@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ManuscriptController extends Controller
 {
@@ -23,7 +24,9 @@ class ManuscriptController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Manuscript/Create', [
+            
+        ]);
     }
 
     /**
@@ -34,7 +37,13 @@ class ManuscriptController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = [
+            'id' => 1,
+            'name' => 'Manuscript 1',
+            'Desc' => 'Test Desc'
+        ];
+
+        return response()->json($data);
     }
 
     /**
@@ -56,7 +65,12 @@ class ManuscriptController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = [
+            'id' => 1,
+            'name' => 'Manuscript 1',
+            'Desc' => 'Test Desc'
+        ];
+        return Inertia::render('Manuscript/Edit', $data);
     }
 
     /**

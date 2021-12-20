@@ -20821,24 +20821,19 @@ var user = {
 };
 var navigation = [{
   name: 'Dashboard',
-  href: '/',
-  current: true
+  href: '/'
 }, {
   name: 'Submit a Manuscript',
-  href: '/manuscript-submit',
-  current: false
+  href: '/manuscript-create'
 }, {
   name: 'Journal Overview',
-  href: '/journal-overview',
-  current: false
+  href: '/journal-overview'
 }, {
   name: 'Users',
-  href: '/users',
-  current: false
+  href: '/users'
 }, {
   name: 'Contact Us',
-  href: '#',
-  current: false
+  href: '#'
 }];
 var userNavigation = [{
   name: 'Your Profile',
@@ -20988,18 +20983,13 @@ var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 var _hoisted_27 = {
   "class": "mt-3 px-2 space-y-1"
 };
-
-var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("header", {
+var _hoisted_28 = {
   "class": "bg-white shadow"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", {
-  "class": "text-3xl font-bold text-gray-900"
-}, " Dashboard ")])], -1
-/* HOISTED */
-);
-
+};
 var _hoisted_29 = {
+  "class": "max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8"
+};
+var _hoisted_30 = {
   "class": "max-w-7xl mx-auto py-6 sm:px-6 lg:px-8"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -21035,8 +21025,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Link, {
           key: item.name,
           href: item.href,
-          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']),
-          "aria-current": item.current ? 'page' : undefined
+          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([item.href == _ctx.$page.url ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']),
+          "aria-current": item.current ? 'page' : undefined,
+          "preserve-state": "",
+          "preserve-scroll": ""
         }, {
           "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
             return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.name), 1
@@ -21151,7 +21143,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               key: item.name,
               as: "a",
               href: item.href,
-              "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']),
+              "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([item.href == _ctx.$page.url ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']),
               "aria-current": item.current ? 'page' : undefined
             }, {
               "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -21210,7 +21202,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  }), _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("main", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Replace with your content "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"px-4 py-6 sm:px-0\">\n          <div class=\"border-4 border-dashed border-gray-200 rounded-lg h-96\" />\n        </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "default"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" /End replace ")])])])], 2112
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("header", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <h1 class=\"text-3xl font-bold text-gray-900\">\n         \n        </h1> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "header")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("main", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Replace with your content "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"px-4 py-6 sm:px-0\">\n          <div class=\"border-4 border-dashed border-gray-200 rounded-lg h-96\" />\n        </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderSlot)(_ctx.$slots, "default"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" /End replace ")])])])], 2112
   /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
   );
 }
@@ -45414,6 +45406,30 @@ var map = {
 	"./Home.vue": [
 		"./resources/js/Pages/Home.vue",
 		"resources_js_Pages_Home_vue"
+	],
+	"./Manuscript/Create": [
+		"./resources/js/Pages/Manuscript/Create.vue",
+		"resources_js_Pages_Manuscript_Create_vue"
+	],
+	"./Manuscript/Create.vue": [
+		"./resources/js/Pages/Manuscript/Create.vue",
+		"resources_js_Pages_Manuscript_Create_vue"
+	],
+	"./Manuscript/Created2": [
+		"./resources/js/Pages/Manuscript/Created2.vue",
+		"resources_js_Pages_Manuscript_Created2_vue"
+	],
+	"./Manuscript/Created2.vue": [
+		"./resources/js/Pages/Manuscript/Created2.vue",
+		"resources_js_Pages_Manuscript_Created2_vue"
+	],
+	"./Manuscript/Edit": [
+		"./resources/js/Pages/Manuscript/Edit.vue",
+		"resources_js_Pages_Manuscript_Edit_vue"
+	],
+	"./Manuscript/Edit.vue": [
+		"./resources/js/Pages/Manuscript/Edit.vue",
+		"resources_js_Pages_Manuscript_Edit_vue"
 	]
 };
 function webpackAsyncContext(req) {
@@ -53903,7 +53919,7 @@ module.exports = JSON.parse('{"_from":"axios@^0.21.1","_id":"axios@0.21.4","_inB
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "js/" + chunkId + ".js?id=" + "8ac85222af23c509" + "";
+/******/ 			return "js/" + chunkId + ".js?id=" + {"resources_js_Pages_Home_vue":"265f06a646dc931c","resources_js_Pages_Manuscript_Create_vue":"7cf4197abc52ce17","resources_js_Pages_Manuscript_Created2_vue":"8e3a9a4b9c825561","resources_js_Pages_Manuscript_Edit_vue":"b4d2b13c6b1abd12"}[chunkId] + "";
 /******/ 		};
 /******/ 	})();
 /******/ 	
