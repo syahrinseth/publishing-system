@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class ManuscriptController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +19,7 @@ class ManuscriptController extends Controller
             'name' => 'Manuscript 1',
             'Desc' => 'Test Desc'
         ];
-        return Inertia::render('Manuscript/Index', $data);
+        return Inertia::render('User/Index', $data);
     }
 
     /**
@@ -29,9 +29,7 @@ class ManuscriptController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Manuscript/Create', [
-            
-        ]);
+        //
     }
 
     /**
@@ -42,13 +40,7 @@ class ManuscriptController extends Controller
      */
     public function store(Request $request)
     {
-        $data = [
-            'id' => 1,
-            'name' => 'Manuscript 1',
-            'Desc' => 'Test Desc'
-        ];
-
-        return response()->json($data);
+        //
     }
 
     /**
@@ -70,12 +62,7 @@ class ManuscriptController extends Controller
      */
     public function edit($id)
     {
-        $data = [
-            'id' => 1,
-            'name' => 'Manuscript 1',
-            'Desc' => 'Test Desc'
-        ];
-        return Inertia::render('Manuscript/Edit', $data);
+        //
     }
 
     /**

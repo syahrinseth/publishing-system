@@ -118,7 +118,8 @@ const user = {
 const navigation = [
   { name: 'Dashboard', href: '/' },
   { name: 'Submit a Manuscript', href: '/manuscript-create' },
-  { name: 'Journal Overview', href: '/journal-overview' },
+  { name: 'Manuscript Overview', href: '/manuscripts' },
+  { name: 'Journal Overview', href: '/journals'},
   { name: 'Users', href: '/users' },
   { name: 'Contact Us', href: '#' },
 ]

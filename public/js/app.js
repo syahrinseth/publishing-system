@@ -20826,8 +20826,11 @@ var navigation = [{
   name: 'Submit a Manuscript',
   href: '/manuscript-create'
 }, {
+  name: 'Manuscript Overview',
+  href: '/manuscripts'
+}, {
   name: 'Journal Overview',
-  href: '/journal-overview'
+  href: '/journals'
 }, {
   name: 'Users',
   href: '/users'
@@ -45407,6 +45410,14 @@ var map = {
 		"./resources/js/Pages/Home.vue",
 		"resources_js_Pages_Home_vue"
 	],
+	"./Journal/Index": [
+		"./resources/js/Pages/Journal/Index.vue",
+		"resources_js_Pages_Journal_Index_vue"
+	],
+	"./Journal/Index.vue": [
+		"./resources/js/Pages/Journal/Index.vue",
+		"resources_js_Pages_Journal_Index_vue"
+	],
 	"./Manuscript/Create": [
 		"./resources/js/Pages/Manuscript/Create.vue",
 		"resources_js_Pages_Manuscript_Create_vue"
@@ -45430,6 +45441,22 @@ var map = {
 	"./Manuscript/Edit.vue": [
 		"./resources/js/Pages/Manuscript/Edit.vue",
 		"resources_js_Pages_Manuscript_Edit_vue"
+	],
+	"./Manuscript/Index": [
+		"./resources/js/Pages/Manuscript/Index.vue",
+		"resources_js_Pages_Manuscript_Index_vue"
+	],
+	"./Manuscript/Index.vue": [
+		"./resources/js/Pages/Manuscript/Index.vue",
+		"resources_js_Pages_Manuscript_Index_vue"
+	],
+	"./User/Index": [
+		"./resources/js/Pages/User/Index.vue",
+		"resources_js_Pages_User_Index_vue"
+	],
+	"./User/Index.vue": [
+		"./resources/js/Pages/User/Index.vue",
+		"resources_js_Pages_User_Index_vue"
 	]
 };
 function webpackAsyncContext(req) {
@@ -53919,7 +53946,7 @@ module.exports = JSON.parse('{"_from":"axios@^0.21.1","_id":"axios@0.21.4","_inB
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "js/" + chunkId + ".js?id=" + {"resources_js_Pages_Home_vue":"265f06a646dc931c","resources_js_Pages_Manuscript_Create_vue":"7cf4197abc52ce17","resources_js_Pages_Manuscript_Created2_vue":"8e3a9a4b9c825561","resources_js_Pages_Manuscript_Edit_vue":"b4d2b13c6b1abd12"}[chunkId] + "";
+/******/ 			return "js/" + chunkId + ".js?id=" + {"resources_js_Pages_Home_vue":"265f06a646dc931c","resources_js_Pages_Journal_Index_vue":"cb05ffb98dce010d","resources_js_Pages_Manuscript_Create_vue":"7cf4197abc52ce17","resources_js_Pages_Manuscript_Created2_vue":"8e3a9a4b9c825561","resources_js_Pages_Manuscript_Edit_vue":"ddc1cf87afec0ee3","resources_js_Pages_Manuscript_Index_vue":"73ebfc4a5ecc17bc","resources_js_Pages_User_Index_vue":"c355e83306c1fadd"}[chunkId] + "";
 /******/ 		};
 /******/ 	})();
 /******/ 	
