@@ -23,6 +23,11 @@ Route::get('/manuscripts', [App\Http\Controllers\ManuscriptController::class, 'i
 
 Route::get('/manuscripts/{id}/edit', [App\Http\Controllers\ManuscriptController::class, 'edit'])->name('manuscript.edit');
 
+// Manuscript Attach Files
+
+Route::get('/manuscripts/{manuscript_id}/attach-files/{id}', [App\Http\Controllers\ManuscriptController::class, 'downloadManuscriptAttach'])->name('manuscript.downloadManuscriptAttach');
+
+
 // Journal Module
 
 Route::get('/journals', [App\Http\Controllers\JournalController::class, 'index'])->name('journal.index');
