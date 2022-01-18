@@ -201,7 +201,7 @@
                                     {{ index + 1 }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ attachment.type }}
+                                    {{ attachment.type.name }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     {{ attachment.description }}
@@ -596,22 +596,6 @@
         handleFileUpload() {
             this.attachForm.file = this.$refs.file.files[0];
         },
-        async uploadAttach() {
-            let formData = new FormData();
-            formData.append('file', this.input.attach.file);
-            formData.append('type', this.input.attach.type);
-            formData.append('description', this.input.attach.description);
-            await window.axios.post(`/api/manuscripts/${this.manuscript.data.id}/attach-files`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then(function (resp) {
-                var data = resp.data;
-                alert("Success!");
-            })["catch"](function (err) {
-                alert(err);
-            });
-        }
     },
     setup (props) {
         const attachForm = useForm({
@@ -622,12 +606,15 @@
 
         function submitAttach() {
             attachForm.post(`/api/manuscripts/${props.manuscript.data.id}/attach-files`)
+            attachForm.file = null;
+            attachForm.type = "";
+            attachForm.description = null;
         }
 
         return { attachForm, submitAttach }
     },
     async mounted() {
 
-}
+    }
   }
 </script>

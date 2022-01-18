@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\ManuscriptAttachCollection;
 
 class ManuscriptResource extends JsonResource
 {
@@ -20,7 +21,7 @@ class ManuscriptResource extends JsonResource
             'title' => $this->title,
             'abstract' => $this->abstract,
             'keywords' => $this->keywords,
-            'attachments' => $this->attachments,
+            'attachments' => new ManuscriptAttachCollection($this->attachments),
             'authors' => $this->authors,
             'corresponding_authors' => $this->corresponding_authors,
             'editors' => $this->editors,

@@ -65,7 +65,7 @@ class ManuscriptAttachFile extends Model
 
     public function manuscript()
     {
-        return $this->hasOne(Manuscript::class, 'manuscript_id');
+        return $this->hasOne(Manuscript::class, 'id');
     }
 
     /**

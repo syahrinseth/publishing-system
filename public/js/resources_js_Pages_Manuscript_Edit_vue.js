@@ -2109,39 +2109,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   methods: {
     handleFileUpload: function handleFileUpload() {
       this.attachForm.file = this.$refs.file.files[0];
-    },
-    uploadAttach: function uploadAttach() {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var formData;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                formData = new FormData();
-                formData.append('file', _this.input.attach.file);
-                formData.append('type', _this.input.attach.type);
-                formData.append('description', _this.input.attach.description);
-                _context.next = 6;
-                return window.axios.post("/api/manuscripts/".concat(_this.manuscript.data.id, "/attach-files"), formData, {
-                  headers: {
-                    'Content-Type': 'multipart/form-data'
-                  }
-                }).then(function (resp) {
-                  var data = resp.data;
-                  alert("Success!");
-                })["catch"](function (err) {
-                  alert(err);
-                });
-
-              case 6:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
     }
   },
   setup: function setup(props) {
@@ -2153,6 +2120,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
     function submitAttach() {
       attachForm.post("/api/manuscripts/".concat(props.manuscript.data.id, "/attach-files"));
+      attachForm.file = null;
+      attachForm.type = "";
+      attachForm.description = null;
     }
 
     return {
@@ -2161,16 +2131,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   mounted: function mounted() {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context.prev = _context.next) {
             case 0:
             case "end":
-              return _context2.stop();
+              return _context.stop();
           }
         }
-      }, _callee2);
+      }, _callee);
     }))();
   }
 });
@@ -3292,7 +3262,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               key: attachment.id + '-attach'
             }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_56, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(index + 1), 1
             /* TEXT */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_57, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(attachment.type), 1
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_57, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(attachment.type.name), 1
             /* TEXT */
             ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_58, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(attachment.description), 1
             /* TEXT */
