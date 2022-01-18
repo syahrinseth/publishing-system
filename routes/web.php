@@ -25,6 +25,7 @@ Route::get('/manuscripts/{id}/edit', [App\Http\Controllers\ManuscriptController:
 
 // Manuscript Attach Files
 
+
 Route::get('/manuscripts/{manuscript_id}/attach-files/{id}', [App\Http\Controllers\ManuscriptController::class, 'downloadManuscriptAttach'])->name('manuscript.downloadManuscriptAttach');
 
 

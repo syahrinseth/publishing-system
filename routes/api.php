@@ -18,11 +18,28 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+# Manuscript
 
-Route::post('/manuscripts', [App\Http\Controllers\ManuscriptController::class, 'store']);
+Route::post('/manuscripts', [App\Http\Controllers\ManuscriptController::class, 'store'])->name('api.manuscript.index');
 
-Route::get('/manuscripts/{$id}', [App\Http\Controllers\ManuscriptController::class, 'edit']);
+Route::get('/manuscripts/{id}', [App\Http\Controllers\ManuscriptController::class, 'edit'])->name('api.manuscript.edit');
 
-Route::put('/manuscripts/{$id}', [App\Http\Controllers\ManuscriptController::class, 'update']);
+Route::put('/manuscripts/{id}', [App\Http\Controllers\ManuscriptController::class, 'update'])->name('api.manuscript.update');
 
-Route::delete('/manuscripts/{$id}', [App\Http\Controllers\ManuscriptController::class, 'update']);
+Route::delete('/manuscripts/{id}', [App\Http\Controllers\ManuscriptController::class, 'destroy'])->name('api.manuscript.destroy');
+
+# Manuscript Attach
+
+Route::get('/manuscripts/{id}/attach-files', [App\Http\Controllers\ManuscriptController::class, 'indexAttachFiles'])->name('api.manuscript.attachFile.index');
+
+Route::get('/manuscripts/{id}/attach-files/{attachFileId}', [App\Http\Controllers\ManuscriptController::class, 'showAttachFiles'])->name('api.manuscript.attachFile.show');
+
+Route::post('/manuscripts/{id}/attach-files', [App\Http\Controllers\ManuscriptController::class, 'storeAttachFiles'])->name('api.manuscript.attachFile.store');
+
+Route::put('/manuscripts/{id}/attach-files/{attachFilesId}', [App\Http\Controllers\ManuscriptController::class, 'updateAttachFiles'])->name('api.manuscript.attachFile.update');
+
+Route::delete('/manuscripts/{id}/attach-files/{attachFilesId}', [App\Http\Controllers\ManuscriptController::class, 'destroyAttachFiles'])->name('api.manuscript.attachFile.destroy');
+
+# Manuscript Type
+
+Route::get('manuscript-types', [App\Http\Controllers\ManuscriptController::class, 'indexManuscriptTypes'])->name('api.manuscript.indexManuscriptType');

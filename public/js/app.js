@@ -45427,6 +45427,14 @@ var map = {
 		"./resources/js/Pages/Journal/Index.vue",
 		"resources_js_Pages_Journal_Index_vue"
 	],
+	"./Manuscript/AttachFiles/Create": [
+		"./resources/js/Pages/Manuscript/AttachFiles/Create.vue",
+		"resources_js_Pages_Manuscript_AttachFiles_Create_vue"
+	],
+	"./Manuscript/AttachFiles/Create.vue": [
+		"./resources/js/Pages/Manuscript/AttachFiles/Create.vue",
+		"resources_js_Pages_Manuscript_AttachFiles_Create_vue"
+	],
 	"./Manuscript/Create": [
 		"./resources/js/Pages/Manuscript/Create.vue",
 		"resources_js_Pages_Manuscript_Create_vue"
@@ -53925,6 +53933,18 @@ module.exports = JSON.parse('{"_from":"axios@^0.21.1","_id":"axios@0.21.4","_inB
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -53955,7 +53975,7 @@ module.exports = JSON.parse('{"_from":"axios@^0.21.1","_id":"axios@0.21.4","_inB
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "js/" + chunkId + ".js?id=" + {"resources_js_Pages_Home_vue":"265f06a646dc931c","resources_js_Pages_Journal_Index_vue":"cb05ffb98dce010d","resources_js_Pages_Manuscript_Create_vue":"7cf4197abc52ce17","resources_js_Pages_Manuscript_Created2_vue":"8e3a9a4b9c825561","resources_js_Pages_Manuscript_Edit_vue":"ddc1cf87afec0ee3","resources_js_Pages_Manuscript_Index_vue":"73ebfc4a5ecc17bc","resources_js_Pages_User_Index_vue":"c355e83306c1fadd"}[chunkId] + "";
+/******/ 			return "js/" + chunkId + ".js?id=" + {"resources_js_Pages_Home_vue":"265f06a646dc931c","resources_js_Pages_Journal_Index_vue":"961153fd0f4f3418","resources_js_Pages_Manuscript_AttachFiles_Create_vue":"e3574c9aa0cac095","resources_js_Pages_Manuscript_Create_vue":"8a5d1e5853a59bad","resources_js_Pages_Manuscript_Created2_vue":"8e3a9a4b9c825561","resources_js_Pages_Manuscript_Edit_vue":"b30edeef6f4e37e4","resources_js_Pages_Manuscript_Index_vue":"4cf1056b6a84d8d9","resources_js_Pages_User_Index_vue":"03bc7dfb518acebd"}[chunkId] + "";
 /******/ 		};
 /******/ 	})();
 /******/ 	

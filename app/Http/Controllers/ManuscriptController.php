@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Storage;
 use PDF;
+use App\Models\User;
+use Inertia\Inertia;
+use App\Models\Manuscript;
+use Illuminate\Http\Request;
+use App\Models\ManuscriptAttachFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Resources\ManuscriptResource;
+use App\Http\Resources\ManuscriptCollection;
 
 class ManuscriptController extends Controller
 {
@@ -16,12 +22,10 @@ class ManuscriptController extends Controller
      */
     public function index()
     {
-        $data = [
-            'id' => 1,
-            'name' => 'Manuscript 1',
-            'Desc' => 'Test Desc'
-        ];
-        return Inertia::render('Manuscript/Index', $data);
+        $manuscripts = new ManuscriptCollection(Manuscript::all());
+        return Inertia::render('Manuscript/Index', [
+            'manuscripts' => $manuscripts
+        ]);
     }
 
     /**
@@ -44,13 +48,18 @@ class ManuscriptController extends Controller
      */
     public function store(Request $request)
     {
-        $data = [
-            'id' => 1,
-            'name' => 'Manuscript 1',
-            'Desc' => 'Test Desc'
-        ];
+        $request->validate([
+            'type' => 'required',
+        ]);
+        $manuscript = new Manuscript();
+        $manuscript->type = $request->type;
+        $manuscript->authors = [];
+        $manuscript->corresponding_authors = [];
+        $manuscript->editors = [];
+        $manuscript->reviewers = [];
+        $manuscript->save();
 
-        return response()->json($data);
+        return response()->json($manuscript);
     }
 
     /**
@@ -61,7 +70,7 @@ class ManuscriptController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -72,12 +81,13 @@ class ManuscriptController extends Controller
      */
     public function edit($id)
     {
-        $data = [
-            'id' => 1,
-            'name' => 'Manuscript 1',
-            'Desc' => 'Test Desc'
-        ];
-        return Inertia::render('Manuscript/Edit', $data);
+        $manuscript = Manuscript::findOrFail($id);
+        $users = User::all();
+        return Inertia::render('Manuscript/Edit', [
+            'manuscript' => new ManuscriptResource($manuscript),
+            'users' => $users,
+            'attachTypes' => ManuscriptAttachFile::$types
+        ]);
     }
 
     /**
@@ -157,5 +167,131 @@ class ManuscriptController extends Controller
         // }
         $doc1->save("{$file_path}/final.html");
         return PDF::loadFile( "{$file_path}/final.html" )->stream( 'download.pdf' );
+    }
+
+    /**
+     * Get Manuscript Types
+     * 
+     * @param Request $request
+     * 
+     * @return Response
+     */
+    public function indexManuscriptTypes(Request $request)
+    {
+        $data = [
+            ['id' => 1, 'name' => 'Full Length Article'],
+            ['id' => 2, 'name' => 'Review'],
+            ['id' => 3, 'name' => 'Short Communication'],
+        ];
+
+        return response()->json($data);
+    }
+
+    /**
+     * Index controller for attach file
+     * 
+     * @param Request $request
+     * @param integer $id
+     * 
+     * @return Response
+     */
+    public function indexAttachFiles(Request $request, $id)
+    {
+        
+    }
+
+    /**
+     * Store controller for attach file
+     * 
+     * @param Request $request
+     * @param integer $id
+     * 
+     * @return Response
+     */
+    public function storeAttachFiles(Request $request, $id)
+    {
+        $manuscript = Manuscript::findOrFail($id);
+        $users = User::all();
+        $attach = new ManuscriptAttachFile;   
+        $attach->manuscript_id = $id;
+        $attach->type = $request->type ?? "Full Length Article";
+        $attach->description = $request->description;
+        $attach->size = 0;
+        $attach->save();
+        if ($request->hasFile('file')) {
+            $path = $request->file->store("manuscripts/{$id}/attach-files/$attach->id");
+            $attach->file_location = $path;
+            $attach->file_name = $attach->getFileName();
+            $attach->size = Storage::size($path);
+            $attach->update();
+        }
+        return Inertia::render('Manuscript/Edit', [
+            'manuscript' => new ManuscriptResource($manuscript),
+            'users' => $users,
+            'attachTypes' => ManuscriptAttachFile::$types
+        ]);
+        
+    }
+
+    /**
+     * Show controller for attach file
+     * 
+     * @param Request $request
+     * @param integer $id
+     * @param integer $attachFileId
+     * 
+     * @return Response
+     */
+    public function showAttachFiles(Request $request, $id, $attachFileId)
+    {
+        
+    }
+
+    /**
+     * Update controller for attach file
+     * 
+     * @param Request $request
+     * @param integer $id
+     * @param integer $attachFileId
+     * 
+     * @return Response
+     */
+    public function updateAttachFiles(Request $request, $id, $attachFileId)
+    {
+        $manuscript = Manuscript::findOrFail($id);
+        $users = User::all();
+        $attach = ManuscriptAttachFile::findOrFail($attachFileId);   
+        $attach->manuscript_id = $id;
+        $attach->type = $request->type ?? $attach->type;
+        $attach->description = $request->description ?? $attach->description;
+        $attach->update();
+        if ($request->hasFile('file')) {
+            if (Storage::exists($attach->file_location)) {
+                Storage::delete($attach->file_location);
+            }
+            $path = $request->file->store("manuscripts/{$id}/attach-files/$attach->id");
+            $attach->file_location = $path;
+            $attach->file_name = $attach->getFileName();
+            $attach->size = $request->file->size();
+            $attach->update();
+        }
+        return Inertia::render('Manuscript/Edit', [
+            'manuscript' => new ManuscriptResource($manuscript),
+            'users' => $users
+        ]);
+    }
+
+    /**
+     * Destroy controller for attach file
+     * 
+     * @param Request $request
+     * @param integer $id
+     * @param integer $attachFileId
+     * 
+     * @return Response
+     */
+    public function destroyAttachFiles(Request $request, $id, $attachFileId)
+    {
+        
     }
 }

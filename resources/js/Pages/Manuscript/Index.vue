@@ -55,7 +55,74 @@
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 
                 <div class="border-t border-gray-200">
-                    <Table></Table>
+                    <Table>
+                        <template v-slot:header>
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Id
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Type
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Title
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Abstract
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Authors
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Last Modified
+                                </th>
+                                <th scope="col" class="relative px-6 py-3">
+                                <span class="sr-only">Edit</span>
+                                <span class="sr-only">Download</span>
+                                </th>
+                            </tr>
+                        </template>
+                        <template v-slot:body>
+                            <tr v-for="manuscript in manuscripts.data" :key="manuscript.id">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <!-- <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full" :src="person.order" alt="" />
+                                    </div> -->
+                                    <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        {{ manuscript.id }}
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        <!-- {{ person.email }} -->
+                                    </div>
+                                    </div>
+                                </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">{{ manuscript.type }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <!-- <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                </span> -->
+                                {{ manuscript.title || 'N/a' }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ manuscript.abstract || 'N/a' }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <!-- {{ manuscript }} --> N/a
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ manuscript.updated_at }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <Link :href="`/manuscripts/${manuscript.id}/edit`" class="text-indigo-600 hover:text-indigo-900">Edit</Link> |
+                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Download</a>
+                                </td>
+                            </tr>
+                        </template>
+                    </Table>
                 </div>
             </div>
 
@@ -72,6 +139,7 @@
 <script>
   import Layout from '../../Layout'
   import Table from '../../Components/Table'
+  import { Link } from '@inertiajs/inertia-vue3'
   import {
   BriefcaseIcon,
   CalendarIcon,
@@ -86,9 +154,9 @@
 
   export default {
       components: {
-          Layout,
-          Table,
-          Menu,
+            Layout,
+            Table,
+            Menu,
             MenuButton,
             MenuItem,
             MenuItems,
@@ -100,9 +168,27 @@
             LinkIcon,
             LocationMarkerIcon,
             PencilIcon,
+            Link
       },
     props: {
-    //   user: Object,
+        manuscripts: Array
     },
+    data() {
+        return {
+
+        }
+    },
+    methods: {
+        async fetchManuscripts() {
+            let resp = await window.axios.get('/api/manuscripts');
+            if (resp.status == 200) {
+                return resp.data;
+            }
+            return [];
+        }
+    },
+    async mounted() {
+
+    }
   }
 </script>

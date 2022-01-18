@@ -21,7 +21,9 @@ class CreateManuscriptsTable extends Migration
             $table->string('keywords')->nullable();
             $table->json('authors');
             $table->json('corresponding_authors');
-            $table->string('category');
+            $table->json('editors');
+            $table->json('reviewers');
+            $table->string('category')->nullable();
             $table->longText('funding_information')->nullable();
             $table->timestamps();
         });

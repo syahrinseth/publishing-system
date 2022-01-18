@@ -53,7 +53,7 @@
   </div>
 </template>
 <script>
-  import Layout from '../../Layout'
+  import Layout from '../../../Layout'
   import { Link } from '@inertiajs/inertia-vue3'
   import { Inertia } from '@inertiajs/inertia'
 

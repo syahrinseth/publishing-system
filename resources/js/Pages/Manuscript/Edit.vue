@@ -4,24 +4,24 @@
             <div class="lg:flex lg:items-center lg:justify-between">
                     <div class="flex-1 min-w-0">
                         <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-                            Manuscript
+                            {{ manuscript.data.title }}
                         </h2>
                         <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
                             <div class="mt-2 flex items-center text-sm text-gray-500">
                             <BriefcaseIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                            Info
+                            {{ manuscript.data.type }}
                             </div>
                             <div class="mt-2 flex items-center text-sm text-gray-500">
                             <LocationMarkerIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                            Info
+                            Author
                             </div>
                             <div class="mt-2 flex items-center text-sm text-gray-500">
                             <CurrencyDollarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                            $120k &ndash; $140k
+                            Editor
                             </div>
                             <div class="mt-2 flex items-center text-sm text-gray-500">
-                            <CalendarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                            Info on January 9, 2020
+                            <CurrencyDollarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                            Category
                             </div>
                         </div>
                     </div>
@@ -36,14 +36,21 @@
                     <span class="hidden sm:block ml-3">
                         <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <LinkIcon class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
-                        View
+                        Some Link
+                        </button>
+                    </span>
+
+                    <span class="hidden sm:block ml-3">
+                        <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <LinkIcon class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                        Save & Submit Later
                         </button>
                     </span>
 
                     <span class="sm:ml-3">
                         <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <CheckIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                        Publish
+                        Build PDF for Approval
                         </button>
                     </span>
 
@@ -70,6 +77,77 @@
         </template>
         <template v-slot:default>
 
+            <Modal :show="showUploadAttachModal" @close="showUploadAttachModal = false">
+                <template v-slot:default>
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                            <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                                Upload Attach File
+                            </DialogTitle>
+                            <div class="mt-2">
+                                <form @submit.prevent="submitAttach">
+                                    <div class="grid grid-cols-3 gap-6 mb-2">
+                                        <div class="col-span-3 sm:col-span-3">
+                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                            Type
+                                            </label>
+                                            <select class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="attachForm.type">
+                                                <option value="" selected>Select</option>
+                                                <option v-for="type in attachTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 sm:col-span-2 mb-2">
+                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                            Description
+                                            </label>
+                                            <div class="mt-1 flex rounded-md shadow-sm">
+                                            <textarea v-model="attachForm.description" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                            </div>
+                                        </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">
+                                            Files
+                                        </label>
+                                        <div class="mt-1 flex justify-center pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                            <div class="space-y-1 text-center">
+                                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                                <p v-if="attachForm.file != null">
+                                                    {{ attachForm.file.name }}
+                                                </p>
+                                                <div class="flex text-sm text-gray-600">
+                                                    <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                    <span>Upload a file</span>
+                                                    <input id="file-upload" ref="file" v-on:change="handleFileUpload($event)" type="file" class="sr-only" />
+                                                    <progress v-if="attachForm.progress" :value="attachForm.progress.percentage" max="100">
+                                                    {{ attachForm.progress.percentage }}%
+                                                    </progress>
+                                                    </label>
+                                                    <p class="pl-1">or drag and drop</p>
+                                                </div>
+                                                <p class="text-xs text-gray-500">
+                                                    PDF, DOCS, PNG up to 50MB
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template v-slot:footer>
+                    <a href="#" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm" @click="submitAttach">
+                        Upload
+                    </a>
+                    <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showUploadAttachModal = false;" ref="cancelButtonRef">
+                        Cancel
+                    </button>
+                </template>
+            </Modal>
+
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 <div class="flex justify-between px-4 py-5 sm:px-6">
                     <div class="">
@@ -82,7 +160,7 @@
                     </div>
                     <div>
                         <span class="sm:ml-3">
-                            <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" @click="showUploadAttachModal = !showUploadAttachModal">
                             <CheckIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 Upload File 
                             </button>
@@ -91,7 +169,58 @@
                 </div>
                 
                 <div class="border-t border-gray-200">
-                    <Table></Table>
+                    <Table>
+                        <template v-slot:header>
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Order
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Items
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Description
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    File Name
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Size
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Last Modified
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions
+                                </th>
+                            </tr>
+                        </template>
+                        <template v-slot:body>
+                            <tr v-for="(attachment, index) in manuscript.data.attachments" :key="attachment.id + '-attach'">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ index + 1 }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ attachment.type }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ attachment.description }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ attachment.file_name }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ attachment.size}}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {{ attachment.updated_at}}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    
+                                </td>
+                            </tr>
+                        </template>
+                    </Table>
                 </div>
             </div>
 
@@ -107,7 +236,7 @@
                     <div class="px-4 sm:px-0">
                         <h3 class="text-lg font-medium leading-6 text-gray-900">General Information</h3>
                         <p class="mt-1 text-sm text-gray-600">
-                        Decide which communications you'd like to receive and how.
+                        Please identify your submission's areas of interest and specialization by selecting one or more classifications.
                         </p>
                     </div>
                     </div>
@@ -115,64 +244,16 @@
                     <form action="#" method="POST">
                         <div class="shadow overflow-hidden sm:rounded-md">
                         <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                            <fieldset>
-                            <legend class="text-base font-medium text-gray-900">By Email</legend>
-                            <div class="mt-4 space-y-4">
-                                <div class="flex items-start">
-                                <div class="flex items-center h-5">
-                                    <input id="comments" name="comments" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
-                                </div>
-                                <div class="ml-3 text-sm">
-                                    <label for="comments" class="font-medium text-gray-700">Comments</label>
-                                    <p class="text-gray-500">Get notified when someones posts a comment on a posting.</p>
-                                </div>
-                                </div>
-                                <div class="flex items-start">
-                                <div class="flex items-center h-5">
-                                    <input id="candidates" name="candidates" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
-                                </div>
-                                <div class="ml-3 text-sm">
-                                    <label for="candidates" class="font-medium text-gray-700">Candidates</label>
-                                    <p class="text-gray-500">Get notified when a candidate applies for a job.</p>
-                                </div>
-                                </div>
-                                <div class="flex items-start">
-                                <div class="flex items-center h-5">
-                                    <input id="offers" name="offers" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
-                                </div>
-                                <div class="ml-3 text-sm">
-                                    <label for="offers" class="font-medium text-gray-700">Offers</label>
-                                    <p class="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p>
-                                </div>
+                            <div class="grid grid-cols-3 gap-6">
+                                <div class="col-span-3 sm:col-span-2">
+                                    <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                    Classifications
+                                    </label>
+                                    <select name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="input.type">
+                                        <option value="" selected>Select</option>
+                                    </select>
                                 </div>
                             </div>
-                            </fieldset>
-                            <fieldset>
-                            <div>
-                                <legend class="text-base font-medium text-gray-900">Push Notifications</legend>
-                                <p class="text-sm text-gray-500">These are delivered via SMS to your mobile phone.</p>
-                            </div>
-                            <div class="mt-4 space-y-4">
-                                <div class="flex items-center">
-                                <input id="push-everything" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300" />
-                                <label for="push-everything" class="ml-3 block text-sm font-medium text-gray-700">
-                                    Everything
-                                </label>
-                                </div>
-                                <div class="flex items-center">
-                                <input id="push-email" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300" />
-                                <label for="push-email" class="ml-3 block text-sm font-medium text-gray-700">
-                                    Same as email
-                                </label>
-                                </div>
-                                <div class="flex items-center">
-                                <input id="push-nothing" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300" />
-                                <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700">
-                                    No push notifications
-                                </label>
-                                </div>
-                            </div>
-                            </fieldset>
                         </div>
                         <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                             <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -190,110 +271,53 @@
                         <div class="border-t border-gray-200" />
                     </div>
                 </div>
-                
-                <div class="mt-10 sm:mt-0">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                        <div class="px-4 sm:px-0">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">Additional Information</h3>
-                            <p class="mt-1 text-sm text-gray-600">
-                            Use a permanent address where you can receive mail.
-                            </p>
-                        </div>
-                        </div>
-                        <div class="mt-5 md:mt-0 md:col-span-2">
-                        <form action="#" method="POST">
-                            <div class="shadow overflow-hidden sm:rounded-md">
-                            <div class="px-4 py-5 bg-white sm:p-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">
-                                        Files
-                                    </label>
-                                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                                        <div class="space-y-1 text-center">
-                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                        <div class="flex text-sm text-gray-600">
-                                            <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                            <span>Upload a file</span>
-                                            <input id="file-upload" name="file-upload" type="file" class="sr-only" />
-                                            </label>
-                                            <p class="pl-1">or drag and drop</p>
-                                        </div>
-                                        <p class="text-xs text-gray-500">
-                                            PDF, DOCS, PNG up to 50MB
-                                        </p>
-                                        </div>
-                                    </div>
-                                    </div>
-                            </div>
-                            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Save
-                                </button>
-                            </div>
-                            </div>
-                        </form>
-                        </div>
-                    </div>
-                    </div>
-
-                    <div class="hidden sm:block" aria-hidden="true">
-                        <div class="py-5">
-                            <div class="border-t border-gray-200" />
-                        </div>
-                    </div>
 
                     
-                    <div>
-                        <div class="md:grid md:grid-cols-3 md:gap-6">
-                            <div class="md:col-span-1">
+                <div>
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
                             <div class="px-4 sm:px-0">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900">General Information</h3>
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">Review Preferences</h3>
                                 <p class="mt-1 text-sm text-gray-600">
-                                This information will be displayed publicly so be careful what you share.
+                                You may request that a specific editor be assigned to your submission. The request will be taken under advisement by the publication. If you do not request an editor, your submission will be assigned to the appropriate editor(s) as determined by the publication staff.
                                 </p>
                             </div>
-                            </div>
-                            <div class="mt-5 md:mt-0 md:col-span-2">
+                        </div>
+                        <div class="mt-5 md:mt-0 md:col-span-2">
                             <form action="#" method="POST">
                                 <div class="shadow sm:rounded-md sm:overflow-hidden">
                                 <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
                                     <div class="grid grid-cols-3 gap-6">
                                         <div class="col-span-3 sm:col-span-2">
                                             <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                            Article Type
+                                            Request Editor
                                             </label>
-                                            <select type="text" name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" >
+                                            <select name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" >
                                                 <option value="">Select</option>
+                                                <option v-for="user in users" :key="user.id + '-user'" :value="user.id">{{ user.name }} - {{ user.email }}</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="grid grid-cols-3 gap-6">
                                         <div class="col-span-3 sm:col-span-2">
                                             <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                            Website
+                                            Suggest Reviewers
                                             </label>
                                             <div class="mt-1 flex rounded-md shadow-sm">
-                                            <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
-                                                http://
-                                            </span>
-                                            <input type="text" name="company-website" id="company-website" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300" placeholder="www.example.com" />
+                                            <input type="text" name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="" />
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div>
-                                    <label for="about" class="block text-sm font-medium text-gray-700">
-                                        About
-                                    </label>
-                                    <div class="mt-1">
-                                        <textarea id="about" name="about" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="you@example.com" />
-                                    </div>
-                                    <p class="mt-2 text-sm text-gray-500">
-                                        Brief description for your profile. URLs are hyperlinked.
-                                    </p>
+                                    <div class="grid grid-cols-3 gap-6">
+                                        <div class="col-span-3 sm:col-span-2">
+                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                            Oppose Reviewers
+                                            </label>
+                                            <div class="mt-1 flex rounded-md shadow-sm">
+                                            <input type="text" name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="" />
+                                            </div>
+                                        </div>
                                     </div>
 
                                     
@@ -305,8 +329,106 @@
                                 </div>
                                 </div>
                             </form>
-                            </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="hidden sm:block" aria-hidden="true">
+                    <div class="py-5">
+                        <div class="border-t border-gray-200" />
+                    </div>
+                </div>
+                
+                <div class="mt-10 sm:mt-0">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                        <div class="px-4 sm:px-0">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">Additional Information</h3>
+                            <p class="mt-1 text-sm text-gray-600">
+                                Please respond to the presented questions/statements.
+                            </p>
+                        </div>
+                        </div>
+                        <div class="mt-5 md:mt-0 md:col-span-2">
+                        <form action="#" method="POST">
+                            <div class="shadow overflow-hidden sm:rounded-md">
+                            <div class="px-4 py-5 bg-white sm:p-6">
+                                <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                                    <fieldset>
+                                    <legend class="text-base font-medium text-gray-900">Please confirm that you have mentioned all organizations that funded your research in the Acknowledgements section of your submission, including grant numbers where appropriate.</legend>
+                                    <div class="mt-4 space-y-4">
+                                        <div class="flex items-start">
+                                        <div class="flex items-center h-5">
+                                            <input id="comments" name="comments" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="comments" class="font-medium text-gray-700">I Confirm</label>
+                                            <p class="text-gray-500">I confirm that I have mentioned all organizations that funded my research in the Acknowledgements section of my submission, including grant numbers where appropriate.</p>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </fieldset>
+                                    <div class="hidden sm:block" aria-hidden="true">
+                                        <div class="py-5">
+                                            <div class="border-t border-gray-200" />
+                                        </div>
+                                    </div>
+                                    <fieldset>
+                                    <legend class="text-base font-medium text-gray-900">Sensors and Actuators Reports is an open access journal which charges an Article Publishing Charge (APC) to cover the cost associated with the publication process. All articles published Open Access will be immediately and permanently free on ScienceDirect for users to read, download, and use in accordance with the author’s selected Creative Commons user license. </legend>
+                                    <div class="mt-4 space-y-4">
+                                        <div class="flex items-start">
+                                        <div class="flex items-center h-5">
+                                            <input id="comments" name="comments" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="comments" class="font-medium text-gray-700">I Acknowledge</label>
+                                            <p class="text-gray-500">As an Author, I acknowledge I need to pay the Article Publishing Charge if my manuscript is accepted for publication</p>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </fieldset>
+                                    <div class="hidden sm:block" aria-hidden="true">
+                                        <div class="py-5">
+                                            <div class="border-t border-gray-200" />
+                                        </div>
+                                    </div>
+                                    <fieldset>
+                                    <div>
+                                        <legend class="text-base font-medium text-gray-900">
+                                        In support of Open Science, Sensors and Actuators Reports offers its authors a free preprint posting service. Preprints provide early registration and dissemination of research, which facilitates early citations and collaboration. Please indicate below whether you would like to release your manuscript publicly as a preprint on the preprint server www.SSRN.com once it enters peer-review with the journal. Your choice will have no effect on the editorial process or outcome with the journal. Your preprint will remain globally available free to read whether the journal accepts or rejects your manuscript. For more information about posting to www.SSRN.com, please consult the SSRN Terms of Use and FAQs.</legend>
+                                    </div>
+                                    <div class="mt-4 space-y-4">
+                                        <div class="flex items-center">
+                                        <input id="push-everything" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                        <label for="push-everything" class="ml-3 block text-sm font-medium text-gray-700">
+                                            Please select a response
+                                        </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                        <input id="push-email" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                        <label for="push-email" class="ml-3 block text-sm font-medium text-gray-700">
+                                            YES, I want to share my research early and openly as a preprint.
+                                        </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                        <input id="push-nothing" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                        <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700">
+                                            NO, I don't want to share my research early and openly as a preprint.
+                                        </label>
+                                        </div>
+                                    </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Save
+                                </button>
+                            </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="hidden sm:block" aria-hidden="true">
@@ -322,7 +444,7 @@
                         <div class="px-4 sm:px-0">
                             <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Data</h3>
                             <p class="mt-1 text-sm text-gray-600">
-                            This information will be displayed publicly so be careful what you share.
+                                When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
                             </p>
                         </div>
                         </div>
@@ -332,13 +454,25 @@
                             <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
                                 <div>
                                 <label for="about" class="block text-sm font-medium text-gray-700">
-                                    Title
+                                    Full Title
                                 </label>
                                 <div class="mt-1">
-                                    <textarea id="about" name="about" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="you@example.com" />
+                                    <textarea id="about" name="about" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500">
-                                    Brief description for your profile. URLs are hyperlinked.
+                                    
+                                </p>
+                                </div>
+
+                                <div>
+                                <label for="about" class="block text-sm font-medium text-gray-700">
+                                    Short Title
+                                </label>
+                                <div class="mt-1">
+                                    <textarea id="about" name="about" rows="1" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500">
+                                    Limit 20 words
                                 </p>
                                 </div>
 
@@ -347,10 +481,10 @@
                                     Abstract
                                 </label>
                                 <div class="mt-1">
-                                    <textarea id="about" name="about" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="you@example.com" />
+                                    <textarea id="about" name="about" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500">
-                                    Brief description for your profile. URLs are hyperlinked.
+                                    Limit 250 words
                                 </p>
                                 </div>
 
@@ -359,10 +493,10 @@
                                     Keywords
                                 </label>
                                 <div class="mt-1">
-                                    <textarea id="about" name="about" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="you@example.com" />
+                                    <textarea id="about" name="about" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500">
-                                    Brief description for your profile. URLs are hyperlinked.
+                                    Please enter keywords separated by semicolons. Each individual keyword may be up to 256 characters in length.
                                 </p>
                                 </div>
 
@@ -371,10 +505,9 @@
                                     Authors
                                 </label>
                                 <div class="mt-1">
-                                    <textarea id="about" name="about" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="you@example.com" />
+                                    <textarea id="about" name="about" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500">
-                                    Brief description for your profile. URLs are hyperlinked.
                                 </p>
                                 </div>
 
@@ -383,10 +516,10 @@
                                     Funding Information
                                 </label>
                                 <div class="mt-1">
-                                    <textarea id="about" name="about" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="you@example.com" />
+                                    <textarea id="about" name="about" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500">
-                                    Brief description for your profile. URLs are hyperlinked.
+
                                 </p>
                                 </div>
 
@@ -408,6 +541,7 @@
 <script>
   import Layout from '../../Layout'
   import Table from '../../Components/Table'
+  import Modal from '../../Components/Modal'
   import {
   BriefcaseIcon,
   CalendarIcon,
@@ -416,29 +550,84 @@
   CurrencyDollarIcon,
   LinkIcon,
   LocationMarkerIcon,
-  PencilIcon,
+  PencilIcon
 } from '@heroicons/vue/solid'
   import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+  import { useForm } from '@inertiajs/inertia-vue3'
 
   export default {
-      components: {
-          Layout,
-          Table,
-          Menu,
-            MenuButton,
-            MenuItem,
-            MenuItems,
-            BriefcaseIcon,
-            CalendarIcon,
-            CheckIcon,
-            ChevronDownIcon,
-            CurrencyDollarIcon,
-            LinkIcon,
-            LocationMarkerIcon,
-            PencilIcon,
-      },
-    props: {
-    //   user: Object,
+    components: {
+        Layout,
+        Table,
+        Menu,
+        MenuButton,
+        MenuItem,
+        MenuItems,
+        BriefcaseIcon,
+        CalendarIcon,
+        CheckIcon,
+        ChevronDownIcon,
+        CurrencyDollarIcon,
+        LinkIcon,
+        LocationMarkerIcon,
+        PencilIcon,
+        Modal
     },
+    props: {
+        manuscript: Object,
+        users: Array,
+        attachTypes: Array
+    },
+    data() {
+        return {
+            input: {
+                attach: {
+                    file: null,
+                    type: "",
+                    description: null
+                },
+                type: "",
+            },
+            attach_files: [],
+            showUploadAttachModal: false,
+        }
+    },
+    methods: {
+        handleFileUpload() {
+            this.attachForm.file = this.$refs.file.files[0];
+        },
+        async uploadAttach() {
+            let formData = new FormData();
+            formData.append('file', this.input.attach.file);
+            formData.append('type', this.input.attach.type);
+            formData.append('description', this.input.attach.description);
+            await window.axios.post(`/api/manuscripts/${this.manuscript.data.id}/attach-files`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(function (resp) {
+                var data = resp.data;
+                alert("Success!");
+            })["catch"](function (err) {
+                alert(err);
+            });
+        }
+    },
+    setup (props) {
+        const attachForm = useForm({
+            file: null,
+            type: "",
+            description: null
+        })
+
+        function submitAttach() {
+            attachForm.post(`/api/manuscripts/${props.manuscript.data.id}/attach-files`)
+        }
+
+        return { attachForm, submitAttach }
+    },
+    async mounted() {
+
+}
   }
 </script>

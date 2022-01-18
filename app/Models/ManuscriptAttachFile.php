@@ -12,6 +12,62 @@ class ManuscriptAttachFile extends Model
 
     protected $table = 'manuscript_attach_files';
 
+    public static $types = [
+        [
+            "id" => 1,
+            "name" => "Manuscript"
+        ],
+        [
+            "id" => 2,
+            "name" => "Highlights (for review)"
+        ],
+        [
+            "id" => 3,
+            "name" => "Declaration of Interest Statement"
+        ],
+        [
+            "id" => 4,
+            "name" => "Conflict of Interest"
+        ],
+        [
+            "id" => 5,
+            "name" => "Cover Letter"
+        ],
+        [
+            "id" => 6,
+            "name" => "Figure(s)"
+        ],
+        [
+            "id" => 7,
+            "name" => "Table(s)"
+        ],
+        [
+            "id" => 8,
+            "name" => "CRediT Author Statement"
+        ],
+        [
+            "id" => 9,
+            "name" => "Supplementary Material"
+        ],
+        [
+            "id" => 10,
+            "name" => "Response to Reviewers"
+        ],
+        [
+            "id" => 11,
+            "name" => "Video Still"
+        ],
+        [
+            "id" => 12,
+            "name" => "LaTeX Source Files"
+        ],
+    ];
+
+    public function manuscript()
+    {
+        return $this->hasOne(Manuscript::class, 'manuscript_id');
+    }
+
     /**
      * 
      */
@@ -27,7 +83,7 @@ class ManuscriptAttachFile extends Model
 
         //Save it into PDF
         $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'HTML');
-        $PDFWriter->save("{$file_path}/${$this->file_name}.html"); 
+        $PDFWriter->save("{$file_path}/{$this->file_name}.html"); 
         return $this;
     }
 
@@ -36,7 +92,7 @@ class ManuscriptAttachFile extends Model
      */
     public function hasFile()
     {
-        return Storage::exists("manuscripts/{$this->manuscript_id}/attach-files/{$this->id}/{$this->file_name}");
+        return Storage::exists($this->file_location);
     }
 
     /**
@@ -44,8 +100,16 @@ class ManuscriptAttachFile extends Model
      */
     public function getFileExt()
     {
-        $path = Storage::exists("manuscripts/{$this->manuscript_id}/attach-files/{$this->id}/{$this->file_name}");
+        $path = Storage::exists($this->file_location);
         return pathinfo($path, PATHINFO_EXTENSION);
     }
 
+    /**
+     * Get File Name
+     * 
+     */
+    public function getFileName()
+    {
+        return basename($this->file_location);
+    }
 }
