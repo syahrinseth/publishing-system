@@ -288,7 +288,8 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <a href="#" class="text-indigo-600 hover:text-indigo-900" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">Edit</a> |
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Download</a>
+                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Download</a> |
+                                    <a href="#" @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900">Delete</a>
                                 </td>
                             </tr>
                         </template>
@@ -720,7 +721,16 @@
             attachForm.description = null;
         }
 
-        return { attachForm, updateAttachForm, submitAttach, clearAttachForm, fillUpdateAttachForm, updateAttach, input, onChangeSubmitAttachFile, onChangeUpdateAttachFile, clearUpdateAttachForm }
+        function deleteAttachFile(attach) {
+            const deleteAttachForm = useForm({
+                _method: 'delete'
+            });
+            if (confirm('Are you sure to delete "' + attach.type.name + '"?')) {
+                deleteAttachForm.post(`/api/manuscripts/${props.manuscript.data.id}/attach-files/${attach.id}`);
+            }
+        }
+
+        return { attachForm, updateAttachForm, submitAttach, clearAttachForm, fillUpdateAttachForm, updateAttach, input, onChangeSubmitAttachFile, onChangeUpdateAttachFile, clearUpdateAttachForm, deleteAttachFile }
     },
     async mounted() {
 

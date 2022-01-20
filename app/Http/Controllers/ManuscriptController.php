@@ -293,6 +293,17 @@ class ManuscriptController extends Controller
      */
     public function destroyAttachFiles(Request $request, $id, $attachFileId)
     {
-        
+        $manuscript = Manuscript::findOrFail($id);
+        $users = User::all();
+        $attach = ManuscriptAttachFile::findOrFail($attachFileId);
+        if (Storage::exists($attach->file_location)) {
+            Storage::delete($attach->file_location);
+        }
+        $attach->delete();
+        return Inertia::render('Manuscript/Edit', [
+            'manuscript' => new ManuscriptResource($manuscript),
+            'users' => $users,
+            'attachTypes' => ManuscriptAttachFile::$types
+        ]);
     }
 }
