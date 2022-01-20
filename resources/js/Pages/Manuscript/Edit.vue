@@ -77,7 +77,7 @@
         </template>
         <template v-slot:default>
 
-            <Modal :show="showUploadAttachModal" @close="showUploadAttachModal = false">
+            <Modal :show="showUploadAttachModal" @close="showUploadAttachModal = false;">
                 <template v-slot:default>
                     <div class="sm:flex sm:items-start">
                         <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
@@ -120,7 +120,7 @@
                                                 <div class="flex text-sm text-gray-600">
                                                     <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                                     <span>Upload a file</span>
-                                                    <input id="file-upload" ref="file" v-on:change="handleFileUpload($event)" type="file" class="sr-only" />
+                                                    <input id="file-upload" ref="file"  @change="onChangeSubmitAttachFile" type="file" class="sr-only" />
                                                     <progress v-if="attachForm.progress" :value="attachForm.progress.percentage" max="100">
                                                     {{ attachForm.progress.percentage }}%
                                                     </progress>
@@ -139,10 +139,81 @@
                     </div>
                 </template>
                 <template v-slot:footer>
-                    <a href="#" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm" @click="submitAttach">
+                    <a href="#" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm" @click="submitAttach()">
                         Upload
                     </a>
-                    <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showUploadAttachModal = false;" ref="cancelButtonRef">
+                    <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showUploadAttachModal = false" ref="cancelButtonRef">
+                        Cancel
+                    </button>
+                </template>
+            </Modal>
+
+            <Modal :show="showUpdateAttachModel" @close="showUpdateAttachModel = false; clearUpdateAttachForm()">
+                <template v-slot:default>
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                            <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                                Update Attach File
+                            </DialogTitle>
+                            <div class="mt-2">
+                                <form @submit.prevent="updateAttach">
+                                    <div class="grid grid-cols-3 gap-6 mb-2">
+                                        <div class="col-span-3 sm:col-span-3">
+                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                            Type
+                                            </label>
+                                            <select class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="updateAttachForm.type">
+                                                <option value="" selected>Select</option>
+                                                <option v-for="type in attachTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3 sm:col-span-2 mb-2">
+                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                            Description
+                                            </label>
+                                            <div class="mt-1 flex rounded-md shadow-sm">
+                                            <textarea v-model="updateAttachForm.description" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                            </div>
+                                        </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">
+                                            Files
+                                        </label>
+                                        <div class="mt-1 flex justify-center pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                            <div class="space-y-1 text-center">
+                                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                                <p v-if="updateAttachForm.file != null">
+                                                    {{ updateAttachForm.file.name }}
+                                                </p>
+                                                <div class="flex text-sm text-gray-600">
+                                                    <label for="update-file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                    <span>Upload a file</span>
+                                                    <input id="update-file-upload" ref="file-update"  @change="onChangeUpdateAttachFile" type="file" class="sr-only" />
+                                                    <progress v-if="updateAttachForm.progress" :value="updateAttachForm.progress.percentage" max="100">
+                                                    {{ updateAttachForm.progress.percentage }}%
+                                                    </progress>
+                                                    </label>
+                                                    <p class="pl-1">or drag and drop</p>
+                                                </div>
+                                                <p class="text-xs text-gray-500">
+                                                    PDF, DOCS, PNG up to 50MB
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template v-slot:footer>
+                    <a href="#" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm" @click="updateAttach()">
+                        Upload
+                    </a>
+                    <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showUpdateAttachModel = false; clearUpdateAttachForm()" ref="cancelButtonRef">
                         Cancel
                     </button>
                 </template>
@@ -160,7 +231,7 @@
                     </div>
                     <div>
                         <span class="sm:ml-3">
-                            <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" @click="showUploadAttachModal = !showUploadAttachModal">
+                            <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" @click="showUploadAttachModal = !showUploadAttachModal; ">
                             <CheckIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 Upload File 
                             </button>
@@ -216,7 +287,8 @@
                                     {{ attachment.updated_at}}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    
+                                    <a href="#" class="text-indigo-600 hover:text-indigo-900" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">Edit</a> |
+                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Download</a>
                                 </td>
                             </tr>
                         </template>
@@ -526,7 +598,7 @@
                                 
                             </div>
                             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                <Link href="/manuscripts/1/edit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <Link :href="`/manuscripts/1/edit`" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 Save
                                 </Link>
                             </div>
@@ -553,7 +625,7 @@
   PencilIcon
 } from '@heroicons/vue/solid'
   import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-  import { useForm } from '@inertiajs/inertia-vue3'
+  import { useForm, Link } from '@inertiajs/inertia-vue3'
 
   export default {
     components: {
@@ -571,7 +643,8 @@
         LinkIcon,
         LocationMarkerIcon,
         PencilIcon,
-        Modal
+        Modal,
+        Link
     },
     props: {
         manuscript: Object,
@@ -580,38 +653,74 @@
     },
     data() {
         return {
-            input: {
-                attach: {
-                    file: null,
-                    type: "",
-                    description: null
-                },
-                type: "",
-            },
             attach_files: [],
             showUploadAttachModal: false,
+            showUpdateAttachModel: false,
         }
     },
     methods: {
-        handleFileUpload() {
-            this.attachForm.file = this.$refs.file.files[0];
-        },
+        
     },
     setup (props) {
+
+        var input = {
+                type: "",
+            };
+
         const attachForm = useForm({
+            id: null,
             file: null,
             type: "",
             description: null
-        })
+        });
+
+        const updateAttachForm = useForm({
+            _method: 'put',
+            id: null,
+            file: null,
+            type: "",
+            description: null
+        });
+
+        function onChangeSubmitAttachFile(e) {
+            attachForm.file = e.target.files[0];
+        }
+
+        function onChangeUpdateAttachFile(e) {
+            updateAttachForm.file = e.target.files[0];
+        }
 
         function submitAttach() {
-            attachForm.post(`/api/manuscripts/${props.manuscript.data.id}/attach-files`)
+            attachForm.post(`/api/manuscripts/${props.manuscript.data.id}/attach-files`);
+            this.clearAttachForm();
+        }
+
+        function updateAttach() {
+            updateAttachForm.post(`/api/manuscripts/${props.manuscript.data.id}/attach-files/${updateAttachForm.id}`);
+        }
+
+        function fillUpdateAttachForm(attach) {
+            updateAttachForm.id = attach.id;
+            updateAttachForm.file = null;
+            updateAttachForm.type = attach.type.id;
+            updateAttachForm.description = attach.description;
+        }
+
+        function clearUpdateAttachForm() {
+            updateAttachForm.id = null;
+            updateAttachForm.file = null;
+            updateAttachForm.type = "";
+            updateAttachForm.description = null;
+        }
+
+        function clearAttachForm() {
+            attachForm.id = null;
             attachForm.file = null;
             attachForm.type = "";
             attachForm.description = null;
         }
 
-        return { attachForm, submitAttach }
+        return { attachForm, updateAttachForm, submitAttach, clearAttachForm, fillUpdateAttachForm, updateAttach, input, onChangeSubmitAttachFile, onChangeUpdateAttachFile, clearUpdateAttachForm }
     },
     async mounted() {
 

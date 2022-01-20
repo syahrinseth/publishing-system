@@ -272,12 +272,13 @@ class ManuscriptController extends Controller
             $path = $request->file->store("manuscripts/{$id}/attach-files/$attach->id");
             $attach->file_location = $path;
             $attach->file_name = $attach->getFileName();
-            $attach->size = $request->file->size();
+            $attach->size = Storage::size($path);
             $attach->update();
         }
         return Inertia::render('Manuscript/Edit', [
             'manuscript' => new ManuscriptResource($manuscript),
-            'users' => $users
+            'users' => $users,
+            'attachTypes' => ManuscriptAttachFile::$types
         ]);
     }
 
