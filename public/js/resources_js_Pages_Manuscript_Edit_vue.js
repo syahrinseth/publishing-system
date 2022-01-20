@@ -2128,12 +2128,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
 
     function submitAttach() {
-      attachForm.post("/api/manuscripts/".concat(props.manuscript.data.id, "/attach-files"));
+      attachForm.post("/manuscripts/".concat(props.manuscript.data.id, "/attach-files"));
       this.clearAttachForm();
     }
 
     function updateAttach() {
-      updateAttachForm.post("/api/manuscripts/".concat(props.manuscript.data.id, "/attach-files/").concat(updateAttachForm.id));
+      updateAttachForm.post("/manuscripts/".concat(props.manuscript.data.id, "/attach-files/").concat(updateAttachForm.id));
     }
 
     function fillUpdateAttachForm(attach) {
@@ -2163,7 +2163,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
 
       if (confirm('Are you sure to delete "' + attach.type.name + '"?')) {
-        deleteAttachForm.post("/api/manuscripts/".concat(props.manuscript.data.id, "/attach-files/").concat(attach.id));
+        deleteAttachForm.post("/manuscripts/".concat(props.manuscript.data.id, "/attach-files/").concat(attach.id));
       }
     }
 
@@ -2724,12 +2724,7 @@ var _hoisted_86 = ["onClick"];
 
 var _hoisted_87 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" | ");
 
-var _hoisted_88 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-  href: "#",
-  "class": "text-indigo-600 hover:text-indigo-900"
-}, "Download", -1
-/* HOISTED */
-);
+var _hoisted_88 = ["href"];
 
 var _hoisted_89 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" | ");
 
@@ -3543,7 +3538,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               }
             }, "Edit", 8
             /* PROPS */
-            , _hoisted_86), _hoisted_87, _hoisted_88, _hoisted_89, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+            , _hoisted_86), _hoisted_87, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+              href: "/manuscripts/".concat($props.manuscript.data.id, "/attach-files/").concat(attachment.id, "/download"),
+              "class": "text-indigo-600 hover:text-indigo-900"
+            }, "Download", 8
+            /* PROPS */
+            , _hoisted_88), _hoisted_89, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
               href: "#",
               onClick: function onClick($event) {
                 return $setup.deleteAttachFile(attachment);

@@ -116,9 +116,11 @@ class ManuscriptController extends Controller
     /**
      * 
      */
-    public function downloadManuscriptAttach(Request $request, $manuscript_id, $id)
+    public function downloadAttachFile(Request $request, $id, $attachFileId)
     {
-        $file_path = Storage::path('manuscripts/1/attach-files/1');
+        $manuscript = Manuscript::findOrFail($id);
+        $attach = ManuscriptAttachFile::findOrFail($attachFileId);
+        return Storage::download($attach->file_location);
         // \PhpOffice\PhpWord\Settings::setPdfRendererPath($file_path);
         // \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
     
@@ -195,7 +197,7 @@ class ManuscriptController extends Controller
      * 
      * @return Response
      */
-    public function indexAttachFiles(Request $request, $id)
+    public function indexAttachFile(Request $request, $id)
     {
         
     }
@@ -208,7 +210,7 @@ class ManuscriptController extends Controller
      * 
      * @return Response
      */
-    public function storeAttachFiles(Request $request, $id)
+    public function storeAttachFile(Request $request, $id)
     {
         $manuscript = Manuscript::findOrFail($id);
         $users = User::all();
@@ -242,7 +244,7 @@ class ManuscriptController extends Controller
      * 
      * @return Response
      */
-    public function showAttachFiles(Request $request, $id, $attachFileId)
+    public function showAttachFile(Request $request, $id, $attachFileId)
     {
         
     }
@@ -256,7 +258,7 @@ class ManuscriptController extends Controller
      * 
      * @return Response
      */
-    public function updateAttachFiles(Request $request, $id, $attachFileId)
+    public function updateAttachFile(Request $request, $id, $attachFileId)
     {
         $manuscript = Manuscript::findOrFail($id);
         $users = User::all();
@@ -291,7 +293,7 @@ class ManuscriptController extends Controller
      * 
      * @return Response
      */
-    public function destroyAttachFiles(Request $request, $id, $attachFileId)
+    public function destroyAttachFile(Request $request, $id, $attachFileId)
     {
         $manuscript = Manuscript::findOrFail($id);
         $users = User::all();

@@ -288,7 +288,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <a href="#" class="text-indigo-600 hover:text-indigo-900" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">Edit</a> |
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Download</a> |
+                                    <a :href="`/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900">Download</a> |
                                     <a href="#" @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900">Delete</a>
                                 </td>
                             </tr>
@@ -692,12 +692,12 @@
         }
 
         function submitAttach() {
-            attachForm.post(`/api/manuscripts/${props.manuscript.data.id}/attach-files`);
+            attachForm.post(`/manuscripts/${props.manuscript.data.id}/attach-files`);
             this.clearAttachForm();
         }
 
         function updateAttach() {
-            updateAttachForm.post(`/api/manuscripts/${props.manuscript.data.id}/attach-files/${updateAttachForm.id}`);
+            updateAttachForm.post(`/manuscripts/${props.manuscript.data.id}/attach-files/${updateAttachForm.id}`);
         }
 
         function fillUpdateAttachForm(attach) {
@@ -726,7 +726,7 @@
                 _method: 'delete'
             });
             if (confirm('Are you sure to delete "' + attach.type.name + '"?')) {
-                deleteAttachForm.post(`/api/manuscripts/${props.manuscript.data.id}/attach-files/${attach.id}`);
+                deleteAttachForm.post(`/manuscripts/${props.manuscript.data.id}/attach-files/${attach.id}`);
             }
         }
 

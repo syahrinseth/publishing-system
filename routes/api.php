@@ -30,15 +30,15 @@ Route::delete('/manuscripts/{id}', [App\Http\Controllers\ManuscriptController::c
 
 # Manuscript Attach
 
-Route::get('/manuscripts/{id}/attach-files', [App\Http\Controllers\ManuscriptController::class, 'indexAttachFiles'])->name('api.manuscript.attachFile.index');
+Route::get('/manuscripts/{id}/attach-files', [App\Http\Controllers\ManuscriptController::class, 'indexAttachFile'])->name('api.manuscript.attachFile.index');
 
-Route::get('/manuscripts/{id}/attach-files/{attachFileId}', [App\Http\Controllers\ManuscriptController::class, 'showAttachFiles'])->name('api.manuscript.attachFile.show');
+Route::get('/manuscripts/{id}/attach-files/{attachFileId}', [App\Http\Controllers\ManuscriptController::class, 'showAttachFile'])->name('api.manuscript.attachFile.show');
 
-Route::post('/manuscripts/{id}/attach-files', [App\Http\Controllers\ManuscriptController::class, 'storeAttachFiles'])->name('api.manuscript.attachFile.store');
+Route::post('/manuscripts/{id}/attach-files', [App\Http\Controllers\ManuscriptController::class, 'storeAttachFile'])->name('api.manuscript.attachFile.store');
 
-Route::put('/manuscripts/{id}/attach-files/{attachFilesId}', [App\Http\Controllers\ManuscriptController::class, 'updateAttachFiles'])->name('api.manuscript.attachFile.update');
+Route::put('/manuscripts/{id}/attach-files/{attachFilesId}', [App\Http\Controllers\ManuscriptController::class, 'updateAttachFile'])->name('api.manuscript.attachFile.update');
 
-Route::delete('/manuscripts/{id}/attach-files/{attachFilesId}', [App\Http\Controllers\ManuscriptController::class, 'destroyAttachFiles'])->name('api.manuscript.attachFile.destroy');
+Route::delete('/manuscripts/{id}/attach-files/{attachFilesId}', [App\Http\Controllers\ManuscriptController::class, 'destroyAttachFile'])->name('api.manuscript.attachFile.destroy');
 
 # Manuscript Type
 
