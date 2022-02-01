@@ -21,6 +21,7 @@ class Manuscript extends Model
         'corresponding_authors' => 'array',
         'editors' => 'array',
         'reviewers' => 'array',
+        'additional_informations' => 'array'
     ];
 
     /**
@@ -43,11 +44,60 @@ class Manuscript extends Model
 
     public function getType()
     {
-        $types = [
-            '1' => "Full Length Article",
-            '2' => "Review",
-            '3' => "Short Communication"
-        ];
-        return $types[$this->type];
+        $types = collect([
+            [
+                'id' => 1,
+                'name' => "Full Length Article",
+            ],
+            [
+                'id' => 2,
+                'name' => "Review",
+            ],
+            [
+                'id' => 3,
+                'name' => "Short Communication",
+            ],
+        ]);
+        return $types->where('id', $this->type)->first();
+    }
+
+    public static function getTypes()
+    {
+        return collect([
+            [
+                'id' => 1,
+                'name' => "Full Length Article",
+            ],
+            [
+                'id' => 2,
+                'name' => "Review",
+            ],
+            [
+                'id' => 3,
+                'name' => "Short Communication",
+            ],
+        ]);
+    }
+
+    public function getCategories()
+    {
+        return collect([
+            [
+                'id' => 1,
+                'name' => 'Catalytic (whole organism, tissues, cells)'
+            ],
+            [
+                'id' => 2,
+                'name' => 'Catalytic (enzyme, biomimetic catalysts)'
+            ],
+            [
+                'id' => 3,
+                'name' => 'Affinity (e.g. antibodies & antibody fragments, nanobodies)'
+            ],
+            [
+                'id' => 4,
+                'name' => 'Others'
+            ],
+        ]);
     }
 }

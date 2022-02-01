@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ManuscriptAttachResource;
 use PDF;
 use App\Models\User;
 use Inertia\Inertia;
@@ -18,11 +19,17 @@ class ManuscriptController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $manuscripts = new ManuscriptCollection(Manuscript::all());
+
+        if ($request->is('api/*')) {
+            return response()->json(new ManuscriptCollection($manuscripts));
+        }
+
         return Inertia::render('Manuscript/Index', [
             'manuscripts' => $manuscripts
         ]);
@@ -35,9 +42,7 @@ class ManuscriptController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Manuscript/Create', [
-            
-        ]);
+        return Inertia::render('Manuscript/Create');
     }
 
     /**
@@ -51,6 +56,7 @@ class ManuscriptController extends Controller
         $request->validate([
             'type' => 'required',
         ]);
+
         $manuscript = new Manuscript();
         $manuscript->type = $request->type;
         $manuscript->authors = [];
@@ -59,34 +65,62 @@ class ManuscriptController extends Controller
         $manuscript->reviewers = [];
         $manuscript->save();
 
-        return response()->json($manuscript);
+        if ($request->is('api/*')) {
+            return response()->json(new ManuscriptResource($manuscript));
+        }
+
+        return Redirect::route('manuscript.edit', [
+            'id' => $manuscript->id
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
+     * @param \Illuminate\Http\Request $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        $manuscript = Manuscript::findOrFail($id);
 
+        $users = User::all();
+        
+        if ($request->is('api/*')) {
+            return response()->json(new ManuscriptResource($manuscript));
+        }
+
+        return Inertia::render('Manuscript/Edit', [
+            'manuscript' => new ManuscriptResource($manuscript),
+            'users' => $users,
+            'attachTypes' => ManuscriptAttachFile::$types,
+            'articleTypes' => Manuscript::getTypes()
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
+     * @param \Illuminate\Http\Request $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $manuscript = Manuscript::findOrFail($id);
+        
         $users = User::all();
+        
+        if ($request->is('api/*')) {
+            return response()->json(new ManuscriptResource($manuscript));
+        }
+        
         return Inertia::render('Manuscript/Edit', [
             'manuscript' => new ManuscriptResource($manuscript),
             'users' => $users,
-            'attachTypes' => ManuscriptAttachFile::$types
+            'attachTypes' => ManuscriptAttachFile::$types,
+            'articleTypes' => Manuscript::getTypes()
         ]);
     }
 
@@ -99,18 +133,48 @@ class ManuscriptController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $manuscript = Manuscript::findOrFail($id);
+        $manuscript->type = $request->type;
+        $manuscript->editors = $request->editors == null ? [] : [$request->editors];
+        $manuscript->reviewers = $request->reviewers == null ? [] : [$request->reviewers];
+        $manuscript->title = $request->title;
+        $manuscript->short_title = $request->short_title;
+        $manuscript->abstract = $request->abstract;
+        $manuscript->keywords = $request->keywords;
+        $manuscript->authors = [];
+        $manuscript->funding_information = $request->funding_information;
+        $manuscript->additional_informations = [
+            'is_confirm_grant_numbers' => $request->is_confirm_grant_numbers ?? false,
+            'is_acknowledge' => $request->is_acknowledge ?? false
+        ];
+        $manuscript->update();
+
+        if ($request->is('api/*')) {
+            return response()->json(new ManuscriptResource($manuscript));
+        }
+
+        return Redirect::route('manuscript.edit', [
+            'id' => $manuscript->id,
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $manuscript = Manuscript::findOrFail($id);
+        $manuscript->delete();
+
+        if ($request->is('api/*')) {
+            return response()->json();
+        }
+
+        return Redirect::route('manuscript.index');
     }
 
     /**
@@ -212,14 +276,18 @@ class ManuscriptController extends Controller
      */
     public function storeAttachFile(Request $request, $id)
     {
+        $request->validate([
+            'type' => 'required',
+        ]);
+
         $manuscript = Manuscript::findOrFail($id);
-        $users = User::all();
         $attach = new ManuscriptAttachFile;   
         $attach->manuscript_id = $id;
         $attach->type = $request->type ?? "Full Length Article";
         $attach->description = $request->description;
         $attach->size = 0;
         $attach->save();
+
         if ($request->hasFile('file')) {
             $path = $request->file->store("manuscripts/{$id}/attach-files/$attach->id");
             $attach->file_location = $path;
@@ -227,10 +295,13 @@ class ManuscriptController extends Controller
             $attach->size = Storage::size($path);
             $attach->update();
         }
-        return Inertia::render('Manuscript/Edit', [
-            'manuscript' => new ManuscriptResource($manuscript),
-            'users' => $users,
-            'attachTypes' => ManuscriptAttachFile::$types
+
+        if ($request->is('api/*')) {
+            return response()->json(new ManuscriptResource($manuscript));
+        }
+
+        return Redirect::route('manuscript.edit', [
+            'id' => $manuscript->id
         ]);
         
     }
@@ -261,12 +332,12 @@ class ManuscriptController extends Controller
     public function updateAttachFile(Request $request, $id, $attachFileId)
     {
         $manuscript = Manuscript::findOrFail($id);
-        $users = User::all();
         $attach = ManuscriptAttachFile::findOrFail($attachFileId);   
         $attach->manuscript_id = $id;
         $attach->type = $request->type ?? $attach->type;
         $attach->description = $request->description ?? $attach->description;
         $attach->update();
+
         if ($request->hasFile('file')) {
             if (Storage::exists($attach->file_location)) {
                 Storage::delete($attach->file_location);
@@ -277,10 +348,13 @@ class ManuscriptController extends Controller
             $attach->size = Storage::size($path);
             $attach->update();
         }
-        return Inertia::render('Manuscript/Edit', [
-            'manuscript' => new ManuscriptResource($manuscript),
-            'users' => $users,
-            'attachTypes' => ManuscriptAttachFile::$types
+
+        if ($request->is('api/*')) {
+            return response()->json(new ManuscriptAttachResource($attach));
+        }
+
+        return Redirect::route('manuscript.edit', [
+            'id' => $manuscript->id
         ]);
     }
 
@@ -296,16 +370,20 @@ class ManuscriptController extends Controller
     public function destroyAttachFile(Request $request, $id, $attachFileId)
     {
         $manuscript = Manuscript::findOrFail($id);
-        $users = User::all();
         $attach = ManuscriptAttachFile::findOrFail($attachFileId);
+
         if (Storage::exists($attach->file_location)) {
             Storage::delete($attach->file_location);
         }
+
         $attach->delete();
-        return Inertia::render('Manuscript/Edit', [
-            'manuscript' => new ManuscriptResource($manuscript),
-            'users' => $users,
-            'attachTypes' => ManuscriptAttachFile::$types
+        
+        if ($request->is('api/*')) {
+            return response()->json();
+        }
+
+        return Redirect::route('manuscript.edit', [
+            'id' => $manuscript->id
         ]);
     }
 }
