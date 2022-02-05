@@ -16,7 +16,7 @@ class CreateManuscriptAttachFiles extends Migration
         Schema::create('manuscript_attach_files', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('manuscript_id');
-            $table->foreign('manuscript_id')->references('id')->on('manuscripts');
+            $table->foreign('manuscript_id')->references('id')->on('manuscripts')->onDelete('cascade');
             $table->string('type')->nullable();
             $table->text('description')->nullable();
             $table->string('file_name');

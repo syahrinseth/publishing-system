@@ -118,7 +118,8 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <Link :href="`/manuscripts/${manuscript.id}/edit`" class="text-indigo-600 hover:text-indigo-900">Edit</Link> |
-                                    <a :href="`/manuscripts/${manuscript.id}/download`" class="text-indigo-600 hover:text-indigo-900" target="_blank">Download</a>
+                                    <a :href="`/manuscripts/${manuscript.id}/download`" class="text-indigo-600 hover:text-indigo-900" target="_blank">Download</a> |
+                                    <a href="#" @click="deleteManuscript(manuscript)" class="text-indigo-600 hover:text-indigo-900">Delete</a>
                                 </td>
                             </tr>
                         </template>
@@ -139,7 +140,7 @@
 <script>
   import Layout from '../../Layout'
   import Table from '../../Components/Table'
-  import { Link } from '@inertiajs/inertia-vue3'
+  import { Link, useForm } from '@inertiajs/inertia-vue3'
   import {
   BriefcaseIcon,
   CalendarIcon,
@@ -185,6 +186,14 @@
                 return resp.data;
             }
             return [];
+        },
+        async deleteManuscript(manuscript) {
+            const deleteAttachForm = useForm({
+                _method: 'post'
+            });
+            if (confirm('Are you sure to delete "' + manuscript.type.name + '"?')) {
+                deleteAttachForm.post(`/manuscripts/${manuscript.id}/destroy`);
+            }
         }
     },
     async mounted() {
