@@ -54399,7 +54399,7 @@ module.exports = JSON.parse('{"_from":"axios@^0.21.1","_id":"axios@0.21.4","_inB
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "js/" + chunkId + ".js?id=" + {"resources_js_Pages_Home_vue":"265f06a646dc931c","resources_js_Pages_Journal_Index_vue":"961153fd0f4f3418","resources_js_Pages_Manuscript_AttachFiles_Create_vue":"e3574c9aa0cac095","resources_js_Pages_Manuscript_Create_vue":"8a5d1e5853a59bad","resources_js_Pages_Manuscript_Created2_vue":"8e3a9a4b9c825561","resources_js_Pages_Manuscript_Edit_vue":"aff4a5ad04c85e8b","resources_js_Pages_Manuscript_Index_vue":"5daaf33c979e394a","resources_js_Pages_User_Index_vue":"03bc7dfb518acebd"}[chunkId] + "";
+/******/ 			return "js/" + chunkId + ".js?id=" + {"resources_js_Pages_Home_vue":"265f06a646dc931c","resources_js_Pages_Journal_Index_vue":"961153fd0f4f3418","resources_js_Pages_Manuscript_AttachFiles_Create_vue":"e3574c9aa0cac095","resources_js_Pages_Manuscript_Create_vue":"8a5d1e5853a59bad","resources_js_Pages_Manuscript_Created2_vue":"8e3a9a4b9c825561","resources_js_Pages_Manuscript_Edit_vue":"aff4a5ad04c85e8b","resources_js_Pages_Manuscript_Index_vue":"aa039c62e82b9012","resources_js_Pages_User_Index_vue":"03bc7dfb518acebd"}[chunkId] + "";
 /******/ 		};
 /******/ 	})();
 /******/ 	

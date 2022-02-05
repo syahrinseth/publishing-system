@@ -288,12 +288,11 @@ var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 }, " Last Modified "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   scope: "col",
-  "class": "relative px-6 py-3"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
-  "class": "sr-only"
-}, "Edit"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
-  "class": "sr-only"
-}, "Download")])], -1
+  "class": "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+}, " Status "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
+  scope: "col",
+  "class": "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+})], -1
 /* HOISTED */
 );
 
@@ -339,18 +338,21 @@ var _hoisted_27 = {
   "class": "px-6 py-4 whitespace-nowrap text-sm text-gray-500"
 };
 var _hoisted_28 = {
+  "class": "px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+};
+var _hoisted_29 = {
   "class": "px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
 };
 
-var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Edit");
+var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Edit");
 
-var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" | ");
+var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" | ");
 
-var _hoisted_31 = ["href"];
+var _hoisted_32 = ["href"];
 
-var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" | ");
+var _hoisted_33 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" | ");
 
-var _hoisted_33 = ["onClick"];
+var _hoisted_34 = ["onClick"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_PencilIcon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("PencilIcon");
 
@@ -467,7 +469,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.manuscripts.data, function (manuscript) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
               key: manuscript.id
-            }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"flex-shrink-0 h-10 w-10\">\n                                    <img class=\"h-10 w-10 rounded-full\" :src=\"person.order\" alt=\"\" />\n                                    </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.id), 1
+            }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"flex-shrink-0 h-10 w-10\">\n                                        <img class=\"h-10 w-10 rounded-full\" :src=\"person.order\" alt=\"\" />\n                                        </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.id), 1
             /* TEXT */
             ), _hoisted_21])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.type.name), 1
             /* TEXT */
@@ -477,25 +479,27 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             /* TEXT */
             ), _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.updated_at), 1
             /* TEXT */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.status), 1
+            /* TEXT */
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
               href: "/manuscripts/".concat(manuscript.id, "/edit"),
               "class": "text-indigo-600 hover:text-indigo-900"
             }, {
               "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                return [_hoisted_29];
+                return [_hoisted_30];
               }),
               _: 2
               /* DYNAMIC */
 
             }, 1032
             /* PROPS, DYNAMIC_SLOTS */
-            , ["href"]), _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+            , ["href"]), _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
               href: "/manuscripts/".concat(manuscript.id, "/download"),
               "class": "text-indigo-600 hover:text-indigo-900",
               target: "_blank"
             }, "Download", 8
             /* PROPS */
-            , _hoisted_31), _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+            , _hoisted_32), _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
               href: "#",
               onClick: function onClick($event) {
                 return $options.deleteManuscript(manuscript);
@@ -503,7 +507,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               "class": "text-indigo-600 hover:text-indigo-900"
             }, "Delete", 8
             /* PROPS */
-            , _hoisted_33)])]);
+            , _hoisted_34)])]);
           }), 128
           /* KEYED_FRAGMENT */
           ))];
