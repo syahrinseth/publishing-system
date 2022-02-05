@@ -144,4 +144,15 @@ return [
 
     ],
 
+    'models' => [
+        'manuscript' => [
+            'status' => [
+                'draft',
+                'in_review',
+                'publish',
+                'publish_and_public'
+            ]
+        ]
+    ]
+
 ];

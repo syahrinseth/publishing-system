@@ -323,13 +323,7 @@ var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNo
 
 var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" | ");
 
-var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-  href: "#",
-  "class": "text-indigo-600 hover:text-indigo-900"
-}, "Download", -1
-/* HOISTED */
-);
-
+var _hoisted_31 = ["href"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_PencilIcon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("PencilIcon");
 
@@ -468,7 +462,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
             }, 1032
             /* PROPS, DYNAMIC_SLOTS */
-            , ["href"]), _hoisted_30, _hoisted_31])]);
+            , ["href"]), _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+              href: "/manuscripts/".concat(manuscript.id, "/download"),
+              "class": "text-indigo-600 hover:text-indigo-900",
+              target: "_blank"
+            }, "Download", 8
+            /* PROPS */
+            , _hoisted_31)])]);
           }), 128
           /* KEYED_FRAGMENT */
           ))];

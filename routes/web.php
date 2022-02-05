@@ -25,6 +25,8 @@ Route::get('/manuscripts/{id}/edit', [App\Http\Controllers\ManuscriptController:
 
 Route::post('/manuscripts/{id}/update', [App\Http\Controllers\ManuscriptController::class, 'update'])->name('manuscript.update');
 
+Route::get('/manuscripts/{id}/download', [App\Http\Controllers\ManuscriptController::class, 'download'])->name('manuscript.download');
+
 // Manuscript Attach Files
 Route::get('/manuscripts/{id}/attach-files', [App\Http\Controllers\ManuscriptController::class, 'indexAttachFile'])->name('manuscript.attachFile.index');
 

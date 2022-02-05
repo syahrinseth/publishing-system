@@ -77,8 +77,8 @@
                                 Last Modified
                                 </th>
                                 <th scope="col" class="relative px-6 py-3">
-                                <span class="sr-only">Edit</span>
-                                <span class="sr-only">Download</span>
+                                    <span class="sr-only">Edit</span>
+                                    <span class="sr-only">Download</span>
                                 </th>
                             </tr>
                         </template>
@@ -118,7 +118,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <Link :href="`/manuscripts/${manuscript.id}/edit`" class="text-indigo-600 hover:text-indigo-900">Edit</Link> |
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Download</a>
+                                    <a :href="`/manuscripts/${manuscript.id}/download`" class="text-indigo-600 hover:text-indigo-900" target="_blank">Download</a>
                                 </td>
                             </tr>
                         </template>

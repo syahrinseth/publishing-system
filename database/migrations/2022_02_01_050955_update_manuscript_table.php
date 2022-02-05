@@ -16,6 +16,7 @@ class UpdateManuscriptTable extends Migration
         Schema::table('manuscripts', function(Blueprint $table) {
             $table->json('additional_informations')->nullable();
             $table->text('short_title')->nullable();
+            $table->string('status')->default('draft');
         });
     }
 
@@ -29,6 +30,7 @@ class UpdateManuscriptTable extends Migration
         Schema::table('manuscripts', function(Blueprint $table) {
             $table->dropColumn('additional_informations');
             $table->dropColumn('short_title');
+            $table->dropColumn('status');
         });
     }
 }

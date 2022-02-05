@@ -112,4 +112,29 @@ class ManuscriptAttachFile extends Model
     {
         return basename($this->file_location);
     }
+
+    /**
+     * Check if attachment can be merge
+     * 
+     * @return boolean
+     */
+    public function canMerge()
+    {
+        $mimeType = Storage::mimeType($this->file_location);
+
+        if (
+            str_contains(strtolower($mimeType), 'image') || 
+            str_contains(strtolower($mimeType), 'pdf')
+        ) {
+
+            return false;
+
+        } else if(!str_contains(strtolower($mimeType), 'word')) {
+
+            return false;
+
+        }
+
+        return true;
+    }
 }

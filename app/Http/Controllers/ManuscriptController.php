@@ -178,6 +178,76 @@ class ManuscriptController extends Controller
     }
 
     /**
+     * Download combined doc in pdf
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function download(Request $request, $id)
+    {
+        $manuscript = Manuscript::findOrFail($id);
+        $attachments = ManuscriptAttachFile::where('manuscript_id', $manuscript->id)
+            ->get();
+        // Loop attachments
+        // Create a main template file to merge with
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
+        $objWriter->save(storage_path('app') . "/manuscripts/{$manuscript->id}/main_template.html");
+        // Load main template
+        $mainTemp = PDF::loadFile(storage_path('app') . "/manuscripts/{$manuscript->id}/main_template.html")->getDomPDF()->get_dom();
+        $break = PDF::loadFile( public_path() . "/break.html" )->getDomPDF()->get_dom();
+        // $mainTempBody = $mainTemp->getElementsByTagName('body')->item(0);
+        $hasContent = false;
+        foreach ($attachments as $attachment) {
+            // Check for supported file for combine
+            if ($attachment->canMerge()) {
+                if (str_contains(Storage::mimeType($attachment->file_location), 'word')) {
+                    // Convert docs to html.
+                    $Content = \PhpOffice\PhpWord\IOFactory::load(storage_path('app') . '/' . $attachment->file_location);
+                    $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'HTML');
+                    $PDFWriter->save(storage_path('app') . '/' . "{$attachment->file_location}.html");
+                }
+
+                // Load html file
+                $htmlTemp = PDF::loadFile( storage_path('app') . "/{$attachment->file_location}.html" )->getDomPDF()->get_dom();
+                // $htmlBodyTemp = $htmlTemp->getElementsByTagName('body')->item(0);
+                // Merge html into one main html temp template
+                // foreach ($htmlBodyTemp->childNodes as $child) {
+                //     $import = $mainTemp->importNode($child, true);
+                //     if ($import) {
+                //         $mainTempBody->appendChild($import);
+                //     }
+                // }
+                foreach ($htmlTemp->documentElement->childNodes as $child) {
+                    $import = $mainTemp->importNode($child, true);
+                    if ($import) {
+                        $mainTemp->documentElement->appendChild($import);
+                    }
+                }
+
+                foreach ($break->documentElement->childNodes as $child) {
+                    $import = $mainTemp->importNode($child, true);
+                    if ($import) {
+                        $mainTemp->documentElement->appendChild($import);
+                    }
+                }
+                $hasContent = true;
+            }
+            
+        }
+
+        if ($hasContent) {
+            // Save Merged html
+            $mainTemp->save(storage_path('app') . "/manuscripts/{$manuscript->id}/final_template.html");
+            // Download pdf from merged html
+            return PDF::loadFile( storage_path('app') . "/manuscripts/{$manuscript->id}/final_template.html" )->stream( 'final_template.pdf' );
+        }
+        return PDF::loadFile( storage_path('app') . "/manuscripts/{$manuscript->id}/main_template.html" )->stream( 'final_template.pdf' );
+        
+    }
+
+    /**
      * 
      */
     public function downloadAttachFile(Request $request, $id, $attachFileId)
@@ -189,11 +259,12 @@ class ManuscriptController extends Controller
         // \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
     
         // //Load word file
-        // $Content = \PhpOffice\PhpWord\IOFactory::load($file_path . '/test.docx');
+        $Content = \PhpOffice\PhpWord\IOFactory::load($file_path . '/test.docx');
 
         // //Save it into PDF
-        // $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'HTML');
-        // $PDFWriter->save("{$file_path}/test2.html"); 
+        $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'HTML');
+        $PDFWriter->save("{$file_path}/test2.html");
+
         $doc1 = PDF::loadFile( "{$file_path}/test.html" )->getDomPDF()->get_dom();
         $doc2 = PDF::loadFile( "{$file_path}/test2.html" )->getDomPDF()->get_dom();
         $doc3 = PDF::loadFile( "{$file_path}/test3.html" )->getDomPDF()->get_dom();
