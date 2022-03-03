@@ -11,21 +11,21 @@
                     <span class="hidden sm:block">
                         <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <PencilIcon class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
-                        Some Link
+                        Button
                         </button>
                     </span>
 
                     <span class="hidden sm:block ml-3">
                         <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <LinkIcon class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
-                        View
+                        Button
                         </button>
                     </span>
 
                     <span class="sm:ml-3">
                         <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <CheckIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                        Publish
+                        Button
                         </button>
                     </span>
 
@@ -55,40 +55,94 @@
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 
                 <div class="border-t border-gray-200">
-                    <Table></Table>
+                    <Table>
+                        <template v-slot:header>
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                #
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Name
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Email
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Role
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Last Modified
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+
+                                </th>
+                            </tr>
+                        </template>
+                        <template v-slot:body>
+                            <tr v-for="(user, index) in users" :key="user.id">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <!-- <div class="flex-shrink-0 h-10 w-10">
+                                        <img class="h-10 w-10 rounded-full" :src="person.order" alt="" />
+                                        </div> -->
+                                        <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">
+                                            {{ index + 1 }}
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            <!-- {{ person.email }} -->
+                                        </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">{{ user.name }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <!-- <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                </span> -->
+                                {{ user.email || 'N/a' }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ user.updated_at }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <Link :href="`/users/${user.id}/edit`" class="text-indigo-600 hover:text-indigo-900">Edit</Link> |
+                                    <a href="#" @click="deleteUser(user)" class="text-indigo-600 hover:text-indigo-900">Delete</a>
+                                </td>
+                            </tr>
+                        </template>
+                    </Table>
                 </div>
             </div>
-
-            <!-- <div class="hidden sm:block" aria-hidden="true">
-                <div class="py-5">
-                    <div class="border-t border-gray-200" />
-                </div>
-            </div> -->
-
             
         </template>
     </Layout>
 </template>
 <script>
-  import Layout from '../../Layout'
-  import Table from '../../Components/Table'
-  import {
-  BriefcaseIcon,
-  CalendarIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  CurrencyDollarIcon,
-  LinkIcon,
-  LocationMarkerIcon,
-  PencilIcon,
-} from '@heroicons/vue/solid'
-  import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+    import Layout from '../../Layout'
+    import Table from '../../Components/Table'
+    import {
+        BriefcaseIcon,
+        CalendarIcon,
+        CheckIcon,
+        ChevronDownIcon,
+        CurrencyDollarIcon,
+        LinkIcon,
+        LocationMarkerIcon,
+        PencilIcon,
+    } from '@heroicons/vue/solid'
+    import { useForm, Link } from '@inertiajs/inertia-vue3'
+    import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 
-  export default {
-      components: {
-          Layout,
-          Table,
-          Menu,
+    export default {
+        components: {
+            Layout,
+            Table,
+            Menu,
             MenuButton,
             MenuItem,
             MenuItems,
@@ -100,9 +154,19 @@
             LinkIcon,
             LocationMarkerIcon,
             PencilIcon,
-      },
-    props: {
-    //   user: Object,
-    },
-  }
+            useForm,
+            Link
+        },
+        setup(props) {
+            const deleteUser = function (user) {
+
+            }
+            return {
+                deleteUser
+            };
+        },
+        props: {
+            users: Array,
+        },
+    }
 </script>

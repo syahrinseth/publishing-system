@@ -54,3 +54,15 @@ Route::get('/journals/{id}/edit', [App\Http\Controllers\JournalController::class
 // User Module
 
 Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
+
+Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'show'])->name('user.show');
+
+Route::get('/user-create', [App\Http\Controllers\UserController::class, 'create'])->name('user.create');
+
+Route::get('/user-store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
+
+Route::get('/users/{id}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
+
+Route::post('/users/{id}/update', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
+
+Route::post('/users/{id}/destroy', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
