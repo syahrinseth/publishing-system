@@ -1,5 +1,7 @@
 <?php
 
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,56 +15,69 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+Route::middleware(['auth:sanctum'])->group(function() {
 
-// Manuscript Module
+    Inertia::share('auth.user', function () {
+        return Auth::user();
+    });
+    
+    Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 
-Route::get('/manuscript-create', [App\Http\Controllers\ManuscriptController::class, 'create'])->name('manuscript.create');
+    // Manuscript Module
 
-Route::get('/manuscripts', [App\Http\Controllers\ManuscriptController::class, 'index'])->name('manuscript.index');
+    Route::get('/manuscript-create', [App\Http\Controllers\ManuscriptController::class, 'create'])->name('manuscript.create');
 
-Route::get('/manuscripts/{id}/edit', [App\Http\Controllers\ManuscriptController::class, 'edit'])->name('manuscript.edit');
+    Route::post('/manuscript-store', [App\Http\Controllers\ManuscriptController::class, 'store'])->name('manuscript.store');
 
-Route::post('/manuscripts/{id}/update', [App\Http\Controllers\ManuscriptController::class, 'update'])->name('manuscript.update');
+    Route::get('/manuscripts', [App\Http\Controllers\ManuscriptController::class, 'index'])->name('manuscript.index');
 
-Route::post('/manuscripts/{id}/destroy', [App\Http\Controllers\ManuscriptController::class, 'destroy'])->name('manuscript.destroy');
+    Route::get('/manuscripts/{id}/edit', [App\Http\Controllers\ManuscriptController::class, 'edit'])->name('manuscript.edit');
 
-Route::get('/manuscripts/{id}/download', [App\Http\Controllers\ManuscriptController::class, 'download'])->name('manuscript.download');
+    Route::post('/manuscripts/{id}/update', [App\Http\Controllers\ManuscriptController::class, 'update'])->name('manuscript.update');
 
-// Manuscript Attach Files
-Route::get('/manuscripts/{id}/attach-files', [App\Http\Controllers\ManuscriptController::class, 'indexAttachFile'])->name('manuscript.attachFile.index');
+    Route::post('/manuscripts/{id}/destroy', [App\Http\Controllers\ManuscriptController::class, 'destroy'])->name('manuscript.destroy');
 
-Route::get('/manuscripts/{id}/attach-files/{attachFileId}', [App\Http\Controllers\ManuscriptController::class, 'showAttachFile'])->name('manuscript.attachFile.show');
+    Route::get('/manuscripts/{id}/download', [App\Http\Controllers\ManuscriptController::class, 'download'])->name('manuscript.download');
 
-Route::post('/manuscripts/{id}/attach-files', [App\Http\Controllers\ManuscriptController::class, 'storeAttachFile'])->name('manuscript.attachFile.store');
+    // Manuscript Attach Files
+    Route::get('/manuscripts/{id}/attach-files', [App\Http\Controllers\ManuscriptController::class, 'indexAttachFile'])->name('manuscript.attachFile.index');
 
-Route::post('/manuscripts/{id}/attach-files/{attachFilesId}/update', [App\Http\Controllers\ManuscriptController::class, 'updateAttachFile'])->name('manuscript.attachFile.update');
+    Route::get('/manuscripts/{id}/attach-files/{attachFileId}', [App\Http\Controllers\ManuscriptController::class, 'showAttachFile'])->name('manuscript.attachFile.show');
 
-Route::delete('/manuscripts/{id}/attach-files/{attachFilesId}', [App\Http\Controllers\ManuscriptController::class, 'destroyAttachFile'])->name('manuscript.attachFile.destroy');
+    Route::post('/manuscripts/{id}/attach-files', [App\Http\Controllers\ManuscriptController::class, 'storeAttachFile'])->name('manuscript.attachFile.store');
 
-Route::get('/manuscripts/{id}/attach-files/{attachFileId}/download', [App\Http\Controllers\ManuscriptController::class, 'downloadAttachFile'])->name('manuscript.downloadManuscriptAttach');
+    Route::post('/manuscripts/{id}/attach-files/{attachFilesId}/update', [App\Http\Controllers\ManuscriptController::class, 'updateAttachFile'])->name('manuscript.attachFile.update');
+
+    Route::delete('/manuscripts/{id}/attach-files/{attachFilesId}', [App\Http\Controllers\ManuscriptController::class, 'destroyAttachFile'])->name('manuscript.attachFile.destroy');
+
+    Route::get('/manuscripts/{id}/attach-files/{attachFileId}/download', [App\Http\Controllers\ManuscriptController::class, 'downloadAttachFile'])->name('manuscript.downloadManuscriptAttach');
+
+    // Manuscript Types
+
+    // Route::get('manuscript-types', [App\Http\Controllers\ManuscriptController::class, 'indexManuscriptTypes'])->name('manuscript.indexManuscriptType');
 
 
-// Journal Module
+    // Journal Module
 
-Route::get('/journals', [App\Http\Controllers\JournalController::class, 'index'])->name('journal.index');
+    Route::get('/journals', [App\Http\Controllers\JournalController::class, 'index'])->name('journal.index');
 
-Route::get('/journals/{id}', [App\Http\Controllers\JournalController::class, 'show'])->name('journal.show');
+    Route::get('/journals/{id}', [App\Http\Controllers\JournalController::class, 'show'])->name('journal.show');
 
-Route::get('/journals/{id}/edit', [App\Http\Controllers\JournalController::class, 'edit'])->name('journal.edit');
+    Route::get('/journals/{id}/edit', [App\Http\Controllers\JournalController::class, 'edit'])->name('journal.edit');
 
-// User Module
+    // User Module
 
-Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
+    Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
 
-Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'show'])->name('user.show');
+    Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'show'])->name('user.show');
 
-Route::get('/user-create', [App\Http\Controllers\UserController::class, 'create'])->name('user.create');
+    Route::get('/user-create', [App\Http\Controllers\UserController::class, 'create'])->name('user.create');
 
-Route::get('/user-store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
+    Route::get('/user-store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
 
-Route::get('/users/{id}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
+    Route::get('/users/{id}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
 
-Route::post('/users/{id}/update', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
+    Route::post('/users/{id}/update', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
 
-Route::post('/users/{id}/destroy', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
+    Route::post('/users/{id}/destroy', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
+});

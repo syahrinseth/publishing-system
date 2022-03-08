@@ -20,10 +20,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = new UserCollection(User::all());
 
         if (request()->is('api/*')) {
-            return response()->json(new UserCollection($users));
+            return response()->json($users);
         }
 
         $data = [
@@ -69,6 +69,9 @@ class UserController extends Controller
             $user->city = $request->city;
             $user->state = $request->state;
             $user->fax_no = $request->fax_no;
+            $user->about = $request->about;
+            $user->website_url = $request->website_url;
+            $user->country = $request->country;
             $user->password = bcrypt($request->password);
             $user->save();
 
@@ -101,7 +104,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if (response()->is('api/*')) {
+        if (request()->is('api/*')) {
             return response()->json(new UserResource($user));
         }
 
@@ -120,7 +123,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if (response()->is('api/*')) {
+        if (request()->is('api/*')) {
             return response()->json(new UserResource($user));
         }
 
@@ -140,7 +143,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required',
+            'email' => 'required|email',
             // 'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 
@@ -156,6 +159,9 @@ class UserController extends Controller
             $user->city = $request->city;
             $user->state = $request->state;
             $user->fax_no = $request->fax_no;
+            $user->about = $request->about;
+            $user->website_url = $request->website_url;
+            $user->country = $request->country;
             // $user->password = bcrypt($request->password);
             $user->update();
 

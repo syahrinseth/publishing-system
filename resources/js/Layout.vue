@@ -41,7 +41,10 @@
                 <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                   <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
-                      <a :href="item.href" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</a>
+                      <a v-if="item.method == 'get'" :href="item.href" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</a>
+                      <a href="#" v-else @click="signOut(item)" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                        {{ item.name }}
+                      </a>
                     </MenuItem>
                   </MenuItems>
                 </transition>
@@ -108,7 +111,8 @@
 <script>
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/vue/outline'
-import { Link } from '@inertiajs/inertia-vue3'
+import { Link, useForm } from '@inertiajs/inertia-vue3'
+import Toast from './Components/Toast'
 
 const user = {
   name: 'Tom Cook',
@@ -125,9 +129,9 @@ const navigation = [
   { name: 'Contact Us', href: '#' },
 ]
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Your Profile', href: '#', method: 'get' },
+  { name: 'Settings', href: '#', method: 'get' },
+  { name: 'Sign out', href: '/logout', method: 'post' },
 ]
 
 export default {
@@ -143,6 +147,29 @@ export default {
     MenuIcon,
     XIcon,
     Link
+  },
+  methods: {
+    notification(message, type = 'success') {
+        this.$toast.open({
+            message: message,
+            type: type,
+            duration: 5000,
+            dismissible: true
+        })
+    },
+    signOut(item) {
+      const form = useForm();
+      form.post(item.href, {
+        onError: (errors) => {
+            Object.keys(errors).forEach((value, index) => {
+                this.notification(errors[value], 'error');
+            });
+        },
+        onSuccess: (res) => {
+          this.notification('Signed Out.');
+        }
+      });
+    }
   },
   setup() {
     return {

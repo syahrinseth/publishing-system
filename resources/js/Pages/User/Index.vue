@@ -79,7 +79,7 @@
                             </tr>
                         </template>
                         <template v-slot:body>
-                            <tr v-for="(user, index) in users" :key="user.id">
+                            <tr v-for="(user, index) in users.data" :key="user.id">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <!-- <div class="flex-shrink-0 h-10 w-10">
@@ -110,8 +110,11 @@
                                 {{ user.updated_at }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <Link :href="`/users/${user.id}/edit`" class="text-indigo-600 hover:text-indigo-900">Edit</Link> |
-                                    <a href="#" @click="deleteUser(user)" class="text-indigo-600 hover:text-indigo-900">Delete</a>
+                                    <form @submit.prevent="deleteUser(user)">
+                                        <Link :href="`/users/${user.id}/edit`" class="text-indigo-600 hover:text-indigo-900">Edit</Link> |
+                                        <button class="text-indigo-600 hover:text-indigo-900">Delete</button>
+                                    </form>
+                                    
                                 </td>
                             </tr>
                         </template>
@@ -157,12 +160,36 @@
             useForm,
             Link
         },
+        methods: {
+            deleteUser(user) {
+                if (confirm('Are you sure to delete "' + user.name + '"?')) {
+                    this.deleteForm.post(`/users/${user.id}/destroy`, {
+                        preserveScroll: true,
+                        onError: (errors) => {
+                            Object.keys(errors).forEach((value, index) => {
+                                this.notification(errors[value], 'error');
+                            });
+                        },
+                        onSuccess: () => {
+                            this.notification('Deleted.', 'success');
+                        }
+                    });
+                }
+            },
+            notification(message, type = 'success') {
+                this.$toast.open({
+                    message: message,
+                    type: type,
+                    duration: 5000,
+                    dismissible: true
+                })
+            },
+        },
         setup(props) {
-            const deleteUser = function (user) {
+            const deleteForm = useForm();
 
-            }
             return {
-                deleteUser
+                deleteForm
             };
         },
         props: {

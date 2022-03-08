@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ManuscriptAttachResource;
 use PDF;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Manuscript;
 use Illuminate\Http\Request;
 use App\Models\ManuscriptAttachFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Resources\ManuscriptResource;
 use App\Http\Resources\ManuscriptCollection;
+use App\Http\Resources\ManuscriptAttachResource;
 
 class ManuscriptController extends Controller
 {
@@ -27,7 +28,7 @@ class ManuscriptController extends Controller
         $manuscripts = new ManuscriptCollection(Manuscript::all());
 
         if ($request->is('api/*')) {
-            return response()->json(new ManuscriptCollection($manuscripts));
+            return response()->json($manuscripts);
         }
 
         return Inertia::render('Manuscript/Index', [
@@ -42,7 +43,13 @@ class ManuscriptController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Manuscript/Create');
+        return Inertia::render('Manuscript/Create', [
+            'types' => [
+                ['id' => 1, 'name' => 'Full Length Article'],
+                ['id' => 2, 'name' => 'Review'],
+                ['id' => 3, 'name' => 'Short Communication'],
+            ]
+        ]);
     }
 
     /**
@@ -59,7 +66,9 @@ class ManuscriptController extends Controller
 
         $manuscript = new Manuscript();
         $manuscript->type = $request->type;
-        $manuscript->authors = [];
+        $manuscript->authors = [
+            Auth::user()->id
+        ];
         $manuscript->corresponding_authors = [];
         $manuscript->editors = [];
         $manuscript->reviewers = [];
@@ -141,7 +150,7 @@ class ManuscriptController extends Controller
         $manuscript->short_title = $request->short_title;
         $manuscript->abstract = $request->abstract;
         $manuscript->keywords = $request->keywords;
-        $manuscript->authors = [];
+        $manuscript->authors = $request->authors;
         $manuscript->funding_information = $request->funding_information;
         $manuscript->additional_informations = [
             'is_confirm_grant_numbers' => $request->is_confirm_grant_numbers ?? false,
@@ -304,24 +313,6 @@ class ManuscriptController extends Controller
         // }
         $doc1->save("{$file_path}/final.html");
         return PDF::loadFile( "{$file_path}/final.html" )->stream( 'download.pdf' );
-    }
-
-    /**
-     * Get Manuscript Types
-     * 
-     * @param Request $request
-     * 
-     * @return Response
-     */
-    public function indexManuscriptTypes(Request $request)
-    {
-        $data = [
-            ['id' => 1, 'name' => 'Full Length Article'],
-            ['id' => 2, 'name' => 'Review'],
-            ['id' => 3, 'name' => 'Short Communication'],
-        ];
-
-        return response()->json($data);
     }
 
     /**

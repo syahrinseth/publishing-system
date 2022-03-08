@@ -22,7 +22,7 @@ class ManuscriptResource extends JsonResource
             'abstract' => $this->abstract,
             'keywords' => $this->keywords,
             'attachments' => new ManuscriptAttachCollection($this->attachments),
-            'authors' => $this->authors,
+            'authors' => $this->getAuthors(),
             'corresponding_authors' => $this->corresponding_authors,
             'editors' => count($this->editors) > 0 ? $this->editors[0] : null,
             'reviewers' => count($this->reviewers) > 0 ? $this->reviewers[0] : null,
@@ -33,12 +33,10 @@ class ManuscriptResource extends JsonResource
             'short_title' => $this->short_title,
             'abstract' => $this->abstract,
             'keywords' => $this->keywords,
-            'authors' => null,
             'status' => ucfirst($this->status),
             'funding_information' => $this->funding_information,
             'created_at' => $this->created_at->diffForHumans(),
             'updated_at' => $this->updated_at->diffForHumans(),
         ];
-        // return parent::toArray($request);
     }
 }

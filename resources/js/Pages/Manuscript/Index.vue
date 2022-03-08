@@ -59,7 +59,7 @@
                         <template v-slot:header>
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Id
+                                #
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Type
@@ -85,7 +85,7 @@
                             </tr>
                         </template>
                         <template v-slot:body>
-                            <tr v-for="manuscript in manuscripts.data" :key="manuscript.id">
+                            <tr v-for="(manuscript, index) in manuscripts.data" :key="manuscript.id">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <!-- <div class="flex-shrink-0 h-10 w-10">
@@ -93,7 +93,7 @@
                                         </div> -->
                                         <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900">
-                                            {{ manuscript.id }}
+                                            {{ index + 1 }}
                                         </div>
                                         <div class="text-sm text-gray-500">
                                             <!-- {{ person.email }} -->
@@ -197,7 +197,9 @@
                 _method: 'post'
             });
             if (confirm('Are you sure to delete "' + manuscript.type.name + '"?')) {
-                deleteAttachForm.post(`/manuscripts/${manuscript.id}/destroy`);
+                deleteAttachForm.post(`/manuscripts/${manuscript.id}/destroy`, {
+                    preserveScroll: true,
+                });
             }
         }
     },

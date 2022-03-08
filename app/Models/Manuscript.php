@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Manuscript extends Model
 {
@@ -23,6 +24,17 @@ class Manuscript extends Model
         'reviewers' => 'array',
         'additional_informations' => 'array'
     ];
+
+    /**
+     * Get authors collection
+     * @return array
+     */
+    public function getAuthors()
+    {
+        $users = User::whereIn('id', $this->authors)
+            ->get();
+        return $users->toArray();
+    }
 
     /**
      * Store Attach File.

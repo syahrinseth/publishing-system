@@ -14,16 +14,12 @@
                                 {{ manuscript.data.type.name }}
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
-                                <LocationMarkerIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                Author
+                                    <DocumentReportIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                    {{ manuscript.data.status }}
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
-                                <CurrencyDollarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                Editor
-                                </div>
-                                <div class="mt-2 flex items-center text-sm text-gray-500">
-                                <CurrencyDollarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                Reviewer
+                                    <UserIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                    {{ manuscript.data.authors.map(x => x.name).join(', ') }}
                                 </div>
                             </div>
                         </div>
@@ -234,7 +230,6 @@
                         <div>
                             <span class="sm:ml-3">
                                 <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" @click="showUploadAttachModal = !showUploadAttachModal; ">
-                                <CheckIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                     Upload File 
                                 </button>
                             </span>
@@ -316,7 +311,7 @@
                         </div>
                         </div>
                         <div class="mt-5 md:mt-0 md:col-span-2">
-                        <!-- <form> -->
+                        <form @submit.prevent="saveManuscript()">
                             <div class="shadow overflow-hidden sm:rounded-md">
                             <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
                                 <div class="grid grid-cols-3 gap-6">
@@ -332,12 +327,12 @@
                                 </div>
                             </div>
                             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                <a href="#" @click="saveManuscript()" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <button class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 Save
-                                </a>
+                                </button>
                             </div>
                             </div>
-                        <!-- </form> -->
+                        </form>
                         </div>
                     </div>
                     </div>
@@ -360,7 +355,7 @@
                                 </div>
                             </div>
                             <div class="mt-5 md:mt-0 md:col-span-2">
-                                <form action="#" method="POST">
+                                <form @submit.prevent="saveManuscript()" >
                                     <div class="shadow sm:rounded-md sm:overflow-hidden">
                                     <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
                                         <div class="grid grid-cols-3 gap-6">
@@ -391,9 +386,9 @@
                                         
                                     </div>
                                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                        <a href="#" @click="saveManuscript()" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        <button class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                             Save
-                                        </a>
+                                        </button>
                                     </div>
                                     </div>
                                 </form>
@@ -619,6 +614,9 @@
   CurrencyDollarIcon,
   LinkIcon,
   LocationMarkerIcon,
+  UserIcon,
+  StatusOnlineIcon,
+  DocumentReportIcon,
   PencilIcon
 } from '@heroicons/vue/solid'
   import { Menu, MenuButton, MenuItem, MenuItems, DialogTitle } from '@headlessui/vue'
@@ -640,6 +638,9 @@
         CurrencyDollarIcon,
         LinkIcon,
         LocationMarkerIcon,
+        UserIcon,
+        StatusOnlineIcon,
+        DocumentReportIcon,
         PencilIcon,
         Modal,
         Link,
@@ -662,8 +663,64 @@
             isShow: false
         }
     },
-    methods: {
-        
+    methods: {      
+        notification(message, type = 'success') {
+            this.$toast.open({
+                message: message,
+                type: type,
+                duration: 5000,
+                dismissible: true
+            })
+        },  
+        saveManuscript() {
+            this.manuscriptForm.authors = [
+                this.$page.props.auth.user.id || 1
+            ];
+            this.manuscriptForm.post(`/manuscripts/${this.$props.manuscript.data.id}/update`, {
+                preserveScroll: true,
+                onError: (errors) => {
+                    Object.keys(errors).forEach((value, index) => {
+                        this.notification(errors[value], 'error');
+                    });
+                },
+                onSuccess: () => {
+                    this.notification('Saved', 'success');
+                }
+            });
+        },
+        onChangeSubmitAttachFile(e) {
+            this.attachForm.file = e.target.files[0];
+        },
+        onChangeUpdateAttachFile(e) {
+            this.updateAttachForm.file = e.target.files[0];
+        },
+        submitAttach() {
+            this.attachForm.post(`/manuscripts/${this.$props.manuscript.data.id}/attach-files`, {
+                preserveScroll: true,
+                onError: (errors) => {
+                    Object.keys(errors).forEach((value, index) => {
+                        this.notification(errors[value], 'error');
+                    });
+                },
+                onSuccess: () => {
+                    this.notification('Saved', 'success');
+                }
+            });
+            this.clearAttachForm();
+        },
+        updateAttach() {
+            this.updateAttachForm.post(`/manuscripts/${this.$props.manuscript.data.id}/attach-files/${this.updateAttachForm.id}/update`, {
+                preserveScroll: true,
+                onError: (errors) => {
+                    Object.keys(errors).forEach((value, index) => {
+                        this.notification(errors[value], 'error');
+                    });
+                },
+                onSuccess: () => {
+                    this.notification('Saved', 'success');
+                }
+            });
+        },
     },
     setup (props) {
 
@@ -674,7 +731,7 @@
             short_title: props.manuscript.data.short_title,
             abstract: props.manuscript.data.abstract,
             keywords: props.manuscript.data.keywords,
-            authors: [],
+            authors: props.manuscript.data.authors,
             corresponding_authors: [],
             editors: props.manuscript.data.editors,
             reviewers: props.manuscript.data.reviewers,
@@ -697,27 +754,6 @@
             type: "",
             description: null
         });
-
-        function saveManuscript() {
-            manuscriptForm.post(`/manuscripts/${props.manuscript.data.id}/update`);
-        }
-
-        function onChangeSubmitAttachFile(e) {
-            attachForm.file = e.target.files[0];
-        }
-
-        function onChangeUpdateAttachFile(e) {
-            updateAttachForm.file = e.target.files[0];
-        }
-
-        function submitAttach() {
-            attachForm.post(`/manuscripts/${props.manuscript.data.id}/attach-files`);
-            this.clearAttachForm();
-        }
-
-        function updateAttach() {
-            updateAttachForm.post(`/manuscripts/${props.manuscript.data.id}/attach-files/${updateAttachForm.id}/update`);
-        }
 
         function fillUpdateAttachForm(attach) {
             updateAttachForm.id = attach.id;
@@ -745,14 +781,16 @@
                 _method: 'delete'
             });
             if (confirm('Are you sure to delete "' + attach.type.name + '"?')) {
-                deleteAttachForm.post(`/manuscripts/${props.manuscript.data.id}/attach-files/${attach.id}`);
+                deleteAttachForm.post(`/manuscripts/${props.manuscript.data.id}/attach-files/${attach.id}`, {
+                    preserveScroll: true,
+                });
             }
         }
 
-        return { attachForm, updateAttachForm, submitAttach, clearAttachForm, fillUpdateAttachForm, updateAttach, onChangeSubmitAttachFile, onChangeUpdateAttachFile, clearUpdateAttachForm, deleteAttachFile, manuscriptForm, saveManuscript }
+        return { clearAttachForm, fillUpdateAttachForm, clearUpdateAttachForm, deleteAttachFile, manuscriptForm, attachForm, updateAttachForm }
     },
     async mounted() {
-
+        // console.log(this.$page.props.auth)
     }
   }
 </script>

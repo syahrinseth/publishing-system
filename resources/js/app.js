@@ -16,9 +16,9 @@ createInertiaApp({
         return page
     },
   setup({ el, App, props, plugin }) {
-    createApp({ render: () => h(App, props) })
-      .use(plugin)
-      .use(VueToast)
-      .mount(el)
+    const app = createApp({ render: () => h(App, props) })
+    app.use(VueToast)
+    app.use(plugin)
+    app.mount(el)
   },
 })

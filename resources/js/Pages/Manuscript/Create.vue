@@ -26,9 +26,9 @@
                                                 <label for="company-website" class="block text-sm font-medium text-gray-700">
                                                 Article Type
                                                 </label>
-                                                <select name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="input.type">
+                                                <select name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="manuscriptForm.type">
                                                     <option value="" selected>Select</option>
-                                                    <option v-for="type in types" v-bind:key="type.id" :value="type.id">{{ type.name }}</option>
+                                                    <option v-for="type in $props.types" v-bind:key="type.id" :value="type.id">{{ type.name }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -53,53 +53,68 @@
   </div>
 </template>
 <script>
-  import Layout from '../../Layout'
-  import { Link } from '@inertiajs/inertia-vue3'
-  import { Inertia } from '@inertiajs/inertia'
+import Layout from '../../Layout'
+import { Link, useForm } from '@inertiajs/inertia-vue3'
+import { Inertia } from '@inertiajs/inertia'
+import Toast from '../../Components/Toast'
 
-  export default {
+export default {
     components: {
         Layout,
-        Link
+        Link,
+        Toast
     },
     data() {
         return {
             input: {
                 type: "",
             },
-            types: []
         };
     },
     methods: {
-        async submit() {
-            if (this.input.type != "") {
-                let resp = await window.axios.post('/api/manuscripts', {
-                    'type': this.input.type
-                })
-                    .then((resp) => {
-                        let data = resp.data;
-                        Inertia.get(`/manuscripts/${data.id}/edit`);
-                    })
-                    .catch((err) => {
-                        alert(err);
-                    });
-            } else {
-                alert('Article Type is required.');
-            }
+        notification(message, type = 'success') {
+            this.$toast.open({
+                message: message,
+                type: type,
+                duration: 5000,
+                dismissible: true
+            })
         },
-        async fetchTypes() {
-            let resp = await window.axios.get('/api/manuscript-types');
-            if (resp.status == 200) {
-                return resp.data;
-            }
-            return [];
-        }
+        async submit() {
+            this.manuscriptForm.post(`/manuscript-store`, {
+                preserveScroll: true,
+                onError: (errors) => {
+                    Object.keys(errors).forEach((value, index) => {
+                        this.notification(errors[value], 'error');
+                    });
+                },
+                onSuccess: (res) => {
+                }
+            });
+        },
+        notification(message, type = 'success') {
+            this.$toast.open({
+                message: message,
+                type: type,
+                duration: 5000,
+                dismissible: true
+            })
+        },
+    },
+    setup(props) {
+        const manuscriptForm = useForm({
+            type: ""
+        });
+
+        return {
+            manuscriptForm
+        };
     },
     async mounted() {
-        this.types = await this.fetchTypes();
     },
     props: {
-
+        types: Array,
+        auth: Object
     },
-  }
+}
 </script>

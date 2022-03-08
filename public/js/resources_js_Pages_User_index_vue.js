@@ -63,11 +63,38 @@ __webpack_require__.r(__webpack_exports__);
     useForm: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_3__.useForm,
     Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_3__.Link
   },
-  setup: function setup(props) {
-    var deleteUser = function deleteUser(user) {};
+  methods: {
+    deleteUser: function deleteUser(user) {
+      var _this = this;
 
+      if (confirm('Are you sure to delete "' + user.name + '"?')) {
+        this.deleteForm.post("/users/".concat(user.id, "/destroy"), {
+          preserveScroll: true,
+          onError: function onError(errors) {
+            Object.keys(errors).forEach(function (value, index) {
+              _this.notification(errors[value], 'error');
+            });
+          },
+          onSuccess: function onSuccess() {
+            _this.notification('Deleted.', 'success');
+          }
+        });
+      }
+    },
+    notification: function notification(message) {
+      var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'success';
+      this.$toast.open({
+        message: message,
+        type: type,
+        duration: 5000,
+        dismissible: true
+      });
+    }
+  },
+  setup: function setup(props) {
+    var deleteForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_3__.useForm)();
     return {
-      deleteUser: deleteUser
+      deleteForm: deleteForm
     };
   },
   props: {
@@ -245,12 +272,18 @@ var _hoisted_26 = {
 var _hoisted_27 = {
   "class": "px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
 };
+var _hoisted_28 = ["onSubmit"];
 
-var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Edit");
+var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Edit");
 
-var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" | ");
+var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" | ");
 
-var _hoisted_30 = ["onClick"];
+var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  "class": "text-indigo-600 hover:text-indigo-900"
+}, "Delete", -1
+/* HOISTED */
+);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_PencilIcon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("PencilIcon");
 
@@ -364,7 +397,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return [_hoisted_16];
         }),
         body: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.users, function (user, index) {
+          return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.users.data, function (user, index) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
               key: user.id
             }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"flex-shrink-0 h-10 w-10\">\n                                        <img class=\"h-10 w-10 rounded-full\" :src=\"person.order\" alt=\"\" />\n                                        </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(index + 1), 1
@@ -375,27 +408,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             /* TEXT */
             )]), _hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.updated_at), 1
             /* TEXT */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+              onSubmit: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+                return $options.deleteUser(user);
+              }, ["prevent"])
+            }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
               href: "/users/".concat(user.id, "/edit"),
               "class": "text-indigo-600 hover:text-indigo-900"
             }, {
               "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                return [_hoisted_28];
+                return [_hoisted_29];
               }),
               _: 2
               /* DYNAMIC */
 
             }, 1032
             /* PROPS, DYNAMIC_SLOTS */
-            , ["href"]), _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-              href: "#",
-              onClick: function onClick($event) {
-                return $setup.deleteUser(user);
-              },
-              "class": "text-indigo-600 hover:text-indigo-900"
-            }, "Delete", 8
-            /* PROPS */
-            , _hoisted_30)])]);
+            , ["href"]), _hoisted_30, _hoisted_31], 40
+            /* PROPS, HYDRATE_EVENTS */
+            , _hoisted_28)])]);
           }), 128
           /* KEYED_FRAGMENT */
           ))];

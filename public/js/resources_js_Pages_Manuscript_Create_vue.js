@@ -27,6 +27,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Layout */ "./resources/js/Layout.vue");
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 /* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+/* harmony import */ var _Components_Toast__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Components/Toast */ "./resources/js/Components/Toast.vue");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -36,115 +39,90 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     Layout: _Layout__WEBPACK_IMPORTED_MODULE_1__["default"],
-    Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__.Link
+    Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__.Link,
+    Toast: _Components_Toast__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   data: function data() {
     return {
       input: {
         type: ""
-      },
-      types: []
+      }
     };
   },
-  methods: {
+  methods: _defineProperty({
+    notification: function notification(message) {
+      var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'success';
+      this.$toast.open({
+        message: message,
+        type: type,
+        duration: 5000,
+        dismissible: true
+      });
+    },
     submit: function submit() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var resp;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (!(_this.input.type != "")) {
-                  _context.next = 6;
-                  break;
-                }
-
-                _context.next = 3;
-                return window.axios.post('/api/manuscripts', {
-                  'type': _this.input.type
-                }).then(function (resp) {
-                  var data = resp.data;
-                  _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.get("/manuscripts/".concat(data.id, "/edit"));
-                })["catch"](function (err) {
-                  alert(err);
+                _this.manuscriptForm.post("/manuscript-store", {
+                  preserveScroll: true,
+                  onError: function onError(errors) {
+                    Object.keys(errors).forEach(function (value, index) {
+                      _this.notification(errors[value], 'error');
+                    });
+                  },
+                  onSuccess: function onSuccess(res) {}
                 });
 
-              case 3:
-                resp = _context.sent;
-                _context.next = 7;
-                break;
-
-              case 6:
-                alert('Article Type is required.');
-
-              case 7:
+              case 1:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
-    },
-    fetchTypes: function fetchTypes() {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var resp;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return window.axios.get('/api/manuscript-types');
-
-              case 2:
-                resp = _context2.sent;
-
-                if (!(resp.status == 200)) {
-                  _context2.next = 5;
-                  break;
-                }
-
-                return _context2.abrupt("return", resp.data);
-
-              case 5:
-                return _context2.abrupt("return", []);
-
-              case 6:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
     }
+  }, "notification", function notification(message) {
+    var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'success';
+    this.$toast.open({
+      message: message,
+      type: type,
+      duration: 5000,
+      dismissible: true
+    });
+  }),
+  setup: function setup(props) {
+    var manuscriptForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__.useForm)({
+      type: ""
+    });
+    return {
+      manuscriptForm: manuscriptForm
+    };
   },
   mounted: function mounted() {
-    var _this2 = this;
-
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
-              _context3.next = 2;
-              return _this2.fetchTypes();
-
-            case 2:
-              _this2.types = _context3.sent;
-
-            case 3:
             case "end":
-              return _context3.stop();
+              return _context2.stop();
           }
         }
-      }, _callee3);
+      }, _callee2);
     }))();
   },
-  props: {}
+  props: {
+    types: Array,
+    auth: Object
+  }
 });
 
 /***/ }),
@@ -244,9 +222,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md",
         placeholder: "www.example.com",
         "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
-          return $data.input.type = $event;
+          return $setup.manuscriptForm.type = $event;
         })
-      }, [_hoisted_10, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.types, function (type) {
+      }, [_hoisted_10, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.$props.types, function (type) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
           key: type.id,
           value: type.id
@@ -257,7 +235,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* KEYED_FRAGMENT */
       ))], 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.input.type]])])])]), _hoisted_12])])])])], 32
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $setup.manuscriptForm.type]])])])]), _hoisted_12])])])])], 32
       /* HYDRATE_EVENTS */
       )];
     }),
