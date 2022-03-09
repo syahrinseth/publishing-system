@@ -80,4 +80,24 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::post('/users/{id}/update', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
 
     Route::post('/users/{id}/destroy', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
+
+    // Roles
+
+    Route::get('/roles', [App\Http\Controllers\RoleController::class, 'index'])->name('role.index');
+
+    Route::get('/role-create', [App\Http\Controllers\RoleController::class, 'create'])->name('role.create');
+
+    Route::get('/role-store', [App\Http\Controllers\RoleController::class, 'store'])->name('role.store');
+
+    Route::get('/roles/{id}', [App\Http\Controllers\RoleController::class, 'show'])->name('role.show');
+
+    Route::get('/roles/{id}/edit', [App\Http\Controllers\RoleController::class, 'edit'])->name('role.edit');
+
+    Route::post('/roles/{id}/update', [App\Http\Controllers\RoleController::class, 'update'])->name('role.update');
+
+    Route::post('/roles/{id}/destroy', [App\Http\Controllers\RoleController::class, 'destroy'])->name('role.destroy');
+
+    // Roles & Permissions
+
+    Route::post('/roles-permissions-update', [App\Http\Controllers\RolePermissionController::class, 'update']);
 });

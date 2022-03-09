@@ -167,15 +167,33 @@
                                             </div>
                                         </div>
                                         <div class="col-span-3 sm:col-span-2 mb-2">
-                                                <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                                Description
-                                                </label>
-                                                <div class="mt-1 flex rounded-md shadow-sm">
-                                                <textarea v-model="updateAttachForm.description" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                                </div>
+                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                            Description
+                                            </label>
+                                            <div class="mt-1 flex rounded-md shadow-sm">
+                                            <textarea v-model="updateAttachForm.description" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                             </div>
+                                        </div>
+                                        <div v-show="updateAttachForm.file_name != null">
+                                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                                <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                                    Uploaded Files
+                                                </label>
+                                                <ul role="list" class="mt-1 border border-gray-200 rounded-md divide-y divide-gray-200">
+                                                    <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
+                                                        <div class="w-0 flex-1 flex items-center">
+                                                        <PaperClipIcon class="flex-shrink-0 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                                        <span class="ml-2 flex-1 w-0 truncate"> {{ updateAttachForm.file_name }} </span>
+                                                        </div>
+                                                        <div class="ml-4 flex-shrink-0">
+                                                        <a :href="`/manuscripts/${manuscript.data.id}/attach-files/${updateAttachForm.id}/download`" class="font-medium text-indigo-600 hover:text-indigo-500"> Download </a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </dd>
+                                        </div>
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700">
+                                            <label class="mt-1 block text-sm font-medium text-gray-700">
                                                 Files
                                             </label>
                                             <div class="mt-1 flex justify-center pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
@@ -617,7 +635,8 @@
   UserIcon,
   StatusOnlineIcon,
   DocumentReportIcon,
-  PencilIcon
+  PencilIcon,
+  PaperClipIcon
 } from '@heroicons/vue/solid'
   import { Menu, MenuButton, MenuItem, MenuItems, DialogTitle } from '@headlessui/vue'
   import { useForm, Link } from '@inertiajs/inertia-vue3'
@@ -645,7 +664,8 @@
         Modal,
         Link,
         DialogTitle,
-        Toast
+        Toast,
+        PaperClipIcon
     },
     props: {
         manuscript: Object,
@@ -760,6 +780,7 @@
             updateAttachForm.file = null;
             updateAttachForm.type = attach.type.id;
             updateAttachForm.description = attach.description;
+            updateAttachForm.file_name = attach.file_name;
         }
 
         function clearUpdateAttachForm() {
@@ -767,6 +788,7 @@
             updateAttachForm.file = null;
             updateAttachForm.type = "";
             updateAttachForm.description = null;
+            updateAttachForm.file_name = attach.file_name;
         }
 
         function clearAttachForm() {
