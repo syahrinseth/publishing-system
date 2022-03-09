@@ -28,7 +28,7 @@ class RoleController extends Controller
                 'roles' => $roles
             ]);
         }
-
+        
         return Inertia::render('Role/Index', [
             'roles' => new RoleCollection($roles),
             'permissions' => $permissions

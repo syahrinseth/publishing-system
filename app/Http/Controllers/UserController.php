@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserCollection;
-use Exception;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rules\Password;
 
@@ -72,6 +73,7 @@ class UserController extends Controller
             $user->about = $request->about;
             $user->website_url = $request->website_url;
             $user->country = $request->country;
+            $user->assignRole('User');
             $user->password = bcrypt($request->password);
             $user->save();
 
@@ -102,14 +104,17 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::findOrFail($id);
+        $user = new UserResource(User::findOrFail($id));
 
         if (request()->is('api/*')) {
-            return response()->json(new UserResource($user));
+            return response()->json($user);
         }
 
+        $roles = Role::all();
+
         return Inertia::render('User/Show', [
-            'user' => $user
+            'user' => $user,
+            'roles' => $roles
         ]);
     }
 
@@ -121,14 +126,17 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
+        $user = new UserResource(User::findOrFail($id));
 
         if (request()->is('api/*')) {
-            return response()->json(new UserResource($user));
+            return response()->json($user);
         }
 
+        $roles = Role::all();
+
         return Inertia::render('User/Edit', [
-            'user' => $user
+            'user' => $user,
+            'roles' => $roles
         ]);
     }
 
@@ -162,6 +170,9 @@ class UserController extends Controller
             $user->about = $request->about;
             $user->website_url = $request->website_url;
             $user->country = $request->country;
+            if (!empty($request->roles) && count($request->roles) > 0) {
+                $user->assignRole($request->roles);
+            }
             // $user->password = bcrypt($request->password);
             $user->update();
 

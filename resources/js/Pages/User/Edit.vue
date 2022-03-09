@@ -155,36 +155,19 @@
                             <fieldset>
                                 <legend class="text-base font-medium text-gray-900">Roles</legend>
                                 <div class="mt-4 space-y-4">
-                                <div class="flex items-start">
-                                    <div class="flex items-center h-5">
-                                    <input id="comments" name="comments" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
+                                    <div v-for="role in roles" v-bind:key="`role-${role.id}`" class="flex items-start">
+                                        <div class="flex items-center h-5">
+                                        <input :id="`role-input-${role.id}`" v-model="userForm.roles" :value="role.id" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                        <label :for="`role-input-${role.id}`" class="font-medium text-gray-700">
+                                            {{ role.name }}
+                                        </label>
+                                        <!-- <p class="text-gray-500">Get notified when someones posts a comment on a posting.</p> -->
+                                        </div>
                                     </div>
-                                    <div class="ml-3 text-sm">
-                                    <label for="comments" class="font-medium text-gray-700">Comments</label>
-                                    <p class="text-gray-500">Get notified when someones posts a comment on a posting.</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start">
-                                    <div class="flex items-center h-5">
-                                    <input id="candidates" name="candidates" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
-                                    </div>
-                                    <div class="ml-3 text-sm">
-                                    <label for="candidates" class="font-medium text-gray-700">Candidates</label>
-                                    <p class="text-gray-500">Get notified when a candidate applies for a job.</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start">
-                                    <div class="flex items-center h-5">
-                                    <input id="offers" name="offers" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
-                                    </div>
-                                    <div class="ml-3 text-sm">
-                                    <label for="offers" class="font-medium text-gray-700">Offers</label>
-                                    <p class="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p>
-                                    </div>
-                                </div>
                                 </div>
                             </fieldset>
-                            
                             </div>
                             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                             <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save</button>
@@ -211,7 +194,8 @@ export default {
         Toast
     },
     props: {
-        user: Object
+        user: Object,
+        roles: Array
     },
     methods: {
         notification(message, type = 'success') {
@@ -223,7 +207,7 @@ export default {
             })
         },
         onSubmit() {
-            this.userForm.post(`/users/${this.$props.user.id}/update`, {
+            this.userForm.post(`/users/${this.$props.user.data.id}/update`, {
                 preserveScroll: true,
                 onError: (errors) => {
                     Object.keys(errors).forEach((value, index) => {
@@ -236,20 +220,22 @@ export default {
             });
         }
     },
-    setup(props) {
+    setup(props) {console.log(props)
+        let user = props.user.data;
         const userForm = useForm({
-            name: props.user.name,
-            email: props.user.email,
-            address_1: props.user.address_1,
-            address_2: props.user.address_2,
-            postcode: props.user.postcode,
-            city: props.user.city,
-            state: props.user.state,
-            fax_no: props.user.fax_no,
-            country: props.user.country,
-            website_url: props.user.website_url,
-            about: props.user.about,
-            photo: props.user.photo
+            name: user.name,
+            email: user.email,
+            address_1: user.address_1,
+            address_2: user.address_2,
+            postcode: user.postcode,
+            city: user.city,
+            state: user.state,
+            fax_no: user.fax_no,
+            country: user.country,
+            website_url: user.website_url,
+            about: user.about,
+            photo: user.photo,
+            roles: user.roles.length > 0 ? user.roles.map((e) => e.id) : []
         });
 
         return {

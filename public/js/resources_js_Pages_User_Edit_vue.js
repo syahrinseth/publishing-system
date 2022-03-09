@@ -25,7 +25,8 @@ __webpack_require__.r(__webpack_exports__);
     Toast: _Components_Toast__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   props: {
-    user: Object
+    user: Object,
+    roles: Array
   },
   methods: {
     notification: function notification(message) {
@@ -40,7 +41,7 @@ __webpack_require__.r(__webpack_exports__);
     onSubmit: function onSubmit() {
       var _this = this;
 
-      this.userForm.post("/users/".concat(this.$props.user.id, "/update"), {
+      this.userForm.post("/users/".concat(this.$props.user.data.id, "/update"), {
         preserveScroll: true,
         onError: function onError(errors) {
           Object.keys(errors).forEach(function (value, index) {
@@ -54,19 +55,24 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   setup: function setup(props) {
+    console.log(props);
+    var user = props.user.data;
     var userForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
-      name: props.user.name,
-      email: props.user.email,
-      address_1: props.user.address_1,
-      address_2: props.user.address_2,
-      postcode: props.user.postcode,
-      city: props.user.city,
-      state: props.user.state,
-      fax_no: props.user.fax_no,
-      country: props.user.country,
-      website_url: props.user.website_url,
-      about: props.user.about,
-      photo: props.user.photo
+      name: user.name,
+      email: user.email,
+      address_1: user.address_1,
+      address_2: user.address_2,
+      postcode: user.postcode,
+      city: user.city,
+      state: user.state,
+      fax_no: user.fax_no,
+      country: user.country,
+      website_url: user.website_url,
+      about: user.about,
+      photo: user.photo,
+      roles: user.roles.length > 0 ? user.roles.map(function (e) {
+        return e.id;
+      }) : []
     });
     return {
       userForm: userForm
@@ -370,73 +376,40 @@ var _hoisted_47 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 var _hoisted_48 = {
   "class": "mt-5 md:mt-0 md:col-span-2"
 };
-
-var _hoisted_49 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_49 = {
   "class": "shadow overflow-hidden sm:rounded-md"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+};
+var _hoisted_50 = {
   "class": "px-4 py-5 bg-white space-y-6 sm:p-6"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("fieldset", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("legend", {
+};
+
+var _hoisted_51 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("legend", {
   "class": "text-base font-medium text-gray-900"
-}, "Roles"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+}, "Roles", -1
+/* HOISTED */
+);
+
+var _hoisted_52 = {
   "class": "mt-4 space-y-4"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "flex items-start"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+};
+var _hoisted_53 = {
   "class": "flex items-center h-5"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-  id: "comments",
-  name: "comments",
-  type: "checkbox",
-  "class": "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-})]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+};
+var _hoisted_54 = ["id", "value"];
+var _hoisted_55 = {
   "class": "ml-3 text-sm"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "for": "comments",
-  "class": "font-medium text-gray-700"
-}, "Comments"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "text-gray-500"
-}, "Get notified when someones posts a comment on a posting.")])]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "flex items-start"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "flex items-center h-5"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-  id: "candidates",
-  name: "candidates",
-  type: "checkbox",
-  "class": "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-})]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "ml-3 text-sm"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "for": "candidates",
-  "class": "font-medium text-gray-700"
-}, "Candidates"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "text-gray-500"
-}, "Get notified when a candidate applies for a job.")])]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "flex items-start"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "flex items-center h-5"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-  id: "offers",
-  name: "offers",
-  type: "checkbox",
-  "class": "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-})]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "ml-3 text-sm"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "for": "offers",
-  "class": "font-medium text-gray-700"
-}, "Offers"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "text-gray-500"
-}, "Get notified when a candidate accepts or rejects an offer.")])])])])]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+};
+var _hoisted_56 = ["for"];
+
+var _hoisted_57 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "px-4 py-3 bg-gray-50 text-right sm:px-6"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   type: "submit",
   "class": "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-}, "Save")])], -1
+}, "Save")], -1
 /* HOISTED */
 );
 
-var _hoisted_50 = [_hoisted_49];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Layout = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Layout");
 
@@ -580,11 +553,33 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.userForm.postcode]])])])]), _hoisted_43])], 32
       /* HYDRATE_EVENTS */
       )])])]), _hoisted_44, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_45, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_46, [_hoisted_47, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
-        onSubmit: _cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+        onSubmit: _cache[14] || (_cache[14] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
           return $options.onSubmit();
         }, ["prevent"])),
         method: "POST"
-      }, _hoisted_50, 32
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("fieldset", null, [_hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_52, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.roles, function (role) {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+          key: "role-".concat(role.id),
+          "class": "flex items-start"
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_53, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+          id: "role-input-".concat(role.id),
+          "onUpdate:modelValue": _cache[13] || (_cache[13] = function ($event) {
+            return $setup.userForm.roles = $event;
+          }),
+          value: role.id,
+          type: "checkbox",
+          "class": "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+        }, null, 8
+        /* PROPS */
+        , _hoisted_54), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $setup.userForm.roles]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_55, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+          "for": "role-input-".concat(role.id),
+          "class": "font-medium text-gray-700"
+        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(role.name), 9
+        /* TEXT, PROPS */
+        , _hoisted_56), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <p class=\"text-gray-500\">Get notified when someones posts a comment on a posting.</p> ")])]);
+      }), 128
+      /* KEYED_FRAGMENT */
+      ))])])]), _hoisted_57])], 32
       /* HYDRATE_EVENTS */
       )])])])];
     }),

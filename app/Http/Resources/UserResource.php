@@ -21,6 +21,16 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'roles' => $this->roles,
             'permissions' => $this->permissions,
+            'address_1' => $this->address_1,
+            'address_2' => $this->address_2,
+            'postcode' => $this->postcode,
+            'city' => $this->city,
+            'state' => $this->state,
+            'fax_no' => $this->fax_no,
+            'country' => $this->country,
+            'website_url' => $this->website_url,
+            'about' => $this->about,
+            'photo' => $this->photo,
             'updated_at' => $this->updated_at->diffForHumans(),
             'created_at' => $this->created_at->diffForHumans()
         ];
