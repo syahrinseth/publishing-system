@@ -132,7 +132,7 @@ let navigation = [
   { name: 'Dashboard', href: '/', disabled: false },
   { name: 'Submit a Manuscript', href: '/manuscript-create', disabled: false },
   { name: 'Manuscript Overview', href: '/manuscripts', disabled: false },
-  { name: 'Journal Overview', href: '/journals', disabled: false},
+  // { name: 'Journal Overview', href: '/journals', disabled: false},
   { name: 'Users', href: '/users', disabled: false },
 ]
 let userNavigation = [
