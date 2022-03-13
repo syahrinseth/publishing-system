@@ -11,7 +11,7 @@
         </template>
         <template v-slot:default>
             <H1>Welcome</H1>
-            <p>Hello {{ user.name }}, welcome to your first Inertia app!</p>
+            <p>Hello {{ auth.user.data.name }}, welcome to the Publishing System!</p>
         </template>
     </Layout>
   </div>

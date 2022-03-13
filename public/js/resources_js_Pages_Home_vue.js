@@ -81,7 +81,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _: 1
         /* STABLE */
 
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Hello " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.user.name) + ", welcome to your first Inertia app!", 1
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Hello " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.auth.user.data.name) + ", welcome to the Publishing System!", 1
       /* TEXT */
       )];
     }),
