@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -44,4 +45,39 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get user permissions attribute
+     * 
+     * @return array
+     */
+    public function getPermissionsAttr()
+    {
+        return [  
+            'users' => [
+                'show' => $this->can('users.show'),
+                'edit' => $this->can('users.edit'),
+                'destroy' => $this->can('users.destroy')
+            ],
+            'manuscripts' => [
+                'show' => $this->can('manuscripts.show'),
+                'edit' => $this->can('manuscripts.edit'),
+                'destroy' => $this->can('manuscripts.destroy')
+            ],
+            'journals' => [
+                'show' => $this->can('journals.show'),
+                'edit' => $this->can('journals.edit'),
+                'destroy' => $this->can('journals.destroy')
+            ],
+            'settings' => [
+                'show' => $this->can('settings.show'),
+                'edit' => $this->can('settings.edit'),
+                'destroy' => $this->can('settings.destroy')
+            ],
+            'dashboard' => [
+                'show' => $this->can('dashboard.show'),
+                'show_all' => $this->can('dashboard.show all'),
+            ]
+        ];
+    }
 }

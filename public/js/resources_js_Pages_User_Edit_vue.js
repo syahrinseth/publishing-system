@@ -14,6 +14,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Layout */ "./resources/js/Layout.vue");
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 /* harmony import */ var _Components_Toast__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Components/Toast */ "./resources/js/Components/Toast.vue");
+/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+
 
 
 
@@ -22,11 +24,13 @@ __webpack_require__.r(__webpack_exports__);
     Layout: _Layout__WEBPACK_IMPORTED_MODULE_0__["default"],
     useForm: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm,
     Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.Link,
-    Toast: _Components_Toast__WEBPACK_IMPORTED_MODULE_2__["default"]
+    Toast: _Components_Toast__WEBPACK_IMPORTED_MODULE_2__["default"],
+    Inertia: _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia
   },
   props: {
     user: Object,
-    roles: Array
+    roles: Array,
+    auth: Object
   },
   methods: {
     notification: function notification(message) {
@@ -55,7 +59,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   setup: function setup(props) {
-    console.log(props);
     var user = props.user.data;
     var userForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
       name: user.name,
@@ -413,7 +416,9 @@ var _hoisted_57 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Layout = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Layout");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Layout, null, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Layout, {
+    auth: $props.auth.user.data
+  }, {
     header: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_1];
     }),
@@ -586,7 +591,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  })]);
+  }, 8
+  /* PROPS */
+  , ["auth"])]);
 }
 
 /***/ }),

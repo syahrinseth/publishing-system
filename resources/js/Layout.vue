@@ -18,17 +18,19 @@
             </div>
             <div class="hidden md:block">
               <div class="ml-10 flex items-baseline space-x-4">
-                <Link v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.href == $page.url ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined" preserve-state preserve-scroll>{{ item.name }}</Link>
-                <a :href="'/manuscripts/1/attach-files/1'" :class="['text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" target="_blank">Download</a>
+                <Link v-for="item in navigation.filter((v) => {return v.disabled == true ? false : true;})" :key="item.name" :href="item.href" :class="[item.href == $page.url ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined" preserve-state preserve-scroll>{{ item.name }}</Link>
+
+                <!-- <a :href="'/manuscripts/1/attach-files/1'" :class="['text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" target="_blank">Download</a> -->
+
               </div>
             </div>
           </div>
           <div class="hidden md:block">
             <div class="ml-4 flex items-center md:ml-6">
-              <button type="button" class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+              <!-- <button type="button" class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                 <span class="sr-only">View notifications</span>
                 <BellIcon class="h-6 w-6" aria-hidden="true" />
-              </button>
+              </button> -->
 
               <!-- Profile dropdown -->
               <Menu as="div" class="ml-3 relative">
@@ -44,8 +46,8 @@
                 <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                   <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
-                      <a v-if="item.method == 'get'" :href="item.href" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</a>
-                      <a href="#" v-else @click="signOut(item)" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">
+                      <a v-if="item.method == 'get' && item.disabled == false" :href="item.href" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ item.name }}</a>
+                      <a v-else href="#" @click="signOut(item)" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">
                         {{ item.name }}
                       </a>
                     </MenuItem>
@@ -72,16 +74,19 @@
         <div class="pt-4 pb-3 border-t border-gray-700">
           <div class="flex items-center px-5">
             <div class="flex-shrink-0">
-              <img class="h-10 w-10 rounded-full" :src="user.imageUrl" alt="" />
+              <!-- <img class="h-10 w-10 rounded-full" :src="user.imageUrl" alt="" /> -->
+              <svg class="h-8 w-8 rounded-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
             </div>
-            <div class="ml-3">
+            <!-- <div class="ml-3">
               <div class="text-base font-medium leading-none text-white">{{ user.name }}</div>
               <div class="text-sm font-medium leading-none text-gray-400">{{ user.email }}</div>
-            </div>
-            <button type="button" class="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+            </div> -->
+            <!-- <button type="button" class="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
               <span class="sr-only">View notifications</span>
               <BellIcon class="h-6 w-6" aria-hidden="true" />
-            </button>
+            </button> -->
           </div>
           <div class="mt-3 px-2 space-y-1">
             <DisclosureButton v-for="item in userNavigation" :key="item.name" as="a" :href="item.href" class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">{{ item.name }}</DisclosureButton>
@@ -117,24 +122,23 @@ import { BellIcon, MenuIcon, XIcon } from '@heroicons/vue/outline'
 import { Link, useForm } from '@inertiajs/inertia-vue3'
 import Toast from './Components/Toast'
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
-const navigation = [
-  { name: 'Dashboard', href: '/' },
-  { name: 'Submit a Manuscript', href: '/manuscript-create' },
-  { name: 'Manuscript Overview', href: '/manuscripts' },
-  { name: 'Journal Overview', href: '/journals'},
-  { name: 'Users', href: '/users' },
-  { name: 'Contact Us', href: '#' },
+// let user = {
+//   name: 'Tom Cook',
+//   email: 'tom@example.com',
+//   imageUrl:
+//     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+// }
+let navigation = [
+  { name: 'Dashboard', href: '/', disabled: false },
+  { name: 'Submit a Manuscript', href: '/manuscript-create', disabled: false },
+  { name: 'Manuscript Overview', href: '/manuscripts', disabled: false },
+  { name: 'Journal Overview', href: '/journals', disabled: false},
+  { name: 'Users', href: '/users', disabled: false },
 ]
-const userNavigation = [
-  { name: 'Your Profile', href: '#', method: 'get' },
-  { name: 'Settings', href: '#', method: 'get' },
-  { name: 'Sign out', href: '/logout', method: 'post' },
+let userNavigation = [
+  { name: 'Your Profile', href: '#', method: 'get', disabled: false },
+  // { name: 'Settings', href: '#', method: 'get', disabled: false },
+  { name: 'Sign out', href: '/logout', method: 'post', disabled: false },
 ]
 
 export default {
@@ -150,6 +154,11 @@ export default {
     MenuIcon,
     XIcon,
     Link
+  },
+  watch: {
+    auth(newVal, oldVal) {
+      this.refreshNavBar();
+    }
   },
   methods: {
     notification(message, type = 'success') {
@@ -172,14 +181,53 @@ export default {
           this.notification('Signed Out.');
         }
       });
+    },
+    refreshNavBar() {
+      const user = this.$props.auth;
+      this.navigation = this.navigation.map((val) => {
+        
+        if (user.permissions_attribute.dashboard.show == false && val.name == 'Dashboard') {
+          val.disabled = true;
+        }
+        
+        if(user.permissions_attribute.users.show == false && val.name == 'Users') {
+          val.disabled = true;
+        }
+
+        if(user.permissions_attribute.journals.show == false && val.name == 'Journal Overview') {
+          val.disabled = true;
+        }
+
+        if(user.permissions_attribute.manuscripts.show == false && (val.name == 'Manuscript Overview' || val.name == 'Submit a manuscript')) {
+          val.disabled = true;
+        }
+
+        return val;
+
+      });
+
+      this.userNavigation = this.userNavigation.map((val) => {
+
+        if (user.permissions_attribute.settings.show == false && val.name == 'Settings') {
+          val.disabled = true;
+        }
+
+        return val;
+      });
+
     }
   },
-  setup() {
+  props: {
+    auth: Object
+  },
+  setup(props) {
     return {
-      user,
       navigation,
       userNavigation,
     }
   },
+  created() {
+    this.refreshNavBar();
+  }
 }
 </script>

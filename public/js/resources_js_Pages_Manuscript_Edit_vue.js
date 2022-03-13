@@ -2103,7 +2103,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     attachTypes: Array,
     articleTypes: Array,
     errors: Object,
-    message: String
+    message: String,
+    auth: Object
   },
   data: function data() {
     return {
@@ -3274,7 +3275,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_Layout = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Layout");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Toast v-show=\"errors != null\"/> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Layout, null, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Toast v-show=\"errors != null\"/> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Layout, {
+    auth: $props.auth.user.data
+  }, {
     header: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.manuscript.data.title), 1
       /* TEXT */
@@ -3807,7 +3810,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  })]);
+  }, 8
+  /* PROPS */
+  , ["auth"])]);
 }
 
 /***/ }),

@@ -21,7 +21,8 @@ __webpack_require__.r(__webpack_exports__);
     Layout: _Layout__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: {
-    user: Object
+    user: Object,
+    auth: Object
   }
 });
 
@@ -66,7 +67,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Layout, null, {
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Layout, {
+    auth: $props.auth.user.data
+  }, {
     header: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_2];
     }),
@@ -85,7 +88,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  })]);
+  }, 8
+  /* PROPS */
+  , ["auth"])]);
 }
 
 /***/ }),

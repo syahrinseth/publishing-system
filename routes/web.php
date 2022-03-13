@@ -1,6 +1,7 @@
 <?php
 
 use Inertia\Inertia;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum'])->group(function() {
 
     Inertia::share('auth.user', function () {
-        return Auth::user();
+        $auth = Auth::user();
+        return $auth == null ? null : new UserResource($auth);
     });
     
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);

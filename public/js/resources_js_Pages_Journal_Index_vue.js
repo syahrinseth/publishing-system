@@ -59,7 +59,9 @@ __webpack_require__.r(__webpack_exports__);
     LocationMarkerIcon: _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_2__.LocationMarkerIcon,
     PencilIcon: _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_2__.PencilIcon
   },
-  props: {//   user: Object,
+  props: {
+    //   user: Object,
+    auth: Object
   }
 });
 
@@ -190,7 +192,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_Layout = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Layout");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Layout, null, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Layout, {
+    auth: $props.auth.user.data
+  }, {
     header: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PencilIcon, {
         "class": "-ml-1 mr-2 h-5 w-5 text-gray-500",
@@ -280,7 +284,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  });
+  }, 8
+  /* PROPS */
+  , ["auth"]);
 }
 
 /***/ }),

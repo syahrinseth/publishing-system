@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Layout>
+        <Layout :auth="auth.user.data">
             <template v-slot:default>
 
                 <div class="mt-10 sm:mt-0">
@@ -198,6 +198,7 @@
       },
     props: {
     //   user: Object,
+        auth: Object
     },
   }
 </script>

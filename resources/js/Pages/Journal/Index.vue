@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <Layout :auth="auth.user.data">
         <template v-slot:header>
             <div class="lg:flex lg:items-center lg:justify-between">
                     <div class="flex-1 min-w-0">
@@ -103,6 +103,7 @@
       },
     props: {
     //   user: Object,
+        auth: Object
     },
   }
 </script>

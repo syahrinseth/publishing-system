@@ -17,6 +17,14 @@ use App\Http\Resources\ManuscriptAttachResource;
 
 class ManuscriptController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:manuscripts.show', ['only' => ['index', 'show', 'edit']]);
+        $this->middleware('permission:manuscripts.edit', ['only' => ['create', 'store', 'update']]);
+        $this->middleware('permission:manuscripts.destroy', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

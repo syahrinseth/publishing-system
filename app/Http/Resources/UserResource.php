@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'roles' => $this->roles,
-            'permissions' => $this->permissions,
+            'permissions_attribute' => $this->getPermissionsAttr(),
             'address_1' => $this->address_1,
             'address_2' => $this->address_2,
             'postcode' => $this->postcode,

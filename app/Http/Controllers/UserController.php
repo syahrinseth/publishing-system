@@ -8,12 +8,22 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\UserCollection;
 use Illuminate\Support\Facades\Redirect;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('permission:users.show', ['only' => ['index', 'show', 'edit']]);
+        $this->middleware('permission:users.edit', ['only' => ['create', 'store', 'update']]);
+        $this->middleware('permission:users.destroy', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -171,6 +181,7 @@ class UserController extends Controller
             $user->website_url = $request->website_url;
             $user->country = $request->country;
             if (!empty($request->roles) && count($request->roles) > 0) {
+                $user->roles()->detach(); 
                 $user->assignRole($request->roles);
             }
             // $user->password = bcrypt($request->password);

@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- <Toast v-show="errors != null"/> -->
-        <Layout>
+        <Layout :auth="auth.user.data">
             <template v-slot:header>
                 <div class="lg:flex lg:items-center lg:justify-between">
                         <div class="flex-1 min-w-0">
@@ -673,7 +673,8 @@
         attachTypes: Array,
         articleTypes: Array,
         errors: Object,
-        message: String
+        message: String,
+        auth: Object
     },
     data() {
         return {

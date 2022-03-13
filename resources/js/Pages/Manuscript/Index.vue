@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <Layout :auth="auth.user.data">
         <template v-slot:header>
             <div class="lg:flex lg:items-center lg:justify-between">
                     <div class="flex-1 min-w-0">
@@ -8,14 +8,8 @@
                         </h2>
                     </div>
                     <div class="mt-5 flex lg:mt-0 lg:ml-4">
-                    <span class="hidden sm:block">
-                        <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <PencilIcon class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
-                        Some Link
-                        </button>
-                    </span>
 
-                    <span class="hidden sm:block ml-3">
+                    <!-- <span class="hidden sm:block ml-3">
                         <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <LinkIcon class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
                         View
@@ -27,7 +21,7 @@
                         <CheckIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                         Publish
                         </button>
-                    </span>
+                    </span> -->
 
                     <!-- Dropdown -->
                     <Menu as="span" class="ml-3 relative sm:hidden">
@@ -122,9 +116,9 @@
                                 {{ manuscript.status }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <Link :href="`/manuscripts/${manuscript.id}/edit`" class="text-indigo-600 hover:text-indigo-900">Edit</Link> |
-                                    <a :href="`/manuscripts/${manuscript.id}/download`" class="text-indigo-600 hover:text-indigo-900" target="_blank">Download</a> |
-                                    <a href="#" @click="deleteManuscript(manuscript)" class="text-indigo-600 hover:text-indigo-900">Delete</a>
+                                    <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/manuscripts/${manuscript.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Edit</Link>
+                                    <a :href="`/manuscripts/${manuscript.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-2" target="_blank">Download</a>
+                                    <a v-if="auth.user.data.permissions_attribute.manuscripts.destroy == true" href="#" @click="deleteManuscript(manuscript)" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</a>
                                 </td>
                             </tr>
                         </template>
@@ -177,7 +171,8 @@
             Link
       },
     props: {
-        manuscripts: Object
+        manuscripts: Object,
+        auth: Object
     },
     data() {
         return {

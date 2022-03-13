@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <Layout :auth="auth.user.data">
         <template v-slot:header>
             <div class="lg:flex lg:items-center lg:justify-between">
                     <div class="flex-1 min-w-0">
@@ -101,7 +101,8 @@ export default {
     },
     props: {
         roles: Array,
-        permissions: Array
+        permissions: Array,
+        auth: Object
     },
     methods: {
         notification(message, type = 'success') {

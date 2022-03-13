@@ -28,7 +28,7 @@ class RoleController extends Controller
                 'roles' => $roles
             ]);
         }
-        
+
         return Inertia::render('Role/Index', [
             'roles' => new RoleCollection($roles),
             'permissions' => $permissions
@@ -141,7 +141,7 @@ class RoleController extends Controller
             $permissions = Permission::whereIn('id', $request->permissions)
                 ->get();
             if (count($permissions) > 0) {
-                $role->givePermissionTo($permissions);
+                $role->syncPermissions($permissions);
             }
 
         } catch (Exception $e) {

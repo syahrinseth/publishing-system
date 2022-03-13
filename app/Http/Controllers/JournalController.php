@@ -7,6 +7,14 @@ use Inertia\Inertia;
 
 class JournalController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:journals.show', ['only' => ['index', 'show', 'edit']]);
+        $this->middleware('permission:journals.edit', ['only' => ['create', 'store', 'update']]);
+        $this->middleware('permission:journals.destroy', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

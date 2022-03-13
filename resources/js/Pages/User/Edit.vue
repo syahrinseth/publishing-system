@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Layout>
+        <Layout :auth="auth.user.data">
             <template v-slot:header>
                 <div class="lg:flex lg:items-center lg:justify-between">
                         <div class="flex-1 min-w-0">
@@ -185,17 +185,20 @@
 import Layout from '../../Layout'
 import { useForm, Link } from '@inertiajs/inertia-vue3'
 import Toast from '../../Components/Toast'
+import { Inertia } from '@inertiajs/inertia'
 
 export default {
     components: {
         Layout,
         useForm,
         Link,
-        Toast
+        Toast,
+        Inertia
     },
     props: {
         user: Object,
-        roles: Array
+        roles: Array,
+        auth: Object
     },
     methods: {
         notification(message, type = 'success') {
@@ -204,7 +207,7 @@ export default {
                 type: type,
                 duration: 5000,
                 dismissible: true
-            })
+            });
         },
         onSubmit() {
             this.userForm.post(`/users/${this.$props.user.data.id}/update`, {
@@ -220,7 +223,7 @@ export default {
             });
         }
     },
-    setup(props) {console.log(props)
+    setup(props) {
         let user = props.user.data;
         const userForm = useForm({
             name: user.name,

@@ -7,6 +7,12 @@ use Inertia\Inertia;
 
 class HomeController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('permission:dashboard.show', ['only' => ['index', 'show', 'edit']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
