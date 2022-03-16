@@ -219,9 +219,24 @@ class ManuscriptController extends Controller
         foreach ($attachments as $attachment) {
             // Check for supported file for combine
             if ($attachment->canMerge()) {
+
                 if (str_contains(Storage::mimeType($attachment->file_location), 'word')) {
+
                     // Convert docs to html.
                     $Content = \PhpOffice\PhpWord\IOFactory::load(storage_path('app') . '/' . $attachment->file_location);
+                    $section = $Content->addSection(array('borderColor' => '00FF00', 'borderSize' => 12));
+
+                    // Add top label
+                    $section->addText($attachment->getType()['name']);
+                    foreach($Content->getSections() as $i => $section) {
+                        $section->setElementIndex($i);
+                    }
+
+                    // sort sections
+                    $Content->sortSections(function($a,$b) { 
+                        return $a->getElementIndex() < $b->getElementIndex();
+                    });
+
                     $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'HTML');
                     $PDFWriter->save(storage_path('app') . '/' . "{$attachment->file_location}.html");
                 }
@@ -243,13 +258,16 @@ class ManuscriptController extends Controller
                     }
                 }
 
+                // break page
                 foreach ($break->documentElement->childNodes as $child) {
                     $import = $mainTemp->importNode($child, true);
                     if ($import) {
                         $mainTemp->documentElement->appendChild($import);
                     }
                 }
+
                 $hasContent = true;
+
             }
             
         }
@@ -348,6 +366,7 @@ class ManuscriptController extends Controller
     {
         $request->validate([
             'type' => 'required',
+            'file' => 'required|mimes:doc,docx'
         ]);
 
         $manuscript = Manuscript::findOrFail($id);
@@ -401,6 +420,11 @@ class ManuscriptController extends Controller
      */
     public function updateAttachFile(Request $request, $id, $attachFileId)
     {
+        $request->validate([
+            'type' => 'required',
+            'file' => 'mimes:doc,docx'
+        ]);
+
         $manuscript = Manuscript::findOrFail($id);
         $attach = ManuscriptAttachFile::findOrFail($attachFileId);   
         $attach->manuscript_id = $id;

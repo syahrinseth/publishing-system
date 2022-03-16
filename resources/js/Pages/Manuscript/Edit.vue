@@ -126,7 +126,7 @@
                                                         <p class="pl-1">or drag and drop</p>
                                                     </div>
                                                     <p class="text-xs text-gray-500">
-                                                        PDF, DOCS, PNG up to 50MB
+                                                        DOC, DOCX up to 50MB
                                                     </p>
                                                 </div>
                                             </div>
@@ -215,7 +215,7 @@
                                                         <p class="pl-1">or drag and drop</p>
                                                     </div>
                                                     <p class="text-xs text-gray-500">
-                                                        PDF, DOCS, PNG up to 50MB
+                                                        DOC, DOCX up to 50MB
                                                     </p>
                                                 </div>
                                             </div>
@@ -241,9 +241,9 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900">
                                 Attach Files
                             </h3>
-                            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                            <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">
                                 Personal details and application.
-                            </p>
+                            </p> -->
                         </div>
                         <div>
                             <span class="sm:ml-3">
@@ -302,9 +302,9 @@
                                         {{ attachment.updated_at}}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">Edit</a> |
-                                        <a :href="`/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900">Download</a> |
-                                        <a href="#" @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900">Delete</a>
+                                        <a href="#" class="text-indigo-600 hover:text-indigo-900 px-1" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">Edit</a>
+                                        <a :href="`/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
+                                        <a href="#" @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 px-1">Delete</a>
                                     </td>
                                 </tr>
                             </template>
@@ -419,6 +419,111 @@
                             <div class="border-t border-gray-200" />
                         </div>
                     </div>
+
+                        
+                    <div>
+                        <div class="md:grid md:grid-cols-3 md:gap-6">
+                            <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Data</h3>
+                                <p class="mt-1 text-sm text-gray-600">
+                                    When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
+                                </p>
+                            </div>
+                            </div>
+                            <div class="mt-5 md:mt-0 md:col-span-2">
+                            <form @submit.prevent="saveManuscript()">
+                                <div class="shadow sm:rounded-md sm:overflow-hidden">
+                                <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                                    <div>
+                                    <label for="title" class="block text-sm font-medium text-gray-700">
+                                        Full Title
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea v-model="manuscriptForm.title" id="title" name="title" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    </div>
+                                    <p class="mt-2 text-sm text-gray-500">
+                                        
+                                    </p>
+                                    </div>
+
+                                    <div>
+                                    <label for="short_title" class="block text-sm font-medium text-gray-700">
+                                        Short Title
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea v-model="manuscriptForm.short_title" id="short_title" name="short_title" rows="1" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    </div>
+                                    <p class="mt-2 text-sm text-gray-500">
+                                        Limit 20 words
+                                    </p>
+                                    </div>
+
+                                    <div>
+                                    <label for="abstract" class="block text-sm font-medium text-gray-700">
+                                        Abstract
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea v-model="manuscriptForm.abstract" id="abstract" name="abstract" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    </div>
+                                    <p class="mt-2 text-sm text-gray-500">
+                                        Limit 250 words
+                                    </p>
+                                    </div>
+
+                                    <div>
+                                    <label for="keywords" class="block text-sm font-medium text-gray-700">
+                                        Keywords
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea v-model="manuscriptForm.keywords" id="keywords" name="keywords" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    </div>
+                                    <p class="mt-2 text-sm text-gray-500">
+                                        Please enter keywords separated by semicolons. Each individual keyword may be up to 256 characters in length.
+                                    </p>
+                                    </div>
+
+                                    <div>
+                                    <!-- <label for="authors" class="block text-sm font-medium text-gray-700">
+                                        Authors
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea v-model="manuscriptForm.authors" id="authors" name="authors" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    </div> -->
+                                    <p class="mt-2 text-sm text-gray-500">
+                                    </p>
+                                    </div>
+
+                                    <div>
+                                    <label for="funding_information" class="block text-sm font-medium text-gray-700">
+                                        Funding Information
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea v-model="manuscriptForm.funding_information" id="funding_information" name="funding_information" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    </div>
+                                    <p class="mt-2 text-sm text-gray-500">
+
+                                    </p>
+                                    </div>
+
+                                    
+                                </div>
+                                <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Save
+                                    </button>
+                                </div>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hidden sm:block" aria-hidden="true">
+                        <div class="py-5">
+                            <div class="border-t border-gray-200" />
+                        </div>
+                    </div>
                     
                     <div class="mt-10 sm:mt-0">
                         <div class="md:grid md:grid-cols-3 md:gap-6">
@@ -500,111 +605,6 @@
                                         </div>
                                         </fieldset> -->
                                     </div>
-                                </div>
-                                <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Save
-                                    </button>
-                                </div>
-                                </div>
-                            </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="hidden sm:block" aria-hidden="true">
-                        <div class="py-5">
-                            <div class="border-t border-gray-200" />
-                        </div>
-                    </div>
-
-                        
-                    <div>
-                        <div class="md:grid md:grid-cols-3 md:gap-6">
-                            <div class="md:col-span-1">
-                            <div class="px-4 sm:px-0">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Data</h3>
-                                <p class="mt-1 text-sm text-gray-600">
-                                    When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
-                                </p>
-                            </div>
-                            </div>
-                            <div class="mt-5 md:mt-0 md:col-span-2">
-                            <form @submit.prevent="saveManuscript()">
-                                <div class="shadow sm:rounded-md sm:overflow-hidden">
-                                <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                    <div>
-                                    <label for="title" class="block text-sm font-medium text-gray-700">
-                                        Full Title
-                                    </label>
-                                    <div class="mt-1">
-                                        <textarea v-model="manuscriptForm.title" id="title" name="title" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                    </div>
-                                    <p class="mt-2 text-sm text-gray-500">
-                                        
-                                    </p>
-                                    </div>
-
-                                    <div>
-                                    <label for="short_title" class="block text-sm font-medium text-gray-700">
-                                        Short Title
-                                    </label>
-                                    <div class="mt-1">
-                                        <textarea v-model="manuscriptForm.short_title" id="short_title" name="short_title" rows="1" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                    </div>
-                                    <p class="mt-2 text-sm text-gray-500">
-                                        Limit 20 words
-                                    </p>
-                                    </div>
-
-                                    <div>
-                                    <label for="abstract" class="block text-sm font-medium text-gray-700">
-                                        Abstract
-                                    </label>
-                                    <div class="mt-1">
-                                        <textarea v-model="manuscriptForm.abstract" id="abstract" name="abstract" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                    </div>
-                                    <p class="mt-2 text-sm text-gray-500">
-                                        Limit 250 words
-                                    </p>
-                                    </div>
-
-                                    <div>
-                                    <label for="keywords" class="block text-sm font-medium text-gray-700">
-                                        Keywords
-                                    </label>
-                                    <div class="mt-1">
-                                        <textarea v-model="manuscriptForm.keywords" id="keywords" name="keywords" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                    </div>
-                                    <p class="mt-2 text-sm text-gray-500">
-                                        Please enter keywords separated by semicolons. Each individual keyword may be up to 256 characters in length.
-                                    </p>
-                                    </div>
-
-                                    <div>
-                                    <label for="authors" class="block text-sm font-medium text-gray-700">
-                                        Authors
-                                    </label>
-                                    <div class="mt-1">
-                                        <textarea v-model="manuscriptForm.authors" id="authors" name="authors" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                    </div>
-                                    <p class="mt-2 text-sm text-gray-500">
-                                    </p>
-                                    </div>
-
-                                    <div>
-                                    <label for="funding_information" class="block text-sm font-medium text-gray-700">
-                                        Funding Information
-                                    </label>
-                                    <div class="mt-1">
-                                        <textarea v-model="manuscriptForm.funding_information" id="funding_information" name="funding_information" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                    </div>
-                                    <p class="mt-2 text-sm text-gray-500">
-
-                                    </p>
-                                    </div>
-
-                                    
                                 </div>
                                 <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                                     <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
