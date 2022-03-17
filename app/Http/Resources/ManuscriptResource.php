@@ -33,7 +33,7 @@ class ManuscriptResource extends JsonResource
             'short_title' => $this->short_title,
             'abstract' => $this->abstract,
             'keywords' => $this->keywords,
-            'status' => ucfirst($this->status),
+            'status' => ucwords($this->status),
             'funding_information' => $this->funding_information,
             'created_at' => $this->created_at->diffForHumans(),
             'updated_at' => $this->updated_at->diffForHumans(),

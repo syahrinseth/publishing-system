@@ -24,33 +24,13 @@
                             </div>
                         </div>
                         <div class="mt-5 flex lg:mt-0 lg:ml-4">
-                        <span class="hidden sm:block">
-                            <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            <PencilIcon class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
-                            Some Link
-                            </button>
-                        </span>
 
-                        <span class="hidden sm:block ml-3">
-                            <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            <LinkIcon class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
-                            Some Link
-                            </button>
-                        </span>
-
-                        <span class="hidden sm:block ml-3">
-                            <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            <LinkIcon class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
-                            Save & Submit Later
-                            </button>
-                        </span>
-
-                        <span class="sm:ml-3">
+                        <!-- <span class="sm:ml-3">
                             <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             <CheckIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                             Build PDF for Approval
                             </button>
-                        </span>
+                        </span> -->
 
                         <!-- Dropdown -->
                         <Menu as="span" class="ml-3 relative sm:hidden">
@@ -333,6 +313,15 @@
                             <div class="shadow overflow-hidden sm:rounded-md">
                             <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
                                 <div class="grid grid-cols-3 gap-6">
+                                    <div class="col-span-3 sm:col-span-2">
+                                        <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                        Manuscript Status
+                                        </label>
+                                        <select name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="manuscriptForm.status">
+                                            <option value="" selected>Select</option>
+                                            <option v-for="status in manuscriptStatusList" :key="`status-${status.name}`">{{ status.name }}</option>
+                                        </select>
+                                    </div>
                                     <div class="col-span-3 sm:col-span-2">
                                         <label for="company-website" class="block text-sm font-medium text-gray-700">
                                         Article Type
@@ -674,7 +663,8 @@
         articleTypes: Array,
         errors: Object,
         message: String,
-        auth: Object
+        auth: Object,
+        manuscriptStatusList: Array
     },
     data() {
         return {
@@ -691,7 +681,7 @@
                 type: type,
                 duration: 5000,
                 dismissible: true
-            })
+            }) 
         },  
         saveManuscript() {
             this.manuscriptForm.authors = [
@@ -704,8 +694,8 @@
                         this.notification(errors[value], 'error');
                     });
                 },
-                onSuccess: () => {
-                    this.notification('Saved', 'success');
+                onSuccess: (res) => {
+                    this.notification('Saved.', 'success');
                 }
             });
         },
@@ -759,6 +749,7 @@
             funding_information: props.manuscript.data.funding_information,
             is_confirm_grant_numbers: props.manuscript.data.is_confirm_grant_numbers,
             is_acknowledge: props.manuscript.data.is_acknowledge,
+            status: props.manuscript.data.status
         });
 
         const attachForm = useForm({

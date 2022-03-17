@@ -32,8 +32,13 @@ class ManuscriptController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-        $manuscripts = new ManuscriptCollection(Manuscript::all());
+    {   
+        $manuscripts = Manuscript::whereJsonContains('authors', Auth::user()->id)
+            ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
+            ->orWhereJsonContains('editors', Auth::user()->id)
+            ->orWhereJsonContains('reviewers', Auth::user()->id)
+            ->get();
+        $manuscripts = new ManuscriptCollection($manuscripts);
 
         if ($request->is('api/*')) {
             return response()->json($manuscripts);
@@ -125,7 +130,12 @@ class ManuscriptController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $manuscript = Manuscript::findOrFail($id);
+        $manuscript = Manuscript::where('id', $id)
+            ->whereJsonContains('authors', Auth::user()->id)
+            ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
+            ->orWhereJsonContains('editors', Auth::user()->id)
+            ->orWhereJsonContains('reviewers', Auth::user()->id)
+            ->firstOrFail();
         
         $users = User::all();
         
@@ -137,7 +147,8 @@ class ManuscriptController extends Controller
             'manuscript' => new ManuscriptResource($manuscript),
             'users' => $users,
             'attachTypes' => ManuscriptAttachFile::$types,
-            'articleTypes' => Manuscript::getTypes()
+            'articleTypes' => Manuscript::getTypes(),
+            'manuscriptStatusList' => Manuscript::getStatusList($manuscript->id)
         ]);
     }
 
@@ -150,13 +161,31 @@ class ManuscriptController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $manuscript = Manuscript::findOrFail($id);
+        $manuscript = Manuscript::where('id', $id)
+            ->whereJsonContains('authors', Auth::user()->id)
+            ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
+            ->orWhereJsonContains('editors', Auth::user()->id)
+            ->orWhereJsonContains('reviewers', Auth::user()->id)
+            ->firstOrFail();
         $manuscript->type = $request->type;
         $manuscript->editors = $request->editors == null ? [] : [$request->editors];
         $manuscript->reviewers = $request->reviewers == null ? [] : [$request->reviewers];
         $manuscript->title = $request->title;
         $manuscript->short_title = $request->short_title;
         $manuscript->abstract = $request->abstract;
+        // Assign status
+        if (!$manuscript->assignStatus($request->status) && $manuscript->status != $request->status) {
+
+            // Response error for fail to assign status.
+            if ($request->is('api/*')) {
+                return response()->json(new ManuscriptResource($manuscript), 401);
+            }
+            
+            return redirect()->back()->withErrors([
+                'status' => 'You don\'t have the permission to change manuscript status into "' . $request->status . '".'
+            ]);
+
+        }
         $manuscript->keywords = $request->keywords;
         $manuscript->authors = $request->authors;
         $manuscript->funding_information = $request->funding_information;
