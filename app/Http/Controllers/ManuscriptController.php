@@ -32,8 +32,13 @@ class ManuscriptController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-        $manuscripts = new ManuscriptCollection(Manuscript::all());
+    {   
+        $manuscripts = Manuscript::whereJsonContains('authors', Auth::user()->id)
+            ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
+            ->orWhereJsonContains('editors', Auth::user()->id)
+            ->orWhereJsonContains('reviewers', Auth::user()->id)
+            ->get();
+        $manuscripts = new ManuscriptCollection($manuscripts);
 
         if ($request->is('api/*')) {
             return response()->json($manuscripts);
@@ -125,7 +130,12 @@ class ManuscriptController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $manuscript = Manuscript::findOrFail($id);
+        $manuscript = Manuscript::where('id', $id)
+            ->whereJsonContains('authors', Auth::user()->id)
+            ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
+            ->orWhereJsonContains('editors', Auth::user()->id)
+            ->orWhereJsonContains('reviewers', Auth::user()->id)
+            ->firstOrFail();
         
         $users = User::all();
         
@@ -137,7 +147,8 @@ class ManuscriptController extends Controller
             'manuscript' => new ManuscriptResource($manuscript),
             'users' => $users,
             'attachTypes' => ManuscriptAttachFile::$types,
-            'articleTypes' => Manuscript::getTypes()
+            'articleTypes' => Manuscript::getTypes(),
+            'manuscriptStatusList' => Manuscript::getStatusList($manuscript->id)
         ]);
     }
 
@@ -150,13 +161,31 @@ class ManuscriptController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $manuscript = Manuscript::findOrFail($id);
+        $manuscript = Manuscript::where('id', $id)
+            ->whereJsonContains('authors', Auth::user()->id)
+            ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
+            ->orWhereJsonContains('editors', Auth::user()->id)
+            ->orWhereJsonContains('reviewers', Auth::user()->id)
+            ->firstOrFail();
         $manuscript->type = $request->type;
         $manuscript->editors = $request->editors == null ? [] : [$request->editors];
         $manuscript->reviewers = $request->reviewers == null ? [] : [$request->reviewers];
         $manuscript->title = $request->title;
         $manuscript->short_title = $request->short_title;
         $manuscript->abstract = $request->abstract;
+        // Assign status
+        if (!$manuscript->assignStatus($request->status) && $manuscript->status != $request->status) {
+
+            // Response error for fail to assign status.
+            if ($request->is('api/*')) {
+                return response()->json(new ManuscriptResource($manuscript), 401);
+            }
+            
+            return redirect()->back()->withErrors([
+                'status' => 'You don\'t have the permission to change manuscript status into "' . $request->status . '".'
+            ]);
+
+        }
         $manuscript->keywords = $request->keywords;
         $manuscript->authors = $request->authors;
         $manuscript->funding_information = $request->funding_information;
@@ -206,23 +235,90 @@ class ManuscriptController extends Controller
         $manuscript = Manuscript::findOrFail($id);
         $attachments = ManuscriptAttachFile::where('manuscript_id', $manuscript->id)
             ->get();
-        // Loop attachments
+
         // Create a main template file to merge with
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
         $objWriter->save(storage_path('app') . "/manuscripts/{$manuscript->id}/main_template.html");
+
         // Load main template
         $mainTemp = PDF::loadFile(storage_path('app') . "/manuscripts/{$manuscript->id}/main_template.html")->getDomPDF()->get_dom();
         $break = PDF::loadFile( public_path() . "/break.html" )->getDomPDF()->get_dom();
         // $mainTempBody = $mainTemp->getElementsByTagName('body')->item(0);
+
         $hasContent = false;
+
+        // Create page for manuscript meta data
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $phpWord->setDefaultFontName('times new romen');
+        $section = $phpWord->addSection(array('borderColor' => '00FF00', 'borderSize' => 12, 'marginBottom' => 600));
+
+        // Populate Main meta data
+        $section->addText($manuscript->title, array('size' => 20, 'allCaps' => true, 'bold' => true), array('align' => "center", 'space' => array('before' => 0, 'after' => 280), ));
+        $section->addText('Author\'s Name:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "center"));
+        $section->addText($manuscript->getAuthors()[0]['name'], array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center"));
+        $section->addText('University/Organisation', array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center", 'space' => array('before' => 0, 'after' => 280), ));
+        $section->addText('Co-Author\'s Name:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "center"));
+        $section->addText('University/Organisation', array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center", 'space' => array('before' => 0, 'after' => 280), ));
+
+        // Populate Abstract
+        $section->addText('Abstract', array('size' => 20, 'allCaps' => true, 'bold' => true), array('align' => "center", 'space' => array('before' => 360, 'after' => 280), ));
+        $section->addText($manuscript->abstract, array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "left", 'space' => array('before' => 0, 'after' => 280), ));
+        $section->addText("Keywords:", array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "left"));
+        $section->addText($manuscript->keywords, array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "left", 'space' => array('before' => 0, 'after' => 280), ));
+
+        // Populate Article type
+        $section->addText('Article Type:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "left"));
+        $section->addText($manuscript->getType()['name'], array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "left", 'space' => array('before' => 0, 'after' => 280), ));
+
+        // Populate Funding Information
+        $section->addText('Funding Information:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "left"));
+        $section->addText($manuscript->funding_information, array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "left"));
+
+        $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
+        $PDFWriter->save(storage_path('app') . "/manuscripts/{$manuscript->id}/cover_template.html");
+        $htmlTemp = PDF::loadFile( storage_path('app') . "/manuscripts/{$manuscript->id}/cover_template.html" )->getDomPDF()->get_dom();
+        
+        foreach ($htmlTemp->documentElement->childNodes as $child) {
+            $import = $mainTemp->importNode($child, true);
+            if ($import) {
+                $mainTemp->documentElement->appendChild($import);
+            }
+        }
+        
+        // break page
+        foreach ($break->documentElement->childNodes as $child) {
+            $import = $mainTemp->importNode($child, true);
+            if ($import) {
+                $mainTemp->documentElement->appendChild($import);
+            }
+        }
+
         foreach ($attachments as $attachment) {
+
             // Check for supported file for combine
             if ($attachment->canMerge()) {
+
+                // Create pages for manuscript attachment contains
                 if (str_contains(Storage::mimeType($attachment->file_location), 'word')) {
+
                     // Convert docs to html.
-                    $Content = \PhpOffice\PhpWord\IOFactory::load(storage_path('app') . '/' . $attachment->file_location);
-                    $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'HTML');
+                    $phpWord = \PhpOffice\PhpWord\IOFactory::load(storage_path('app') . '/' . $attachment->file_location);
+                    $phpWord->setDefaultFontName('times new romen');
+                    $section = $phpWord->addSection(array('borderColor' => '00FF00', 'borderSize' => 12));
+
+                    // Add top label
+                    $section->addText($attachment->getType()['name']);
+                    foreach($phpWord->getSections() as $i => $section) {
+                        $section->setElementIndex($i);
+                    }
+
+                    // sort sections
+                    $phpWord->sortSections(function($a,$b) { 
+                        return $a->getElementIndex() < $b->getElementIndex();
+                    });
+
+                    $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
                     $PDFWriter->save(storage_path('app') . '/' . "{$attachment->file_location}.html");
                 }
 
@@ -236,6 +332,7 @@ class ManuscriptController extends Controller
                 //         $mainTempBody->appendChild($import);
                 //     }
                 // }
+
                 foreach ($htmlTemp->documentElement->childNodes as $child) {
                     $import = $mainTemp->importNode($child, true);
                     if ($import) {
@@ -243,23 +340,30 @@ class ManuscriptController extends Controller
                     }
                 }
 
+                // break page
                 foreach ($break->documentElement->childNodes as $child) {
                     $import = $mainTemp->importNode($child, true);
                     if ($import) {
                         $mainTemp->documentElement->appendChild($import);
                     }
                 }
+
                 $hasContent = true;
+
             }
             
         }
 
         if ($hasContent) {
+
             // Save Merged html
             $mainTemp->save(storage_path('app') . "/manuscripts/{$manuscript->id}/final_template.html");
+            
             // Download pdf from merged html
             return PDF::loadFile( storage_path('app') . "/manuscripts/{$manuscript->id}/final_template.html" )->stream( 'final_template.pdf' );
+        
         }
+        
         return PDF::loadFile( storage_path('app') . "/manuscripts/{$manuscript->id}/main_template.html" )->stream( 'final_template.pdf' );
         
     }
@@ -348,6 +452,7 @@ class ManuscriptController extends Controller
     {
         $request->validate([
             'type' => 'required',
+            'file' => 'required|mimes:doc,docx'
         ]);
 
         $manuscript = Manuscript::findOrFail($id);
@@ -401,6 +506,11 @@ class ManuscriptController extends Controller
      */
     public function updateAttachFile(Request $request, $id, $attachFileId)
     {
+        $request->validate([
+            'type' => 'required',
+            'file' => 'mimes:doc,docx'
+        ]);
+
         $manuscript = Manuscript::findOrFail($id);
         $attach = ManuscriptAttachFile::findOrFail($attachFileId);   
         $attach->manuscript_id = $id;

@@ -92,7 +92,7 @@ var _hoisted_4 = {
   "class": "shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
 };
 var _hoisted_5 = {
-  "class": "min-w-full divide-y divide-gray-200"
+  "class": "min-w-full divide-y divide-gray-200 table-fixed"
 };
 var _hoisted_6 = {
   "class": "bg-gray-50"

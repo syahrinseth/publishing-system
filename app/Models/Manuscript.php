@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -23,6 +24,44 @@ class Manuscript extends Model
         'editors' => 'array',
         'reviewers' => 'array',
         'additional_informations' => 'array'
+    ];
+
+    public static $types = [
+        [
+            'id' => 1,
+            'name' => "Full Length Article",
+        ],
+        [
+            'id' => 2,
+            'name' => "Review",
+        ],
+        [
+            'id' => 3,
+            'name' => "Short Communication",
+        ],
+    ];
+
+    public static $statusList = [
+        [
+            'name' => "Draft",
+            'color' => 'gray'
+        ],
+        [
+            'name' => "Submit For Review",
+            'color' => 'blue'
+        ],
+        [
+            'name' => "Rejected",
+            'color' => 'red'
+        ],
+        [
+            'name' => "Approved",
+            'color' => 'green'
+        ],
+        [
+            'name' => "Published",
+            'color' => 'indigo'
+        ]
     ];
 
     /**
@@ -56,39 +95,13 @@ class Manuscript extends Model
 
     public function getType()
     {
-        $types = collect([
-            [
-                'id' => 1,
-                'name' => "Full Length Article",
-            ],
-            [
-                'id' => 2,
-                'name' => "Review",
-            ],
-            [
-                'id' => 3,
-                'name' => "Short Communication",
-            ],
-        ]);
+        $types = collect(Manuscript::$types);
         return $types->where('id', $this->type)->first();
     }
 
     public static function getTypes()
     {
-        return collect([
-            [
-                'id' => 1,
-                'name' => "Full Length Article",
-            ],
-            [
-                'id' => 2,
-                'name' => "Review",
-            ],
-            [
-                'id' => 3,
-                'name' => "Short Communication",
-            ],
-        ]);
+        return collect(Manuscript::$types);
     }
 
     public function getCategories()
@@ -111,5 +124,104 @@ class Manuscript extends Model
                 'name' => 'Others'
             ],
         ]);
+    }
+
+    /**
+     * Get status list depend on user role on the manuscript.
+     * @param int $manuscript_id
+     * @return collect
+     */
+    public static function getStatusList($manuscript_id)
+    {
+        $list = collect(Manuscript::$statusList);
+        // $manuscript = Manuscript::findOrFail($manuscript_id);
+        // // if ($manuscript->authIsEditor()) {
+        // //     return $list->whereIn('name', ['Draft', "Submit For Review"]);
+        // // } elseif($manuscript->authIsReviewer()) {
+        // //     return $list->whereIn('name', ['Draft', "Submit For Review", "Rejected", "Approved"]);
+        // // } elseif($manuscript->authIsPublisher()) {
+        // //     return $list->whereIn('name', ['Draft', "Submit For Review", "Rejected", "Approved", "Published"]);
+        // // }
+        return $list;
+    }
+
+    /**
+     * Assign status.
+     * @param String $input
+     * @return bool
+     */
+    public function assignStatus($input)
+    {
+
+        if (($this->authIsEditor() || $this->authIsAuthor()) && in_array($input, ['Draft', "Submit For Review"])) {
+
+            $this->status = $input;
+            $this->update();
+            return false;
+        
+        } elseif($this->authIsReviewer() && in_array($input, ['Draft', "Submit For Review", "Rejected", "Approved"])) {
+        
+            $this->status = $input;
+            $this->update();
+            return false;
+        
+        } elseif($this->authIsPublisher() && in_array($input, ['Draft', "Submit For Review", "Rejected", "Approved", "Published"])) {
+        
+            $this->status = $input;
+            $this->update();
+            return false;
+        
+        }
+        
+        return false;
+    
+    }
+
+    /**
+     * Validate if auth is author of the manuscript.
+     * @return boolean
+     */
+    public function authIsAuthor()
+    {
+        if (in_array(Auth::user()->id, $this->authors ?? [])) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Validate if auth is editor of the manuscript.
+     * @return boolean
+     */
+    public function authIsEditor()
+    {
+        if (in_array(Auth::user()->id, $this->editors ?? [])) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Validate if auth is reviewer of the manuscript.
+     * @return boolean
+     */
+    public function authIsReviewer()
+    {
+        if (in_array(Auth::user()->id, $this->reviewers ?? [])) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Validate if auth is publisher of the manuscript.
+     * @return boolean
+     */
+    public function authIsPublisher()
+    {
+        if (in_array(Auth::user()->id, $this->publishers ?? [])) {
+            return true;
+        }
+        return false;
     }
 }

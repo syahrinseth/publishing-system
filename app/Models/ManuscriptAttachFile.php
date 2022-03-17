@@ -137,4 +137,15 @@ class ManuscriptAttachFile extends Model
 
         return true;
     }
+
+    /**
+     * Get type.
+     * 
+     * @return Object
+     */
+    public function getType()
+    {
+        $types = collect(ManuscriptAttachFile::$types);
+        return $types->where('id', $this->type)->first();
+    }
 }
