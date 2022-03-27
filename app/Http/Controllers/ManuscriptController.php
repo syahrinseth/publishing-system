@@ -131,10 +131,12 @@ class ManuscriptController extends Controller
     public function edit(Request $request, $id)
     {
         $manuscript = Manuscript::where('id', $id)
-            ->whereJsonContains('authors', Auth::user()->id)
-            ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
-            ->orWhereJsonContains('editors', Auth::user()->id)
-            ->orWhereJsonContains('reviewers', Auth::user()->id)
+            ->where(function($query) {
+                $query->whereJsonContains('authors', Auth::user()->id)
+                ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
+                ->orWhereJsonContains('editors', Auth::user()->id)
+                ->orWhereJsonContains('reviewers', Auth::user()->id);
+            })
             ->firstOrFail();
         
         $users = User::all();
@@ -162,10 +164,12 @@ class ManuscriptController extends Controller
     public function update(Request $request, $id)
     {
         $manuscript = Manuscript::where('id', $id)
-            ->whereJsonContains('authors', Auth::user()->id)
-            ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
-            ->orWhereJsonContains('editors', Auth::user()->id)
-            ->orWhereJsonContains('reviewers', Auth::user()->id)
+            ->where(function($query) {
+                $query->whereJsonContains('authors', Auth::user()->id)
+                ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
+                ->orWhereJsonContains('editors', Auth::user()->id)
+                ->orWhereJsonContains('reviewers', Auth::user()->id);
+            })
             ->firstOrFail();
         $manuscript->type = $request->type;
         $manuscript->editors = $request->editors == null ? [] : [$request->editors];

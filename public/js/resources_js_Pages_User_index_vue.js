@@ -93,7 +93,6 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   setup: function setup(props) {
-    console.log(props.auth.user.data);
     var deleteForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_3__.useForm)();
     return {
       deleteForm: deleteForm
