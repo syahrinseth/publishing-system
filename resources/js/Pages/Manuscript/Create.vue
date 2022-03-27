@@ -81,7 +81,7 @@ export default {
             })
         },
         async submit() {
-            this.manuscriptForm.post(`/manuscript-store`, {
+            this.manuscriptForm.post(`/admin/manuscript-store`, {
                 preserveScroll: true,
                 onError: (errors) => {
                     Object.keys(errors).forEach((value, index) => {

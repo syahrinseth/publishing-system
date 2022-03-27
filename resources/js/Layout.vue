@@ -129,11 +129,11 @@ import Toast from './Components/Toast'
 //     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 // }
 let navigation = [
-  { name: 'Dashboard', href: '/', disabled: false },
-  { name: 'Submit a Manuscript', href: '/manuscript-create', disabled: false },
-  { name: 'Manuscript Overview', href: '/manuscripts', disabled: false },
+  { name: 'Dashboard', href: '/admin/', disabled: false },
+  { name: 'Submit a Manuscript', href: '/admin/manuscript-create', disabled: false },
+  { name: 'Manuscript Overview', href: '/admin/manuscripts', disabled: false },
   // { name: 'Journal Overview', href: '/journals', disabled: false},
-  { name: 'Users', href: '/users', disabled: false },
+  { name: 'Users', href: '/admin/users', disabled: false },
 ]
 let userNavigation = [
   { name: 'Your Profile', href: '#', method: 'get', disabled: false },

@@ -9,7 +9,7 @@
                     </div>
                     <div class="mt-5 flex lg:mt-0 lg:ml-4">
                     <span class="hidden sm:block">
-                        <Link :href="`/roles`" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <Link :href="`/admin/roles`" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             <UserIcon class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
                             Roles & Permissions
                         </Link>
@@ -78,7 +78,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <form @submit.prevent="deleteUser(user)">
-                                        <Link v-if="auth.user.data.permissions_attribute.users.edit == true" :href="`/users/${user.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Edit</Link>
+                                        <Link v-if="auth.user.data.permissions_attribute.users.edit == true" :href="`/admin/users/${user.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Edit</Link>
                                         <button v-if="auth.user.data.permissions_attribute.users.destroy == true" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</button>
                                     </form>
                                     
@@ -132,7 +132,7 @@
         methods: {
             deleteUser(user) {
                 if (confirm('Are you sure to delete "' + user.name + '"?')) {
-                    this.deleteForm.post(`/users/${user.id}/destroy`, {
+                    this.deleteForm.post(`/admin/users/${user.id}/destroy`, {
                         preserveScroll: true,
                         onError: (errors) => {
                             Object.keys(errors).forEach((value, index) => {

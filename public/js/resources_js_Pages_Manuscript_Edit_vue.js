@@ -2130,7 +2130,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       this.manuscriptForm.authors = [this.$page.props.auth.user.id || 1];
-      this.manuscriptForm.post("/manuscripts/".concat(this.$props.manuscript.data.id, "/update"), {
+      this.manuscriptForm.post("/admin/manuscripts/".concat(this.$props.manuscript.data.id, "/update"), {
         preserveScroll: true,
         onError: function onError(errors) {
           Object.keys(errors).forEach(function (value, index) {
@@ -2151,7 +2151,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     submitAttach: function submitAttach() {
       var _this2 = this;
 
-      this.attachForm.post("/manuscripts/".concat(this.$props.manuscript.data.id, "/attach-files"), {
+      this.attachForm.post("/admin/manuscripts/".concat(this.$props.manuscript.data.id, "/attach-files"), {
         preserveScroll: true,
         onError: function onError(errors) {
           Object.keys(errors).forEach(function (value, index) {
@@ -2167,7 +2167,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     updateAttach: function updateAttach() {
       var _this3 = this;
 
-      this.updateAttachForm.post("/manuscripts/".concat(this.$props.manuscript.data.id, "/attach-files/").concat(this.updateAttachForm.id, "/update"), {
+      this.updateAttachForm.post("/admin/manuscripts/".concat(this.$props.manuscript.data.id, "/attach-files/").concat(this.updateAttachForm.id, "/update"), {
         preserveScroll: true,
         onError: function onError(errors) {
           Object.keys(errors).forEach(function (value, index) {
@@ -2240,7 +2240,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
 
       if (confirm('Are you sure to delete "' + attach.type.name + '"?')) {
-        deleteAttachForm.post("/manuscripts/".concat(props.manuscript.data.id, "/attach-files/").concat(attach.id), {
+        deleteAttachForm.post("/admin/manuscripts/".concat(props.manuscript.data.id, "/attach-files/").concat(attach.id), {
           preserveScroll: true
         });
       }
@@ -3264,7 +3264,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }).join(', ')), 1
       /* TEXT */
       )])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-        href: "/manuscripts/".concat($props.manuscript.data.id, "/download"),
+        href: "/admin/manuscripts/".concat($props.manuscript.data.id, "/download"),
         "class": "inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
         target: "_blank"
       }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DownloadIcon, {
@@ -3492,7 +3492,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_53, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.updateAttachForm.file_name), 1
           /* TEXT */
           )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_54, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-            href: "/manuscripts/".concat($props.manuscript.data.id, "/attach-files/").concat($setup.updateAttachForm.id, "/download"),
+            href: "/admin/manuscripts/".concat($props.manuscript.data.id, "/attach-files/").concat($setup.updateAttachForm.id, "/download"),
             "class": "font-medium text-indigo-600 hover:text-indigo-500"
           }, " Download ", 8
           /* PROPS */
@@ -3580,7 +3580,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }, "Edit", 8
             /* PROPS */
             , _hoisted_80), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-              href: "/manuscripts/".concat($props.manuscript.data.id, "/attach-files/").concat(attachment.id, "/download"),
+              href: "/admin/manuscripts/".concat($props.manuscript.data.id, "/attach-files/").concat(attachment.id, "/download"),
               "class": "text-indigo-600 hover:text-indigo-900 px-1"
             }, "Download", 8
             /* PROPS */

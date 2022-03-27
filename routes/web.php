@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PublicController;
 use Inertia\Inertia;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->group(function() {
+Route::get('/', [PublicController::class, 'index'])->name('public.index');
+
+Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
     Inertia::share('auth.user', function () {
         $auth = Auth::user();

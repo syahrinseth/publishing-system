@@ -133,7 +133,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
                 if (confirm('Are you sure to delete "' + manuscript.type.name + '"?')) {
-                  deleteAttachForm.post("/manuscripts/".concat(manuscript.id, "/destroy"), {
+                  deleteAttachForm.post("/admin/manuscripts/".concat(manuscript.id, "/destroy"), {
                     preserveScroll: true
                   });
                 }
@@ -429,7 +429,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             /* TEXT */
             ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_19, [$props.auth.user.data.permissions_attribute.manuscripts.edit == true ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Link, {
               key: 0,
-              href: "/manuscripts/".concat(manuscript.id, "/edit"),
+              href: "/admin/manuscripts/".concat(manuscript.id, "/edit"),
               "class": "text-indigo-600 hover:text-indigo-900 px-2"
             }, {
               "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -441,7 +441,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }, 1032
             /* PROPS, DYNAMIC_SLOTS */
             , ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-              href: "/manuscripts/".concat(manuscript.id, "/download"),
+              href: "/admin/manuscripts/".concat(manuscript.id, "/download"),
               "class": "text-indigo-600 hover:text-indigo-900 px-2",
               target: "_blank"
             }, "Download", 8
