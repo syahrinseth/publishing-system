@@ -5,13 +5,17 @@ namespace App\Models;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Manuscript extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $table = 'manuscripts';
+
+    protected static $logAttributes = ["*"];
+    protected static $logOnlyDirty = true;
 
     /**
      * The attributes that should be cast.
@@ -23,6 +27,7 @@ class Manuscript extends Model
         'corresponding_authors' => 'array',
         'editors' => 'array',
         'reviewers' => 'array',
+        'publishers' => 'array',
         'additional_informations' => 'array'
     ];
 

@@ -5,12 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class ManuscriptAttachFile extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $table = 'manuscript_attach_files';
+    protected static $logAttributes = ["*"];
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
 
     public static $types = [
         [

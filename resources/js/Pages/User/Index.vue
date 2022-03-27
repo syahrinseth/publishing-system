@@ -155,7 +155,6 @@
             },
         },
         setup(props) {
-            console.log(props.auth.user.data);
             const deleteForm = useForm();
             return {
                 deleteForm
