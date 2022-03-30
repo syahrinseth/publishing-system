@@ -73,7 +73,7 @@ class UserController extends Controller
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
-            // $user->affiliation = $request->affiliation;
+            $user->affiliation = $request->affiliation;
             $user->address_1 = $request->address_1;
             $user->address_2 = $request->address_2;
             $user->postcode = $request->postcode;
@@ -83,6 +83,8 @@ class UserController extends Controller
             $user->about = $request->about;
             $user->website_url = $request->website_url;
             $user->country = $request->country;
+            // $user->faculty = $request->faculty;
+            // $user->university = $request->university;
             $user->assignRole('User');
             $user->password = bcrypt($request->password);
             $user->save();
@@ -170,7 +172,7 @@ class UserController extends Controller
             $user = User::findOrFail($id);
             $user->name = $request->name;
             $user->email = $request->email;
-            // $user->affiliation = $request->affiliation;
+            $user->affiliation = $request->affiliation;
             $user->address_1 = $request->address_1;
             $user->address_2 = $request->address_2;
             $user->postcode = $request->postcode;
@@ -180,6 +182,8 @@ class UserController extends Controller
             $user->about = $request->about;
             $user->website_url = $request->website_url;
             $user->country = $request->country;
+            // $user->faculty = $request->faculty;
+            // $user->university = $request->university;
             if (!empty($request->roles) && count($request->roles) > 0) {
                 $user->roles()->detach(); 
                 $user->assignRole($request->roles);

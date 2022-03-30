@@ -81,9 +81,14 @@
                         <div class="shadow overflow-hidden sm:rounded-md">
                             <div class="px-4 py-5 bg-white sm:p-6">
                             <div class="grid grid-cols-12 gap-6">
-                                <div class="col-span-12 sm:col-span-12">
+                                <div class="col-span-8 sm:col-span-8">
                                     <label for="first-name" class="block text-sm font-medium text-gray-700">Full Name</label>
                                     <input v-model="userForm.name" type="text" name="first-name" id="first-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                </div>
+
+                                <div class="col-span-4">
+                                    <label for="affiliation" class="block text-sm font-medium text-gray-700">Affiliation</label>
+                                    <input v-model="userForm.affiliation" type="text" name="affiliation" id="affiliation" autocomplete="affiliation" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Eg: Universiti Teknologi MARA" />
                                 </div>
 
                                 <div class="col-span-4 sm:col-span-4">
@@ -110,18 +115,18 @@
                                 </div>
 
                                 <div class="col-span-4">
-                                <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-                                <input v-model="userForm.city" type="text" name="city" id="city" autocomplete="address-level1" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                    <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                                    <input v-model="userForm.city" type="text" name="city" id="city" autocomplete="address-level1" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
                                 </div>
 
                                 <div class="col-span-4">
-                                <label for="region" class="block text-sm font-medium text-gray-700">State / Province</label>
-                                <input v-model="userForm.state" type="text" name="region" id="region" autocomplete="address-level1" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                    <label for="region" class="block text-sm font-medium text-gray-700">State / Province</label>
+                                    <input v-model="userForm.state" type="text" name="region" id="region" autocomplete="address-level1" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
                                 </div>
 
                                 <div class="col-span-4">
-                                <label for="postal-code" class="block text-sm font-medium text-gray-700">ZIP / Postal code</label>
-                                <input v-model="userForm.postcode" type="text" name="postal-code" id="postal-code" autocomplete="postal-code" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                    <label for="postal-code" class="block text-sm font-medium text-gray-700">ZIP / Postal code</label>
+                                    <input v-model="userForm.postcode" type="text" name="postal-code" id="postal-code" autocomplete="postal-code" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
                                 </div>
                             </div>
                             </div>
@@ -238,7 +243,8 @@ export default {
             website_url: user.website_url,
             about: user.about,
             photo: user.photo,
-            roles: user.roles.length > 0 ? user.roles.map((e) => e.id) : []
+            roles: user.roles.length > 0 ? user.roles.map((e) => e.id) : [],
+            affiliation: user.affiliation
         });
 
         return {

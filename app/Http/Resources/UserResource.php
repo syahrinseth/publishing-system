@@ -32,7 +32,9 @@ class UserResource extends JsonResource
             'about' => $this->about,
             'photo' => $this->photo,
             'updated_at' => $this->updated_at->diffForHumans(),
-            'created_at' => $this->created_at->diffForHumans()
+            'created_at' => $this->created_at->diffForHumans(),
+            'university' => $this->university,
+            'affiliation' => $this->affiliation
         ];
     }
 }
