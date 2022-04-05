@@ -61,17 +61,17 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Title
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Abstract
-                                </th>
+                                </th> -->
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Authors
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Last Modified
+                                    Status
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status
+                                Last Modified
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 
@@ -103,17 +103,17 @@
                                 </span> -->
                                 {{ manuscript.title || 'N/a' }}
                                 </td>
+                                <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <p class="text-ellipsis overflow-hidden">{{ manuscript.abstract || 'N/a' }}</p>
+                                </td> -->
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ manuscript.abstract || 'N/a' }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                <!-- {{ manuscript }} --> N/a
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ manuscript.updated_at }}
+                                {{ manuscript.authors[0].name }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ manuscript.status }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ manuscript.updated_at }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/manuscripts/${manuscript.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Edit</Link>

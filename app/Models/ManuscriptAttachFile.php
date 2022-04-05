@@ -5,12 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class ManuscriptAttachFile extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $table = 'manuscript_attach_files';
+    protected static $logAttributes = ["*"];
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
 
     public static $types = [
         [
@@ -136,5 +140,16 @@ class ManuscriptAttachFile extends Model
         }
 
         return true;
+    }
+
+    /**
+     * Get type.
+     * 
+     * @return Object
+     */
+    public function getType()
+    {
+        $types = collect(ManuscriptAttachFile::$types);
+        return $types->where('id', $this->type)->first();
     }
 }
