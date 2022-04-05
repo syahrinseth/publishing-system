@@ -26,6 +26,7 @@ class ManuscriptResource extends JsonResource
             'corresponding_authors' => $this->corresponding_authors,
             'editors' => count($this->editors) > 0 ? $this->editors[0] : null,
             'reviewers' => count($this->reviewers) > 0 ? $this->reviewers[0] : null,
+            'publishers' => count($this->publishers ?? []) > 0 ? $this->publishers[0] : null,
             'category' => $this->category,
             'funding_information' => $this->funding_information,
             'is_confirm_grant_numbers' => empty($this->additional_informations) ? false : $this->additional_informations['is_confirm_grant_numbers'],

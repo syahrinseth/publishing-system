@@ -2192,6 +2192,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       corresponding_authors: [],
       editors: props.manuscript.data.editors,
       reviewers: props.manuscript.data.reviewers,
+      publishers: props.manuscript.data.publishers,
       funding_information: props.manuscript.data.funding_information,
       is_confirm_grant_numbers: props.manuscript.data.is_confirm_grant_numbers,
       is_acknowledge: props.manuscript.data.is_acknowledge,
@@ -2947,154 +2948,42 @@ var _hoisted_114 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 /* HOISTED */
 );
 
-var _hoisted_115 = ["value"];
-
-var _hoisted_116 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "px-4 py-3 bg-gray-50 text-right sm:px-6"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  "class": "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-}, " Save ")], -1
-/* HOISTED */
-);
-
-var _hoisted_117 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "hidden sm:block",
-  "aria-hidden": "true"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "py-5"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "border-t border-gray-200"
-})])], -1
-/* HOISTED */
-);
-
-var _hoisted_118 = {
-  "class": "md:grid md:grid-cols-3 md:gap-6"
-};
-
-var _hoisted_119 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "md:col-span-1"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "px-4 sm:px-0"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
-  "class": "text-lg font-medium leading-6 text-gray-900"
-}, "Manuscript Data"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "mt-1 text-sm text-gray-600"
-}, " When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details. ")])], -1
-/* HOISTED */
-);
-
-var _hoisted_120 = {
-  "class": "mt-5 md:mt-0 md:col-span-2"
-};
-var _hoisted_121 = {
-  "class": "shadow sm:rounded-md sm:overflow-hidden"
-};
-var _hoisted_122 = {
-  "class": "px-4 py-5 bg-white space-y-6 sm:p-6"
-};
-
-var _hoisted_123 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "for": "title",
-  "class": "block text-sm font-medium text-gray-700"
-}, " Full Title ", -1
-/* HOISTED */
-);
-
+var _hoisted_123 = ["value"];
 var _hoisted_124 = {
-  "class": "mt-1"
+  "class": "grid grid-cols-3 gap-6"
 };
-
-var _hoisted_125 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "mt-2 text-sm text-gray-500"
-}, null, -1
-/* HOISTED */
-);
+var _hoisted_125 = {
+  "class": "col-span-3 sm:col-span-2"
+};
 
 var _hoisted_126 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "for": "short_title",
+  "for": "company-website",
   "class": "block text-sm font-medium text-gray-700"
-}, " Short Title ", -1
+}, " Publisher ", -1
 /* HOISTED */
 );
 
 var _hoisted_127 = {
-  "class": "mt-1"
+  "class": "mt-1 flex rounded-md shadow-sm"
 };
 
-var _hoisted_128 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "mt-2 text-sm text-gray-500"
-}, " Limit 20 words ", -1
+var _hoisted_128 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+  value: ""
+}, "Select", -1
 /* HOISTED */
 );
 
-var _hoisted_129 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "for": "abstract",
-  "class": "block text-sm font-medium text-gray-700"
-}, " Abstract ", -1
-/* HOISTED */
-);
+var _hoisted_129 = ["value"];
 
-var _hoisted_130 = {
-  "class": "mt-1"
-};
-
-var _hoisted_131 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "mt-2 text-sm text-gray-500"
-}, " Limit 250 words ", -1
-/* HOISTED */
-);
-
-var _hoisted_132 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "for": "keywords",
-  "class": "block text-sm font-medium text-gray-700"
-}, " Keywords ", -1
-/* HOISTED */
-);
-
-var _hoisted_133 = {
-  "class": "mt-1"
-};
-
-var _hoisted_134 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "mt-2 text-sm text-gray-500"
-}, " Please enter keywords separated by semicolons. Each individual keyword may be up to 256 characters in length. ", -1
-/* HOISTED */
-);
-
-var _hoisted_135 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <label for=\"authors\" class=\"block text-sm font-medium text-gray-700\">\n                                        Authors\n                                    </label>\n                                    <div class=\"mt-1\">\n                                        <textarea v-model=\"manuscriptForm.authors\" id=\"authors\" name=\"authors\" rows=\"3\" class=\"shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md\" placeholder=\"\" />\n                                    </div> "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "mt-2 text-sm text-gray-500"
-})], -1
-/* HOISTED */
-);
-
-var _hoisted_136 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "for": "funding_information",
-  "class": "block text-sm font-medium text-gray-700"
-}, " Funding Information ", -1
-/* HOISTED */
-);
-
-var _hoisted_137 = {
-  "class": "mt-1"
-};
-
-var _hoisted_138 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "mt-2 text-sm text-gray-500"
-}, null, -1
-/* HOISTED */
-);
-
-var _hoisted_139 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_130 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "px-4 py-3 bg-gray-50 text-right sm:px-6"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  type: "submit",
   "class": "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 }, " Save ")], -1
 /* HOISTED */
 );
 
-var _hoisted_140 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_131 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "hidden sm:block",
   "aria-hidden": "true"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
@@ -3105,14 +2994,14 @@ var _hoisted_140 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 /* HOISTED */
 );
 
-var _hoisted_141 = {
+var _hoisted_132 = {
   "class": "mt-10 sm:mt-0"
 };
-var _hoisted_142 = {
+var _hoisted_133 = {
   "class": "md:grid md:grid-cols-3 md:gap-6"
 };
 
-var _hoisted_143 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_134 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "md:col-span-1"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "px-4 sm:px-0"
@@ -3124,36 +3013,36 @@ var _hoisted_143 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 /* HOISTED */
 );
 
-var _hoisted_144 = {
+var _hoisted_135 = {
   "class": "mt-5 md:mt-0 md:col-span-2"
 };
-var _hoisted_145 = {
+var _hoisted_136 = {
   "class": "shadow overflow-hidden sm:rounded-md"
 };
-var _hoisted_146 = {
+var _hoisted_137 = {
   "class": "px-4 py-5 bg-white sm:p-6"
 };
-var _hoisted_147 = {
+var _hoisted_138 = {
   "class": "px-4 py-5 bg-white space-y-6 sm:p-6"
 };
 
-var _hoisted_148 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("legend", {
+var _hoisted_139 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("legend", {
   "class": "text-base font-medium text-gray-900"
 }, "Please confirm that you have mentioned all organizations that funded your research in the Acknowledgements section of your submission, including grant numbers where appropriate.", -1
 /* HOISTED */
 );
 
-var _hoisted_149 = {
+var _hoisted_140 = {
   "class": "mt-4 space-y-4"
 };
-var _hoisted_150 = {
+var _hoisted_141 = {
   "class": "flex items-start"
 };
-var _hoisted_151 = {
+var _hoisted_142 = {
   "class": "flex items-center h-5"
 };
 
-var _hoisted_152 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_143 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "ml-3 text-sm"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "for": "is_confirm_grant_numbers",
@@ -3164,7 +3053,7 @@ var _hoisted_152 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 /* HOISTED */
 );
 
-var _hoisted_153 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_144 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "hidden sm:block",
   "aria-hidden": "true"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
@@ -3175,23 +3064,23 @@ var _hoisted_153 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 /* HOISTED */
 );
 
-var _hoisted_154 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("legend", {
+var _hoisted_145 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("legend", {
   "class": "text-base font-medium text-gray-900"
 }, "Sensors and Actuators Reports is an open access journal which charges an Article Publishing Charge (APC) to cover the cost associated with the publication process. All articles published Open Access will be immediately and permanently free on ScienceDirect for users to read, download, and use in accordance with the author’s selected Creative Commons user license. ", -1
 /* HOISTED */
 );
 
-var _hoisted_155 = {
+var _hoisted_146 = {
   "class": "mt-4 space-y-4"
 };
-var _hoisted_156 = {
+var _hoisted_147 = {
   "class": "flex items-start"
 };
-var _hoisted_157 = {
+var _hoisted_148 = {
   "class": "flex items-center h-5"
 };
 
-var _hoisted_158 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_149 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "ml-3 text-sm"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "for": "is_acknowledge",
@@ -3202,7 +3091,154 @@ var _hoisted_158 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 /* HOISTED */
 );
 
-var _hoisted_159 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_150 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "px-4 py-3 bg-gray-50 text-right sm:px-6"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  "class": "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+}, " Save ")], -1
+/* HOISTED */
+);
+
+var _hoisted_151 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "hidden sm:block",
+  "aria-hidden": "true"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "py-5"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "border-t border-gray-200"
+})])], -1
+/* HOISTED */
+);
+
+var _hoisted_152 = {
+  "class": "md:grid md:grid-cols-3 md:gap-6"
+};
+
+var _hoisted_153 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "md:col-span-1"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "px-4 sm:px-0"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
+  "class": "text-lg font-medium leading-6 text-gray-900"
+}, "Manuscript Data"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "mt-1 text-sm text-gray-600"
+}, " When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details. ")])], -1
+/* HOISTED */
+);
+
+var _hoisted_154 = {
+  "class": "mt-5 md:mt-0 md:col-span-2"
+};
+var _hoisted_155 = {
+  "class": "shadow sm:rounded-md sm:overflow-hidden"
+};
+var _hoisted_156 = {
+  "class": "px-4 py-5 bg-white space-y-6 sm:p-6"
+};
+
+var _hoisted_157 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "for": "title",
+  "class": "block text-sm font-medium text-gray-700"
+}, " Full Title ", -1
+/* HOISTED */
+);
+
+var _hoisted_158 = {
+  "class": "mt-1"
+};
+
+var _hoisted_159 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "mt-2 text-sm text-gray-500"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_160 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "for": "short_title",
+  "class": "block text-sm font-medium text-gray-700"
+}, " Short Title ", -1
+/* HOISTED */
+);
+
+var _hoisted_161 = {
+  "class": "mt-1"
+};
+
+var _hoisted_162 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "mt-2 text-sm text-gray-500"
+}, " Limit 20 words ", -1
+/* HOISTED */
+);
+
+var _hoisted_163 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "for": "abstract",
+  "class": "block text-sm font-medium text-gray-700"
+}, " Abstract ", -1
+/* HOISTED */
+);
+
+var _hoisted_164 = {
+  "class": "mt-1"
+};
+
+var _hoisted_165 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "mt-2 text-sm text-gray-500"
+}, " Limit 250 words ", -1
+/* HOISTED */
+);
+
+var _hoisted_166 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "for": "keywords",
+  "class": "block text-sm font-medium text-gray-700"
+}, " Keywords ", -1
+/* HOISTED */
+);
+
+var _hoisted_167 = {
+  "class": "mt-1"
+};
+
+var _hoisted_168 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "mt-2 text-sm text-gray-500"
+}, " Please enter keywords separated by semicolons. Each individual keyword may be up to 256 characters in length. ", -1
+/* HOISTED */
+);
+
+var _hoisted_169 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "for": "authors",
+  "class": "block text-sm font-medium text-gray-700"
+}, " Funding Information ", -1
+/* HOISTED */
+);
+
+var _hoisted_170 = {
+  "class": "mt-1"
+};
+
+var _hoisted_171 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "mt-2 text-sm text-gray-500"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_172 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "for": "funding_information",
+  "class": "block text-sm font-medium text-gray-700"
+}, " Funding Information ", -1
+/* HOISTED */
+);
+
+var _hoisted_173 = {
+  "class": "mt-1"
+};
+
+var _hoisted_174 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "mt-2 text-sm text-gray-500"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_175 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "px-4 py-3 bg-gray-50 text-right sm:px-6"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   type: "submit",
@@ -3643,7 +3679,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* NEED_PATCH */
       ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $setup.manuscriptForm.type]])])])]), _hoisted_98])], 32
       /* HYDRATE_EVENTS */
-      )])])]), _hoisted_99, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_100, [_hoisted_101, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_102, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+      )])])]), _hoisted_107, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_108, [_hoisted_109, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_110, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
         onSubmit: _cache[20] || (_cache[20] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
           return $options.saveManuscript();
         }, ["prevent"]))
@@ -3685,14 +3721,58 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* KEYED_FRAGMENT */
       ))], 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $setup.manuscriptForm.reviewers]])])])])]), _hoisted_116])], 32
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $setup.manuscriptForm.reviewers]])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_124, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_125, [_hoisted_126, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_127, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+        name: "suggest-publisher",
+        id: "suggest-publisher",
+        "class": "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md",
+        "onUpdate:modelValue": _cache[19] || (_cache[19] = function ($event) {
+          return $setup.manuscriptForm.publishers = $event;
+        })
+      }, [_hoisted_128, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.users, function (user) {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
+          key: user.id + '-user',
+          value: user.id
+        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.name) + " - " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(user.email), 9
+        /* TEXT, PROPS */
+        , _hoisted_129);
+      }), 128
+      /* KEYED_FRAGMENT */
+      ))], 512
+      /* NEED_PATCH */
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $setup.manuscriptForm.publishers]])])])])]), _hoisted_130])], 32
       /* HYDRATE_EVENTS */
-      )])])]), _hoisted_117, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_118, [_hoisted_119, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_120, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
-        onSubmit: _cache[26] || (_cache[26] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+      )])])]), _hoisted_131, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_132, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_133, [_hoisted_134, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_135, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+        onSubmit: _cache[23] || (_cache[23] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
           return $options.saveManuscript();
         }, ["prevent"]))
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_121, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_122, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_123, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_124, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_136, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_137, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_138, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("fieldset", null, [_hoisted_139, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_140, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_141, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_142, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
         "onUpdate:modelValue": _cache[21] || (_cache[21] = function ($event) {
+          return $setup.manuscriptForm.is_confirm_grant_numbers = $event;
+        }),
+        id: "is_confirm_grant_numbers",
+        name: "is_confirm_grant_numbers",
+        type: "checkbox",
+        "class": "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+      }, null, 512
+      /* NEED_PATCH */
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $setup.manuscriptForm.is_confirm_grant_numbers]])]), _hoisted_143])])]), _hoisted_144, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("fieldset", null, [_hoisted_145, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_146, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_147, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_148, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+        "onUpdate:modelValue": _cache[22] || (_cache[22] = function ($event) {
+          return $setup.manuscriptForm.is_acknowledge = $event;
+        }),
+        id: "is_acknowledge",
+        name: "is_acknowledge",
+        type: "checkbox",
+        "class": "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+      }, null, 512
+      /* NEED_PATCH */
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $setup.manuscriptForm.is_acknowledge]])]), _hoisted_149])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"hidden sm:block\" aria-hidden=\"true\">\n                                            <div class=\"py-5\">\n                                                <div class=\"border-t border-gray-200\" />\n                                            </div>\n                                        </div>\n                                        <fieldset>\n                                        <div>\n                                            <legend class=\"text-base font-medium text-gray-900\">\n                                            In support of Open Science, Sensors and Actuators Reports offers its authors a free preprint posting service. Preprints provide early registration and dissemination of research, which facilitates early citations and collaboration. Please indicate below whether you would like to release your manuscript publicly as a preprint on the preprint server www.SSRN.com once it enters peer-review with the journal. Your choice will have no effect on the editorial process or outcome with the journal. Your preprint will remain globally available free to read whether the journal accepts or rejects your manuscript. For more information about posting to www.SSRN.com, please consult the SSRN Terms of Use and FAQs.</legend>\n                                        </div>\n                                        <div class=\"mt-4 space-y-4\">\n                                            <div class=\"flex items-center\">\n                                            <input id=\"push-everything\" name=\"push-notifications\" type=\"radio\" class=\"focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300\">\n                                            <label for=\"push-everything\" class=\"ml-3 block text-sm font-medium text-gray-700\">\n                                                Please select a response\n                                            </label>\n                                            </div>\n                                            <div class=\"flex items-center\">\n                                            <input id=\"push-email\" name=\"push-notifications\" type=\"radio\" class=\"focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300\">\n                                            <label for=\"push-email\" class=\"ml-3 block text-sm font-medium text-gray-700\">\n                                                YES, I want to share my research early and openly as a preprint.\n                                            </label>\n                                            </div>\n                                            <div class=\"flex items-center\">\n                                            <input id=\"push-nothing\" name=\"push-notifications\" type=\"radio\" class=\"focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300\">\n                                            <label for=\"push-nothing\" class=\"ml-3 block text-sm font-medium text-gray-700\">\n                                                NO, I don't want to share my research early and openly as a preprint.\n                                            </label>\n                                            </div>\n                                        </div>\n                                        </fieldset> ")])]), _hoisted_150])], 32
+      /* HYDRATE_EVENTS */
+      )])])]), _hoisted_151, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_152, [_hoisted_153, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_154, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+        onSubmit: _cache[30] || (_cache[30] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+          return $options.saveManuscript();
+        }, ["prevent"]))
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_155, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_156, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_157, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_158, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+        "onUpdate:modelValue": _cache[24] || (_cache[24] = function ($event) {
           return $setup.manuscriptForm.title = $event;
         }),
         id: "title",
@@ -3702,8 +3782,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         placeholder: ""
       }, null, 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.manuscriptForm.title]])]), _hoisted_125]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_126, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_127, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
-        "onUpdate:modelValue": _cache[22] || (_cache[22] = function ($event) {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.manuscriptForm.title]])]), _hoisted_159]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_160, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_161, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+        "onUpdate:modelValue": _cache[25] || (_cache[25] = function ($event) {
           return $setup.manuscriptForm.short_title = $event;
         }),
         id: "short_title",
@@ -3713,8 +3793,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         placeholder: ""
       }, null, 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.manuscriptForm.short_title]])]), _hoisted_128]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_129, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_130, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
-        "onUpdate:modelValue": _cache[23] || (_cache[23] = function ($event) {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.manuscriptForm.short_title]])]), _hoisted_162]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_163, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_164, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+        "onUpdate:modelValue": _cache[26] || (_cache[26] = function ($event) {
           return $setup.manuscriptForm["abstract"] = $event;
         }),
         id: "abstract",
@@ -3724,8 +3804,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         placeholder: ""
       }, null, 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.manuscriptForm["abstract"]]])]), _hoisted_131]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_132, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_133, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
-        "onUpdate:modelValue": _cache[24] || (_cache[24] = function ($event) {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.manuscriptForm["abstract"]]])]), _hoisted_165]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_166, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_167, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+        "onUpdate:modelValue": _cache[27] || (_cache[27] = function ($event) {
           return $setup.manuscriptForm.keywords = $event;
         }),
         id: "keywords",
@@ -3735,9 +3815,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         placeholder: ""
       }, null, 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.manuscriptForm.keywords]])]), _hoisted_134]), _hoisted_135, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_136, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_137, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
-        "onUpdate:modelValue": _cache[25] || (_cache[25] = function ($event) {
-          return $setup.manuscriptForm.funding_information = $event;
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.manuscriptForm.keywords]])]), _hoisted_168]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_169, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_170, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+        "onUpdate:modelValue": _cache[28] || (_cache[28] = function ($event) {
+          return $setup.manuscriptForm.authors = $event;
         }),
         id: "funding_information",
         name: "funding_information",
@@ -3746,25 +3826,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         placeholder: ""
       }, null, 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.manuscriptForm.funding_information]])]), _hoisted_138])]), _hoisted_139])], 32
-      /* HYDRATE_EVENTS */
-      )])])]), _hoisted_140, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_141, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_142, [_hoisted_143, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_144, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
-        onSubmit: _cache[29] || (_cache[29] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-          return $options.saveManuscript();
-        }, ["prevent"]))
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_145, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_146, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_147, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("fieldset", null, [_hoisted_148, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_149, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_150, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_151, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-        "onUpdate:modelValue": _cache[27] || (_cache[27] = function ($event) {
-          return $setup.manuscriptForm.is_confirm_grant_numbers = $event;
-        }),
-        id: "is_confirm_grant_numbers",
-        name: "is_confirm_grant_numbers",
-        type: "checkbox",
-        "class": "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-      }, null, 512
-      /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $setup.manuscriptForm.is_confirm_grant_numbers]])]), _hoisted_152])])]), _hoisted_153, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("fieldset", null, [_hoisted_154, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_155, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_156, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_157, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-        "onUpdate:modelValue": _cache[28] || (_cache[28] = function ($event) {
-          return $setup.manuscriptForm.is_acknowledge = $event;
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.manuscriptForm.authors]])]), _hoisted_171]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_172, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_173, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+        "onUpdate:modelValue": _cache[29] || (_cache[29] = function ($event) {
+          return $setup.manuscriptForm.funding_information = $event;
         }),
         id: "is_acknowledge",
         name: "is_acknowledge",
@@ -3772,7 +3836,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
       }, null, 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $setup.manuscriptForm.is_acknowledge]])]), _hoisted_158])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"hidden sm:block\" aria-hidden=\"true\">\n                                            <div class=\"py-5\">\n                                                <div class=\"border-t border-gray-200\" />\n                                            </div>\n                                        </div>\n                                        <fieldset>\n                                        <div>\n                                            <legend class=\"text-base font-medium text-gray-900\">\n                                            In support of Open Science, Sensors and Actuators Reports offers its authors a free preprint posting service. Preprints provide early registration and dissemination of research, which facilitates early citations and collaboration. Please indicate below whether you would like to release your manuscript publicly as a preprint on the preprint server www.SSRN.com once it enters peer-review with the journal. Your choice will have no effect on the editorial process or outcome with the journal. Your preprint will remain globally available free to read whether the journal accepts or rejects your manuscript. For more information about posting to www.SSRN.com, please consult the SSRN Terms of Use and FAQs.</legend>\n                                        </div>\n                                        <div class=\"mt-4 space-y-4\">\n                                            <div class=\"flex items-center\">\n                                            <input id=\"push-everything\" name=\"push-notifications\" type=\"radio\" class=\"focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300\">\n                                            <label for=\"push-everything\" class=\"ml-3 block text-sm font-medium text-gray-700\">\n                                                Please select a response\n                                            </label>\n                                            </div>\n                                            <div class=\"flex items-center\">\n                                            <input id=\"push-email\" name=\"push-notifications\" type=\"radio\" class=\"focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300\">\n                                            <label for=\"push-email\" class=\"ml-3 block text-sm font-medium text-gray-700\">\n                                                YES, I want to share my research early and openly as a preprint.\n                                            </label>\n                                            </div>\n                                            <div class=\"flex items-center\">\n                                            <input id=\"push-nothing\" name=\"push-notifications\" type=\"radio\" class=\"focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300\">\n                                            <label for=\"push-nothing\" class=\"ml-3 block text-sm font-medium text-gray-700\">\n                                                NO, I don't want to share my research early and openly as a preprint.\n                                            </label>\n                                            </div>\n                                        </div>\n                                        </fieldset> ")])]), _hoisted_159])], 32
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.manuscriptForm.funding_information]])]), _hoisted_174])]), _hoisted_175])], 32
       /* HYDRATE_EVENTS */
       )])])])];
     }),

@@ -85,6 +85,7 @@ class ManuscriptController extends Controller
         $manuscript->corresponding_authors = [];
         $manuscript->editors = [];
         $manuscript->reviewers = [];
+        $manuscript->publishers = [];
         $manuscript->save();
 
         if ($request->is('api/*')) {
@@ -193,6 +194,7 @@ class ManuscriptController extends Controller
         $manuscript->keywords = $request->keywords;
         $manuscript->authors = $request->authors;
         $manuscript->funding_information = $request->funding_information;
+        $manuscript->publishers = $request->publishers == null ? [] : [$request->publishers];
         $manuscript->additional_informations = [
             'is_confirm_grant_numbers' => $request->is_confirm_grant_numbers ?? false,
             'is_acknowledge' => $request->is_acknowledge ?? false
