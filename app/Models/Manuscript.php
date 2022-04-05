@@ -22,7 +22,8 @@ class Manuscript extends Model
         'corresponding_authors' => 'array',
         'editors' => 'array',
         'reviewers' => 'array',
-        'additional_informations' => 'array'
+        'additional_informations' => 'array',
+        'publishers' => 'array'
     ];
 
     /**
