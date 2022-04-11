@@ -2129,7 +2129,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     saveManuscript: function saveManuscript() {
       var _this = this;
 
-      this.manuscriptForm.authors = [this.$page.props.auth.user.id || 1];
+      this.manuscriptForm.authors = this.manuscriptForm.authors.map(function (user) {
+        return user.id;
+      });
       this.manuscriptForm.post("/admin/manuscripts/".concat(this.$props.manuscript.data.id, "/update"), {
         preserveScroll: true,
         onError: function onError(errors) {

@@ -686,9 +686,7 @@
             }) 
         },  
         saveManuscript() {
-            this.manuscriptForm.authors = [
-                this.$page.props.auth.user.id || 1
-            ];
+            this.manuscriptForm.authors = this.manuscriptForm.authors.map((user) => user.id);
             this.manuscriptForm.post(`/admin/manuscripts/${this.$props.manuscript.data.id}/update`, {
                 preserveScroll: true,
                 onError: (errors) => {
