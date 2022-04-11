@@ -44,8 +44,10 @@ class Journal extends Model
     public function manuscripts()
     {
         $ids_ordered = implode(',', $this->manuscripts ?? []);
-        return new ManuscriptCollection(Manuscript::whereIn('id', $this->manuscripts ?? [])
-            ->orderByRaw("FIELD(id, $ids_ordered)")
-            ->get());
+        $manuscripts = Manuscript::whereIn('id', $this->manuscripts ?? []);
+        if ($ids_ordered != null) {
+            $manuscripts->orderByRaw("FIELD(id, $ids_ordered)");
+        }
+        return new ManuscriptCollection($manuscripts->get());
     }
 }
