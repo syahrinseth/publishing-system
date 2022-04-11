@@ -68,7 +68,15 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
     Route::get('/journals/{id}', [App\Http\Controllers\JournalController::class, 'show'])->name('journal.show');
 
+    Route::get('/journal-create', [App\Http\Controllers\JournalController::class, 'create'])->name('journal.create');
+
+    Route::post('/journal-store', [App\Http\Controllers\JournalController::class, 'store'])->name('journal.store');
+
     Route::get('/journals/{id}/edit', [App\Http\Controllers\JournalController::class, 'edit'])->name('journal.edit');
+
+    Route::post('/journals/{id}/update', [App\Http\Controllers\JournalController::class, 'update'])->name('journal.update');
+
+    Route::post('/journals/{id}/destroy', [App\Http\Controllers\JournalController::class, 'destroy'])->name('journal.destroy');
 
     // User Module
 

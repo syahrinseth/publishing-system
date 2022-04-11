@@ -81,7 +81,6 @@
                                         <Link v-if="auth.user.data.permissions_attribute.users.edit == true" :href="`/admin/users/${user.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Edit</Link>
                                         <button v-if="auth.user.data.permissions_attribute.users.destroy == true" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</button>
                                     </form>
-                                    
                                 </td>
                             </tr>
                         </template>

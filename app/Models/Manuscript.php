@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\QueryFilter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -78,6 +79,14 @@ class Manuscript extends Model
         $users = User::whereIn('id', $this->authors)
             ->get();
         return $users->toArray();
+    }
+
+    /**
+     * Scoped Filter method.
+     */
+    public function scopeFilter($query, QueryFilter $filters)
+    {
+        return $filters->apply($query);
     }
 
     /**

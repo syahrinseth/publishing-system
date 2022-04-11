@@ -17,7 +17,10 @@ class CreateJournalsTable extends Migration
             $table->id();
             $table->string('name');
             $table->dateTime('date');
+            $table->string('status')->default('draft')->nullable();
             $table->json('manuscripts');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

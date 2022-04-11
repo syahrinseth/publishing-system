@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Journal;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\JournalResource;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Resources\JournalCollection;
 
 class JournalController extends Controller
 {
@@ -22,12 +27,24 @@ class JournalController extends Controller
      */
     public function index()
     {
-        $data = [
-            'id' => 1,
-            'name' => 'Journal 1',
-            'Desc' => 'Test Desc'
-        ];
-        return Inertia::render('Journal/Index', $data);
+        $journals = Journal::where(function($query) {
+            $query->where('status', 'published');
+        })
+            ->orWhere(function($query) {
+                $query->where('status', 'draft')
+                    ->where('user_id', Auth::user()->id);
+            })
+            ->orderBy('updated_at', 'desc')
+            ->get();
+        $journals = new JournalCollection($journals);
+
+        if (request()->is('api/*')) {
+            return response()->json($journals);
+        }
+
+        return Inertia::render('Journal/Index', [
+            'journals' => $journals,
+        ]);
     }
 
     /**
@@ -50,13 +67,29 @@ class JournalController extends Controller
      */
     public function store(Request $request)
     {
-        $data = [
-            'id' => 1,
-            'name' => 'Journal 1',
-            'Desc' => 'Test Desc'
-        ];
+        $request->validate([
+            'name' => 'required',
+            'date' => 'required',
+            'status' => '',
+            'manuscripts' => '',
+            'user_id' => ''
+        ]);
 
-        return response()->json($data);
+        $journal = new Journal();
+        $journal->name = $request->name;
+        $journal->manuscripts = $request->manuscripts ?? [];
+        $journal->date = $request->date;
+        $journal->status = $request->status ?? 'draft';
+        $journal->user_id = Auth::user()->id;
+        $journal->save();
+
+        if ($request->is('api/*')) {
+            return response()->json(new JournalResource($journal));
+        }
+
+        return Redirect::route('journal.edit', [
+            'id' => $journal->id
+        ]);
     }
 
     /**
@@ -67,7 +100,16 @@ class JournalController extends Controller
      */
     public function show($id)
     {
-        //
+        $journal = Journal::findOrFail($id);
+        $journal = new JournalResource($journal);
+
+        if (request()->is('api/*')) {
+            return response()->json($journal);
+        }
+
+        return Inertia::render('Journal/Edit', [
+            'journal' => $journal
+        ]);
     }
 
     /**
@@ -78,12 +120,16 @@ class JournalController extends Controller
      */
     public function edit($id)
     {
-        $data = [
-            'id' => 1,
-            'name' => 'Journal 1',
-            'Desc' => 'Test Desc'
-        ];
-        return Inertia::render('Journal/Edit', $data);
+        $journal = Journal::findOrFail($id);
+        $journal = new JournalResource($journal);
+
+        if (request()->is('api/*')) {
+            return response()->json($journal);
+        }
+
+        return Inertia::render('Journal/Edit', [
+            'journal' => $journal
+        ]);
     }
 
     /**
@@ -95,7 +141,23 @@ class JournalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'manuscripts' => 'array|between:0,10'
+        ]);
+        $journal = Journal::findOrfail($id);
+        $journal->name = $request->name;
+        $journal->manuscripts = $request->manuscripts ?? [];
+        $journal->date = $request->date;
+        $journal->status = $request->status;
+        $journal->update();
+
+        if ($request->is('api/*')) {
+            return response()->json(new JournalResource($journal));
+        }
+
+        return Redirect::route('journal.edit', [
+            'id' => $journal->id
+        ]);
     }
 
     /**
@@ -106,6 +168,13 @@ class JournalController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $journal = Journal::findOrFail($id);
+        $journal->delete();
+
+        if (request()->is('api/*')) {
+            return response()->json();
+        }
+
+        return Redirect::route('journal.index');
     }
 }

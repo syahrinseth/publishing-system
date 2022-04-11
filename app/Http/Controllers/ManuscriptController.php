@@ -6,6 +6,7 @@ use PDF;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Manuscript;
+use App\Models\Filters\ManuscriptFilters;
 use Illuminate\Http\Request;
 use App\Models\ManuscriptAttachFile;
 use Illuminate\Support\Facades\Auth;
@@ -31,14 +32,18 @@ class ManuscriptController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, ManuscriptFilters $manuscriptFilters)
     {   
-        $manuscripts = Manuscript::whereJsonContains('authors', Auth::user()->id)
-            ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
-            ->orWhereJsonContains('editors', Auth::user()->id)
-            ->orWhereJsonContains('reviewers', Auth::user()->id)
-            ->get();
-        $manuscripts = new ManuscriptCollection($manuscripts);
+        $manuscripts = Manuscript::filter($manuscriptFilters);
+        
+        $manuscripts->where(function($query) {
+            $query->whereJsonContains('authors', Auth::user()->id)
+                ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
+                ->orWhereJsonContains('editors', Auth::user()->id)
+                ->orWhereJsonContains('reviewers', Auth::user()->id);
+        });
+
+        $manuscripts = new ManuscriptCollection($manuscripts->get());
 
         if ($request->is('api/*')) {
             return response()->json($manuscripts);

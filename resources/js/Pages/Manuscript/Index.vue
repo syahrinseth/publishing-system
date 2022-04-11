@@ -180,13 +180,6 @@
         }
     },
     methods: {
-        async fetchManuscripts() {
-            let resp = await window.axios.get('/api/manuscripts');
-            if (resp.status == 200) {
-                return resp.data;
-            }
-            return [];
-        },
         async deleteManuscript(manuscript) {
             const deleteAttachForm = useForm({
                 _method: 'post'
