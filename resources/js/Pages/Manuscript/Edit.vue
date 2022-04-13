@@ -26,7 +26,7 @@
                         <div class="mt-5 flex lg:mt-0 lg:ml-4">
 
                         <span class="sm:ml-3">
-                            <a :href="`/manuscripts/${manuscript.data.id}/download`" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
+                            <a :href="`/admin/manuscripts/${manuscript.data.id}/download`" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
                                 <DownloadIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 Build PDF
                             </a>
@@ -166,7 +166,7 @@
                                                         <span class="ml-2 flex-1 w-0 truncate"> {{ updateAttachForm.file_name }} </span>
                                                         </div>
                                                         <div class="ml-4 flex-shrink-0">
-                                                        <a :href="`/manuscripts/${manuscript.data.id}/attach-files/${updateAttachForm.id}/download`" class="font-medium text-indigo-600 hover:text-indigo-500"> Download </a>
+                                                        <a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${updateAttachForm.id}/download`" class="font-medium text-indigo-600 hover:text-indigo-500"> Download </a>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -283,7 +283,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <a href="#" class="text-indigo-600 hover:text-indigo-900 px-1" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">Edit</a>
-                                        <a :href="`/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
+                                        <a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
                                         <a href="#" @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 px-1">Delete</a>
                                     </td>
                                 </tr>
@@ -699,10 +699,8 @@
             }) 
         },  
         saveManuscript() {
-            this.manuscriptForm.authors = [
-                this.$page.props.auth.user.id || 1
-            ];
-            this.manuscriptForm.post(`/manuscripts/${this.$props.manuscript.data.id}/update`, {
+            this.manuscriptForm.authors = this.manuscriptForm.authors.map((user) => user.id);
+            this.manuscriptForm.post(`/admin/manuscripts/${this.$props.manuscript.data.id}/update`, {
                 preserveScroll: true,
                 onError: (errors) => {
                     Object.keys(errors).forEach((value, index) => {
@@ -721,7 +719,7 @@
             this.updateAttachForm.file = e.target.files[0];
         },
         submitAttach() {
-            this.attachForm.post(`/manuscripts/${this.$props.manuscript.data.id}/attach-files`, {
+            this.attachForm.post(`/admin/manuscripts/${this.$props.manuscript.data.id}/attach-files`, {
                 preserveScroll: true,
                 onError: (errors) => {
                     Object.keys(errors).forEach((value, index) => {
@@ -735,7 +733,7 @@
             this.clearAttachForm();
         },
         updateAttach() {
-            this.updateAttachForm.post(`/manuscripts/${this.$props.manuscript.data.id}/attach-files/${this.updateAttachForm.id}/update`, {
+            this.updateAttachForm.post(`/admin/manuscripts/${this.$props.manuscript.data.id}/attach-files/${this.updateAttachForm.id}/update`, {
                 preserveScroll: true,
                 onError: (errors) => {
                     Object.keys(errors).forEach((value, index) => {
@@ -811,7 +809,7 @@
                 _method: 'delete'
             });
             if (confirm('Are you sure to delete "' + attach.type.name + '"?')) {
-                deleteAttachForm.post(`/manuscripts/${props.manuscript.data.id}/attach-files/${attach.id}`, {
+                deleteAttachForm.post(`/admin/manuscripts/${props.manuscript.data.id}/attach-files/${attach.id}`, {
                     preserveScroll: true,
                 });
             }

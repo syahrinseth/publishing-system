@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/** Custom CSS for Vue Multiselect component. **/
+.multiselect__tag, .multiselect__option--highlight, .multiselect__option--highlight:after {
+    @apply bg-indigo-600 !important 
+}
+
+.multiselect__tag-icon {
+    @apply text-white !important
+}

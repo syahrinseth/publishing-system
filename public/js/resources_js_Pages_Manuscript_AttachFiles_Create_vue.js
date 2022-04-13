@@ -69,7 +69,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   'type': _this.input.type
                 }).then(function (resp) {
                   var data = resp.data;
-                  _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.get("/manuscripts/".concat(data.id, "/edit"));
+                  _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.get("/admin/manuscripts/".concat(data.id, "/edit"));
                 })["catch"](function (err) {
                   alert(err);
                 });
@@ -221,7 +221,7 @@ var _hoisted_11 = ["value"];
 
 var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "px-4 py-3 bg-gray-50 text-right sm:px-6"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Link href=\"/manuscripts/1/edit\" class=\"inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500\">\n                                        Save\n                                        </Link> "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Link href=\"/admin/manuscripts/1/edit\" class=\"inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500\">\n                                        Save\n                                        </Link> "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   "class": "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
   type: "submit"
 }, " Proceed ")], -1

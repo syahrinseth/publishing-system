@@ -45,7 +45,7 @@ __webpack_require__.r(__webpack_exports__);
     onSubmit: function onSubmit() {
       var _this = this;
 
-      this.userForm.post("/users/".concat(this.$props.user.data.id, "/update"), {
+      this.userForm.post("/admin/users/".concat(this.$props.user.data.id, "/update"), {
         preserveScroll: true,
         onError: function onError(errors) {
           Object.keys(errors).forEach(function (value, index) {

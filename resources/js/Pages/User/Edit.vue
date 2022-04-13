@@ -210,7 +210,7 @@ export default {
             });
         },
         onSubmit() {
-            this.userForm.post(`/users/${this.$props.user.data.id}/update`, {
+            this.userForm.post(`/admin/users/${this.$props.user.data.id}/update`, {
                 preserveScroll: true,
                 onError: (errors) => {
                     Object.keys(errors).forEach((value, index) => {

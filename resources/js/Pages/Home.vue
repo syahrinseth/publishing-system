@@ -44,7 +44,7 @@
                   {{ `Manuscript "${step.title || step.type['name']}" is ready to be publish by you. Please review the manuscript.` }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Review</Link>
+                  <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Review</Link>
                 </td>
               </tr>
               <tr v-for="(step, index) in nextSteps.reviewer.data" :key="`step-author-${index}`">
@@ -52,7 +52,7 @@
                   {{ `Manuscript "${step.title || step.type['name']}" is ready to be review by you. Please review the manuscript.` }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Review</Link>
+                  <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Review</Link>
                 </td>
               </tr>
               <tr v-for="(step, index) in nextSteps.author.data" :key="`step-author-${index}`">
@@ -60,7 +60,7 @@
                   {{ `Manuscript "${step.title || step.type['name']}" is in status "${step.status}". Please review the manuscript.` }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Review</Link>
+                  <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Review</Link>
                 </td>
               </tr>
             </template>

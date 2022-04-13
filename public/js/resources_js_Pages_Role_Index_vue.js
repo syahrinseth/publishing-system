@@ -51,7 +51,7 @@ __webpack_require__.r(__webpack_exports__);
     onSubmit: function onSubmit(roleId) {
       var _this = this;
 
-      this.roleForm[roleId].post("/roles/".concat(roleId, "/update"), {
+      this.roleForm[roleId].post("/admin/roles/".concat(roleId, "/update"), {
         preserveScroll: true,
         onError: function onError(errors) {
           Object.keys(errors).forEach(function (value, index) {

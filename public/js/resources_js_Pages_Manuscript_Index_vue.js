@@ -90,74 +90,43 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {};
   },
   methods: {
-    fetchManuscripts: function fetchManuscripts() {
+    deleteManuscript: function deleteManuscript(manuscript) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var resp;
+        var deleteAttachForm;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return window.axios.get('/api/manuscripts');
-
-              case 2:
-                resp = _context.sent;
-
-                if (!(resp.status == 200)) {
-                  _context.next = 5;
-                  break;
-                }
-
-                return _context.abrupt("return", resp.data);
-
-              case 5:
-                return _context.abrupt("return", []);
-
-              case 6:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
-    },
-    deleteManuscript: function deleteManuscript(manuscript) {
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var deleteAttachForm;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
               case 0:
                 deleteAttachForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_3__.useForm)({
                   _method: 'post'
                 });
 
                 if (confirm('Are you sure to delete "' + manuscript.type.name + '"?')) {
-                  deleteAttachForm.post("/manuscripts/".concat(manuscript.id, "/destroy"), {
+                  deleteAttachForm.post("/admin/manuscripts/".concat(manuscript.id, "/destroy"), {
                     preserveScroll: true
                   });
                 }
 
               case 2:
               case "end":
-                return _context2.stop();
+                return _context.stop();
             }
           }
-        }, _callee2);
+        }, _callee);
       }))();
     }
   },
   mounted: function mounted() {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
             case "end":
-              return _context3.stop();
+              return _context2.stop();
           }
         }
-      }, _callee3);
+      }, _callee2);
     }))();
   }
 });
@@ -429,7 +398,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             /* TEXT */
             ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_19, [$props.auth.user.data.permissions_attribute.manuscripts.edit == true ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Link, {
               key: 0,
-              href: "/manuscripts/".concat(manuscript.id, "/edit"),
+              href: "/admin/manuscripts/".concat(manuscript.id, "/edit"),
               "class": "text-indigo-600 hover:text-indigo-900 px-2"
             }, {
               "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -441,7 +410,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }, 1032
             /* PROPS, DYNAMIC_SLOTS */
             , ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-              href: "/manuscripts/".concat(manuscript.id, "/download"),
+              href: "/admin/manuscripts/".concat(manuscript.id, "/download"),
               "class": "text-indigo-600 hover:text-indigo-900 px-2",
               target: "_blank"
             }, "Download", 8

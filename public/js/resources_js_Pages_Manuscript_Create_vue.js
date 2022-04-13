@@ -71,7 +71,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _this.manuscriptForm.post("/manuscript-store", {
+                _this.manuscriptForm.post("/admin/manuscript-store", {
                   preserveScroll: true,
                   onError: function onError(errors) {
                     Object.keys(errors).forEach(function (value, index) {

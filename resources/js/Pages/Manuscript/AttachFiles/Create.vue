@@ -36,7 +36,7 @@
                                         
                                     </div>
                                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                        <!-- <Link href="/manuscripts/1/edit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        <!-- <Link href="/admin/manuscripts/1/edit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         Save
                                         </Link> -->
                                         <button class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="submit">
@@ -78,7 +78,7 @@
                 })
                     .then((resp) => {
                         let data = resp.data;
-                        Inertia.get(`/manuscripts/${data.id}/edit`);
+                        Inertia.get(`/admin/manuscripts/${data.id}/edit`);
                     })
                     .catch((err) => {
                         alert(err);

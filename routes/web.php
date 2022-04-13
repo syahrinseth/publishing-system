@@ -4,6 +4,8 @@ use Inertia\Inertia;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PublicController;
+use App\Http\Controllers\PublicJournalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +18,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->group(function() {
+# Public Route
+Route::get('/', [PublicController::class, 'index'])->name('public.index');
+
+// Journals
+Route::get('/journals', [PublicJournalController::class, 'index'])->name('public.journal.index');
+Route::get('/journals/{id}', [PublicJournalController::class, 'show'])->name('public.journal.show');
+
+# Private Route
+Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
     Inertia::share('auth.user', function () {
         $auth = Auth::user();
@@ -65,7 +75,15 @@ Route::middleware(['auth:sanctum'])->group(function() {
 
     Route::get('/journals/{id}', [App\Http\Controllers\JournalController::class, 'show'])->name('journal.show');
 
+    Route::get('/journal-create', [App\Http\Controllers\JournalController::class, 'create'])->name('journal.create');
+
+    Route::post('/journal-store', [App\Http\Controllers\JournalController::class, 'store'])->name('journal.store');
+
     Route::get('/journals/{id}/edit', [App\Http\Controllers\JournalController::class, 'edit'])->name('journal.edit');
+
+    Route::post('/journals/{id}/update', [App\Http\Controllers\JournalController::class, 'update'])->name('journal.update');
+
+    Route::post('/journals/{id}/destroy', [App\Http\Controllers\JournalController::class, 'destroy'])->name('journal.destroy');
 
     // User Module
 

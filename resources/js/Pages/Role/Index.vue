@@ -114,7 +114,7 @@ export default {
             })
         },
         onSubmit(roleId) {
-            this.roleForm[roleId].post(`/roles/${roleId}/update`, {
+            this.roleForm[roleId].post(`/admin/roles/${roleId}/update`, {
                 preserveScroll: true,
                 onError: (errors) => {
                     Object.keys(errors).forEach((value, index) => {

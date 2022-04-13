@@ -116,8 +116,8 @@
                                 {{ manuscript.updated_at }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/manuscripts/${manuscript.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Edit</Link>
-                                    <a :href="`/manuscripts/${manuscript.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-2" target="_blank">Download</a>
+                                    <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${manuscript.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Edit</Link>
+                                    <a :href="`/admin/manuscripts/${manuscript.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-2" target="_blank">Download</a>
                                     <a v-if="auth.user.data.permissions_attribute.manuscripts.destroy == true" href="#" @click="deleteManuscript(manuscript)" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</a>
                                 </td>
                             </tr>
@@ -180,19 +180,12 @@
         }
     },
     methods: {
-        async fetchManuscripts() {
-            let resp = await window.axios.get('/api/manuscripts');
-            if (resp.status == 200) {
-                return resp.data;
-            }
-            return [];
-        },
         async deleteManuscript(manuscript) {
             const deleteAttachForm = useForm({
                 _method: 'post'
             });
             if (confirm('Are you sure to delete "' + manuscript.type.name + '"?')) {
-                deleteAttachForm.post(`/manuscripts/${manuscript.id}/destroy`, {
+                deleteAttachForm.post(`/admin/manuscripts/${manuscript.id}/destroy`, {
                     preserveScroll: true,
                 });
             }
