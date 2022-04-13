@@ -389,6 +389,19 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="grid grid-cols-3 gap-6">
+                                            <div class="col-span-3 sm:col-span-2">
+                                                <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                                Publisher
+                                                </label>
+                                                <div class="mt-1 flex rounded-md shadow-sm">
+                                                <select name="suggest-publisher" id="suggest-publisher" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" v-model="manuscriptForm.publishers" >
+                                                    <option value="">Select</option>
+                                                    <option v-for="user in users" :key="user.id + '-user'" :value="user.id">{{ user.name }} - {{ user.email }}</option>
+                                                </select>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         
                                     </div>
@@ -746,6 +759,7 @@
             corresponding_authors: [],
             editors: props.manuscript.data.editors,
             reviewers: props.manuscript.data.reviewers,
+            publishers: props.manuscript.data.publishers,
             funding_information: props.manuscript.data.funding_information,
             is_confirm_grant_numbers: props.manuscript.data.is_confirm_grant_numbers,
             is_acknowledge: props.manuscript.data.is_acknowledge,
