@@ -18,7 +18,7 @@ class PublicController extends Controller
             return response()->json();
         }
 
-        return Inertia::render('PublicHome', [
+        return Inertia::render('Public/Home', [
 
         ]);
     }

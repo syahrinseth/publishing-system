@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PublicJournalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Public Route
+Route::get('/journals', [PublicJournalController::class, 'index'])->name('api.public.journal.index');
+Route::get('/journals/{id}', [PublicJournalController::class, 'show'])->name('api.public.journal.show');
+
+// Private Route
 Route::middleware('auth:sanctum')->group(function () {
 
     # User

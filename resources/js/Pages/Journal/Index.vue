@@ -85,13 +85,14 @@
                                     {{ journal.name }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ journal.date }}
+                                    {{ moment(journal.date).format('DD/MM/YYYY') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     {{ journal.status }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <form @submit.prevent="deleteJournal(journal)">
+                                        <Link v-if="journal.status == 'published'" :href="`/journals/${journal.id}`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
                                         <Link v-if="auth.user.data.permissions_attribute.journals.edit == true" :href="`/admin/journals/${journal.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Edit</Link>
                                         <button v-if="auth.user.data.permissions_attribute.journals.destroy == true" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</button>
                                     </form>
@@ -120,6 +121,7 @@ PencilIcon,
 } from '@heroicons/vue/solid'
 import { useForm, Link } from '@inertiajs/inertia-vue3'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import moment from 'moment'
 
 let headermenu = [
     { 
@@ -146,7 +148,7 @@ export default {
         LinkIcon,
         LocationMarkerIcon,
         PencilIcon,
-        Link
+        Link,
     },
     methods: {
         deleteJournal(journal) {
@@ -177,7 +179,8 @@ export default {
         const deleteForm = useForm();
         return {
             deleteForm,
-            headermenu
+            headermenu,
+            moment
         };
     },
     props: {

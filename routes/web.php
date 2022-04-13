@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\PublicController;
 use Inertia\Inertia;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PublicController;
+use App\Http\Controllers\PublicJournalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,8 +18,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+# Public Route
 Route::get('/', [PublicController::class, 'index'])->name('public.index');
 
+// Journals
+Route::get('/journals', [PublicJournalController::class, 'index'])->name('public.journal.index');
+Route::get('/journals/{id}', [PublicJournalController::class, 'show'])->name('public.journal.show');
+
+# Private Route
 Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
     Inertia::share('auth.user', function () {

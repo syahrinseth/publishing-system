@@ -839,6 +839,9 @@ __webpack_require__.r(__webpack_exports__);
 var navigation = [{
   name: 'Product',
   href: '#'
+}, {
+  name: 'Journal Published',
+  href: '/journals'
 }];
 var features = [{
   name: 'Competitive exchange rates',
