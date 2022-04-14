@@ -59,7 +59,7 @@
                                 </PopoverPanel>
                                 </transition>
                             </Popover>
-                            <a v-if="auth == null" href="/login" class="font-medium text-indigo-600 hover:text-indigo-500">Log in</a>
+                            <a v-if="auth.user == null" href="/login" class="font-medium text-indigo-600 hover:text-indigo-500">Log in</a>
                             <Link v-else :href="`/admin`" class="font-medium text-indigo-600 hover:text-indigo-500">Dashboard</Link>
                         </PopoverGroup>
 

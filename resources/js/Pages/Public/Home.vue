@@ -63,7 +63,8 @@
                                 </PopoverPanel>
                                 </transition>
                             </Popover>
-                            <a href="/login" class="font-medium text-indigo-600 hover:text-indigo-500">Log in</a>
+                            <a v-if="auth.user == null" href="/login" class="font-medium text-indigo-600 hover:text-indigo-500">Log in</a>
+                            <Link v-else :href="`/admin`" class="font-medium text-indigo-600 hover:text-indigo-500">Dashboard</Link>
                         </PopoverGroup>
 
                     </div>
@@ -165,6 +166,7 @@
 import { Popover, PopoverButton, PopoverPanel, PopoverGroup } from '@headlessui/vue'
 import { MenuIcon, XIcon, AnnotationIcon, GlobeAltIcon, LightningBoltIcon, ScaleIcon, ChartBarIcon, CursorClickIcon, ShieldCheckIcon, ViewGridIcon, RefreshIcon, PlayIcon, PhoneIcon } from '@heroicons/vue/outline'
 import { ChevronDownIcon } from '@heroicons/vue/solid'
+import { Link } from '@inertiajs/inertia-vue3'
 
 const navigation = [
   { name: 'Product', href: '#' },
@@ -243,7 +245,11 @@ export default {
     LightningBoltIcon, 
     ScaleIcon,
     ChevronDownIcon,
-    PopoverGroup
+    PopoverGroup,
+    Link
+  },
+  props: {
+    auth: Object
   },
   setup() {
     return {
