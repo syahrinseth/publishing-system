@@ -130,8 +130,8 @@
     props: {
       auth: Object,
       manuscript_overview: Object,
-      activities: Array,
-      nextSteps: Array
+      activities: Object,
+      nextSteps: Object
     },
     setup(props) {
       const overviewCards = [

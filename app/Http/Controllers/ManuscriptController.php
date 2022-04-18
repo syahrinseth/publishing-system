@@ -382,60 +382,11 @@ class ManuscriptController extends Controller
     /**
      * 
      */
-    public function downloadAttachFile(Request $request, $id, $attachFileId)
+    public function downloadAttachFile($id, $attachFileId)
     {
         $manuscript = Manuscript::findOrFail($id);
         $attach = ManuscriptAttachFile::findOrFail($attachFileId);
         return Storage::download($attach->file_location);
-        // \PhpOffice\PhpWord\Settings::setPdfRendererPath($file_path);
-        // \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
-    
-        // //Load word file
-        $Content = \PhpOffice\PhpWord\IOFactory::load($file_path . '/test.docx');
-
-        // //Save it into PDF
-        $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'HTML');
-        $PDFWriter->save("{$file_path}/test2.html");
-
-        $doc1 = PDF::loadFile( "{$file_path}/test.html" )->getDomPDF()->get_dom();
-        $doc2 = PDF::loadFile( "{$file_path}/test2.html" )->getDomPDF()->get_dom();
-        $doc3 = PDF::loadFile( "{$file_path}/test3.html" )->getDomPDF()->get_dom();
-        $break = PDF::loadFile( public_path() . "/break.html" )->getDomPDF()->get_dom();
-
-        $doc1Body = $doc1->getElementsByTagName('body')->item(0);
-        $doc2Body = $doc2->getElementsByTagName('body')->item(0);
-        $doc3Body = $doc3->getElementsByTagName('body')->item(0);
-        $breakBody = $break->getElementsByTagName('body')->item(0);
-        foreach ($doc2Body->childNodes as $child) {
-            $import = $doc1->importNode($child, true);
-            if ($import) {
-                $doc1Body->appendChild($import);
-            }
-        }
-        
-        foreach ($breakBody->childNodes as $child) {
-            $import = $doc1->importNode($child, true);
-            if ($import) {
-                $doc1Body->appendChild($import);
-            }
-        }
-
-        foreach ($doc3Body->childNodes as $child) {
-            $import = $doc1->importNode($child, true);
-            if ($import) {
-                $doc1Body->appendChild($import);
-            }
-        }
-            
-        // foreach ($doc2Body->childNodes as $child) {
-        //     // dump($child);
-        //     $import = $doc1->importNode($child, true);
-        //     if ($import) {
-        //         $doc1->appendChild($import);
-        //     }
-        // }
-        $doc1->save("{$file_path}/final.html");
-        return PDF::loadFile( "{$file_path}/final.html" )->stream( 'download.pdf' );
     }
 
     /**

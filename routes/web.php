@@ -5,6 +5,7 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\PublicJournalController;
 
 /*
@@ -120,4 +121,8 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
     // Roles & Permissions
 
     Route::post('/roles-permissions-update', [App\Http\Controllers\RolePermissionController::class, 'update']);
+
+    // Settings
+    Route::get('/settings', [SettingController::class, 'index'])->name('setting.index');
+    Route::post('/settings', [SettingController::class, 'update'])->name('setting.update');
 });

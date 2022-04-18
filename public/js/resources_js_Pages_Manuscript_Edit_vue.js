@@ -2100,7 +2100,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   props: {
     manuscript: Object,
-    users: Array,
+    users: Object,
     attachTypes: Array,
     articleTypes: Array,
     errors: Object,
