@@ -6,6 +6,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Models\Permission;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -67,12 +68,19 @@ class User extends Authenticatable
             'manuscripts' => [
                 'show' => $this->can('manuscripts.show'),
                 'edit' => $this->can('manuscripts.edit'),
-                'destroy' => $this->can('manuscripts.destroy')
+                'destroy' => $this->can('manuscripts.destroy'),
+                'publish' => $this->can('manuscripts.publish'),
+                'review' => $this->can('manuscripts.review'),
+                'show_all' => $this->can('manuscripts.show_all'),
+                'cover_letter' => $this->can('manuscripts.cover_letter'),
+                'conflict_of_interest' => $this->can('manuscripts.conflict_of_interest'),
+                'declaration_of_interest_statement' => $this->can('manuscripts.declaration_of_interest_statement'),
             ],
             'journals' => [
                 'show' => $this->can('journals.show'),
                 'edit' => $this->can('journals.edit'),
-                'destroy' => $this->can('journals.destroy')
+                'destroy' => $this->can('journals.destroy'),
+                'show_all' => $this->can('journals.show_all'),
             ],
             'settings' => [
                 'show' => $this->can('settings.show'),
@@ -81,7 +89,10 @@ class User extends Authenticatable
             ],
             'dashboard' => [
                 'show' => $this->can('dashboard.show'),
-                'show_all' => $this->can('dashboard.show all'),
+                'show_all' => $this->can('dashboard.show_all'),
+            ],
+            'roles_and_permissions' => [
+                'edit' => $this->can('roles_and_permissions.edit')
             ]
         ];
     }

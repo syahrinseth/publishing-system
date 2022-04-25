@@ -6,10 +6,11 @@ use Exception;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
-use App\Http\Resources\RoleCollection;
 use App\Http\Resources\RoleResource;
+use App\Http\Resources\RoleCollection;
 use Illuminate\Support\Facades\Redirect;
 use Spatie\Permission\Models\Permission;
+use App\Http\Resources\PermissionCollection;
 
 class RoleController extends Controller
 {
@@ -28,10 +29,9 @@ class RoleController extends Controller
                 'roles' => $roles
             ]);
         }
-
         return Inertia::render('Role/Index', [
             'roles' => new RoleCollection($roles),
-            'permissions' => $permissions
+            'permissions' => new PermissionCollection($permissions)
         ]);
 
     }

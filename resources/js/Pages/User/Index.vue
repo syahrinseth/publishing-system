@@ -160,7 +160,7 @@
             };
         },
         props: {
-            users: Array,
+            users: Object,
             auth: Object
         },
     }

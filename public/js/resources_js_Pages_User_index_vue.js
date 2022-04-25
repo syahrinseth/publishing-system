@@ -99,7 +99,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   props: {
-    users: Array,
+    users: Object,
     auth: Object
   }
 });

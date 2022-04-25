@@ -134,6 +134,7 @@ let navigation = [
   { name: 'Manuscript Overview', href: '/admin/manuscripts', disabled: false },
   { name: 'Journal Overview', href: '/admin/journals', disabled: false},
   { name: 'Users', href: '/admin/users', disabled: false },
+  { name: 'Settings', href: '/admin/settings', disabled: false }
 ]
 let userNavigation = [
   { name: 'Your Profile', href: '#', method: 'get', disabled: false },

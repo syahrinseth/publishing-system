@@ -51,8 +51,8 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     auth: Object,
     manuscript_overview: Object,
-    activities: Array,
-    nextSteps: Array
+    activities: Object,
+    nextSteps: Object
   },
   setup: function setup(props) {
     var overviewCards = [{

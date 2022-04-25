@@ -6,7 +6,7 @@
                 <div class="lg:flex lg:items-center lg:justify-between">
                         <div class="flex-1 min-w-0">
                             <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-                                {{ manuscript.data.title }}
+                                {{ manuscript.data.manuscript_no }} - {{ manuscript.data.title || 'Untitled' }}
                             </h2>
                             <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
@@ -17,9 +17,13 @@
                                     <DocumentReportIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
                                     {{ manuscript.data.status }}
                                 </div>
-                                <div class="mt-2 flex items-center text-sm text-gray-500">
+                                <!-- <div class="mt-2 flex items-center text-sm text-gray-500">
                                     <UserIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
                                     {{ manuscript.data.authors.map(x => x.name).join(', ') }}
+                                </div> -->
+                                <div class="mt-2 flex items-center text-sm text-gray-500">
+                                    <CalendarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                    {{ manuscript.data.created_at_date }}
                                 </div>
                             </div>
                         </div>
@@ -77,7 +81,7 @@
                                         </div>
                                         <div class="col-span-3 sm:col-span-2 mb-2">
                                                 <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                                Description
+                                                Notes
                                                 </label>
                                                 <div class="mt-1 flex rounded-md shadow-sm">
                                                 <textarea v-model="attachForm.description" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
@@ -148,7 +152,7 @@
                                         </div>
                                         <div class="col-span-3 sm:col-span-2 mb-2">
                                             <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                            Description
+                                            Notes
                                             </label>
                                             <div class="mt-1 flex rounded-md shadow-sm">
                                             <textarea v-model="updateAttachForm.description" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
@@ -215,88 +219,13 @@
                     </template>
                 </Modal>
 
-                <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-                    <div class="flex justify-between px-4 py-5 sm:px-6">
-                        <div class="">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">
-                                Attach Files
-                            </h3>
-                            <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                                Personal details and application.
-                            </p> -->
-                        </div>
-                        <div>
-                            <span class="sm:ml-3">
-                                <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" @click="showUploadAttachModal = !showUploadAttachModal; ">
-                                    Upload File 
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="border-t border-gray-200 text-sm">
-                        <Table>
-                            <template v-slot:header>
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Order
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Items
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Description
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        File Name
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Size
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Last Modified
-                                    </th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Actions
-                                    </th>
-                                </tr>
-                            </template>
-                            <template v-slot:body>
-                                <tr v-for="(attachment, index) in manuscript.data.attachments" :key="attachment.id + '-attach'">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        {{ index + 1 }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        {{ attachment.type.name }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        {{ attachment.description }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        {{ attachment.file_name }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        {{ attachment.size}}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        {{ attachment.updated_at}}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900 px-1" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">Edit</a>
-                                        <a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
-                                        <a href="#" @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 px-1">Delete</a>
-                                    </td>
-                                </tr>
-                            </template>
-                        </Table>
-                    </div>
-                </div>
+                
 
-                <div class="hidden sm:block" aria-hidden="true">
+                <!-- <div class="hidden sm:block" aria-hidden="true">
                     <div class="py-5">
                         <div class="border-t border-gray-200" />
                     </div>
-                </div>
+                </div> -->
 
                 <div class="mt-10 sm:mt-0">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
@@ -456,9 +385,6 @@
                                     <div class="mt-1">
                                         <textarea v-model="manuscriptForm.short_title" id="short_title" name="short_title" rows="1" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                     </div>
-                                    <p class="mt-2 text-sm text-gray-500">
-                                        Limit 20 words
-                                    </p>
                                     </div>
 
                                     <div>
@@ -469,7 +395,7 @@
                                         <textarea v-model="manuscriptForm.abstract" id="abstract" name="abstract" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                     </div>
                                     <p class="mt-2 text-sm text-gray-500">
-                                        Limit 250 words
+                                        Limit 300 words
                                     </p>
                                     </div>
 
@@ -518,6 +444,89 @@
                                 </div>
                             </form>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="hidden sm:block" aria-hidden="true">
+                        <div class="py-5">
+                            <div class="border-t border-gray-200" />
+                        </div>
+                    </div>
+
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                        <div class="flex justify-between px-4 py-5 sm:px-6">
+                            <div class="">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                    Attach Files
+                                </h3>
+                                <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                                    Personal details and application.
+                                </p> -->
+                            </div>
+                            <div>
+                                <span class="sm:ml-3">
+                                    <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" @click="showUploadAttachModal = !showUploadAttachModal; ">
+                                        Upload File 
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-gray-200 text-sm">
+                            <Table>
+                                <template v-slot:header>
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Order
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Items
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Description
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            File Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Size
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Last Modified
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </template>
+                                <template v-slot:body>
+                                    <tr v-for="(attachment, index) in manuscript.data.attachments.filter(function(attach) {if(auth.user.data.permissions_attribute.manuscripts.cover_letter == false && attach.type.name == `Cover Letter` || auth.user.data.permissions_attribute.manuscripts.conflict_of_interest == false && attach.type.name == `Conflict of Interest` || auth.user.data.permissions_attribute.manuscripts.declaration_of_interest_statement == false && attach.type.name == `Declaration of Interest Statement`) {return false;}return true;})" :key="attachment.id + '-attach'">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ index + 1 }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ attachment.type.name }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ attachment.description }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ attachment.file_name }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ attachment.size}}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ attachment.updated_at}}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <a href="#" class="text-indigo-600 hover:text-indigo-900 px-1" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">Edit</a>
+                                            <a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
+                                            <a href="#" @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 px-1">Delete</a>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </Table>
                         </div>
                     </div>
 
@@ -673,7 +682,7 @@
     },
     props: {
         manuscript: Object,
-        users: Array,
+        users: Object,
         attachTypes: Array,
         articleTypes: Array,
         errors: Object,

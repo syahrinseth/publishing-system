@@ -53,4 +53,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Route::get('manuscript-types', [App\Http\Controllers\ManuscriptController::class, 'indexManuscriptTypes'])->name('api.manuscript.indexManuscriptType');
 
+    # Settings
+    Route::get('/settings', [SettingController::class, 'index'])->name('api.setting.index');
+    Route::put('/settings', [SettingControlle::class, 'update'])->name('api.setting.update');
+
 });
