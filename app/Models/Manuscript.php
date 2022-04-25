@@ -238,4 +238,17 @@ class Manuscript extends Model
         }
         return false;
     }
+
+    /**
+     * Generate Manuscript Number
+     * @return boolean
+     */
+    public function generateManuscriptNumber()
+    {
+        $setting = Setting::where('name', 'manuscript_number_prefix')->first();
+        if (!empty($setting)) {
+            $this->manuscript_no = $setting->value . $this->id;
+        }
+        return $this;
+    }
 }

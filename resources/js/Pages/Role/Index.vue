@@ -47,12 +47,12 @@
                 </div>
                 <div class="border-t border-gray-200">
                     <dl>
-                        <div v-for="(permission, index) in permissions.map((val) => val.name.split('.')[0]).filter((value, index, self) => {return self.indexOf(value) === index;})" v-bind:key="`permission-${permission.id}`" :class="index % 2 == 0 ? `` : `bg-gray-50`" class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <div v-for="(permission, index) in permissions.data.map((val) => val.name.split('.')[0]).filter((value, index, self) => {return self.indexOf(value) === index;})" v-bind:key="`permission-${permission.id}`" :class="index % 2 == 0 ? `` : `bg-gray-50`" class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                             <dt class="text-sm font-medium text-gray-500">
-                                {{ permission }}
+                                {{ (new Strings(permission)).upper().get() }}
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                <div class="" v-for="detail_permission in permissions" v-bind:key="`detail-${detail_permission.id}`">
+                                <div class="" v-for="detail_permission in permissions.data" v-bind:key="`detail-${detail_permission.id}`">
                                     <div v-if="detail_permission.name.split('.')[0] == permission" class="flex items-center">
                                         <input :id="`${role.id}-${permission}-${detail_permission.name}`" v-model="roleForm[role.id].permissions" :value="detail_permission.id" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
                                         <label :for="`${role.id}-${permission}-${detail_permission.name}`" class="ml-2 block text-sm text-gray-900"> {{ detail_permission.name.split('.')[1] }} </label>
@@ -84,6 +84,7 @@
 import { PaperClipIcon } from '@heroicons/vue/solid'
 import { useForm, Link } from '@inertiajs/inertia-vue3'
 import Layout from '../../Layout'
+import { ChevronDownIcon } from '@heroicons/vue/solid'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import Toast from '../../Components/Toast'
 
@@ -97,11 +98,17 @@ export default {
         MenuButton,
         MenuItem,
         MenuItems,
-        Toast
+        Toast,
+        ChevronDownIcon
+    },
+    data() {
+        return {
+            Strings: require( 'strings.js' )
+        }
     },
     props: {
-        roles: Array,
-        permissions: Array,
+        roles: Object,
+        permissions: Object,
         auth: Object
     },
     methods: {
@@ -128,7 +135,6 @@ export default {
         }
     },
     setup(props) {
-        console.log(props.roles);
         let roles = props.roles.data;
         let roleForm = [];
         for (let i = 0; i < roles.length; i++) {

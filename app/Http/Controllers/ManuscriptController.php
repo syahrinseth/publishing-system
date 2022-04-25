@@ -92,6 +92,8 @@ class ManuscriptController extends Controller
         $manuscript->reviewers = [];
         $manuscript->publishers = [];
         $manuscript->save();
+        $manuscript->generateManuscriptNumber();
+        $manuscript->update();
 
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));

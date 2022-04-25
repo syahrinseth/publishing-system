@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\ManuscriptAttachCollection;
 
@@ -19,6 +20,7 @@ class ManuscriptResource extends JsonResource
             'id' => $this->id,
             'type' => $this->getType(),
             'title' => $this->title,
+            'manuscript_no' => $this->manuscript_no,
             'abstract' => $this->abstract,
             'keywords' => $this->keywords,
             'attachments' => new ManuscriptAttachCollection($this->attachments),
@@ -37,6 +39,7 @@ class ManuscriptResource extends JsonResource
             'status' => ucwords($this->status),
             'funding_information' => $this->funding_information,
             'created_at' => $this->created_at->diffForHumans(),
+            'created_at_date' => Carbon::parse($this->created_at)->format('d/m/Y'),
             'updated_at' => $this->updated_at->diffForHumans(),
         ];
     }
