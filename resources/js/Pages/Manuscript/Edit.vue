@@ -611,80 +611,85 @@
                         </div>
                     </div>
 
-                    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-                        <div class="flex justify-between px-4 py-5 sm:px-6">
-                            <div class="">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900">
-                                    Attach Files
-                                </h3>
-                                <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                                    Personal details and application.
-                                </p> -->
+                    <div>
+                        <div class="md:grid md:grid-cols-3 md:gap-6">
+                            <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Attach Files</h3>
+                                <p class="mt-1 text-sm text-gray-600">
+                                    When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
+                                </p>
                             </div>
-                            <div>
-                                <span class="sm:ml-3">
-                                    <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" @click="showUploadAttachModal = !showUploadAttachModal; ">
-                                        Upload File 
-                                    </button>
-                                </span>
                             </div>
-                        </div>
-                        
-                        <div class="border-t border-gray-200 text-sm">
-                            <Table>
-                                <template v-slot:header>
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Order
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Items
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Description
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            File Name
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Size
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Last Modified
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </template>
-                                <template v-slot:body>
-                                    <tr v-for="(attachment, index) in manuscript.data.attachments.filter(function(attach) {if(auth.user.data.permissions_attribute.manuscripts.cover_letter == false && attach.type.name == `Cover Letter` || auth.user.data.permissions_attribute.manuscripts.conflict_of_interest == false && attach.type.name == `Conflict of Interest` || auth.user.data.permissions_attribute.manuscripts.declaration_of_interest_statement == false && attach.type.name == `Declaration of Interest Statement`) {return false;}return true;})" :key="attachment.id + '-attach'">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            {{ index + 1 }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            {{ attachment.type.name }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            {{ attachment.description }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            {{ attachment.file_name }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            {{ attachment.size}}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            {{ attachment.updated_at}}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <a href="#" class="text-indigo-600 hover:text-indigo-900 px-1" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">Edit</a>
-                                            <a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
-                                            <a href="#" @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 px-1">Delete</a>
-                                        </td>
-                                    </tr>
-                                </template>
-                            </Table>
+                            <div class="mt-5 md:mt-0 md:col-span-2">
+                                <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                                    <div class="flex justify-between px-4 py-5 sm:px-6">
+                                        <div class="">
+                                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                                Attach Files
+                                            </h3>
+                                            <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                                                Personal details and application.
+                                            </p> -->
+                                        </div>
+                                        <div>
+                                            <span class="sm:ml-3">
+                                                <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" @click="showUploadAttachModal = !showUploadAttachModal; ">
+                                                    Upload File 
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border-t border-gray-200 text-sm">
+                                        <Table>
+                                            <template v-slot:header>
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Order
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Items
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Size
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Last Modified
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Actions
+                                                    </th>
+                                                </tr>
+                                            </template>
+                                            <template v-slot:body>
+                                                <tr v-for="(attachment, index) in manuscript.data.attachments.filter(function(attach) {if(auth.user.data.permissions_attribute.manuscripts.cover_letter == false && attach.type.name == `Cover Letter` || auth.user.data.permissions_attribute.manuscripts.conflict_of_interest == false && attach.type.name == `Conflict of Interest` || auth.user.data.permissions_attribute.manuscripts.declaration_of_interest_statement == false && attach.type.name == `Declaration of Interest Statement`) {return false;}return true;})" :key="attachment.id + '-attach'">
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        {{ index + 1 }}
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        <p>{{ attachment.type.name }}</p>
+                                                        <small class="text-gray-500">
+                                                            {{ attachment.description }}
+                                                        </small>
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        {{ attachment.size}}
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        {{ attachment.updated_at}}
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                        <a href="#" class="text-indigo-600 hover:text-indigo-900 px-1" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">Edit</a>
+                                                        <a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
+                                                        <a href="#" @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 px-1">Delete</a>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </Table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
