@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicJournalController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,8 +24,12 @@ Route::get('/journals/{id}', [PublicJournalController::class, 'show'])->name('ap
 Route::middleware('auth:sanctum')->group(function () {
 
     # User
-    Route::get('/user', function(Request $request) {
-        return $request->user();
+    Route::controller(UserController::class)->group(function() {
+        Route::get('/users', 'index');
+        Route::get('/users/{id}', 'show');
+        Route::post('/users', 'store');
+        Route::put('/users/{id}', 'update');
+        Route::delete('/users/{id}', 'destroy');
     });
 
     # Manuscript

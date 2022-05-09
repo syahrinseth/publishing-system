@@ -84,10 +84,10 @@ class ManuscriptController extends Controller
 
         $manuscript = new Manuscript();
         $manuscript->type = $request->type;
-        $manuscript->authors = [
+        $manuscript->corresponding_authors = [
             Auth::user()->id
         ];
-        $manuscript->corresponding_authors = [];
+        $manuscript->authors = [];
         $manuscript->editors = [];
         $manuscript->reviewers = [];
         $manuscript->publishers = [];
@@ -148,7 +148,7 @@ class ManuscriptController extends Controller
             ->firstOrFail();
         
         $users = User::all();
-        
+
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));
         }
@@ -180,28 +180,31 @@ class ManuscriptController extends Controller
             })
             ->firstOrFail();
         $manuscript->type = $request->type;
-        $manuscript->editors = $request->editors == null ? [] : [$request->editors];
-        $manuscript->reviewers = $request->reviewers == null ? [] : [$request->reviewers];
+        $manuscript->editors = $request->editors ?? [];
+        $manuscript->reviewers = $request->reviewers ?? [];
         $manuscript->title = $request->title;
         $manuscript->short_title = $request->short_title;
         $manuscript->abstract = $request->abstract;
         // Assign status
-        if (!$manuscript->assignStatus($request->status) && $manuscript->status != $request->status) {
+        if ($manuscript->status != $request->status) {
 
-            // Response error for fail to assign status.
-            if ($request->is('api/*')) {
-                return response()->json(new ManuscriptResource($manuscript), 401);
+            if (!$manuscript->assignStatus($request->status)) {
+                // Response error for fail to assign status.
+                if ($request->is('api/*')) {
+                    return response()->json(new ManuscriptResource($manuscript), 401);
+                }
+                
+                return redirect()->back()->withErrors([
+                    'status' => 'You don\'t have the permission to change manuscript status into "' . $request->status . '".'
+                ]);
             }
-            
-            return redirect()->back()->withErrors([
-                'status' => 'You don\'t have the permission to change manuscript status into "' . $request->status . '".'
-            ]);
 
         }
         $manuscript->keywords = $request->keywords;
-        $manuscript->authors = $request->authors;
+        $manuscript->authors = $request->authors ?? [];
+        $manuscript->corresponding_authors = $request->corresponding_authors ?? [];
         $manuscript->funding_information = $request->funding_information;
-        $manuscript->publishers = $request->publishers == null ? [] : [$request->publishers];
+        $manuscript->publishers = $request->publishers ?? [];
         $manuscript->additional_informations = [
             'is_confirm_grant_numbers' => $request->is_confirm_grant_numbers ?? false,
             'is_acknowledge' => $request->is_acknowledge ?? false

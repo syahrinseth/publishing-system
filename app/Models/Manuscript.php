@@ -57,11 +57,23 @@ class Manuscript extends Model
             'color' => 'blue'
         ],
         [
+            'name' => "Rejected Invite To Resubmit",
+            'color' => 'red'
+        ],
+        [
             'name' => "Rejected",
             'color' => 'red'
         ],
         [
-            'name' => "Approved",
+            'name' => "Accept Without Changes",
+            'color' => 'green'
+        ],
+        [
+            'name' => "Accepted With Minor Changes",
+            'color' => 'green'
+        ],
+        [
+            'name' => "Accepted With Major Changes",
             'color' => 'green'
         ],
         [
@@ -76,7 +88,51 @@ class Manuscript extends Model
      */
     public function getAuthors()
     {
-        $users = User::whereIn('id', $this->authors)
+        $users = User::whereIn('id', $this->authors ?? [])
+            ->get();
+        return $users->toArray();
+    }
+
+    /**
+     * Get corresponding authors collection
+     * @return array
+     */
+    public function getCorrespondingAuthors()
+    {
+        $users = User::whereIn('id', $this->corresponding_authors ?? [])
+            ->get();
+        return $users->toArray();
+    }
+
+    /**
+     * Get editors collection
+     * @return array
+     */
+    public function getEditors()
+    {
+        $users = User::whereIn('id', $this->editors ?? [])
+            ->get();
+        return $users->toArray();
+    }
+
+    /**
+     * Get reviewers collection
+     * @return array
+     */
+    public function getReviewers()
+    {
+        $users = User::whereIn('id', $this->reviewers ?? [])
+            ->get();
+        return $users->toArray();
+    }
+
+    /**
+     * Get publishers collection
+     * @return array
+     */
+    public function getPublishers()
+    {
+        $users = User::whereIn('id', $this->publishers ?? [])
             ->get();
         return $users->toArray();
     }
@@ -166,24 +222,24 @@ class Manuscript extends Model
      */
     public function assignStatus($input)
     {
+        $statusList = Manuscript::$statusList;
+        if (($this->authIsEditor() || $this->authIsAuthor()) && in_array($input, [$statusList[0]['name'], $statusList[1]['name']])) {
 
-        if (($this->authIsEditor() || $this->authIsAuthor()) && in_array($input, ['Draft', "Submit For Review"])) {
-
             $this->status = $input;
             $this->update();
-            return false;
+            return true;
         
-        } elseif($this->authIsReviewer() && in_array($input, ['Draft', "Submit For Review", "Rejected", "Approved"])) {
-        
-            $this->status = $input;
-            $this->update();
-            return false;
-        
-        } elseif($this->authIsPublisher() && in_array($input, ['Draft', "Submit For Review", "Rejected", "Approved", "Published"])) {
+        } elseif($this->authIsReviewer() && in_array($input, [$statusList[2]['name'], $statusList[3]['name'], $statusList[4]['name'], $statusList[5]['name'], $statusList[6]['name']])) {
         
             $this->status = $input;
             $this->update();
-            return false;
+            return true;
+        
+        } elseif($this->authIsPublisher() && in_array($input, [$statusList[7]['name']])) {
+        
+            $this->status = $input;
+            $this->update();
+            return true;
         
         }
         

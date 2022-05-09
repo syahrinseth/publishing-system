@@ -106,7 +106,7 @@
                                     <p class="text-ellipsis overflow-hidden">{{ manuscript.abstract || 'N/a' }}</p>
                                 </td> -->
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ manuscript.authors[0].name }}
+                                {{ manuscript.authors.length > 0 ? manuscript.authors[0].name : 'N/a' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ manuscript.status }}

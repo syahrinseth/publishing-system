@@ -4,32 +4,56 @@
         <Layout :auth="auth.user.data">
             <template v-slot:header>
                 <div class="lg:flex lg:items-center lg:justify-between">
-                        <div class="flex-1 min-w-0">
-                            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-                                {{ manuscript.data.manuscript_no }} - {{ manuscript.data.title || 'Untitled' }}
-                            </h2>
-                            <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
-                                <div class="mt-2 flex items-center text-sm text-gray-500">
-                                <BriefcaseIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                {{ manuscript.data.type.name }}
-                                </div>
-                                <div class="mt-2 flex items-center text-sm text-gray-500">
-                                    <DocumentReportIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                    {{ manuscript.data.status }}
-                                </div>
-                                <!-- <div class="mt-2 flex items-center text-sm text-gray-500">
-                                    <UserIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                    {{ manuscript.data.authors.map(x => x.name).join(', ') }}
-                                </div> -->
-                                <div class="mt-2 flex items-center text-sm text-gray-500">
-                                    <CalendarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                    {{ manuscript.data.created_at_date }}
-                                </div>
+                    <div class="flex-1 min-w-0">
+                        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                            {{ manuscript.data.manuscript_no }} - {{ manuscript.data.title || 'Untitled' }}
+                        </h2>
+                        <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
+                            <div class="mt-2 flex items-center text-sm text-gray-500">
+                            <BriefcaseIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                            {{ manuscript.data.type.name }}
+                            </div>
+                            <div class="mt-2 flex items-center text-sm text-gray-500">
+                                <DocumentReportIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                {{ manuscript.data.status }}
+                            </div>
+                            <!-- <div class="mt-2 flex items-center text-sm text-gray-500">
+                                <UserIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                {{ manuscript.data.authors.map(x => x.name).join(', ') }}
+                            </div> -->
+                            <div class="mt-2 flex items-center text-sm text-gray-500">
+                                <CalendarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                {{ manuscript.data.created_at_date }}
                             </div>
                         </div>
-                        <div class="mt-5 flex lg:mt-0 lg:ml-4">
+                    </div>
+                    <div class="mt-5 flex lg:mt-0 lg:ml-4">
 
-                        <span class="sm:ml-3">
+                        <span class="sm:ml-3" v-if="(manuscript.data.status == `Draft` || manuscript.data.status == `Rejected Invite To Resubmit`) && (authIsAuthor() || authIsEditor())">
+                            <a href="#" @click="showSubmitReviewModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                Submit For Review
+                            </a>
+                        </span>
+                        <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && authIsReviewer()">
+                            <a href="#" @click="showRejectModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                <XCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                Reject
+                            </a>
+                        </span>
+                        <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && authIsReviewer()">
+                            <a href="#" @click="showAcceptModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                <CheckCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                Accept
+                            </a>
+                        </span>
+                        <span class="sm:ml-3" v-if="manuscript.data.status.includes('Accept') && authIsPublisher()">
+                            <a href="#" @click="showPublishModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <PaperAirplaneIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                Publish
+                            </a>
+                        </span>
+                        <span class="sm:ml-3" v-if="manuscript.data.status == `Published`">
                             <a :href="`/admin/manuscripts/${manuscript.data.id}/download`" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
                                 <DownloadIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 Build PDF
@@ -55,6 +79,39 @@
                             </transition>
                         </Menu>
                     </div>
+                </div>
+
+                <div class="flex mt-1">
+                    <span class="flex-none pr-1" v-show="authIsAuthor()">
+                        <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
+                            <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                            You are an Author
+                        </div>
+                    </span>
+                    <span class="flex-none pr-1" v-show="authIsCorrespondingAuthor()">
+                        <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" target="_blank">
+                            <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                            You are a Co-Author
+                        </div>
+                    </span>
+                    <span class="flex-none pr-1" v-show="authIsEditor()">
+                        <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" target="_blank">
+                            <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                            You are an Editor
+                        </div>
+                    </span>
+                    <span class="flex-none pr-1" v-show="authIsReviewer()">
+                        <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" target="_blank">
+                            <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                            You are a Reviewer
+                        </div>
+                    </span>
+                    <span class="flex-none pr-1" v-show="authIsPublisher()">
+                        <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" target="_blank">
+                            <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                            You are a Publisher
+                        </div>
+                    </span>
                 </div>
             </template>
             <template v-slot:default>
@@ -219,7 +276,95 @@
                     </template>
                 </Modal>
 
-                
+                <Modal :show="showSubmitReviewModal" @close="showSubmitReviewModal = false;">
+                    <template v-slot:default>
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <ExclamationIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
+                            </div>
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Submit For Review </DialogTitle>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                </div>
+                                <div class="w-full mt-3 grid grid-col-1 gap-4">
+                                    <a href="#" @click="submitForReview" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:w-auto sm:text-sm">
+                                        Submit For Review
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-slot:footer>
+                        
+                        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showSubmitReviewModal = false">
+                            Cancel
+                        </button>
+                    </template>
+                </Modal>
+
+                <Modal :show="showAcceptModal" @close="showAcceptModal = false;">
+                    <template v-slot:default>
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <ExclamationIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
+                            </div>
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Accept Manuscript </DialogTitle>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                </div>
+                                <div class="w-full mt-3 grid grid-col-1 gap-4">
+                                    <a href="#" @click="acceptWithoutChanges" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm">
+                                        Accept without changes
+                                    </a>
+                                    <a href="#" @click="acceptWithMinorChanges" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm">
+                                        Accept with minor changes
+                                    </a>
+                                    <a href="#" @click="acceptWithMajorChanges" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm">
+                                        Accept with major changes
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-slot:footer>
+                        
+                        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showAcceptModal = false">
+                            Cancel
+                        </button>
+                    </template>
+                </Modal>
+
+                <Modal :show="showRejectModal" @close="showRejectModal = false;">
+                    <template v-slot:default>
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <ExclamationIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
+                            </div>
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Reject Manuscript </DialogTitle>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                </div>
+                                <div class="w-full mt-3 grid grid-col-1 gap-4">
+                                    <a href="#" @click="rejectInviteToResubmit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:w-auto sm:text-sm">
+                                        Reject invite to resubmit
+                                    </a>
+                                    <a href="#" @click="reject" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
+                                        Reject
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-slot:footer>
+                        
+                        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showRejectModal = false">
+                            Cancel
+                        </button>
+                    </template>
+                </Modal>
 
                 <!-- <div class="hidden sm:block" aria-hidden="true">
                     <div class="py-5">
@@ -242,7 +387,7 @@
                             <div class="shadow overflow-hidden sm:rounded-md">
                             <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
                                 <div class="grid grid-cols-3 gap-6">
-                                    <div class="col-span-3 sm:col-span-2">
+                                    <!-- <div class="col-span-3 sm:col-span-2">
                                         <label for="company-website" class="block text-sm font-medium text-gray-700">
                                         Manuscript Status
                                         </label>
@@ -250,7 +395,7 @@
                                             <option value="" selected>Select</option>
                                             <option v-for="status in manuscriptStatusList" :key="`status-${status.name}`">{{ status.name }}</option>
                                         </select>
-                                    </div>
+                                    </div> -->
                                     <div class="col-span-3 sm:col-span-2">
                                         <label for="company-website" class="block text-sm font-medium text-gray-700">
                                         Article Type
@@ -259,6 +404,22 @@
                                             <option value="" selected>Select</option>
                                             <option v-for="type in articleTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
                                         </select>
+                                    </div>
+                                    <div class="col-span-3 sm:col-span-2">
+                                        <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                        Authors
+                                        </label>
+                                        <VueMultiselect 
+                                        v-model="manuscriptForm.authors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors">
+                                            </VueMultiselect>
+                                    </div>
+                                    <div class="col-span-3 sm:col-span-2">
+                                        <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                        Co-Authors
+                                        </label>
+                                        <VueMultiselect 
+                                        v-model="manuscriptForm.corresponding_authors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="correspondingAuthorSelect.options" :multiple="true" :searchable="true" :loading="correspondingAuthorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindCorrespondingAuthors">
+                                            </VueMultiselect>
                                     </div>
                                 </div>
                             </div>
@@ -299,10 +460,9 @@
                                                 <label for="company-website" class="block text-sm font-medium text-gray-700">
                                                 Request Editor
                                                 </label>
-                                                <select name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" v-model="manuscriptForm.editors" placeholder="www.example.com" >
-                                                    <option value="">Select</option>
-                                                    <option v-for="user in users" :key="user.id + '-user'" :value="user.id">{{ user.name }} - {{ user.email }}</option>
-                                                </select>
+                                                <VueMultiselect 
+                                                v-model="manuscriptForm.editors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="true" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
+                                                    </VueMultiselect>
                                             </div>
                                         </div>
                                         <div class="grid grid-cols-3 gap-6">
@@ -311,10 +471,9 @@
                                                 Suggest Reviewers
                                                 </label>
                                                 <div class="mt-1 flex rounded-md shadow-sm">
-                                                <select name="suggest-reviewers" id="suggest-reviewers" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" v-model="manuscriptForm.reviewers" placeholder="www.example.com" >
-                                                    <option value="">Select</option>
-                                                    <option v-for="user in users" :key="user.id + '-user'" :value="user.id">{{ user.name }} - {{ user.email }}</option>
-                                                </select>
+                                                <VueMultiselect 
+                                                v-model="manuscriptForm.reviewers_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers">
+                                                    </VueMultiselect>
                                                 </div>
                                             </div>
                                         </div>
@@ -324,10 +483,9 @@
                                                 Publisher
                                                 </label>
                                                 <div class="mt-1 flex rounded-md shadow-sm">
-                                                <select name="suggest-publisher" id="suggest-publisher" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" v-model="manuscriptForm.publishers" >
-                                                    <option value="">Select</option>
-                                                    <option v-for="user in users" :key="user.id + '-user'" :value="user.id">{{ user.name }} - {{ user.email }}</option>
-                                                </select>
+                                                <VueMultiselect 
+                                                v-model="manuscriptForm.publishers_obj" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="publisherSelect.options" :multiple="true" :searchable="true" :loading="publisherSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindPublishers">
+                                                    </VueMultiselect>
                                                 </div>
                                             </div>
                                         </div>
@@ -635,6 +793,7 @@
   import Layout from '../../Layout'
   import Table from '../../Components/Table'
   import Modal from '../../Components/Modal'
+  import VueMultiselect from 'vue-multiselect'
   import {
   BriefcaseIcon,
   CalendarIcon,
@@ -648,7 +807,15 @@
   StatusOnlineIcon,
   DocumentReportIcon,
   PencilIcon,
-  PaperClipIcon
+  PaperClipIcon,
+  DocumentSearchIcon,
+  ExclamationIcon,
+  PaperAirplaneIcon,
+  NewspaperIcon,
+  XCircleIcon,
+  BadgeCheckIcon,
+  CheckCircleIcon,
+  CloudUploadIcon
 } from '@heroicons/vue/solid'
   import { Menu, MenuButton, MenuItem, MenuItems, DialogTitle } from '@headlessui/vue'
   import { useForm, Link } from '@inertiajs/inertia-vue3'
@@ -656,6 +823,7 @@
 
   export default {
     components: {
+        VueMultiselect,
         Layout,
         Table,
         Menu,
@@ -665,6 +833,7 @@
         BriefcaseIcon,
         CalendarIcon,
         CheckIcon,
+        DocumentSearchIcon,
         ChevronDownIcon,
         CurrencyDollarIcon,
         LinkIcon,
@@ -673,7 +842,15 @@
         UserIcon,
         StatusOnlineIcon,
         DocumentReportIcon,
+        ExclamationIcon,
         PencilIcon,
+        UserIcon,
+        PaperAirplaneIcon,
+        NewspaperIcon,
+        XCircleIcon,
+        BadgeCheckIcon,
+        CheckCircleIcon,
+        CloudUploadIcon,
         Modal,
         Link,
         DialogTitle,
@@ -695,7 +872,30 @@
             attach_files: [],
             showUploadAttachModal: false,
             showUpdateAttachModel: false,
-            isShow: false
+            showAcceptModal: false,
+            showRejectModal: false,
+            showSubmitReviewModal: false,
+            isShow: false,
+            authorSelect: {
+                isLoading: false,
+                options: []
+            },
+            correspondingAuthorSelect: {
+                isLoading: false,
+                options: []
+            },
+            editorSelect: {
+                isLoading: false,
+                options: []
+            },
+            reviewerSelect: {
+                isLoading: false,
+                options: []
+            },
+            publisherSelect: {
+                isLoading: false,
+                options: []
+            }
         }
     },
     methods: {      
@@ -708,7 +908,11 @@
             }) 
         },  
         saveManuscript() {
-            this.manuscriptForm.authors = this.manuscriptForm.authors.map((user) => user.id);
+            this.manuscriptForm.authors = this.manuscriptForm.authors_obj.map((user) => user.id);
+            this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map((user) => user.id)
+            this.manuscriptForm.editors = this.manuscriptForm.editors_obj.map((user) => user.id);
+            this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map((user) => user.id);
+            this.manuscriptForm.publishers = this.manuscriptForm.publishers_obj.map((user) => user.id);
             this.manuscriptForm.post(`/admin/manuscripts/${this.$props.manuscript.data.id}/update`, {
                 preserveScroll: true,
                 onError: (errors) => {
@@ -754,6 +958,170 @@
                 }
             });
         },
+        submitForReview() {
+            this.manuscriptForm.status = "Submit For Review";
+            this.saveManuscript();
+        },
+        acceptWithoutChanges() {
+            this.manuscriptForm.status = "Accept Without Changes";
+            this.saveManuscript();
+        },
+        acceptWithMinorChanges() {
+            this.manuscriptForm.status = "Accepted With Minor Changes";
+            this.saveManuscript();
+        },
+        acceptWithMajorChanges() {
+            this.manuscriptForm.status = "Accepted With Major Changes";
+            this.saveManuscript();
+        },
+        rejectInviteToResubmit() {
+            this.manuscriptForm.status = "Rejected Invite To Resubmit";
+            this.saveManuscript();
+        },
+        reject() {
+            this.manuscriptForm.status = "Rejected";
+            this.saveManuscript();
+        },
+        asyncFindEditors: _.debounce(async function(query) {
+            this.editorSelect.isLoading = true;
+            let resp = await window.axios.get('/api/users', {
+                params: {
+                    search: query,
+                    role: 'Editor',
+                }
+            });
+            this.editorSelect.isLoading = false;
+            if (resp.status == 200) {
+                this.editorSelect.options = resp.data;
+                return 0;
+            }
+            this.editorSelect.options = [];
+            return 0;
+        }, 300),
+        asyncFindReviewers: _.debounce(async function(query) {
+            this.reviewerSelect.isLoading = true;
+            let resp = await window.axios.get('/api/users', {
+                params: {
+                    search: query,
+                    role: 'Reviewer',
+                }
+            });
+            this.reviewerSelect.isLoading = false;
+            if (resp.status == 200) {
+                this.reviewerSelect.options = resp.data;
+                return 0;
+            }
+            this.reviewerSelect.options = [];
+            return 0;
+        }, 300),
+        asyncFindPublishers: _.debounce(async function(query) {
+            this.publisherSelect.isLoading = true;
+            let resp = await window.axios.get('/api/users', {
+                params: {
+                    search: query,
+                    role: 'Publisher',
+                }
+            });
+            this.publisherSelect.isLoading = false;
+            if (resp.status == 200) {
+                this.publisherSelect.options = resp.data;
+                return 0;
+            }
+            this.publisherSelect.options = [];
+            return 0;
+        }, 300),
+        asyncFindAuthors: _.debounce(async function(query) {
+            this.authorSelect.isLoading = true;
+            let resp = await window.axios.get('/api/users', {
+                params: {
+                    search: query,
+                    role: 'Author',
+                }
+            });
+            this.authorSelect.isLoading = false;
+            if (resp.status == 200) {
+                this.authorSelect.options = resp.data;
+                return 0;
+            }
+            this.authorSelect.options = [];
+            return 0;
+        }, 300),
+        asyncFindCorrespondingAuthors: _.debounce(async function(query) {
+            this.correspondingAuthorSelect.isLoading = true;
+            let resp = await window.axios.get('/api/users', {
+                params: {
+                    search: query,
+                    role: 'Author',
+                }
+            });
+            this.correspondingAuthorSelect.isLoading = false;
+            if (resp.status == 200) {
+                this.correspondingAuthorSelect.options = resp.data;
+                return 0;
+            }
+            this.correspondingAuthorSelect.options = [];
+            return 0;
+        }, 300),
+        authIsAuthor() {
+            let auth_id = this.$props.auth.user.data.id;
+            let manuscriptAuthors = this.manuscript.data.authors;
+            // Filter auth roles
+            let result = manuscriptAuthors.filter(function(user) {
+                if (user.id == auth_id) {
+                    return true;
+                }
+                return false;
+            });
+            return result.length > 0;
+        },
+        authIsCorrespondingAuthor() {
+            let auth_id = this.$props.auth.user.data.id;
+            let manuscriptAuthors = this.manuscript.data.corresponding_authors;
+            // Filter auth roles
+            let result = manuscriptAuthors.filter(function(user) {
+                if (user.id == auth_id) {
+                    return true;
+                }
+                return false;
+            });
+            return result.length > 0;
+        },
+        authIsEditor() {
+            let auth_id = this.$props.auth.user.data.id;
+            let manuscriptEditors = this.manuscript.data.editors;
+            // Filter auth roles
+            let result = manuscriptEditors.filter(function(user) {
+                if (user.id == auth_id) {
+                    return true;
+                }
+                return false;
+            });
+            return result.length > 0;
+        },
+        authIsReviewer() {
+            let auth_id = this.$props.auth.user.data.id;
+            let manuscriptReviewers = this.manuscript.data.reviewers;
+            // Filter auth roles
+            let result = manuscriptReviewers.filter(function(user) {
+                if (user.id == auth_id) {
+                    return true;
+                }
+                return false;
+            });
+            return result.length > 0;
+        },
+        authIsPublisher() {
+            let auth_id = this.$props.auth.user.data.id;
+            let manuscriptPublishers = this.manuscript.data.publishers;
+            // Filter auth roles
+            let result = manuscriptPublishers.filter(function(user) {
+                if (user.id == auth_id) {
+                    return true;
+                }
+                return false;
+            });
+            return result.length > 0;
+        },
     },
     setup (props) {
 
@@ -764,11 +1132,16 @@
             short_title: props.manuscript.data.short_title,
             abstract: props.manuscript.data.abstract,
             keywords: props.manuscript.data.keywords,
-            authors: props.manuscript.data.authors,
-            corresponding_authors: [],
-            editors: props.manuscript.data.editors,
-            reviewers: props.manuscript.data.reviewers,
-            publishers: props.manuscript.data.publishers,
+            authors: props.manuscript.data.authors.map(function(val){return val.id;}),
+            authors_obj: props.manuscript.data.authors,
+            corresponding_authors: props.manuscript.data.corresponding_authors.map(function(val){return val.id;}),
+            corresponding_authors_obj: props.manuscript.data.corresponding_authors,
+            editors: props.manuscript.data.editors.map(function(val){return val.id;}),
+            editors_obj: props.manuscript.data.editors,
+            reviewers: props.manuscript.data.reviewers.map(function(val){return val.id;}),
+            reviewers_obj: props.manuscript.data.reviewers,
+            publishers: props.manuscript.data.publishers.map(function(val){return val.id;}),
+            publishers_obj: props.manuscript.data.publishers,
             funding_information: props.manuscript.data.funding_information,
             is_confirm_grant_numbers: props.manuscript.data.is_confirm_grant_numbers,
             is_acknowledge: props.manuscript.data.is_acknowledge,
@@ -827,7 +1200,8 @@
         return { clearAttachForm, fillUpdateAttachForm, clearUpdateAttachForm, deleteAttachFile, manuscriptForm, attachForm, updateAttachForm }
     },
     async mounted() {
-        // console.log(this.$page.props.auth)
+        // console.log(this.$page.props.auth.user)
     }
   }
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
