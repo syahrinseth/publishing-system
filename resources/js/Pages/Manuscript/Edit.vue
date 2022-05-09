@@ -680,9 +680,9 @@
                                                         {{ attachment.updated_at}}
                                                     </td>
                                                     <td class="px-6 py-4 whitespace-nowrap">
-                                                        <a href="#" class="text-indigo-600 hover:text-indigo-900 px-1" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">Edit</a>
+                                                        <span class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">Edit</span>
                                                         <a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
-                                                        <a href="#" @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 px-1">Delete</a>
+                                                        <span @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1">Delete</span>
                                                     </td>
                                                 </tr>
                                             </template>
