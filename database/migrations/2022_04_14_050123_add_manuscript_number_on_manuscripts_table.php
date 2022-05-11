@@ -37,6 +37,8 @@ class AddManuscriptNumberOnManuscriptsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('manuscripts', function(Blueprint $table) {
+            $table->dropColumn('manuscript_no');
+        });
     }
 }

@@ -7,6 +7,7 @@ use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use App\Models\Filters\UserFilters;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\UserCollection;
@@ -29,9 +30,10 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(UserFilters $userFilters)
     {
-        $users = new UserCollection(User::all());
+        $users = User::filter($userFilters);
+        $users = new UserCollection($users->get());
 
         if (request()->is('api/*')) {
             return response()->json($users);

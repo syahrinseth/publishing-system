@@ -66,7 +66,7 @@
             </template>
           </Table>
 
-          <h4 class="font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate my-4">Recent Activities</h4>
+          <!-- <h4 class="font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate my-4">Recent Activities</h4>
           <Table>
             <template v-slot:header>
               <tr>
@@ -108,7 +108,7 @@
                 </td>
               </tr>
             </template>
-          </Table>
+          </Table> -->
         </template>
     </Layout>
   </div>
