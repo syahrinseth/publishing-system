@@ -6,15 +6,20 @@ use PDF;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Manuscript;
-use App\Models\Filters\ManuscriptFilters;
 use Illuminate\Http\Request;
+use App\Models\ManuscriptComment;
 use App\Models\ManuscriptAttachFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\Filters\ManuscriptFilters;
 use App\Http\Resources\ManuscriptResource;
+use App\Models\ManuscriptAttachFileComment;
 use App\Http\Resources\ManuscriptCollection;
 use App\Http\Resources\ManuscriptAttachResource;
+use App\Models\Filters\ManuscriptCommentFilters;
+use App\Http\Resources\ManuscriptCommentResource;
+use App\Http\Resources\ManuscriptCommentCollection;
 
 class ManuscriptController extends Controller
 {
@@ -532,5 +537,97 @@ class ManuscriptController extends Controller
         return Redirect::route('manuscript.edit', [
             'id' => $manuscript->id
         ]);
+    }
+
+    /**
+     * Index controller for attach file comments.
+     * 
+     * @param Request $request
+     * @param ManuscriptCommentFilters $filters
+     * @param integer $id
+     * @param integer $attachFileId
+     */
+    public function indexComment(Request $request, ManuscriptCommentFilters $filters, $id)
+    {
+        $comments = ManuscriptComment::filter($filters);
+        $comments = $comments->where('manuscript_id', $id);
+        $comments = new ManuscriptCommentCollection($comments->get());
+        if ($request->is('api/*')) {
+            return response()->json($comments);
+        }
+        return abort(404);
+    }
+
+    /**
+     * Store controller for attach file comments.
+     * 
+     * @param Request $request
+     * @param integer $id
+     */
+    public function storeComment(Request $request, $id)
+    {
+        $request->validate([
+            'text' => 'required',
+            'to' => 'required'
+        ]);
+        $comment = new ManuscriptComment;
+        $comment->manuscript_id = $id;
+        $comment->user_id = auth()->id();
+        $comment->from = $request->from ?? 'author';
+        $comment->text = $request->text;
+        $comment->to = $request->to ?? 'all';
+        $comment->save();
+        if ($request->is('api/*')) {
+            return response()->json(new ManuscriptCommentResource($comment));
+        }
+        return Redirect::route('manuscript.edit', [
+            'id' => $id
+        ]);
+    }
+
+    /**
+     * Index controller for attach file comments.
+     * 
+     * @param Request $request
+     * @param ManuscriptCommentFilters $filters
+     * @param integer $id
+     * @param integer $attachFileId
+     */
+    public function indexAttachFileComment(Request $request, ManuscriptCommentFilters $filters, $id, $attachFileId)
+    {
+        // $comments = ManuscriptAttachFileComment::filter($filters);
+        // $comments = $comments->where('manuscript_attach_id', $attachFileId);
+        // $comments = new ManuscriptAttachFileCommentCollection($comments->get());
+        // if ($request->is('api/*')) {
+        //     return response()->json($comments);
+        // }
+        // return abort(404);
+    }
+
+    /**
+     * Store controller for attach file comments.
+     * 
+     * @param Request $request
+     * @param integer $id
+     * @param integer $attachFileId
+     */
+    public function storeAttachFileComment(Request $request, $id, $attachFileId)
+    {
+        // $request->validate([
+        //     'text' => 'required',
+        //     'to' => 'required'
+        // ]);
+        // $comment = new ManuscriptAttachFileComment;
+        // $comment->manuscript_attach_id = $attachFileId;
+        // $comment->user_id = auth()->id();
+        // $comment->to = $request->to ?? 'all';
+        // $comment->text = $request->text;
+        // $comment->save();
+        // if ($request->is('api/*')) {
+        //     return response()->json(new ManuscriptAttachFileCommentResource($comment));
+        // }
+        // return Redirect::route('manuscript.edit', [
+        //     'id' => $id
+        // ]);
     }
 }

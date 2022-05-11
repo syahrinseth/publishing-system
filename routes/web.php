@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ManuscriptController;
 use App\Http\Controllers\PublicJournalController;
 
 /*
@@ -38,32 +39,40 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
     // Manuscript Module
 
-    Route::get('/manuscript-create', [App\Http\Controllers\ManuscriptController::class, 'create'])->name('manuscript.create');
+    Route::get('/manuscript-create', [ManuscriptController::class, 'create'])->name('manuscript.create');
 
-    Route::post('/manuscript-store', [App\Http\Controllers\ManuscriptController::class, 'store'])->name('manuscript.store');
+    Route::post('/manuscript-store', [ManuscriptController::class, 'store'])->name('manuscript.store');
 
-    Route::get('/manuscripts', [App\Http\Controllers\ManuscriptController::class, 'index'])->name('manuscript.index');
+    Route::get('/manuscripts', [ManuscriptController::class, 'index'])->name('manuscript.index');
 
-    Route::get('/manuscripts/{id}/edit', [App\Http\Controllers\ManuscriptController::class, 'edit'])->name('manuscript.edit');
+    Route::get('/manuscripts/{id}/edit', [ManuscriptController::class, 'edit'])->name('manuscript.edit');
 
-    Route::post('/manuscripts/{id}/update', [App\Http\Controllers\ManuscriptController::class, 'update'])->name('manuscript.update');
+    Route::post('/manuscripts/{id}/update', [ManuscriptController::class, 'update'])->name('manuscript.update');
 
-    Route::post('/manuscripts/{id}/destroy', [App\Http\Controllers\ManuscriptController::class, 'destroy'])->name('manuscript.destroy');
+    Route::post('/manuscripts/{id}/destroy', [ManuscriptController::class, 'destroy'])->name('manuscript.destroy');
 
-    Route::get('/manuscripts/{id}/download', [App\Http\Controllers\ManuscriptController::class, 'download'])->name('manuscript.download');
+    Route::get('/manuscripts/{id}/download', [ManuscriptController::class, 'download'])->name('manuscript.download');
 
     // Manuscript Attach Files
-    Route::get('/manuscripts/{id}/attach-files', [App\Http\Controllers\ManuscriptController::class, 'indexAttachFile'])->name('manuscript.attachFile.index');
+    Route::get('/manuscripts/{id}/attach-files', [ManuscriptController::class, 'indexAttachFile'])->name('manuscript.attachFile.index');
 
-    Route::get('/manuscripts/{id}/attach-files/{attachFileId}', [App\Http\Controllers\ManuscriptController::class, 'showAttachFile'])->name('manuscript.attachFile.show');
+    Route::get('/manuscripts/{id}/attach-files/{attachFileId}', [ManuscriptController::class, 'showAttachFile'])->name('manuscript.attachFile.show');
 
-    Route::post('/manuscripts/{id}/attach-files', [App\Http\Controllers\ManuscriptController::class, 'storeAttachFile'])->name('manuscript.attachFile.store');
+    Route::post('/manuscripts/{id}/attach-files', [ManuscriptController::class, 'storeAttachFile'])->name('manuscript.attachFile.store');
 
-    Route::post('/manuscripts/{id}/attach-files/{attachFilesId}/update', [App\Http\Controllers\ManuscriptController::class, 'updateAttachFile'])->name('manuscript.attachFile.update');
+    Route::post('/manuscripts/{id}/attach-files/{attachFilesId}/update', [ManuscriptController::class, 'updateAttachFile'])->name('manuscript.attachFile.update');
 
-    Route::delete('/manuscripts/{id}/attach-files/{attachFilesId}', [App\Http\Controllers\ManuscriptController::class, 'destroyAttachFile'])->name('manuscript.attachFile.destroy');
+    Route::delete('/manuscripts/{id}/attach-files/{attachFilesId}', [ManuscriptController::class, 'destroyAttachFile'])->name('manuscript.attachFile.destroy');
 
-    Route::get('/manuscripts/{id}/attach-files/{attachFileId}/download', [App\Http\Controllers\ManuscriptController::class, 'downloadAttachFile'])->name('manuscript.downloadManuscriptAttach');
+    Route::get('/manuscripts/{id}/attach-files/{attachFileId}/download', [ManuscriptController::class, 'downloadAttachFile'])->name('manuscript.downloadManuscriptAttach');
+
+    // Manuscript Comments
+    Route::get('/manuscripts/{id}/comments', [ManuscriptController::class, 'indexComment'])->name('manuscript.comment.index');
+    Route::post('/manuscripts/{id}/comments', [ManuscriptController::class, 'storeComment'])->name('manuscript.comment.store');
+
+    // Manuscript Attach File Comments
+    Route::get('/manuscripts/{id}/attach-files/{attachFilesId}/comments', [ManuscriptController::class, 'indexAttachFileComment'])->name('manuscript.attachFile.comment.index');
+    Route::post('/manuscripts/{id}/attach-files/{attachFilesId}/comments', [ManuscriptController::class, 'storeAttachFileComment'])->name('manuscript.attachFile.comment.store');
 
     // Manuscript Types
 

@@ -13,7 +13,7 @@
                         Or
                         {{ ' ' }}
                         <Link :href="`/register`" class="font-medium text-indigo-600 hover:text-indigo-500">
-                            start your 14-day free trial
+                            Sign Up
                         </Link>
                         </p>
                     </div>

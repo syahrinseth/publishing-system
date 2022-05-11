@@ -80,7 +80,6 @@
                         </Menu>
                     </div>
                 </div>
-
                 <div class="flex mt-1">
                     <span class="flex-none pr-1" v-show="authIsAuthor()">
                         <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
@@ -115,7 +114,6 @@
                 </div>
             </template>
             <template v-slot:default>
-
                 <Modal :show="showUploadAttachModal" @close="showUploadAttachModal = false;">
                     <template v-slot:default>
                         <div class="sm:flex sm:items-start">
@@ -186,7 +184,6 @@
                         </button>
                     </template>
                 </Modal>
-
                 <Modal :show="showUpdateAttachModel" @close="showUpdateAttachModel = false; clearUpdateAttachForm()">
                     <template v-slot:default>
                         <div class="sm:flex sm:items-start">
@@ -261,6 +258,15 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="hidden sm:block" aria-hidden="true">
+                                            <div class="py-5">
+                                                <div class="border-t border-gray-200" />
+                                            </div>
+                                        </div>
+                                        <CommentSectionCard
+                                            :manuscript-id="manuscript.data.id"
+                                            :manuscript-attach-id="updateAttachForm.id"
+                                            :auth="auth"></CommentSectionCard>
                                     </form>
                                 </div>
                             </div>
@@ -268,7 +274,7 @@
                     </template>
                     <template v-slot:footer>
                         <a href="#" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm" @click="updateAttach()">
-                            Upload
+                            Update
                         </a>
                         <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showUpdateAttachModel = false; clearUpdateAttachForm()" ref="cancelButtonRef">
                             Cancel
@@ -365,13 +371,6 @@
                         </button>
                     </template>
                 </Modal>
-
-                <!-- <div class="hidden sm:block" aria-hidden="true">
-                    <div class="py-5">
-                        <div class="border-t border-gray-200" />
-                    </div>
-                </div> -->
-
                 <div class="mt-10 sm:mt-0">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
@@ -432,364 +431,390 @@
                         </form>
                         </div>
                     </div>
+                </div>
+                <div class="hidden sm:block" aria-hidden="true">
+                    <div class="py-5">
+                        <div class="border-t border-gray-200" />
                     </div>
-
-                    <div class="hidden sm:block" aria-hidden="true">
-                        <div class="py-5">
-                            <div class="border-t border-gray-200" />
-                        </div>
-                    </div>
-
-                        
-                    <div>
-                        <div class="md:grid md:grid-cols-3 md:gap-6">
-                            <div class="md:col-span-1">
-                                <div class="px-4 sm:px-0">
-                                    <h3 class="text-lg font-medium leading-6 text-gray-900">Review Preferences</h3>
-                                    <p class="mt-1 text-sm text-gray-600">
-                                    You may request that a specific editor be assigned to your submission. The request will be taken under advisement by the publication. If you do not request an editor, your submission will be assigned to the appropriate editor(s) as determined by the publication staff.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="mt-5 md:mt-0 md:col-span-2">
-                                <form @submit.prevent="saveManuscript()" >
-                                    <div class="shadow sm:rounded-md sm:overflow-hidden">
-                                    <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                        <div class="grid grid-cols-3 gap-6">
-                                            <div class="col-span-3 sm:col-span-2">
-                                                <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                                Request Editor
-                                                </label>
-                                                <VueMultiselect 
-                                                v-model="manuscriptForm.editors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="true" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
-                                                    </VueMultiselect>
-                                            </div>
-                                        </div>
-                                        <div class="grid grid-cols-3 gap-6">
-                                            <div class="col-span-3 sm:col-span-2">
-                                                <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                                Suggest Reviewers
-                                                </label>
-                                                <div class="mt-1 flex rounded-md shadow-sm">
-                                                <VueMultiselect 
-                                                v-model="manuscriptForm.reviewers_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers">
-                                                    </VueMultiselect>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="grid grid-cols-3 gap-6">
-                                            <div class="col-span-3 sm:col-span-2">
-                                                <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                                Publisher
-                                                </label>
-                                                <div class="mt-1 flex rounded-md shadow-sm">
-                                                <VueMultiselect 
-                                                v-model="manuscriptForm.publishers_obj" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="publisherSelect.options" :multiple="true" :searchable="true" :loading="publisherSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindPublishers">
-                                                    </VueMultiselect>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        
-                                    </div>
-                                    <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                        <button class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                            Save
-                                        </button>
-                                    </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="hidden sm:block" aria-hidden="true">
-                        <div class="py-5">
-                            <div class="border-t border-gray-200" />
-                        </div>
-                    </div>
-
-                        
-                    <div>
-                        <div class="md:grid md:grid-cols-3 md:gap-6">
-                            <div class="md:col-span-1">
+                </div>  
+                <div>
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
                             <div class="px-4 sm:px-0">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Data</h3>
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">Review Preferences</h3>
                                 <p class="mt-1 text-sm text-gray-600">
-                                    When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
+                                You may request that a specific editor be assigned to your submission. The request will be taken under advisement by the publication. If you do not request an editor, your submission will be assigned to the appropriate editor(s) as determined by the publication staff.
                                 </p>
                             </div>
-                            </div>
-                            <div class="mt-5 md:mt-0 md:col-span-2">
-                            <form @submit.prevent="saveManuscript()">
+                        </div>
+                        <div class="mt-5 md:mt-0 md:col-span-2">
+                            <form @submit.prevent="saveManuscript()" >
                                 <div class="shadow sm:rounded-md sm:overflow-hidden">
                                 <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                    <div>
-                                    <label for="title" class="block text-sm font-medium text-gray-700">
-                                        Full Title
-                                    </label>
-                                    <div class="mt-1">
-                                        <textarea v-model="manuscriptForm.title" id="title" name="title" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    <div class="grid grid-cols-3 gap-6">
+                                        <div class="col-span-3 sm:col-span-2">
+                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                            Request Editor
+                                            </label>
+                                            <VueMultiselect 
+                                            v-model="manuscriptForm.editors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="true" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
+                                                </VueMultiselect>
+                                        </div>
                                     </div>
-                                    <p class="mt-2 text-sm text-gray-500">
-                                        
-                                    </p>
+                                    <div class="grid grid-cols-3 gap-6">
+                                        <div class="col-span-3 sm:col-span-2">
+                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                            Suggest Reviewers
+                                            </label>
+                                            <div class="mt-1 flex rounded-md shadow-sm">
+                                            <VueMultiselect 
+                                            v-model="manuscriptForm.reviewers_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers">
+                                                </VueMultiselect>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <div>
-                                    <label for="short_title" class="block text-sm font-medium text-gray-700">
-                                        Short Title
-                                    </label>
-                                    <div class="mt-1">
-                                        <textarea v-model="manuscriptForm.short_title" id="short_title" name="short_title" rows="1" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                    </div>
-                                    </div>
-
-                                    <div>
-                                    <label for="abstract" class="block text-sm font-medium text-gray-700">
-                                        Abstract
-                                    </label>
-                                    <div class="mt-1">
-                                        <textarea v-model="manuscriptForm.abstract" id="abstract" name="abstract" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                    </div>
-                                    <p class="mt-2 text-sm text-gray-500">
-                                        Limit 300 words
-                                    </p>
-                                    </div>
-
-                                    <div>
-                                    <label for="keywords" class="block text-sm font-medium text-gray-700">
-                                        Keywords
-                                    </label>
-                                    <div class="mt-1">
-                                        <textarea v-model="manuscriptForm.keywords" id="keywords" name="keywords" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                    </div>
-                                    <p class="mt-2 text-sm text-gray-500">
-                                        Please enter keywords separated by semicolons. Each individual keyword may be up to 256 characters in length.
-                                    </p>
-                                    </div>
-
-                                    <div>
-                                    <!-- <label for="authors" class="block text-sm font-medium text-gray-700">
-                                        Authors
-                                    </label>
-                                    <div class="mt-1">
-                                        <textarea v-model="manuscriptForm.authors" id="authors" name="authors" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                    </div> -->
-                                    <p class="mt-2 text-sm text-gray-500">
-                                    </p>
-                                    </div>
-
-                                    <div>
-                                    <label for="funding_information" class="block text-sm font-medium text-gray-700">
-                                        Funding Information
-                                    </label>
-                                    <div class="mt-1">
-                                        <textarea v-model="manuscriptForm.funding_information" id="funding_information" name="funding_information" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                    </div>
-                                    <p class="mt-2 text-sm text-gray-500">
-
-                                    </p>
+                                    <div class="grid grid-cols-3 gap-6">
+                                        <div class="col-span-3 sm:col-span-2">
+                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                            Publisher
+                                            </label>
+                                            <div class="mt-1 flex rounded-md shadow-sm">
+                                            <VueMultiselect 
+                                            v-model="manuscriptForm.publishers_obj" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="publisherSelect.options" :multiple="true" :searchable="true" :loading="publisherSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindPublishers">
+                                                </VueMultiselect>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     
                                 </div>
                                 <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Save
+                                    <button class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Save
                                     </button>
                                 </div>
                                 </div>
                             </form>
-                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="hidden sm:block" aria-hidden="true">
-                        <div class="py-5">
-                            <div class="border-t border-gray-200" />
-                        </div>
+                <div class="hidden sm:block" aria-hidden="true">
+                    <div class="py-5">
+                        <div class="border-t border-gray-200" />
                     </div>
+                </div>
 
-                    <div>
-                        <div class="md:grid md:grid-cols-3 md:gap-6">
-                            <div class="md:col-span-1">
-                            <div class="px-4 sm:px-0">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Attach Files</h3>
-                                <p class="mt-1 text-sm text-gray-600">
-                                    When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
-                                </p>
-                            </div>
-                            </div>
-                            <div class="mt-5 md:mt-0 md:col-span-2">
-                                <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-                                    <div class="flex justify-between px-4 py-5 sm:px-6">
-                                        <div class="">
-                                            <h3 class="text-lg leading-6 font-medium text-gray-900">
-                                                Attach Files
-                                            </h3>
-                                            <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                                                Personal details and application.
-                                            </p> -->
-                                        </div>
-                                        <div>
-                                            <span class="sm:ml-3">
-                                                <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" @click="showUploadAttachModal = !showUploadAttachModal; ">
-                                                    Upload File 
-                                                </button>
-                                            </span>
-                                        </div>
-                                    </div>
+                <div>
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                        <div class="px-4 sm:px-0">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Data</h3>
+                            <p class="mt-1 text-sm text-gray-600">
+                                When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
+                            </p>
+                        </div>
+                        </div>
+                        <div class="mt-5 md:mt-0 md:col-span-2">
+                        <form @submit.prevent="saveManuscript()">
+                            <div class="shadow sm:rounded-md sm:overflow-hidden">
+                            <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                                <div>
+                                <label for="title" class="block text-sm font-medium text-gray-700">
+                                    Full Title
+                                </label>
+                                <div class="mt-1">
+                                    <textarea v-model="manuscriptForm.title" id="title" name="title" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500">
                                     
-                                    <div class="border-t border-gray-200 text-sm">
-                                        <Table>
-                                            <template v-slot:header>
-                                                <tr>
-                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Order
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Items
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Size
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Last Modified
-                                                    </th>
-                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                        Actions
-                                                    </th>
-                                                </tr>
-                                            </template>
-                                            <template v-slot:body>
-                                                <tr v-for="(attachment, index) in manuscript.data.attachments.filter(function(attach) {if(auth.user.data.permissions_attribute.manuscripts.cover_letter == false && attach.type.name == `Cover Letter` || auth.user.data.permissions_attribute.manuscripts.conflict_of_interest == false && attach.type.name == `Conflict of Interest` || auth.user.data.permissions_attribute.manuscripts.declaration_of_interest_statement == false && attach.type.name == `Declaration of Interest Statement`) {return false;}return true;})" :key="attachment.id + '-attach'">
-                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                        {{ index + 1 }}
-                                                    </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                        <p>{{ attachment.type.name }}</p>
-                                                        <small class="text-gray-500">
-                                                            {{ attachment.description }}
-                                                        </small>
-                                                    </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                        {{ attachment.size}}
-                                                    </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                        {{ attachment.updated_at}}
-                                                    </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                        <span class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">Edit</span>
-                                                        <a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
-                                                        <span @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1">Delete</span>
-                                                    </td>
-                                                </tr>
-                                            </template>
-                                        </Table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="hidden sm:block" aria-hidden="true">
-                        <div class="py-5">
-                            <div class="border-t border-gray-200" />
-                        </div>
-                    </div>
-                    
-                    <div class="mt-10 sm:mt-0">
-                        <div class="md:grid md:grid-cols-3 md:gap-6">
-                            <div class="md:col-span-1">
-                            <div class="px-4 sm:px-0">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900">Additional Information</h3>
-                                <p class="mt-1 text-sm text-gray-600">
-                                    Please respond to the presented questions/statements.
                                 </p>
+                                </div>
+
+                                <div>
+                                <label for="short_title" class="block text-sm font-medium text-gray-700">
+                                    Short Title
+                                </label>
+                                <div class="mt-1">
+                                    <textarea v-model="manuscriptForm.short_title" id="short_title" name="short_title" rows="1" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                </div>
+                                </div>
+
+                                <div>
+                                <label for="abstract" class="block text-sm font-medium text-gray-700">
+                                    Abstract
+                                </label>
+                                <div class="mt-1">
+                                    <textarea v-model="manuscriptForm.abstract" id="abstract" name="abstract" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500">
+                                    Limit 300 words
+                                </p>
+                                </div>
+
+                                <div>
+                                <label for="keywords" class="block text-sm font-medium text-gray-700">
+                                    Keywords
+                                </label>
+                                <div class="mt-1">
+                                    <textarea v-model="manuscriptForm.keywords" id="keywords" name="keywords" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500">
+                                    Please enter keywords separated by semicolons. Each individual keyword may be up to 256 characters in length.
+                                </p>
+                                </div>
+
+                                <div>
+                                <!-- <label for="authors" class="block text-sm font-medium text-gray-700">
+                                    Authors
+                                </label>
+                                <div class="mt-1">
+                                    <textarea v-model="manuscriptForm.authors" id="authors" name="authors" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                </div> -->
+                                <p class="mt-2 text-sm text-gray-500">
+                                </p>
+                                </div>
+
+                                <div>
+                                <label for="funding_information" class="block text-sm font-medium text-gray-700">
+                                    Funding Information
+                                </label>
+                                <div class="mt-1">
+                                    <textarea v-model="manuscriptForm.funding_information" id="funding_information" name="funding_information" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500">
+
+                                </p>
+                                </div>
+
+                                
+                            </div>
+                            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Save
+                                </button>
                             </div>
                             </div>
-                            <div class="mt-5 md:mt-0 md:col-span-2">
-                            <form @submit.prevent="saveManuscript()">
-                                <div class="shadow overflow-hidden sm:rounded-md">
-                                <div class="px-4 py-5 bg-white sm:p-6">
-                                    <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                        <fieldset>
-                                        <legend class="text-base font-medium text-gray-900">Please confirm that you have mentioned all organizations that funded your research in the Acknowledgements section of your submission, including grant numbers where appropriate.</legend>
-                                        <div class="mt-4 space-y-4">
-                                            <div class="flex items-start">
-                                            <div class="flex items-center h-5">
-                                                <input v-model="manuscriptForm.is_confirm_grant_numbers" id="is_confirm_grant_numbers" name="is_confirm_grant_numbers" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
-                                            </div>
-                                            <div class="ml-3 text-sm">
-                                                <label for="is_confirm_grant_numbers" class="font-medium text-gray-700">I Confirm</label>
-                                                <p class="text-gray-500">I confirm that I have mentioned all organizations that funded my research in the Acknowledgements section of my submission, including grant numbers where appropriate.</p>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        </fieldset>
-                                        <div class="hidden sm:block" aria-hidden="true">
-                                            <div class="py-5">
-                                                <div class="border-t border-gray-200" />
-                                            </div>
-                                        </div>
-                                        <fieldset>
-                                        <legend class="text-base font-medium text-gray-900">Sensors and Actuators Reports is an open access journal which charges an Article Publishing Charge (APC) to cover the cost associated with the publication process. All articles published Open Access will be immediately and permanently free on ScienceDirect for users to read, download, and use in accordance with the author’s selected Creative Commons user license. </legend>
-                                        <div class="mt-4 space-y-4">
-                                            <div class="flex items-start">
-                                            <div class="flex items-center h-5">
-                                                <input v-model="manuscriptForm.is_acknowledge" id="is_acknowledge" name="is_acknowledge" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
-                                            </div>
-                                            <div class="ml-3 text-sm">
-                                                <label for="is_acknowledge" class="font-medium text-gray-700">I Acknowledge</label>
-                                                <p class="text-gray-500">As an Author, I acknowledge I need to pay the Article Publishing Charge if my manuscript is accepted for publication</p>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        </fieldset>
-                                        <!-- <div class="hidden sm:block" aria-hidden="true">
-                                            <div class="py-5">
-                                                <div class="border-t border-gray-200" />
-                                            </div>
-                                        </div>
-                                        <fieldset>
-                                        <div>
-                                            <legend class="text-base font-medium text-gray-900">
-                                            In support of Open Science, Sensors and Actuators Reports offers its authors a free preprint posting service. Preprints provide early registration and dissemination of research, which facilitates early citations and collaboration. Please indicate below whether you would like to release your manuscript publicly as a preprint on the preprint server www.SSRN.com once it enters peer-review with the journal. Your choice will have no effect on the editorial process or outcome with the journal. Your preprint will remain globally available free to read whether the journal accepts or rejects your manuscript. For more information about posting to www.SSRN.com, please consult the SSRN Terms of Use and FAQs.</legend>
-                                        </div>
-                                        <div class="mt-4 space-y-4">
-                                            <div class="flex items-center">
-                                            <input id="push-everything" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                                            <label for="push-everything" class="ml-3 block text-sm font-medium text-gray-700">
-                                                Please select a response
-                                            </label>
-                                            </div>
-                                            <div class="flex items-center">
-                                            <input id="push-email" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                                            <label for="push-email" class="ml-3 block text-sm font-medium text-gray-700">
-                                                YES, I want to share my research early and openly as a preprint.
-                                            </label>
-                                            </div>
-                                            <div class="flex items-center">
-                                            <input id="push-nothing" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                                            <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700">
-                                                NO, I don't want to share my research early and openly as a preprint.
-                                            </label>
-                                            </div>
-                                        </div>
-                                        </fieldset> -->
+                        </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hidden sm:block" aria-hidden="true">
+                    <div class="py-5">
+                        <div class="border-t border-gray-200" />
+                    </div>
+                </div>
+
+                <div>
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                        <div class="px-4 sm:px-0">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Attach Files</h3>
+                            <p class="mt-1 text-sm text-gray-600">
+                                When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
+                            </p>
+                        </div>
+                        </div>
+                        <div class="mt-5 md:mt-0 md:col-span-2">
+                            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                                <div class="flex justify-between px-4 py-5 sm:px-6">
+                                    <div class="">
+                                        <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                            Attach Files
+                                        </h3>
+                                        <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                                            Personal details and application.
+                                        </p> -->
+                                    </div>
+                                    <div>
+                                        <span class="sm:ml-3">
+                                            <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" @click="showUploadAttachModal = !showUploadAttachModal; ">
+                                                Upload File 
+                                            </button>
+                                        </span>
                                     </div>
                                 </div>
-                                <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Save
-                                    </button>
+                                
+                                <div class="border-t border-gray-200 text-sm">
+                                    <Table>
+                                        <template v-slot:header>
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Order
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Items
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Size
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Last Modified
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Actions
+                                                </th>
+                                            </tr>
+                                        </template>
+                                        <template v-slot:body>
+                                            <tr v-for="(attachment, index) in manuscript.data.attachments.filter(function(attach) {if(auth.user.data.permissions_attribute.manuscripts.cover_letter == false && attach.type.name == `Cover Letter` || auth.user.data.permissions_attribute.manuscripts.conflict_of_interest == false && attach.type.name == `Conflict of Interest` || auth.user.data.permissions_attribute.manuscripts.declaration_of_interest_statement == false && attach.type.name == `Declaration of Interest Statement`) {return false;}return true;})" :key="attachment.id + '-attach'">
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    {{ index + 1 }}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <p>{{ attachment.type.name }}</p>
+                                                    <small class="text-gray-500">
+                                                        {{ attachment.description }}
+                                                    </small>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    {{ attachment.size}}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    {{ attachment.updated_at}}
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">View</span>
+                                                    <a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
+                                                    <span @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1">Delete</span>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </Table>
                                 </div>
-                                </div>
-                            </form>
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="hidden sm:block" aria-hidden="true">
+                    <div class="py-5">
+                        <div class="border-t border-gray-200" />
+                    </div>
+                </div>
+                
+                <div class="mt-10 sm:mt-0">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                        <div class="px-4 sm:px-0">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">Additional Information</h3>
+                            <p class="mt-1 text-sm text-gray-600">
+                                Please respond to the presented questions/statements.
+                            </p>
+                        </div>
+                        </div>
+                        <div class="mt-5 md:mt-0 md:col-span-2">
+                        <form @submit.prevent="saveManuscript()">
+                            <div class="shadow overflow-hidden sm:rounded-md">
+                            <div class="px-4 py-5 bg-white sm:p-6">
+                                <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                                    <fieldset>
+                                    <legend class="text-base font-medium text-gray-900">Please confirm that you have mentioned all organizations that funded your research in the Acknowledgements section of your submission, including grant numbers where appropriate.</legend>
+                                    <div class="mt-4 space-y-4">
+                                        <div class="flex items-start">
+                                        <div class="flex items-center h-5">
+                                            <input v-model="manuscriptForm.is_confirm_grant_numbers" id="is_confirm_grant_numbers" name="is_confirm_grant_numbers" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="is_confirm_grant_numbers" class="font-medium text-gray-700">I Confirm</label>
+                                            <p class="text-gray-500">I confirm that I have mentioned all organizations that funded my research in the Acknowledgements section of my submission, including grant numbers where appropriate.</p>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </fieldset>
+                                    <div class="hidden sm:block" aria-hidden="true">
+                                        <div class="py-5">
+                                            <div class="border-t border-gray-200" />
+                                        </div>
+                                    </div>
+                                    <fieldset>
+                                    <legend class="text-base font-medium text-gray-900">Sensors and Actuators Reports is an open access journal which charges an Article Publishing Charge (APC) to cover the cost associated with the publication process. All articles published Open Access will be immediately and permanently free on ScienceDirect for users to read, download, and use in accordance with the author’s selected Creative Commons user license. </legend>
+                                    <div class="mt-4 space-y-4">
+                                        <div class="flex items-start">
+                                        <div class="flex items-center h-5">
+                                            <input v-model="manuscriptForm.is_acknowledge" id="is_acknowledge" name="is_acknowledge" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="is_acknowledge" class="font-medium text-gray-700">I Acknowledge</label>
+                                            <p class="text-gray-500">As an Author, I acknowledge I need to pay the Article Publishing Charge if my manuscript is accepted for publication</p>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </fieldset>
+                                    <!-- <div class="hidden sm:block" aria-hidden="true">
+                                        <div class="py-5">
+                                            <div class="border-t border-gray-200" />
+                                        </div>
+                                    </div>
+                                    <fieldset>
+                                    <div>
+                                        <legend class="text-base font-medium text-gray-900">
+                                        In support of Open Science, Sensors and Actuators Reports offers its authors a free preprint posting service. Preprints provide early registration and dissemination of research, which facilitates early citations and collaboration. Please indicate below whether you would like to release your manuscript publicly as a preprint on the preprint server www.SSRN.com once it enters peer-review with the journal. Your choice will have no effect on the editorial process or outcome with the journal. Your preprint will remain globally available free to read whether the journal accepts or rejects your manuscript. For more information about posting to www.SSRN.com, please consult the SSRN Terms of Use and FAQs.</legend>
+                                    </div>
+                                    <div class="mt-4 space-y-4">
+                                        <div class="flex items-center">
+                                        <input id="push-everything" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                        <label for="push-everything" class="ml-3 block text-sm font-medium text-gray-700">
+                                            Please select a response
+                                        </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                        <input id="push-email" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                        <label for="push-email" class="ml-3 block text-sm font-medium text-gray-700">
+                                            YES, I want to share my research early and openly as a preprint.
+                                        </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                        <input id="push-nothing" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                        <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700">
+                                            NO, I don't want to share my research early and openly as a preprint.
+                                        </label>
+                                        </div>
+                                    </div>
+                                    </fieldset> -->
+                                </div>
+                            </div>
+                            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Save
+                                </button>
+                            </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden sm:block" aria-hidden="true">
+                    <div class="py-5">
+                        <div class="border-t border-gray-200" />
+                    </div>
+                </div>  
+                <div class="mt-10 sm:mt-0">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                        <div class="px-4 sm:px-0">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">Comments</h3>
+                            <p class="mt-1 text-sm text-gray-600">
+                            Please identify your submission's areas of interest and specialization by selecting one or more classifications.
+                            </p>
+                        </div>
+                        </div>
+                        <div class="mt-5 md:mt-0 md:col-span-2">
+                        <form @submit.prevent="saveManuscript()">
+                            <div class="shadow overflow-hidden sm:rounded-md">
+                                <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                                    <div class="grid gap-6">
+                                        <CommentSectionCard
+                                            :manuscript-id="manuscript.data.id"
+                                            :auth="auth"></CommentSectionCard>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
             </template>
         </Layout>
     </div>
@@ -825,6 +850,7 @@
   import { Menu, MenuButton, MenuItem, MenuItems, DialogTitle } from '@headlessui/vue'
   import { useForm, Link } from '@inertiajs/inertia-vue3'
   import Toast from '../../Components/Toast'
+  import CommentSectionCard from '../../Components/CommentSectionCard.vue'
 
   export default {
     components: {
@@ -860,7 +886,8 @@
         Link,
         DialogTitle,
         Toast,
-        PaperClipIcon
+        PaperClipIcon,
+        CommentSectionCard
     },
     props: {
         manuscript: Object,
