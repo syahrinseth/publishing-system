@@ -20,6 +20,8 @@ use App\Http\Resources\ManuscriptAttachResource;
 use App\Models\Filters\ManuscriptCommentFilters;
 use App\Http\Resources\ManuscriptCommentResource;
 use App\Http\Resources\ManuscriptCommentCollection;
+use App\Http\Resources\ManuscriptAttachFileCommentResource;
+use App\Http\Resources\ManuscriptAttachFileCommentCollection;
 
 class ManuscriptController extends Controller
 {
@@ -573,7 +575,7 @@ class ManuscriptController extends Controller
         $comment = new ManuscriptComment;
         $comment->manuscript_id = $id;
         $comment->user_id = auth()->id();
-        $comment->from = $request->from ?? 'author';
+        $comment->from = $comment->isFrom(auth()->id());
         $comment->text = $request->text;
         $comment->to = $request->to ?? 'all';
         $comment->save();
@@ -595,13 +597,13 @@ class ManuscriptController extends Controller
      */
     public function indexAttachFileComment(Request $request, ManuscriptCommentFilters $filters, $id, $attachFileId)
     {
-        // $comments = ManuscriptAttachFileComment::filter($filters);
-        // $comments = $comments->where('manuscript_attach_id', $attachFileId);
-        // $comments = new ManuscriptAttachFileCommentCollection($comments->get());
-        // if ($request->is('api/*')) {
-        //     return response()->json($comments);
-        // }
-        // return abort(404);
+        $comments = ManuscriptAttachFileComment::filter($filters);
+        $comments = $comments->where('manuscript_attach_id', $attachFileId);
+        $comments = new ManuscriptAttachFileCommentCollection($comments->get());
+        if ($request->is('api/*')) {
+            return response()->json($comments);
+        }
+        return abort(404);
     }
 
     /**
@@ -613,21 +615,22 @@ class ManuscriptController extends Controller
      */
     public function storeAttachFileComment(Request $request, $id, $attachFileId)
     {
-        // $request->validate([
-        //     'text' => 'required',
-        //     'to' => 'required'
-        // ]);
-        // $comment = new ManuscriptAttachFileComment;
-        // $comment->manuscript_attach_id = $attachFileId;
-        // $comment->user_id = auth()->id();
-        // $comment->to = $request->to ?? 'all';
-        // $comment->text = $request->text;
-        // $comment->save();
-        // if ($request->is('api/*')) {
-        //     return response()->json(new ManuscriptAttachFileCommentResource($comment));
-        // }
-        // return Redirect::route('manuscript.edit', [
-        //     'id' => $id
-        // ]);
+        $request->validate([
+            'text' => 'required',
+            'to' => 'required'
+        ]);
+        $comment = new ManuscriptAttachFileComment;
+        $comment->manuscript_attach_id = $attachFileId;
+        $comment->user_id = auth()->id();
+        $comment->from = $comment->isFrom(auth()->id());
+        $comment->to = $request->to ?? 'all';
+        $comment->text = $request->text;
+        $comment->save();
+        if ($request->is('api/*')) {
+            return response()->json(new ManuscriptAttachFileCommentResource($comment));
+        }
+        return Redirect::route('manuscript.edit', [
+            'id' => $id
+        ]);
     }
 }

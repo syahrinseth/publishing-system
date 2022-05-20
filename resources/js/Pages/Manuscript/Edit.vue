@@ -263,10 +263,12 @@
                                                 <div class="border-t border-gray-200" />
                                             </div>
                                         </div>
-                                        <CommentSectionCard
-                                            :manuscript-id="manuscript.data.id"
-                                            :manuscript-attach-id="updateAttachForm.id"
-                                            :auth="auth"></CommentSectionCard>
+                                        <span v-if="updateAttachForm.id != null">
+                                            <CommentSectionCard
+                                                :manuscript-id="manuscript.data.id"
+                                                :manuscript-attach-id="updateAttachForm.id"
+                                                :auth="auth"></CommentSectionCard>
+                                        </span>
                                     </form>
                                 </div>
                             </div>
@@ -1208,7 +1210,7 @@
             updateAttachForm.file = null;
             updateAttachForm.type = "";
             updateAttachForm.description = null;
-            updateAttachForm.file_name = attach.file_name;
+            updateAttachForm.file_name = null;
         }
 
         function clearAttachForm() {

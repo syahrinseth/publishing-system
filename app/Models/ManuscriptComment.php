@@ -27,4 +27,15 @@ class ManuscriptComment extends Model
     {
         return $filters->apply($query);
     }
+
+    /**
+     * @param int $user_id
+     * @return String
+     * 
+     */
+    public function isFrom($user_id)
+    {
+        $manuscript = Manuscript::find($this->manuscript_id);
+        return $manuscript == null ? 'unknown' : $manuscript->findUserRole($user_id);
+    }
 }

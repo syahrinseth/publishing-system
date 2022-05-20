@@ -19,7 +19,8 @@ class ManuscriptCommentResource extends JsonResource
             'text' => $this->text,
             'manuscript' => $this->manuscript,
             'user' => $this->user,
-            'to' => $this->to,
+            'from' => ucfirst($this->from),
+            'to' => ucfirst($this->to),
             'updated_at' => $this->updated_at->diffForHumans(),
             'created_at' => $this->created_at->diffForHumans()
         ];

@@ -43,10 +43,10 @@
                     </div>
                     <div class="grow">
                         <p class="text-gray-700">
-                            {{ comment.user.name }}
+                            {{ comment.from }}
                         </p>
                         <small class="text-gray-500">
-                            {{ comment.from_role }}
+                            <!-- {{ comment.from_role }} -->
                         </small>
                     </div>
                     <div class="flex-none">
@@ -107,18 +107,17 @@ export default {
     data() {
         return {
             comments: [],
-            manuscriptAttachFileId: null
         };  
     },
     methods: {
         async fetchComments() {
-            if (this.manuscriptAttachFileId == null) {
+            if (this.$props.manuscriptAttachId == null) {
                 let resp = await window.axios.get(`/api/manuscripts/${this.$props.manuscriptId}/comments`);
                 if (resp.status == 200) {
                     return resp.data;
                 }
             } else {
-                let resp = await window.axios.get(`/api/manuscripts/${this.$props.manuscriptId}/attach-files/${this.manuscriptAttachFileId}/comments`);
+                let resp = await window.axios.get(`/api/manuscripts/${this.$props.manuscriptId}/attach-files/${this.$props.manuscriptAttachId}/comments`);
                 if (resp.status == 200) {
                     return resp.data;
                 }
@@ -140,7 +139,7 @@ export default {
             })
         },
         postComment() {
-            if (this.manuscriptAttachFileId == null) {
+            if (this.$props.manuscriptAttachId == null) {
                 this.commentForm.post(`/admin/manuscripts/${this.$props.manuscriptId}/comments`, {
                     preserveScroll: true,
                     onError: (errors) => {
@@ -153,7 +152,7 @@ export default {
                     }
                 });
             } else {
-                this.commentForm.post(`/admin/manuscripts/${this.$props.manuscriptId}/attach-files/${this.manuscriptAttachFileId}/comments`, {
+                this.commentForm.post(`/admin/manuscripts/${this.$props.manuscriptId}/attach-files/${this.$props.manuscriptAttachId}/comments`, {
                     preserveScroll: true,
                     onError: (errors) => {
                         Object.keys(errors).forEach((value, index) => {
@@ -169,11 +168,11 @@ export default {
     },
     watch: {
         manuscriptAttachId: function(newVal, oldVal) {
-            this.manuscriptAttachFileId = newVal;
             this.refresh();
         }
     },
     mounted() {
+        console.log(this.$props);
         this.refresh();
     },
     setup() {

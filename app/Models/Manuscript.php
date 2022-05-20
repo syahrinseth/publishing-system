@@ -248,6 +248,18 @@ class Manuscript extends Model
     }
 
     /**
+     * Get auth role in the manuscript.
+     * @return boolean
+     */
+    public function authIs()
+    {
+        // Validate Publisher
+        // Validate Editor
+        // Validate Reviewer
+        // Validate Author
+    }
+
+    /**
      * Validate if auth is author of the manuscript.
      * @return boolean
      */
@@ -306,5 +318,27 @@ class Manuscript extends Model
             $this->manuscript_no = $setting->value . $this->id;
         }
         return $this;
+    }
+
+    /**
+     * Get user role in the manuscript.
+     * @return String
+     */
+    public function findUserRole()
+    {
+        $tempRole = 'unknown';
+        // Find author
+        if (Manuscript::where('id', $this->id)->whereJsonContains('authors', auth()->id())->exists()){
+            $tempRole = 'author';
+        } else if(Manuscript::where('id', $this->id)->whereJsonContains('corresponding_authors', auth()->id())->exists()) {
+            $tempRole = 'corresponding author';
+        } else if(Manuscript::where('id', $this->id)->whereJsonContains('reviewers', auth()->id())) {
+            $tempRole = 'reviewer';
+        } else if (Manuscript::where('id', $this->id)->whereJsonContains('editors', auth()->id())) {
+            $tempRole = 'editor';
+        } else if (Manuscript::where('id', $this->id)->whereJsonContains('publishers', auth()->id())) {
+            $tempRole = 'publisher';
+        }
+        return $tempRole;
     }
 }
