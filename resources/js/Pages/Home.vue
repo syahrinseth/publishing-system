@@ -119,6 +119,8 @@
   import { Head } from '@inertiajs/inertia-vue3'
   import Table from '../Components/Table.vue'
   import { Link } from '@inertiajs/inertia-vue3'
+  import { computed } from 'vue'
+  import { usePage } from '@inertiajs/inertia-vue3'
 
   export default {
     components: {

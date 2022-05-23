@@ -1,8 +1,11 @@
 <?php
 
 use Inertia\Inertia;
+use App\Models\Manuscript;
+use App\Mail\ManuscriptCreated;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\SettingController;
@@ -20,6 +23,13 @@ use App\Http\Controllers\PublicJournalController;
 |
 */
 
+# Test Route
+Route::get('/test', function() {
+    return abort(404);
+    $manuscript = Manuscript::find(15);
+    Mail::to(auth()->user())->queue(new ManuscriptCreated($manuscript));
+});
+
 # Public Route
 Route::get('/', [PublicController::class, 'index'])->name('public.index');
 
@@ -30,11 +40,6 @@ Route::get('/journals/{id}', [PublicJournalController::class, 'show'])->name('pu
 # Private Route
 Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
-    Inertia::share('auth.user', function () {
-        $auth = Auth::user();
-        return $auth == null ? null : new UserResource($auth);
-    });
-    
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 
     // Manuscript Module

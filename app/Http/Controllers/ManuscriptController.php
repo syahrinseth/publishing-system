@@ -7,9 +7,11 @@ use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Manuscript;
 use Illuminate\Http\Request;
+use App\Mail\ManuscriptCreated;
 use App\Models\ManuscriptComment;
 use App\Models\ManuscriptAttachFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Filters\ManuscriptFilters;
@@ -101,6 +103,10 @@ class ManuscriptController extends Controller
         $manuscript->save();
         $manuscript->generateManuscriptNumber();
         $manuscript->update();
+        $coAuthors = collect($manuscript->getCorrespondingAuthors())->map(function($user) {
+            return $user['email'];
+        });
+        Mail::to($coAuthors)->queue(new ManuscriptCreated($manuscript));
 
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));
