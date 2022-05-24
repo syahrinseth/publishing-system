@@ -8,9 +8,17 @@
                 <div class="max-w-md w-full space-y-8">
                     <div>
                         <a href="/">
-                            <img class="mx-auto h-12 w-auto" src="/img/logo.jpeg" alt="Workflow" />
+                            <img class="mx-auto h-16 w-auto" src="/img/logo.png" alt="Workflow" />
                         </a>
-                        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign Up</h2>
+                        <h2 class="text-center text-3xl font-extrabold text-gray-900">
+                            Journal of Smart Sensor and Materials (JSSM)
+                        </h2>
+                        <div class="hidden sm:block" aria-hidden="true">
+                            <div class="py-5">
+                            <div class="border-t border-gray-200" />
+                            </div>
+                        </div>
+                        <h2 class="text-center text-2xl font-extrabold text-gray-900">Sign Up</h2>
                     </div>
                     <form class="mt-8 space-y-6" @submit.prevent="onSubmit()">
                         <input type="hidden" name="remember" value="true" />

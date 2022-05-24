@@ -12,7 +12,7 @@
         <template v-slot:default>
           <h4 class="font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate mb-4">Overview</h4>
           <div class="grid grid-cols-4 gap-3 mb-5">
-            <div v-for="overview in overviewCards" :key="`overview-${overview.name}`" class="max-w-sm flex p-6 bg-gray-100 rounded-lg shadow">
+            <div v-for="overview in overviewCards" :key="`overview-${overview.name}`" class="max-w-sm flex p-6 bg-white rounded-lg shadow">
               <div class="flex-shrink-0 self-center">
                 <i :class="[overview.icon, overview.color]" class="fa fa-2xl"></i>
               </div>
