@@ -12,7 +12,7 @@
                         <a href="#">
                             <span class="sr-only">Workflow</span>
                             <a href="/">
-                              <img class="mx-auto h-12 w-auto" src="/storage/logo.jpeg" alt="Workflow" />
+                              <img class="mx-auto h-12 w-auto" src="/img/logo.jpeg" alt="Workflow" />
                           </a>
                         </a>
                         <div class="-mr-2 flex items-center md:hidden">
@@ -75,7 +75,7 @@
                         <div class="px-5 pt-4 flex items-center justify-between">
                         <div>
                           <a href="/">
-                            <img class="mx-auto h-12 w-auto" src="/storage/logo.jpeg" alt="Workflow" />
+                            <img class="mx-auto h-12 w-auto" src="/img/logo.jpeg" alt="Workflow" />
                           </a>
                         </div>
                         <div class="-mr-2">

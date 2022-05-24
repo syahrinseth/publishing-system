@@ -8,7 +8,7 @@
                 <div class="max-w-md w-full space-y-8">
                     <div>
                         <a href="/">
-                            <img class="mx-auto h-12 w-auto" src="/storage/logo.jpeg" alt="Workflow" />
+                            <img class="mx-auto h-12 w-auto" src="/img/logo.jpeg" alt="Workflow" />
                         </a>
                         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
                         <p class="mt-2 text-center text-sm text-gray-600">

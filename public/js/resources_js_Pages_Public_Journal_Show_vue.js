@@ -1178,7 +1178,7 @@ var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   href: "/"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
   "class": "mx-auto h-12 w-auto",
-  src: "/storage/logo.jpeg",
+  src: "/img/logo.jpeg",
   alt: "Workflow"
 })])], -1
 /* HOISTED */
@@ -1245,7 +1245,7 @@ var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   href: "/"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
   "class": "mx-auto h-12 w-auto",
-  src: "/storage/logo.jpeg",
+  src: "/img/logo.jpeg",
   alt: "Workflow"
 })])], -1
 /* HOISTED */

@@ -14,7 +14,7 @@
                     <div class="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
                         <div class="flex items-center justify-between w-full md:w-auto">
                         <a href="/">
-                            <img class="mx-auto h-12 w-auto" src="/storage/logo.jpeg" alt="Workflow" />
+                            <img class="mx-auto h-12 w-auto" src="/img/logo.jpeg" alt="Workflow" />
                         </a>
                         <div class="-mr-2 flex items-center md:hidden">
                             <PopoverButton class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
@@ -75,7 +75,7 @@
                     <div class="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
                         <div class="px-5 pt-4 flex items-center justify-between">
                         <div>
-                            <img class="h-8 w-auto" src="/storage/logo.jpeg" alt="" />
+                            <img class="h-8 w-auto" src="/img/logo.jpeg" alt="" />
                         </div>
                         <div class="-mr-2">
                             <PopoverButton class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
@@ -116,7 +116,7 @@
             </div>
             </div>
             <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-            <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="/storage/journalposter.jpeg" alt="" />
+            <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="/img/journalposter.jpeg" alt="" />
             </div>
         </div>
         <div class="py-12 bg-gradient-to-r from-indigo-600 to-indigo-900">
@@ -175,7 +175,7 @@
                     </div>
                   </div>
                   <div>
-                    <img class="" src="/storage/journalposter.jpeg" alt="sensor-malaysia-poster">
+                    <img class="" src="/img/journalposter.jpeg" alt="sensor-malaysia-poster">
                   </div>
                 </div>
               </div>
