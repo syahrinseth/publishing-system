@@ -8,10 +8,13 @@ use Inertia\Inertia;
 use App\Models\Manuscript;
 use Illuminate\Http\Request;
 use App\Mail\ManuscriptCreated;
+use App\Mail\ManuscriptUpdated;
 use App\Models\ManuscriptComment;
 use App\Models\ManuscriptAttachFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\ManuscriptAttachCreated;
+use App\Mail\ManuscriptAttachUpdated;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Filters\ManuscriptFilters;
@@ -223,6 +226,28 @@ class ManuscriptController extends Controller
             'is_acknowledge' => $request->is_acknowledge ?? false
         ];
         $manuscript->update();
+
+        // Send mail
+        $users = collect($manuscript->getCorrespondingAuthors())->map(function($user) {
+            return $user['email'];
+        });
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptUpdated($manuscript));
+        }
+
+        $users = collect($manuscript->getAuthors())->map(function($user) {
+            return $user['email'];
+        });
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptUpdated($manuscript));
+        }
+
+        $users = collect($manuscript->getEditors())->map(function($user) {
+            return $user['email'];
+        });
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptUpdated($manuscript));
+        }
 
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));
@@ -451,8 +476,31 @@ class ManuscriptController extends Controller
             $attach->update();
         }
 
+        // Send mail
+        $users = collect($manuscript->getCorrespondingAuthors())->map(function($user) {
+            return $user['email'];
+        });
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptAttachCreated($manuscript, $attach));
+        }
+
+        $users = collect($manuscript->getAuthors())->map(function($user) {
+            return $user['email'];
+        });
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptAttachCreated($manuscript, $attach));
+        }
+
+        $users = collect($manuscript->getEditors())->map(function($user) {
+            return $user['email'];
+        });
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptAttachCreated($manuscript, $attach));
+        }
+
+        // Response
         if ($request->is('api/*')) {
-            return response()->json(new ManuscriptResource($manuscript));
+            return response()->json(new ManuscriptAttachCreated($manuscript, $attach));
         }
 
         return Redirect::route('manuscript.edit', [
@@ -509,6 +557,29 @@ class ManuscriptController extends Controller
             $attach->update();
         }
 
+        // Send mail
+        $users = collect($manuscript->getCorrespondingAuthors())->map(function($user) {
+            return $user['email'];
+        });
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptAttachUpdated($manuscript, $attach));
+        }
+
+        $users = collect($manuscript->getAuthors())->map(function($user) {
+            return $user['email'];
+        });
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptAttachUpdated($manuscript, $attach));
+        }
+
+        $users = collect($manuscript->getEditors())->map(function($user) {
+            return $user['email'];
+        });
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptAttachUpdated($manuscript, $attach));
+        }
+
+        // Response
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptAttachResource($attach));
         }
