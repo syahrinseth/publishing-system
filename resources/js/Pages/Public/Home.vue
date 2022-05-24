@@ -13,9 +13,8 @@
                     <nav class="relative flex items-center justify-between sm:h-10 lg:justify-start" aria-label="Global">
                     <div class="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
                         <div class="flex items-center justify-between w-full md:w-auto">
-                        <a href="#">
-                            <span class="sr-only">Workflow</span>
-                            <img class="h-8 w-auto sm:h-10" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" />
+                        <a href="/">
+                            <img class="mx-auto h-12 w-auto" src="/storage/logo.jpeg" alt="Workflow" />
                         </a>
                         <div class="-mr-2 flex items-center md:hidden">
                             <PopoverButton class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
@@ -76,7 +75,7 @@
                     <div class="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
                         <div class="px-5 pt-4 flex items-center justify-between">
                         <div>
-                            <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="" />
+                            <img class="h-8 w-auto" src="/storage/logo.jpeg" alt="" />
                         </div>
                         <div class="-mr-2">
                             <PopoverButton class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
@@ -97,33 +96,37 @@
                 <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
                 <div class="sm:text-center lg:text-left">
                     <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                    <span class="block xl:inline">Manuscript Editorial</span>
+                    <span class="block xl:inline">Journal of Smart</span>
                     {{ ' ' }}
-                    <span class="block text-indigo-600 xl:inline">Management System</span>
+                    <span class="block text-indigo-600 xl:inline">Sensors and Materials</span>
                     </h1>
-                    <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.</p>
+                    <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                      Journal of Smart Sensors and Materials (JSSM) is an interdisciplinary journal dedicated to publishing research and development in the field of sensing technology, chemical actuators and analytical microsystems, nanomaterial applications in sensing, solid-state devices for transducing physical signals. 
+                    </p>
                     <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                     <div class="rounded-md shadow">
                         <a href="/register" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"> Get started </a>
                     </div>
-                    <div class="mt-3 sm:mt-0 sm:ml-3">
+                    <!-- <div class="mt-3 sm:mt-0 sm:ml-3">
                         <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"> Live demo </a>
-                    </div>
+                    </div> -->
                     </div>
                 </div>
                 </main>
             </div>
             </div>
             <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-            <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="img/photo-1551434678-e076c223a692.jpeg" alt="" />
+            <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="/storage/journalposter.jpeg" alt="" />
             </div>
         </div>
-        <div class="py-12 bg-white">
+        <div class="py-12 bg-gradient-to-r from-indigo-600 to-indigo-900">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:text-center">
-                <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">Transactions</h2>
-                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">A better way to send money</p>
-                <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam voluptatum cupiditate veritatis in accusamus quisquam.</p>
+                <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase"></h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-white sm:text-4xl">Scope</p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-300 lg:mx-auto">
+                  The scope of Journal of Smart Sensors and Materials (JSSM) encompasses, but is not restricted to, the following areas:
+                </p>
             </div>
 
             <div class="mt-10">
@@ -133,7 +136,7 @@
                     <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
                         <component :is="feature.icon" class="h-6 w-6" aria-hidden="true" />
                     </div>
-                    <p class="ml-16 text-lg leading-6 font-medium text-gray-900">{{ feature.name }}</p>
+                    <p class="ml-16 text-lg leading-6 font-medium text-gray-100">{{ feature.name }}</p>
                     </dt>
                     <dd class="mt-2 ml-16 text-base text-gray-500">
                     {{ feature.description }}
@@ -143,18 +146,53 @@
             </div>
             </div>
         </div>
+        <div class="py-12 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div class="mt-10">
+                <div class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+                  <div>
+                    <div class="lg:text-center">
+                        <p id="about" class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">About</p>
+                    </div>
+                    <div class="hidden sm:block" aria-hidden="true">
+                      <div class="py-5">
+                      <div class="border-t border-gray-200" />
+                      </div>
+                    </div>
+                    <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                      The journal aims to promote original works in the experimental and theoretical that demonstrates significant progress beyond the current state of the art in these fields along with applicability to solve meaningful analytical problems.
+                    </p>
+                    <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                      This Journal is published by the Malaysian Society for Sensor Technology Development or SENSOR as the sole scientific publication of the Society since 2019. The Journal is published in three issues per volume (per year) i.e. in April, August and December.
+                    </p>
+                    <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                      Journal of Smart Sensors and Materials provides immediate open access to its content on the principle that making published articles freely access and downloadable to the public supports a greater global exchange of knowledge. Researchers from any countries are invited to publish their research articles in this journal.
+                    </p>
+                    <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                      <div class="rounded-md shadow">
+                          <a href="/register" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"> Get started </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <img class="" src="/storage/journalposter.jpeg" alt="sensor-malaysia-poster">
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
         <div class="bg-gray-50">
             <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between">
             <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
                 <span class="block">Ready to dive in?</span>
-                <span class="block text-indigo-600">Start your free trial today.</span>
+                <span class="block text-indigo-600">Let's get started today.</span>
             </h2>
             <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
                 <div class="inline-flex rounded-md shadow">
                 <a href="/register" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"> Get started </a>
                 </div>
                 <div class="ml-3 inline-flex rounded-md shadow">
-                <a href="#" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50"> Learn more </a>
+                <a href="#about" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50"> Learn more </a>
                 </div>
             </div>
             </div>
@@ -164,39 +202,165 @@
 
 <script>
 import { Popover, PopoverButton, PopoverPanel, PopoverGroup } from '@headlessui/vue'
-import { MenuIcon, XIcon, AnnotationIcon, GlobeAltIcon, LightningBoltIcon, ScaleIcon, ChartBarIcon, CursorClickIcon, ShieldCheckIcon, ViewGridIcon, RefreshIcon, PlayIcon, PhoneIcon } from '@heroicons/vue/outline'
+import { MenuIcon, XIcon, AnnotationIcon, GlobeAltIcon, ChevronRightIcon, LightningBoltIcon, ScaleIcon, ChartBarIcon, CursorClickIcon, ShieldCheckIcon, ViewGridIcon, RefreshIcon, PlayIcon, PhoneIcon } from '@heroicons/vue/outline'
 import { ChevronDownIcon } from '@heroicons/vue/solid'
 import { Link } from '@inertiajs/inertia-vue3'
 
 const navigation = [
-  { name: 'Product', href: '#' },
+  // { name: 'Product', href: '#' },
   { name: 'Journal Published', href: '/journals' },
 ]
 
 const features = [
   {
-    name: 'Competitive exchange rates',
+    name: 'Sensing principles and mechanisms',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-    icon: GlobeAltIcon,
+      '',
+    icon: ChevronRightIcon,
   },
   {
-    name: 'No hidden fees',
+    name: 'Materials for Sensor Technology Nanostructured materials',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-    icon: ScaleIcon,
+      '',
+    icon: ChevronRightIcon,
   },
   {
-    name: 'Transfers are instant',
+    name: 'Synthetic organic chemistry Synthetic inorganic chemistry',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-    icon: LightningBoltIcon,
+      '',
+    icon: ChevronRightIcon,
   },
   {
-    name: 'Mobile notifications',
+    name: 'Polymer composites',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-    icon: AnnotationIcon,
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'New sensing transducers',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Sensor fabrication technology Actuators',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Optical sensors',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Electrochemical sensors',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Chemical sensors',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Biosensors',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Physical sensors',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Mass-sensitive devices',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Gas sensors',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Humidity sensors',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Lab-on-a-chip',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Sensor-array',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Optoelectronic sensors',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Mechanical sensors',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Thermal sensors',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Magnetic sensors',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'μTAS - Micro Total Analysis Systems',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Remote Sensing',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Pressure Sensing',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Nuclear Sensing',
+    description:
+      '',
+    icon: ChevronRightIcon,
+  },
+  {
+    name: 'Acoustic Sensing',
+    description:
+      '',
+    icon: ChevronRightIcon,
   },
 ]
 

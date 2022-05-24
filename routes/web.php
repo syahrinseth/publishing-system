@@ -29,11 +29,6 @@ Route::get('/journals/{id}', [PublicJournalController::class, 'show'])->name('pu
 
 # Private Route
 Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
-
-    Inertia::share('auth.user', function () {
-        $auth = Auth::user();
-        return $auth == null ? null : new UserResource($auth);
-    });
     
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 

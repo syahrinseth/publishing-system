@@ -838,29 +838,111 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var navigation = [{
-  name: 'Product',
-  href: '#'
-}, {
+var navigation = [// { name: 'Product', href: '#' },
+{
   name: 'Journal Published',
   href: '/journals'
 }];
 var features = [{
-  name: 'Competitive exchange rates',
-  description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.GlobeAltIcon
+  name: 'Sensing principles and mechanisms',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
 }, {
-  name: 'No hidden fees',
-  description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ScaleIcon
+  name: 'Materials for Sensor Technology Nanostructured materials',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
 }, {
-  name: 'Transfers are instant',
-  description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.LightningBoltIcon
+  name: 'Synthetic organic chemistry Synthetic inorganic chemistry',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
 }, {
-  name: 'Mobile notifications',
-  description: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
-  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.AnnotationIcon
+  name: 'Polymer composites',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'New sensing transducers',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Sensor fabrication technology Actuators',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Optical sensors',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Electrochemical sensors',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Chemical sensors',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Biosensors',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Physical sensors',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Mass-sensitive devices',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Gas sensors',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Humidity sensors',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Lab-on-a-chip',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Sensor-array',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Optoelectronic sensors',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Mechanical sensors',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Thermal sensors',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Magnetic sensors',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'μTAS - Micro Total Analysis Systems',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Remote Sensing',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Pressure Sensing',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Nuclear Sensing',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
+}, {
+  name: 'Acoustic Sensing',
+  description: '',
+  icon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_0__.ChevronRightIcon
 }];
 var menuFeatures = [{
   name: 'Analytics',
@@ -976,12 +1058,11 @@ var _hoisted_8 = {
 };
 
 var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-  href: "#"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
-  "class": "sr-only"
-}, "Workflow"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-  "class": "h-8 w-auto sm:h-10",
-  src: "https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+  href: "/"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+  "class": "mx-auto h-12 w-auto",
+  src: "/storage/logo.jpeg",
+  alt: "Workflow"
 })], -1
 /* HOISTED */
 );
@@ -1045,7 +1126,7 @@ var _hoisted_27 = {
 
 var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
   "class": "h-8 w-auto",
-  src: "https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg",
+  src: "/storage/logo.jpeg",
   alt: ""
 })], -1
 /* HOISTED */
@@ -1073,20 +1154,20 @@ var _hoisted_33 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<main class=\"mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28\"><div class=\"sm:text-center lg:text-left\"><h1 class=\"text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl\"><span class=\"block xl:inline\">Manuscript Editorial</span>   <span class=\"block text-indigo-600 xl:inline\">Management System</span></h1><p class=\"mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0\">Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.</p><div class=\"mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start\"><div class=\"rounded-md shadow\"><a href=\"/register\" class=\"w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10\"> Get started </a></div><div class=\"mt-3 sm:mt-0 sm:ml-3\"><a href=\"#\" class=\"w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10\"> Live demo </a></div></div></div></main>", 1);
+var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<main class=\"mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28\"><div class=\"sm:text-center lg:text-left\"><h1 class=\"text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl\"><span class=\"block xl:inline\">Journal of Smart</span>   <span class=\"block text-indigo-600 xl:inline\">Sensors and Materials</span></h1><p class=\"mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0\"> Journal of Smart Sensors and Materials (JSSM) is an interdisciplinary journal dedicated to publishing research and development in the field of sensing technology, chemical actuators and analytical microsystems, nanomaterial applications in sensing, solid-state devices for transducing physical signals. </p><div class=\"mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start\"><div class=\"rounded-md shadow\"><a href=\"/register\" class=\"w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10\"> Get started </a></div><!-- &lt;div class=&quot;mt-3 sm:mt-0 sm:ml-3&quot;&gt;\n                        &lt;a href=&quot;#&quot; class=&quot;w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10&quot;&gt; Live demo &lt;/a&gt;\n                    &lt;/div&gt; --></div></div></main>", 1);
 
 var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
   "class": "h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full",
-  src: "img/photo-1551434678-e076c223a692.jpeg",
+  src: "/storage/journalposter.jpeg",
   alt: ""
 })], -1
 /* HOISTED */
 );
 
 var _hoisted_36 = {
-  "class": "py-12 bg-white"
+  "class": "py-12 bg-gradient-to-r from-indigo-600 to-indigo-900"
 };
 var _hoisted_37 = {
   "class": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
@@ -1096,11 +1177,11 @@ var _hoisted_38 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": "lg:text-center"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
   "class": "text-base text-indigo-600 font-semibold tracking-wide uppercase"
-}, "Transactions"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"
-}, "A better way to send money"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto"
-}, "Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam voluptatum cupiditate veritatis in accusamus quisquam.")], -1
+}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "mt-2 text-3xl leading-8 font-extrabold tracking-tight text-white sm:text-4xl"
+}, "Scope"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "mt-4 max-w-2xl text-xl text-gray-300 lg:mx-auto"
+}, " The scope of Journal of Smart Sensors and Materials (JSSM) encompasses, but is not restricted to, the following areas: ")], -1
 /* HOISTED */
 );
 
@@ -1114,13 +1195,13 @@ var _hoisted_41 = {
   "class": "absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white"
 };
 var _hoisted_42 = {
-  "class": "ml-16 text-lg leading-6 font-medium text-gray-900"
+  "class": "ml-16 text-lg leading-6 font-medium text-gray-100"
 };
 var _hoisted_43 = {
   "class": "mt-2 ml-16 text-base text-gray-500"
 };
 
-var _hoisted_44 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"bg-gray-50\"><div class=\"max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between\"><h2 class=\"text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl\"><span class=\"block\">Ready to dive in?</span><span class=\"block text-indigo-600\">Start your free trial today.</span></h2><div class=\"mt-8 flex lg:mt-0 lg:flex-shrink-0\"><div class=\"inline-flex rounded-md shadow\"><a href=\"/register\" class=\"inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700\"> Get started </a></div><div class=\"ml-3 inline-flex rounded-md shadow\"><a href=\"#\" class=\"inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50\"> Learn more </a></div></div></div></div>", 1);
+var _hoisted_44 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"py-12 bg-white\"><div class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"mt-10\"><div class=\"space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10\"><div><div class=\"lg:text-center\"><p id=\"about\" class=\"mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl\">About</p></div><div class=\"hidden sm:block\" aria-hidden=\"true\"><div class=\"py-5\"><div class=\"border-t border-gray-200\"></div></div></div><p class=\"mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto\"> The journal aims to promote original works in the experimental and theoretical that demonstrates significant progress beyond the current state of the art in these fields along with applicability to solve meaningful analytical problems. </p><p class=\"mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto\"> This Journal is published by the Malaysian Society for Sensor Technology Development or SENSOR as the sole scientific publication of the Society since 2019. The Journal is published in three issues per volume (per year) i.e. in April, August and December. </p><p class=\"mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto\"> Journal of Smart Sensors and Materials provides immediate open access to its content on the principle that making published articles freely access and downloadable to the public supports a greater global exchange of knowledge. Researchers from any countries are invited to publish their research articles in this journal. </p><div class=\"mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start\"><div class=\"rounded-md shadow\"><a href=\"/register\" class=\"w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10\"> Get started </a></div></div></div><div><img class=\"\" src=\"/storage/journalposter.jpeg\" alt=\"sensor-malaysia-poster\"></div></div></div></div></div><div class=\"bg-gray-50\"><div class=\"max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between\"><h2 class=\"text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl\"><span class=\"block\">Ready to dive in?</span><span class=\"block text-indigo-600\">Let&#39;s get started today.</span></h2><div class=\"mt-8 flex lg:mt-0 lg:flex-shrink-0\"><div class=\"inline-flex rounded-md shadow\"><a href=\"/register\" class=\"inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700\"> Get started </a></div><div class=\"ml-3 inline-flex rounded-md shadow\"><a href=\"#about\" class=\"inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50\"> Learn more </a></div></div></div></div>", 2);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_MenuIcon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("MenuIcon");
