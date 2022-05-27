@@ -187,5 +187,14 @@ export default {
         journals: Object,
         auth: Object
     },
+    created() {
+        let user = this.$props.auth.user;
+        this.headermenu = this.headermenu.map((val) => {
+            if (user.data.permissions_attribute.journals.create == false && val.name == 'Create Journal') {
+                val.disabled = true;
+            }
+            return val;
+        });
+    }
 }
 </script>

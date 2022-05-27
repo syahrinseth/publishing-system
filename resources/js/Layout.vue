@@ -273,6 +273,10 @@ export default {
           val.disabled = true;
         }
 
+        if(user.permissions_attribute.settings.edit == false && (val.name == 'Settings')) {
+          val.disabled = true;
+        }
+
         return val;
 
       });
