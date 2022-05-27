@@ -111,6 +111,16 @@ var headermenu = [{
   props: {
     journals: Object,
     auth: Object
+  },
+  created: function created() {
+    var user = this.$props.auth.user;
+    this.headermenu = this.headermenu.map(function (val) {
+      if (user.data.permissions_attribute.journals.create == false && val.name == 'Create Journal') {
+        val.disabled = true;
+      }
+
+      return val;
+    });
   }
 });
 

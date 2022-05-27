@@ -86,6 +86,7 @@ class User extends Authenticatable
                 'declaration_of_interest_statement' => $this->can('manuscripts.declaration_of_interest_statement'),
             ],
             'journals' => [
+                'create' => $this->can('journals.create'),
                 'show' => $this->can('journals.show'),
                 'edit' => $this->can('journals.edit'),
                 'destroy' => $this->can('journals.destroy'),
