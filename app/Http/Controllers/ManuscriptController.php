@@ -652,10 +652,15 @@ class ManuscriptController extends Controller
         $comment = new ManuscriptComment;
         $comment->manuscript_id = $id;
         $comment->user_id = auth()->id();
-        $comment->from = $comment->isFrom(auth()->id());
+        $comment->from = $comment->isFrom();
         $comment->text = $request->text;
         $comment->to = $request->to ?? 'all';
         $comment->save();
+        
+        // Send mail
+        $comment->notify();
+
+        // Response
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptCommentResource($comment));
         }
