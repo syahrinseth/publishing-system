@@ -52,7 +52,8 @@ class ManuscriptController extends Controller
             $query->whereJsonContains('authors', Auth::user()->id)
                 ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
                 ->orWhereJsonContains('editors', Auth::user()->id)
-                ->orWhereJsonContains('reviewers', Auth::user()->id);
+                ->orWhereJsonContains('reviewers', Auth::user()->id)
+                ->orWhereJsonContains('publishers', Auth::user()->id);
         });
 
         $manuscripts = new ManuscriptCollection($manuscripts->get());
