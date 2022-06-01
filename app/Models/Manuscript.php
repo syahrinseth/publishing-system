@@ -5,8 +5,10 @@ namespace App\Models;
 use App\Models\User;
 use App\QueryFilter;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Mail\ManuscriptReviewThanksNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Manuscript extends Model
@@ -233,6 +235,7 @@ class Manuscript extends Model
         
             $this->status = $input;
             $this->update();
+            Mail::to(auth()->user()->email)->queue(new ManuscriptReviewThanksNotification($this));
             return true;
         
         } elseif($this->authIsPublisher() && in_array($input, [$statusList[7]['name']])) {

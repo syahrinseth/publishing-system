@@ -31,6 +31,6 @@ class ManuscriptCommentCreated extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.manuscript_comment_notify');
+        return $this->from('bot@sensormalaysia.com.my', 'JSSM Sensor Malaysia System')->view('emails.manuscript_comment_notify');
     }
 }
