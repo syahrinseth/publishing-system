@@ -227,4 +227,23 @@ class UserController extends Controller
 
         return Redirect::route('user.index');
     }
+
+    /**
+     * Profile controller.
+     */
+    public function profile()
+    {
+        $user = new UserResource(User::findOrFail(auth()->id()));
+
+        if (request()->is('api/*')) {
+            return response()->json($user);
+        }
+
+        $roles = Role::all();
+
+        return Inertia::render('User/Edit', [
+            'user' => $user,
+            'roles' => $roles
+        ]);
+    }
 }

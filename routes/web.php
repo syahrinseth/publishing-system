@@ -100,6 +100,9 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
     Route::post('/journals/{id}/destroy', [App\Http\Controllers\JournalController::class, 'destroy'])->name('journal.destroy');
 
+    // Profile Module
+    Route::get('/profile', [App\Http\Controllers\UserController::class, 'profile'])->name('profile');
+
     // User Module
 
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');

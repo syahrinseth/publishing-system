@@ -207,7 +207,7 @@ let navigation = [
   { name: 'Settings', href: '/admin/settings', disabled: false }
 ]
 let userNavigation = [
-  { name: 'Your Profile', href: '#', method: 'get', disabled: false },
+  { name: 'Your Profile', href: '/admin/profile', method: 'get', disabled: false },
   // { name: 'Settings', href: '#', method: 'get', disabled: false },
   { name: 'Sign out', href: '/logout', method: 'post', disabled: false },
 ]
