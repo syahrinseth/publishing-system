@@ -39,7 +39,7 @@ Route::get('/journals/{id}', [PublicJournalController::class, 'show'])->name('pu
 
 # Private Route
 Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
-
+    
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 
     // Manuscript Module

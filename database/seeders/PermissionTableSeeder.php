@@ -30,6 +30,7 @@ class PermissionTableSeeder extends Seeder
             'declaration_of_interest_statement'
         ],
         'journals' => [
+            'create',
             'show',
             'edit',
             'destroy',

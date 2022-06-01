@@ -7,8 +7,18 @@
             <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
                 <div class="max-w-md w-full space-y-8">
                     <div>
-                        <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow" />
-                        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Reset Password</h2>
+                        <a href="/">
+                            <img class="mx-auto h-16 w-auto" src="/img/logo.png" alt="Workflow" />
+                        </a>
+                        <h2 class="text-center text-3xl font-extrabold text-gray-900">
+                            Journal of Smart Sensor and Materials (JSSM)
+                        </h2>
+                        <div class="hidden sm:block" aria-hidden="true">
+                            <div class="py-5">
+                            <div class="border-t border-gray-200" />
+                            </div>
+                        </div>
+                        <h2 class="text-center text-2xl font-extrabold text-gray-900">Reset Password</h2>
                     </div>
                     <form class="mt-8 space-y-6" action="#" method="POST">
                         <input type="hidden" name="remember" value="true" />
