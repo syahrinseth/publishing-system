@@ -23,7 +23,8 @@ class UserController extends Controller
         if (!request()->is('api/*')) {
             $this->middleware('permission:users.show', ['only' => ['index', 'show', 'edit']]);
         }
-        $this->middleware('permission:users.edit', ['only' => ['create', 'store', 'update']]);
+        $this->middleware('permission:users.edit', ['only' => ['store', 'update']]);
+        $this->middleware('permission:users.create', ['only' => ['create']]);
         $this->middleware('permission:users.destroy', ['only' => ['destroy']]);
     }
 
