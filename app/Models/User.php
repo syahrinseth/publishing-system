@@ -70,6 +70,7 @@ class User extends Authenticatable
     {
         return [  
             'users' => [
+                'create' => $this->can('users.create'),
                 'show' => $this->can('users.show'),
                 'edit' => $this->can('users.edit'),
                 'destroy' => $this->can('users.destroy')

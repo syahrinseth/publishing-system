@@ -9,6 +9,7 @@ class PermissionTableSeeder extends Seeder
 {
     protected $permissions = [
         'users' => [
+            'create',
             'show',
             'edit',
             'destroy'

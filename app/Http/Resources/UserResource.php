@@ -31,6 +31,7 @@ class UserResource extends JsonResource
             'website_url' => $this->website_url,
             'about' => $this->about,
             'photo' => $this->photo,
+            'affiliation' => $this->affiliation,
             'updated_at' => $this->updated_at->diffForHumans(),
             'created_at' => $this->created_at->diffForHumans()
         ];
