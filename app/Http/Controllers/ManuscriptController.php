@@ -48,13 +48,15 @@ class ManuscriptController extends Controller
     {   
         $manuscripts = Manuscript::filter($manuscriptFilters);
         
-        $manuscripts->where(function($query) {
-            $query->whereJsonContains('authors', Auth::user()->id)
-                ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
-                ->orWhereJsonContains('editors', Auth::user()->id)
-                ->orWhereJsonContains('reviewers', Auth::user()->id)
-                ->orWhereJsonContains('publishers', Auth::user()->id);
-        });
+        if (!auth()->user()->can('manuscripts.show_all')) {
+            $manuscripts->where(function($query) {
+                $query->whereJsonContains('authors', Auth::user()->id)
+                    ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
+                    ->orWhereJsonContains('editors', Auth::user()->id)
+                    ->orWhereJsonContains('reviewers', Auth::user()->id)
+                    ->orWhereJsonContains('publishers', Auth::user()->id);
+            });
+        }
 
         $manuscripts = new ManuscriptCollection($manuscripts->get());
 
@@ -130,7 +132,18 @@ class ManuscriptController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $manuscript = Manuscript::findOrFail($id);
+        $manuscript = Manuscript::where('id', $id);
+
+        if (!auth()->user()->can('manuscripts.show_all')) {
+            $manuscript->where(function($query) {
+                $query->whereJsonContains('authors', Auth::user()->id)
+                ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
+                ->orWhereJsonContains('editors', Auth::user()->id)
+                ->orWhereJsonContains('reviewers', Auth::user()->id);
+            });
+        }
+            
+        $manuscript = $manuscript->firstOrFail();
 
         $users = User::all();
         
@@ -155,14 +168,18 @@ class ManuscriptController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $manuscript = Manuscript::where('id', $id)
-            ->where(function($query) {
+        $manuscript = Manuscript::where('id', $id);
+
+        if (!auth()->user()->can('manuscripts.show_all')) {
+            $manuscript->where(function($query) {
                 $query->whereJsonContains('authors', Auth::user()->id)
                 ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
                 ->orWhereJsonContains('editors', Auth::user()->id)
                 ->orWhereJsonContains('reviewers', Auth::user()->id);
-            })
-            ->firstOrFail();
+            });
+        }
+            
+        $manuscript = $manuscript->firstOrFail();
         
         $users = User::all();
 
@@ -188,14 +205,19 @@ class ManuscriptController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $manuscript = Manuscript::where('id', $id)
-            ->where(function($query) {
+        $manuscript = Manuscript::where('id', $id);
+
+        if (!auth()->user()->can('manuscripts.show_all')) {
+            $manuscript->where(function($query) {
                 $query->whereJsonContains('authors', Auth::user()->id)
                 ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
                 ->orWhereJsonContains('editors', Auth::user()->id)
                 ->orWhereJsonContains('reviewers', Auth::user()->id);
-            })
-            ->firstOrFail();
+            });
+        }
+            
+        $manuscript = $manuscript->firstOrFail();
+        
         $manuscript->type = $request->type;
         $manuscript->editors = $request->editors ?? [];
         $manuscript->reviewers = $request->reviewers ?? [];
