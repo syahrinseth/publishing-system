@@ -27,14 +27,13 @@ class JournalController extends Controller
      */
     public function index()
     {
-        $journals = Journal::where(function($query) {
-            $query->where('status', 'published');
-        })
-            ->orWhere(function($query) {
-                $query->where('status', 'draft')
-                    ->where('user_id', Auth::user()->id);
-            })
-            ->orderBy('updated_at', 'desc')
+        $journals = Journal::query();
+
+        if (!auth()->user()->can('journals.show_all')) {
+            $journals->where('user_id', Auth::user()->id);
+        }
+            
+        $journals = $journals->orderBy('updated_at', 'desc')
             ->get();
         $journals = new JournalCollection($journals);
 
