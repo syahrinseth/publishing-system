@@ -55,7 +55,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('User/Create');
+        $roles = Role::all();
+        return Inertia::render('User/Create', [
+            'roles' => $roles
+        ]);
     }
 
     /**
@@ -77,7 +80,7 @@ class UserController extends Controller
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
-            // $user->affiliation = $request->affiliation;
+            $user->affiliation = $request->affiliation;
             $user->address_1 = $request->address_1;
             $user->address_2 = $request->address_2;
             $user->postcode = $request->postcode;
@@ -87,7 +90,12 @@ class UserController extends Controller
             $user->about = $request->about;
             $user->website_url = $request->website_url;
             $user->country = $request->country;
-            $user->assignRole('User');
+            if (!empty($request->roles) && count($request->roles) > 0) {
+                $user->roles()->detach(); 
+                $user->assignRole($request->roles);
+            } else {
+                $user->assignRole('User');
+            }
             $user->password = bcrypt($request->password);
             $user->save();
 
@@ -174,7 +182,7 @@ class UserController extends Controller
             $user = User::findOrFail($id);
             $user->name = $request->name;
             $user->email = $request->email;
-            // $user->affiliation = $request->affiliation;
+            $user->affiliation = $request->affiliation;
             $user->address_1 = $request->address_1;
             $user->address_2 = $request->address_2;
             $user->postcode = $request->postcode;

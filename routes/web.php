@@ -111,7 +111,7 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
     Route::get('/user-create', [App\Http\Controllers\UserController::class, 'create'])->name('user.create');
 
-    Route::get('/user-store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
+    Route::post('/user-store', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
 
     Route::get('/users/{id}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
 
