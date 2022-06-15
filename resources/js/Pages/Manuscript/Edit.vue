@@ -379,7 +379,13 @@
                         <div class="px-4 sm:px-0">
                             <h3 class="text-lg font-medium leading-6 text-gray-900">General Information</h3>
                             <p class="mt-1 text-sm text-gray-600">
-                            Please identify your submission's areas of interest and specialization by selecting one or more classifications.
+                                <span v-show="authIsAuthor()">
+                                    Please identify your submission's areas of interest and specialization by selecting one or more classifications.
+                                </span>
+                                <span v-show="authIsReviewer()">
+                                    You have been assigned to review this manuscript, please download the manuscript in the "Manuscript Attach Files" section below.
+                                </span>
+                                
                             </p>
                         </div>
                         </div>
@@ -444,7 +450,10 @@
                         <div class="md:col-span-1">
                             <div class="px-4 sm:px-0">
                                 <h3 class="text-lg font-medium leading-6 text-gray-900">Review Preferences</h3>
-                                <p class="mt-1 text-sm text-gray-600">
+                                <p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
+                                    In view of your work in the field, your name has been recommended, as a reviewer.  Please suggest other reviewer's name if you are unable to review this manuscript. Thank You
+                                </p>
+                                <p v-show="authIsAuthor()" class="mt-1 text-sm text-gray-600">
                                 Please name specific reviewers to be assigned to your submission. The request will be taken under advisement by the Editor. If you do not request any reviewers, your submission will be assigned to the appropriate reviewer(s) as determined by the Editorial staff.
                                 </p>
                             </div>
@@ -453,7 +462,7 @@
                             <form @submit.prevent="saveManuscript()" >
                                 <div class="shadow sm:rounded-md sm:overflow-hidden">
                                 <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                    <div class="grid grid-cols-3 gap-6">
+                                    <div v-show="!authIsReviewer()" class="grid grid-cols-3 gap-6">
                                         <div class="col-span-3 sm:col-span-2">
                                             <label for="company-website" class="block text-sm font-medium text-gray-700">
                                             Request Editor
@@ -512,7 +521,10 @@
                         <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
                             <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Data</h3>
-                            <p class="mt-1 text-sm text-gray-600">
+                            <p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
+                                Please make sure the manuscript attached here is the same manuscript as registered here.
+                            </p>
+                            <p v-show="authIsAuthor()" class="mt-1 text-sm text-gray-600">
                                 When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
                             </p>
                         </div>
@@ -613,7 +625,10 @@
                         <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
                             <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Attach Files</h3>
-                            <p class="mt-1 text-sm text-gray-600">
+                            <p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
+                                Please upload your reviewer comments in a new file name using Words Document file.  Please make sure that your comments can be clearly understood by the authors. You are given 30 working days for this cycle of reviewing process. Thank You
+                            </p>
+                            <p v-show="authIsAuthor()" class="mt-1 text-sm text-gray-600">
                                 When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
                             </p>
                         </div>
@@ -690,13 +705,13 @@
                     </div>
                 </div>
 
-                <div class="hidden sm:block" aria-hidden="true">
+                <div v-show="authIsAuthor()" class="hidden sm:block" aria-hidden="true">
                     <div class="py-5">
                         <div class="border-t border-gray-200" />
                     </div>
                 </div>
                 
-                <div class="mt-10 sm:mt-0">
+                <div v-show="authIsAuthor()" class="mt-10 sm:mt-0">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
