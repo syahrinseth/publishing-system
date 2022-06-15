@@ -731,7 +731,7 @@
                                         </div>
                                     </div>
                                     <fieldset>
-                                    <legend class="text-base font-medium text-gray-900">Sensors and Actuators Reports is an open access journal which charges an Article Publishing Charge (APC) to cover the cost associated with the publication process. All articles published Open Access will be immediately and permanently free on ScienceDirect for users to read, download, and use in accordance with the author’s selected Creative Commons user license. </legend>
+                                    <legend class="text-base font-medium text-gray-900">Sensors Malaysia is an open access journal which charges an Article Publishing Charge (APC) to cover the cost associated with the publication process. All articles published Open Access will be immediately and permanently free on ScienceDirect for users to read, download, and use in accordance with the author’s selected Creative Commons user license. </legend>
                                     <div class="mt-4 space-y-4">
                                         <div class="flex items-start">
                                         <div class="flex items-center h-5">
