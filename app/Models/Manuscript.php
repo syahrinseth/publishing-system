@@ -31,7 +31,8 @@ class Manuscript extends Model
         'editors' => 'array',
         'reviewers' => 'array',
         'publishers' => 'array',
-        'additional_informations' => 'array'
+        'additional_informations' => 'array',
+        'reviewers_accepted' => 'array'
     ];
 
     public static $types = [

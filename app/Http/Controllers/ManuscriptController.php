@@ -106,6 +106,7 @@ class ManuscriptController extends Controller
         $manuscript->editors = [];
         $manuscript->reviewers = [];
         $manuscript->publishers = [];
+        $manuscript->reviewers_accepted = [];
         $manuscript->save();
         $manuscript->generateManuscriptNumber();
         $manuscript->update();

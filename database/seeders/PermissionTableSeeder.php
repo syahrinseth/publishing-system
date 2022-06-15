@@ -39,7 +39,8 @@ class PermissionTableSeeder extends Seeder
         ],
         'dashboard' => [
             'show',
-            'show_all'
+            'show_all',
+            'show_reviewers_status'
         ],
         'roles_and_permissions' => [
             'edit'

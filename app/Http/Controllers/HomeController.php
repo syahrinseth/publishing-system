@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Manuscript;
 use Illuminate\Http\Request;
@@ -53,6 +54,7 @@ class HomeController extends Controller
         $total_rejected = $manuscripts->where('status', 'Rejected')->count();
         $total_approved = $manuscripts->where('status', 'Approved')->count();
         $total_published = $manuscripts->where('status', 'Published')->count();
+        $total_reviewers_reviewed_manuscripts = User::getTotalReviewersReviewedManuscripts();
 
         return Inertia::render('Home', [
             'manuscript_overview' => [
@@ -60,7 +62,8 @@ class HomeController extends Controller
                 'total_review' => $total_review,
                 'total_rejected' => $total_rejected,
                 'total_approved' => $total_approved,
-                'total_published' => $total_published
+                'total_published' => $total_published,
+                'total_reviewers_reviewed_manuscripts' => $total_reviewers_reviewed_manuscripts
             ],
             'activities' => new ActivityCollection($activities),
             'nextSteps' => [

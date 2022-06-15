@@ -13,6 +13,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use \Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
 
 class User extends Authenticatable
 {
@@ -60,6 +61,11 @@ class User extends Authenticatable
     {
         return $filters->apply($query);
     }
+
+    public function reviewerManuscripts()
+    {
+        return Manuscript::whereJsonContains('reviewers', $this->id)->get();
+    }
     
     /**
      * Get user permissions attribute
@@ -101,10 +107,23 @@ class User extends Authenticatable
             'dashboard' => [
                 'show' => $this->can('dashboard.show'),
                 'show_all' => $this->can('dashboard.show_all'),
+                'show_reviewers_status' => $this->can('dashboard.show_reviewers_status'),
             ],
             'roles_and_permissions' => [
                 'edit' => $this->can('roles_and_permissions.edit')
             ]
         ];
+    }
+
+    public static function getTotalReviewersReviewedManuscripts()
+    {
+        $reviewers = User::whereHas('roles', function($q) {
+            $q->where('name', 'Reviewer');
+        })->get();
+        $total = 0;
+        foreach($reviewers as $reviewer) {
+            $total += $reviewer->reviewerManuscripts()->count();
+        }
+        return $total;
     }
 }
