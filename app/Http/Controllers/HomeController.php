@@ -27,27 +27,41 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $manuscripts = Manuscript::whereJsonContains('authors', Auth::user()->id)
+        $manuscripts = Manuscript::query();
+
+        if (!auth()->user()->can('manuscripts.show_all')) {
+            $manuscripts->whereJsonContains('authors', Auth::user()->id)
             ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
             ->orWhereJsonContains('editors', Auth::user()->id)
-            ->orWhereJsonContains('reviewers', Auth::user()->id)
-            ->get();
+            ->orWhereJsonContains('reviewers', Auth::user()->id);
+        }
+        
+        $manuscripts = $manuscripts->get();
+        
 
         // $manuscript_activities
         $activities = Activity::where('causer_id', Auth::user()->id)->orderBy('created_at', 'desc')->get()->take(10);
 
         // Next Steps
-        $authorNextSteps = Manuscript::whereIn('status', ['Draft', 'Rejected'])
-            ->whereJsonContains('authors', Auth::user()->id)
+        $authorNextSteps = Manuscript::whereIn('status', ['Draft', 'Rejected']);
+        if (!auth()->user()->can('manuscripts.show_all')) {
+            $authorNextSteps ->whereJsonContains('authors', Auth::user()->id)
             ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
-            ->orWhereJsonContains('editors', Auth::user()->id)
-            ->get();
-        $reviewerNextSteps = Manuscript::where('status', 'Submit For Review')
-            ->whereJsonContains('reviewers', Auth::user()->id)
-            ->get();
-        $publisherNextSteps = Manuscript::whereIn('status', ['Approved'])
-            ->whereJsonContains('publishers', Auth::user()->id)
-            ->get();
+            ->orWhereJsonContains('editors', Auth::user()->id);
+        }
+        $authorNextSteps = $authorNextSteps->get();
+
+        $reviewerNextSteps = Manuscript::where('status', 'Submit For Review');
+        if (!auth()->user()->can('manuscripts.show_all')) {
+            $reviewerNextSteps->whereJsonContains('reviewers', Auth::user()->id);
+        }
+        $reviewerNextSteps = $reviewerNextSteps->get();
+
+        $publisherNextSteps = Manuscript::whereIn('status', ['Approved']);
+        if (!auth()->user()->can('manuscripts.show_all')) {
+            $publisherNextSteps->whereJsonContains('publishers', Auth::user()->id);
+        }
+        $publisherNextSteps = $publisherNextSteps->get();
         
         $total_draft = $manuscripts->where('status', 'Draft')->count();
         $total_review = $manuscripts->where('status', 'Submit For Review')->count();

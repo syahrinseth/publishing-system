@@ -445,7 +445,7 @@
                             <div class="px-4 sm:px-0">
                                 <h3 class="text-lg font-medium leading-6 text-gray-900">Review Preferences</h3>
                                 <p class="mt-1 text-sm text-gray-600">
-                                You may request that a specific editor be assigned to your submission. The request will be taken under advisement by the publication. If you do not request an editor, your submission will be assigned to the appropriate editor(s) as determined by the publication staff.
+                                Please name specific reviewers to be assigned to your submission. The request will be taken under advisement by the Editor. If you do not request any reviewers, your submission will be assigned to the appropriate reviewer(s) as determined by the Editorial staff.
                                 </p>
                             </div>
                         </div>
@@ -475,7 +475,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="grid grid-cols-3 gap-6">
+                                    <!--<div class="grid grid-cols-3 gap-6">
                                         <div class="col-span-3 sm:col-span-2">
                                             <label for="company-website" class="block text-sm font-medium text-gray-700">
                                             Publisher
@@ -486,7 +486,7 @@
                                                 </VueMultiselect>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                     
                                 </div>
