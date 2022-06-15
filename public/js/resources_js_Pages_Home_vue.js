@@ -178,7 +178,7 @@ var _hoisted_8 = {
 
 var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
   "class": "font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate my-4"
-}, "Next Step", -1
+}, "Actions", -1
 /* HOISTED */
 );
 
@@ -197,7 +197,7 @@ var _hoisted_12 = {
   "class": "px-6 py-4 whitespace-nowrap"
 };
 
-var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Review");
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("View");
 
 var _hoisted_14 = {
   "class": "px-6 py-4 whitespace-nowrap"
@@ -206,7 +206,7 @@ var _hoisted_15 = {
   "class": "px-6 py-4 whitespace-nowrap"
 };
 
-var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Review");
+var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("View");
 
 var _hoisted_17 = {
   "class": "px-6 py-4 whitespace-nowrap"
@@ -215,7 +215,7 @@ var _hoisted_18 = {
   "class": "px-6 py-4 whitespace-nowrap"
 };
 
-var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Review");
+var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("View");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Head = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Head");

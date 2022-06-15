@@ -26,7 +26,7 @@
               </div>
             </div>
           </div>
-          <h4 class="font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate my-4">Next Step</h4>
+          <h4 class="font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate my-4">Actions</h4>
           <Table>
             <template v-slot:header>
               <tr>
@@ -44,7 +44,7 @@
                   {{ `Manuscript "${step.title || step.type['name']}" is ready to be publish by you. Please review the manuscript.` }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Review</Link>
+                  <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
                 </td>
               </tr>
               <tr v-for="(step, index) in nextSteps.reviewer.data" :key="`step-author-${index}`">
@@ -52,7 +52,7 @@
                   {{ `Manuscript "${step.title || step.type['name']}" is ready to be review by you. Please review the manuscript.` }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Review</Link>
+                  <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
                 </td>
               </tr>
               <tr v-for="(step, index) in nextSteps.author.data" :key="`step-author-${index}`">
@@ -60,7 +60,7 @@
                   {{ `Manuscript "${step.title || step.type['name']}" is in status "${step.status}". Please review the manuscript.` }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Review</Link>
+                  <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
                 </td>
               </tr>
             </template>
