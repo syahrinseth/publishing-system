@@ -385,7 +385,9 @@
                                 <span v-show="authIsReviewer()">
                                     You have been assigned to review this manuscript, please download the manuscript in the "Manuscript Attach Files" section below.
                                 </span>
-                                
+                                <span v-show="authIsEditor()">
+                                    You have been assigned as an Editor. Please select reviewers and notify the reviewers to review manuscripts. Thank you
+                                </span>
                             </p>
                         </div>
                         </div>
@@ -509,14 +511,70 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="hidden sm:block" aria-hidden="true">
+                    <div class="py-5">
+                        <div class="border-t border-gray-200" />
+                    </div>
+                </div>  
+                <div v-show="authIsEditor()">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">List Of Reviewers</h3>
+                                <p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
+                                    In view of your work in the field, your name has been recommended, as a reviewer.  Please suggest other reviewer's name if you are unable to review this manuscript. Thank You
+                                </p>
+                                <p v-show="authIsAuthor()" class="mt-1 text-sm text-gray-600">
+                                Please name specific reviewers to be assigned to your submission. The request will be taken under advisement by the Editor. If you do not request any reviewers, your submission will be assigned to the appropriate reviewer(s) as determined by the Editorial staff.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-5 md:mt-0 md:col-span-2">
+                            <Table>
+                                        <template v-slot:header>
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Name
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Review Status
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Date Reviewed
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Attach
+                                                </th>
+                                            </tr>
+                                        </template>
+                                        <template v-slot:body>
+                                            <tr >
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    Reviewer One
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    Reviewed
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    10 Jan 2022
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <a herf="#" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </Table>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-show="!authIsEditor()" class="hidden sm:block" aria-hidden="true">
                     <div class="py-5">
                         <div class="border-t border-gray-200" />
                     </div>
                 </div>
 
-                <div>
+                <div v-show="!authIsEditor()">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
