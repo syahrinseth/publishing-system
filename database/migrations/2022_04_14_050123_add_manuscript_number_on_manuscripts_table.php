@@ -23,10 +23,12 @@ class AddManuscriptNumberOnManuscriptsTable extends Migration
         $manuscripts = Manuscript::all();
         $manuscript_setting = Setting::where('type', Manuscript::class)
             ->where('name', 'manuscript_number_prefix')
-            ->firstOrFail();
-        foreach ($manuscripts as $manuscript) {
-            $manuscript->manuscript_no = $manuscript_setting->generateManuscriptNo($manuscript);
-            $manuscript->update();
+            ->first();
+        if (!empty($manuscript_setting)) {
+            foreach ($manuscripts as $manuscript) {
+                $manuscript->manuscript_no = $manuscript_setting->generateManuscriptNo($manuscript);
+                $manuscript->update();
+            }
         }
     }
 

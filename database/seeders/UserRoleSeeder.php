@@ -16,7 +16,6 @@ class UserRoleSeeder extends Seeder
         'Editor',
         'Reviewer',
         'Author',
-        'User'
     ];
 
     /**
