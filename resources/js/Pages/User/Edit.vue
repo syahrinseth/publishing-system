@@ -28,6 +28,10 @@
                                     <input v-model="userForm.name" type="text" name="first-name" id="first-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
                                 </div>
                                 <div class="col-span-8 sm:col-span-8">
+                                    <label for="field" class="block text-sm font-medium text-gray-700">Field</label>
+                                    <input v-model="userForm.field" type="text" name="field" id="field" autocomplete="given-name" placeholder="eg: Optical Sensors" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                </div>
+                                <div class="col-span-8 sm:col-span-8">
                                     <label for="affiliation" class="block text-sm font-medium text-gray-700">Affiliation</label>
                                     <input v-model="userForm.affiliation" type="text" name="affiliation" id="affiliation" autocomplete="given-name" placeholder="eg: University of Malaya" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block shadow-sm sm:text-sm border-gray-300 rounded-md" />
                                 </div>
