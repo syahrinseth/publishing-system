@@ -484,18 +484,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--<div class="grid grid-cols-3 gap-6">
-                                        <div class="col-span-3 sm:col-span-2">
-                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                            Publisher
-                                            </label>
-                                            <div class="mt-1 flex rounded-md shadow-sm">
-                                            <VueMultiselect 
-                                            v-model="manuscriptForm.publishers_obj" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="publisherSelect.options" :multiple="true" :searchable="true" :loading="publisherSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindPublishers">
-                                                </VueMultiselect>
-                                            </div>
-                                        </div>
-                                    </div>-->
 
                                     
                                 </div>
@@ -941,10 +929,6 @@
                 isLoading: false,
                 options: []
             },
-            publisherSelect: {
-                isLoading: false,
-                options: []
-            }
         }
     },
     methods: {      
@@ -961,7 +945,6 @@
             this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map((user) => user.id)
             this.manuscriptForm.editors = this.manuscriptForm.editors_obj.map((user) => user.id);
             this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map((user) => user.id);
-            this.manuscriptForm.publishers = this.manuscriptForm.publishers_obj.map((user) => user.id);
             this.manuscriptForm.post(`/admin/manuscripts/${this.$props.manuscript.data.id}/update`, {
                 preserveScroll: true,
                 onError: (errors) => {
@@ -1063,22 +1046,6 @@
             this.reviewerSelect.options = [];
             return 0;
         }, 300),
-        asyncFindPublishers: _.debounce(async function(query) {
-            this.publisherSelect.isLoading = true;
-            let resp = await window.axios.get('/api/users', {
-                params: {
-                    search: query,
-                    role: 'Publisher',
-                }
-            });
-            this.publisherSelect.isLoading = false;
-            if (resp.status == 200) {
-                this.publisherSelect.options = resp.data;
-                return 0;
-            }
-            this.publisherSelect.options = [];
-            return 0;
-        }, 300),
         asyncFindAuthors: _.debounce(async function(query) {
             this.authorSelect.isLoading = true;
             let resp = await window.axios.get('/api/users', {
@@ -1160,11 +1127,10 @@
             return result.length > 0;
         },
         authIsPublisher() {
-            let auth_id = this.$props.auth.user.data.id;
-            let manuscriptPublishers = this.manuscript.data.publishers;
+            let authRoles = this.$props.auth.user.data.roles;
             // Filter auth roles
-            let result = manuscriptPublishers.filter(function(user) {
-                if (user.id == auth_id) {
+            let result = authRoles.filter(function(role) {
+                if (role.name == 'Super Admin' || role.name == 'Admin' || role.name == 'Publisher') {
                     return true;
                 }
                 return false;
@@ -1189,8 +1155,6 @@
             editors_obj: props.manuscript.data.editors,
             reviewers: props.manuscript.data.reviewers.map(function(val){return val.id;}),
             reviewers_obj: props.manuscript.data.reviewers,
-            publishers: props.manuscript.data.publishers.map(function(val){return val.id;}),
-            publishers_obj: props.manuscript.data.publishers,
             funding_information: props.manuscript.data.funding_information,
             is_confirm_grant_numbers: props.manuscript.data.is_confirm_grant_numbers,
             is_acknowledge: props.manuscript.data.is_acknowledge,

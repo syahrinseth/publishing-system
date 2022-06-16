@@ -19,7 +19,7 @@ class AddAttachFileComment extends Migration
             $table->foreign('manuscript_attach_id')->references('id')->on('manuscript_attach_files');
             $table->text('text');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('from');
             $table->string('to');
             $table->timestamps();

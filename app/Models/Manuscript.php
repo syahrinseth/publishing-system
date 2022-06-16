@@ -26,13 +26,7 @@ class Manuscript extends Model
      * @var array
      */
     protected $casts = [
-        'authors' => 'array',
-        'corresponding_authors' => 'array',
-        'editors' => 'array',
-        'reviewers' => 'array',
-        'publishers' => 'array',
         'additional_informations' => 'array',
-        'reviewers_accepted' => 'array'
     ];
 
     public static $types = [
@@ -87,57 +81,38 @@ class Manuscript extends Model
 
     /**
      * Get authors collection
-     * @return array
+     * @return Collection
      */
-    public function getAuthors()
+    public function authors()
     {
-        $users = User::whereIn('id', $this->authors ?? [])
-            ->get();
-        return $users->toArray();
+        return $this->hasMany(ManuscriptMember::class, 'id', 'manuscript_id')->where('role', 'author');
     }
 
     /**
      * Get corresponding authors collection
-     * @return array
+     * @return Collection
      */
-    public function getCorrespondingAuthors()
+    public function correspondingAuthors()
     {
-        $users = User::whereIn('id', $this->corresponding_authors ?? [])
-            ->get();
-        return $users->toArray();
+        return $this->hasMany(ManuscriptMember::class, 'id', 'manuscript_id')->where('role', 'corresponding author');
     }
 
     /**
      * Get editors collection
-     * @return array
+     * @return Collection
      */
-    public function getEditors()
+    public function editors()
     {
-        $users = User::whereIn('id', $this->editors ?? [])
-            ->get();
-        return $users->toArray();
+        return $this->hasMany(ManuscriptMember::class, 'id', 'manuscript_id')->where('role', 'editor');
     }
 
     /**
      * Get reviewers collection
-     * @return array
+     * @return Collection
      */
-    public function getReviewers()
+    public function reviewers()
     {
-        $users = User::whereIn('id', $this->reviewers ?? [])
-            ->get();
-        return $users->toArray();
-    }
-
-    /**
-     * Get publishers collection
-     * @return array
-     */
-    public function getPublishers()
-    {
-        $users = User::whereIn('id', $this->publishers ?? [])
-            ->get();
-        return $users->toArray();
+        return $this->hasMany(ManuscriptMember::class, 'id', 'manuscript_id')->where('role', 'reviewer');
     }
 
     /**
@@ -344,5 +319,31 @@ class Manuscript extends Model
             $tempRole = 'publisher';
         }
         return $tempRole;
+    }
+
+    /**
+     * Get members from the manuscript.
+     * 
+     * @return Collection
+     */
+    public function members()
+    {
+        return $this->hasMany(ManuscriptMember::class, 'id', 'manuscript_id');
+    }
+
+    /**
+     * Assign co author.
+     * @param User $user
+     * 
+     * @return Manuscript
+     */
+    public function assignCoAuthor($user)
+    {
+        $member = new ManuscriptMember();
+        $member->manuscript_id = $this->id;
+        $member->user_id = $user->id;
+        $member->role = 'corresponding author';
+        $member->save();
+        return $this;
     }
 }

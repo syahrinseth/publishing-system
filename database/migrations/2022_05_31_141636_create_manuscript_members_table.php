@@ -19,9 +19,9 @@ class CreateManuscriptMembersTable extends Migration
         Schema::create('manuscript_members', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('manuscript_id');
-            $table->foreign('manuscript_id')->references('id')->on('manuscripts');
+            $table->foreign('manuscript_id')->references('id')->on('manuscripts')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('role');
             $table->timestamps();
         });

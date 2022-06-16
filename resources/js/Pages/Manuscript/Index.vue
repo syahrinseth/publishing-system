@@ -9,14 +9,14 @@
                     </div>
                     <div class="mt-5 flex lg:mt-0 lg:ml-4">
 
-                    <!-- <span class="hidden sm:block ml-3">
-                        <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <LinkIcon class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
-                        View
-                        </button>
+                    <span class="hidden sm:block ml-3">
+                        <Link :href="`/admin/manuscript-create`" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" preserve-scroll>
+                            <PlusIcon class="-ml-1 mr-2 h-5 w-5 text-white" aria-hidden="true" />
+                            Submit a Manuscript
+                        </Link>
                     </span>
 
-                    <span class="sm:ml-3">
+                    <!-- <span class="sm:ml-3">
                         <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <CheckIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                         Publish
@@ -151,6 +151,7 @@
   LinkIcon,
   LocationMarkerIcon,
   PencilIcon,
+  PlusIcon
 } from '@heroicons/vue/solid'
   import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 
@@ -170,6 +171,7 @@
             LinkIcon,
             LocationMarkerIcon,
             PencilIcon,
+            PlusIcon,
             Link
       },
     props: {
@@ -193,8 +195,8 @@
             }
         }
     },
-    async mounted() {
-
+    async created() {
+        
     }
   }
 </script>

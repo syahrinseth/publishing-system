@@ -20,7 +20,7 @@ class CreateJournalsTable extends Migration
             $table->string('status')->default('draft')->nullable();
             $table->json('manuscripts');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

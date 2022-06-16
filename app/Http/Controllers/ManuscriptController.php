@@ -99,18 +99,13 @@ class ManuscriptController extends Controller
 
         $manuscript = new Manuscript();
         $manuscript->type = $request->type;
-        $manuscript->corresponding_authors = [
-            Auth::user()->id
-        ];
-        $manuscript->authors = [];
-        $manuscript->editors = [];
-        $manuscript->reviewers = [];
-        $manuscript->publishers = [];
-        $manuscript->reviewers_accepted = [];
+        $manuscript->status = 'Submit For Review';
         $manuscript->save();
+        // Assign co author
+        $manuscript->assignCoAuthor(auth()->user());
         $manuscript->generateManuscriptNumber();
         $manuscript->update();
-        $coAuthors = collect($manuscript->getCorrespondingAuthors())->map(function($user) {
+        $coAuthors = $manuscript->correspondingAuthors->map(function($user) {
             return $user['email'];
         });
         Mail::to($coAuthors)->queue(new ManuscriptCreated($manuscript));
@@ -252,21 +247,21 @@ class ManuscriptController extends Controller
         $manuscript->update();
 
         // Send mail
-        $users = collect($manuscript->getCorrespondingAuthors())->map(function($user) {
+        $users = $manuscript->correspondingAuthors->map(function($user) {
             return $user['email'];
         });
         if (!empty($users)) {
             Mail::to($users)->queue(new ManuscriptUpdated($manuscript));
         }
 
-        $users = collect($manuscript->getAuthors())->map(function($user) {
+        $users = $manuscript->authors->map(function($user) {
             return $user['email'];
         });
         if (!empty($users)) {
             Mail::to($users)->queue(new ManuscriptUpdated($manuscript));
         }
 
-        $users = collect($manuscript->getEditors())->map(function($user) {
+        $users = $manuscript->editors->map(function($user) {
             return $user['email'];
         });
         if (!empty($users)) {
@@ -334,7 +329,7 @@ class ManuscriptController extends Controller
         // Populate Main meta data
         $section->addText($manuscript->title, array('size' => 20, 'allCaps' => true, 'bold' => true), array('align' => "center", 'space' => array('before' => 0, 'after' => 280), ));
         $section->addText('Author\'s Name:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "center"));
-        $section->addText($manuscript->getAuthors()[0]['name'], array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center"));
+        $section->addText($manuscript->authors[0]['name'], array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center"));
         $section->addText('University/Organisation', array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center", 'space' => array('before' => 0, 'after' => 280), ));
         $section->addText('Co-Author\'s Name:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "center"));
         $section->addText('University/Organisation', array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center", 'space' => array('before' => 0, 'after' => 280), ));
@@ -501,21 +496,21 @@ class ManuscriptController extends Controller
         }
 
         // Send mail
-        $users = collect($manuscript->getCorrespondingAuthors())->map(function($user) {
+        $users = $manuscript->correspondingAuthors->map(function($user) {
             return $user['email'];
         });
         if (!empty($users)) {
             Mail::to($users)->queue(new ManuscriptAttachCreated($manuscript, $attach));
         }
 
-        $users = collect($manuscript->getAuthors())->map(function($user) {
+        $users = collect($manuscript->authors)->map(function($user) {
             return $user['email'];
         });
         if (!empty($users)) {
             Mail::to($users)->queue(new ManuscriptAttachCreated($manuscript, $attach));
         }
 
-        $users = collect($manuscript->getEditors())->map(function($user) {
+        $users = collect($manuscript->editors)->map(function($user) {
             return $user['email'];
         });
         if (!empty($users)) {
@@ -582,21 +577,21 @@ class ManuscriptController extends Controller
         }
 
         // Send mail
-        $users = collect($manuscript->getCorrespondingAuthors())->map(function($user) {
+        $users = $manuscript->correspondingAuthors->map(function($user) {
             return $user['email'];
         });
         if (!empty($users)) {
             Mail::to($users)->queue(new ManuscriptAttachUpdated($manuscript, $attach));
         }
 
-        $users = collect($manuscript->getAuthors())->map(function($user) {
+        $users = $manuscript->authors->map(function($user) {
             return $user['email'];
         });
         if (!empty($users)) {
             Mail::to($users)->queue(new ManuscriptAttachUpdated($manuscript, $attach));
         }
 
-        $users = collect($manuscript->getEditors())->map(function($user) {
+        $users = $manuscript->editors->map(function($user) {
             return $user['email'];
         });
         if (!empty($users)) {

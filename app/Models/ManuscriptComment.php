@@ -62,60 +62,60 @@ class ManuscriptComment extends Model
             $emails = collect();
             $manuscript = Manuscript::where('id', $this->manuscript_id)->firstOrFail();
             if ($this->to == "all") {
-                $authors = collect($manuscript->getAuthors())->map(function($user){
+                $authors = $manuscript->authors->map(function($user){
                     return $user['email'];
                 });
                 $emails = $emails->merge($authors);
                 
-                $co_authors = collect($manuscript->getCorrespondingAuthors())->map(function($user){
+                $co_authors = $manuscript->correspondingAuthors->map(function($user){
                     return $user['email'];
                 });
                 $emails = $emails->merge($co_authors);
 
-                $editors = collect($manuscript->getEditors())->map(function($user){
+                $editors = $manuscript->editors->map(function($user){
                     return $user['email'];
                 });
                 $emails = $emails->merge($editors);
 
-                $reviewers = collect($manuscript->getReviewers())->map(function($user){
+                $reviewers = $manuscript->reviewers->map(function($user){
                     return $user['email'];
                 });
                 $emails = $emails->merge($reviewers);
 
-                $publishers = collect($manuscript->getPublishers())->map(function($user){
+                $publishers = User::whereHas('roles', function($q){$q->whereIn('name', ['Super Admin', 'Admin', 'Publisher']);})->get()->map(function($user){
                     return $user['email'];
                 });
                 $emails = $emails->merge($publishers);
 
             } elseif($this->to == "authors") {
 
-                $authors = collect($manuscript->getAuthors())->map(function($user){
+                $authors = $manuscript->authors->map(function($user){
                     return $user['email'];
                 });
                 $emails = $emails->merge($authors);
 
-                $co_authors = collect($manuscript->getCorrespondingAuthors())->map(function($user){
+                $co_authors = $manuscript->correspondingAuthors->map(function($user){
                     return $user['email'];
                 });
                 $emails = $emails->merge($co_authors);
 
             } elseif($this->to == "reviewers") {
 
-                $reviewers = collect($manuscript->getReviewers())->map(function($user){
+                $reviewers = $manuscript->reviewers->map(function($user){
                     return $user['email'];
                 });
                 $emails = $emails->merge($reviewers);
 
             } elseif($this->to == "editors") {
 
-                $editors = collect($manuscript->getEditors())->map(function($user){
+                $editors = $manuscript->editors->map(function($user){
                     return $user['email'];
                 });
                 $emails = $emails->merge($editors);
 
             } elseif($this->to == "publishers") {
 
-                $publishers = collect($manuscript->getPublishers())->map(function($user){
+                $publishers = User::whereHas('roles', function($q){$q->whereIn('name', ['Super Admin', 'Admin', 'Publisher']);})->get()->map(function($user){
                     return $user['email'];
                 });
                 $emails = $emails->merge($publishers);

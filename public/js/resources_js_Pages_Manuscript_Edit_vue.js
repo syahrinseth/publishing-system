@@ -2135,7 +2135,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   mounted: function mounted() {
-    console.log(this.$props);
+    // console.log(this.$props);
     this.refresh();
   },
   setup: function setup() {
@@ -2321,10 +2321,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       reviewerSelect: {
         isLoading: false,
         options: []
-      },
-      publisherSelect: {
-        isLoading: false,
-        options: []
       }
     };
   },
@@ -2351,9 +2347,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return user.id;
       });
       this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map(function (user) {
-        return user.id;
-      });
-      this.manuscriptForm.publishers = this.manuscriptForm.publishers_obj.map(function (user) {
         return user.id;
       });
       this.manuscriptForm.post("/admin/manuscripts/".concat(this.$props.manuscript.data.id, "/update"), {
@@ -2517,36 +2510,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return _ref2.apply(this, arguments);
       };
     }(), 300),
-    asyncFindPublishers: _.debounce( /*#__PURE__*/function () {
+    asyncFindAuthors: _.debounce( /*#__PURE__*/function () {
       var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(query) {
         var resp;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                this.publisherSelect.isLoading = true;
+                this.authorSelect.isLoading = true;
                 _context3.next = 3;
                 return window.axios.get('/api/users', {
                   params: {
                     search: query,
-                    role: 'Publisher'
+                    role: 'Author'
                   }
                 });
 
               case 3:
                 resp = _context3.sent;
-                this.publisherSelect.isLoading = false;
+                this.authorSelect.isLoading = false;
 
                 if (!(resp.status == 200)) {
                   _context3.next = 8;
                   break;
                 }
 
-                this.publisherSelect.options = resp.data;
+                this.authorSelect.options = resp.data;
                 return _context3.abrupt("return", 0);
 
               case 8:
-                this.publisherSelect.options = [];
+                this.authorSelect.options = [];
                 return _context3.abrupt("return", 0);
 
               case 10:
@@ -2561,14 +2554,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return _ref3.apply(this, arguments);
       };
     }(), 300),
-    asyncFindAuthors: _.debounce( /*#__PURE__*/function () {
+    asyncFindCorrespondingAuthors: _.debounce( /*#__PURE__*/function () {
       var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(query) {
         var resp;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                this.authorSelect.isLoading = true;
+                this.correspondingAuthorSelect.isLoading = true;
                 _context4.next = 3;
                 return window.axios.get('/api/users', {
                   params: {
@@ -2579,18 +2572,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
               case 3:
                 resp = _context4.sent;
-                this.authorSelect.isLoading = false;
+                this.correspondingAuthorSelect.isLoading = false;
 
                 if (!(resp.status == 200)) {
                   _context4.next = 8;
                   break;
                 }
 
-                this.authorSelect.options = resp.data;
+                this.correspondingAuthorSelect.options = resp.data;
                 return _context4.abrupt("return", 0);
 
               case 8:
-                this.authorSelect.options = [];
+                this.correspondingAuthorSelect.options = [];
                 return _context4.abrupt("return", 0);
 
               case 10:
@@ -2603,50 +2596,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return function (_x4) {
         return _ref4.apply(this, arguments);
-      };
-    }(), 300),
-    asyncFindCorrespondingAuthors: _.debounce( /*#__PURE__*/function () {
-      var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(query) {
-        var resp;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                this.correspondingAuthorSelect.isLoading = true;
-                _context5.next = 3;
-                return window.axios.get('/api/users', {
-                  params: {
-                    search: query,
-                    role: 'Author'
-                  }
-                });
-
-              case 3:
-                resp = _context5.sent;
-                this.correspondingAuthorSelect.isLoading = false;
-
-                if (!(resp.status == 200)) {
-                  _context5.next = 8;
-                  break;
-                }
-
-                this.correspondingAuthorSelect.options = resp.data;
-                return _context5.abrupt("return", 0);
-
-              case 8:
-                this.correspondingAuthorSelect.options = [];
-                return _context5.abrupt("return", 0);
-
-              case 10:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5, this);
-      }));
-
-      return function (_x5) {
-        return _ref5.apply(this, arguments);
       };
     }(), 300),
     authIsAuthor: function authIsAuthor() {
@@ -2702,11 +2651,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return result.length > 0;
     },
     authIsPublisher: function authIsPublisher() {
-      var auth_id = this.$props.auth.user.data.id;
-      var manuscriptPublishers = this.manuscript.data.publishers; // Filter auth roles
+      var authRoles = this.$props.auth.user.data.roles; // Filter auth roles
 
-      var result = manuscriptPublishers.filter(function (user) {
-        if (user.id == auth_id) {
+      var result = authRoles.filter(function (role) {
+        if (role.name == 'Super Admin' || role.name == 'Admin' || role.name == 'Publisher') {
           return true;
         }
 
@@ -2739,10 +2687,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return val.id;
       }),
       reviewers_obj: props.manuscript.data.reviewers,
-      publishers: props.manuscript.data.publishers.map(function (val) {
-        return val.id;
-      }),
-      publishers_obj: props.manuscript.data.publishers,
       funding_information: props.manuscript.data.funding_information,
       is_confirm_grant_numbers: props.manuscript.data.is_confirm_grant_numbers,
       is_acknowledge: props.manuscript.data.is_acknowledge,
@@ -2809,16 +2753,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   mounted: function mounted() {// console.log(this.$page.props.auth.user)
 
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
         while (1) {
-          switch (_context6.prev = _context6.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
             case "end":
-              return _context6.stop();
+              return _context5.stop();
           }
         }
-      }, _callee6);
+      }, _callee5);
     }))();
   }
 });
@@ -4838,7 +4782,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onSearchChange: $options.asyncFindReviewers
       }, null, 8
       /* PROPS */
-      , ["modelValue", "options", "loading", "onSearchChange"])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("<div class=\"grid grid-cols-3 gap-6\">\n                                        <div class=\"col-span-3 sm:col-span-2\">\n                                            <label for=\"company-website\" class=\"block text-sm font-medium text-gray-700\">\n                                            Publisher\n                                            </label>\n                                            <div class=\"mt-1 flex rounded-md shadow-sm\">\n                                            <VueMultiselect \n                                            v-model=\"manuscriptForm.publishers_obj\" label=\"name\" track-by=\"id\" placeholder=\"Type to search\" open-direction=\"bottom\" :options=\"publisherSelect.options\" :multiple=\"true\" :searchable=\"true\" :loading=\"publisherSelect.isLoading\" :internal-search=\"false\" :clear-on-select=\"false\" :close-on-select=\"false\" :options-limit=\"300\" :max-height=\"600\" :show-no-results=\"false\" :hide-selected=\"true\" @search-change=\"asyncFindPublishers\">\n                                                </VueMultiselect>\n                                            </div>\n                                        </div>\n                                    </div>")]), _hoisted_147])], 32
+      , ["modelValue", "options", "loading", "onSearchChange"])])])])]), _hoisted_147])], 32
       /* HYDRATE_EVENTS */
       )])])]), _hoisted_148, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_149, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_150, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_151, [_hoisted_152, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_153, " Please make sure the manuscript attached here is the same manuscript as registered here. ", 512
       /* NEED_PATCH */

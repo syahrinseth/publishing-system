@@ -16,10 +16,10 @@ class AddManuscriptComments extends Migration
         Schema::create('manuscript_comments', function(Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('manuscript_id');
-            $table->foreign('manuscript_id')->references('id')->on('manuscripts');
+            $table->foreign('manuscript_id')->references('id')->on('manuscripts')->onDelete('cascade');
             $table->text('text');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('from');
             $table->string('to');
             $table->timestamps();
