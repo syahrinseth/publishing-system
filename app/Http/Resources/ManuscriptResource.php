@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\ManuscriptAttachCollection;
 
@@ -25,9 +26,13 @@ class ManuscriptResource extends JsonResource
             'keywords' => $this->keywords,
             'attachments' => new ManuscriptAttachCollection($this->attachments),
             'authors' => $this->authors,
+            'authors_in_users' => User::whereIn('id', $this->authors->map(function($q){return $q->user_id;}))->get()->all(),
             'corresponding_authors' => $this->correspondingAuthors,
+            'corresponding_authors_in_users' => User::whereIn('id', $this->correspondingAuthors->map(function($q){return $q->user_id;}))->get()->all(),
             'editors' => $this->editors,
+            'editors_in_users' => User::whereIn('id', $this->editors->map(function($q){return $q->user_id;}))->get()->all(),
             'reviewers' => $this->reviewers,
+            'reviewers_in_users' => User::whereIn('id', $this->reviewers->map(function($q){return $q->user_id;}))->get()->all(),
             'category' => $this->category,
             'funding_information' => $this->funding_information,
             'is_confirm_grant_numbers' => empty($this->additional_informations) ? false : $this->additional_informations['is_confirm_grant_numbers'],

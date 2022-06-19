@@ -967,10 +967,10 @@
             }) 
         },
         saveManuscript() {
-            this.manuscriptForm.authors = this.manuscriptForm.authors_obj.map((member) => member.user_id);
-            this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map((member) => member.user_id)
-            this.manuscriptForm.editors = this.manuscriptForm.editors_obj.map((member) => member.user_id);
-            this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map((member) => member.user_id);
+            this.manuscriptForm.authors = this.manuscriptForm.authors_obj.map((member) => member.id);
+            this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map((member) => member.id)
+            this.manuscriptForm.editors = this.manuscriptForm.editors_obj.map((member) => member.id);
+            this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map((member) => member.id);
             this.manuscriptForm.post(`/admin/manuscripts/${this.$props.manuscript.data.id}/update`, {
                 preserveScroll: true,
                 onError: (errors) => {
@@ -1177,14 +1177,14 @@
             short_title: props.manuscript.data.short_title,
             abstract: props.manuscript.data.abstract,
             keywords: props.manuscript.data.keywords,
-            authors: props.manuscript.data.authors.map(function(val){return val.user_id;}),
-            authors_obj: props.manuscript.data.authors,
-            corresponding_authors: props.manuscript.data.corresponding_authors.map(function(val){return val.user_id;}),
-            corresponding_authors_obj: props.manuscript.data.corresponding_authors,
-            editors: props.manuscript.data.editors.map(function(val){return val.user_id;}),
-            editors_obj: props.manuscript.data.editors,
-            reviewers: props.manuscript.data.reviewers.map(function(val){return val.user_id;}),
-            reviewers_obj: props.manuscript.data.reviewers,
+            authors: props.manuscript.data.authors_in_users.map(function(val){return val.id;}),
+            authors_obj: props.manuscript.data.authors_in_users,
+            corresponding_authors: props.manuscript.data.corresponding_authors_in_users.map(function(val){return val.id;}),
+            corresponding_authors_obj: props.manuscript.data.corresponding_authors_in_users,
+            editors: props.manuscript.data.editors_in_users.map(function(val){return val.id;}),
+            editors_obj: props.manuscript.data.editors_in_users,
+            reviewers: props.manuscript.data.reviewers_in_users.map(function(val){return val.id;}),
+            reviewers_obj: props.manuscript.data.reviewers_in_users,
             funding_information: props.manuscript.data.funding_information,
             is_confirm_grant_numbers: props.manuscript.data.is_confirm_grant_numbers,
             is_acknowledge: props.manuscript.data.is_acknowledge,

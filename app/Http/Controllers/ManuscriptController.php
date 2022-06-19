@@ -248,7 +248,6 @@ class ManuscriptController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         if (!auth()->user()->can('manuscripts.show_all')) {
             ManuscriptMember::where('user_id', auth()->user())
                 ->where(function($q) {
