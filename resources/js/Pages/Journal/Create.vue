@@ -14,7 +14,7 @@
                             <div class="px-4 sm:px-0">
                                 <h3 class="text-lg font-medium leading-6 text-gray-900">General Information</h3>
                                 <p class="mt-1 text-sm text-gray-600">
-                                This information will be displayed publicly so be careful what you share.
+                                    Please select type of manuscript in the dropdown menu.
                                 </p>
                             </div>
                             </div>

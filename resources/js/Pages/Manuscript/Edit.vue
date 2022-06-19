@@ -29,7 +29,13 @@
                     </div>
                     <div class="mt-5 flex lg:mt-0 lg:ml-4">
 
-                        <span class="sm:ml-3" v-if="(manuscript.data.status == `Draft` || manuscript.data.status == `Rejected Invite To Resubmit`) && (authIsAuthor() || authIsEditor())">
+                        <span class="sm:ml-3" v-if="(manuscript.data.status == `Draft`) && (authIsAuthor())">
+                            <a href="#" @click="showSubmitToEditorModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                Submit To Editor
+                            </a>
+                        </span>
+                        <span class="sm:ml-3" v-if="(manuscript.data.status == `Rejected Invite To Resubmit`) && (authIsAuthor() || authIsEditor())">
                             <a href="#" @click="showSubmitReviewModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                 <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 Submit For Review
@@ -61,7 +67,7 @@
                         </span>
 
                         <!-- Dropdown -->
-                        <Menu as="span" class="ml-3 relative sm:hidden">
+                        <!-- <Menu as="span" class="ml-3 relative sm:hidden">
                             <MenuButton class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             More
                             <ChevronDownIcon class="-mr-1 ml-2 h-5 w-5 text-gray-500" aria-hidden="true" />
@@ -77,7 +83,7 @@
                                 </MenuItem>
                             </MenuItems>
                             </transition>
-                        </Menu>
+                        </Menu> -->
                     </div>
                 </div>
                 <div class="flex mt-1">
@@ -283,6 +289,31 @@
                         </button>
                     </template>
                 </Modal>
+                <Modal :show="showSubmitToEditorModal" @close="showSubmitToEditorModal = false;">
+                    <template v-slot:default>
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <ExclamationIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
+                            </div>
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Submit To Editor </DialogTitle>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                </div>
+                                <div class="w-full mt-3 grid grid-col-1 gap-4">
+                                    <a href="#" @click="submitToEditor()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:w-auto sm:text-sm">
+                                        Submit To Editor
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-slot:footer>
+                        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showSubmitToEditorModal = false">
+                            Cancel
+                        </button>
+                    </template>
+                </Modal>
 
                 <Modal :show="showSubmitReviewModal" @close="showSubmitReviewModal = false;">
                     <template v-slot:default>
@@ -373,7 +404,7 @@
                         </button>
                     </template>
                 </Modal>
-                <div class="mt-10 sm:mt-0">
+                <div v-if="!authIsReviewer()" class="mt-10 sm:mt-0">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
@@ -382,9 +413,9 @@
                                 <span v-show="authIsAuthor()">
                                     Please identify your submission's areas of interest and specialization by selecting one or more classifications.
                                 </span>
-                                <span v-show="authIsReviewer()">
+                                <!--<span v-show="authIsReviewer()">
                                     You have been assigned to review this manuscript, please download the manuscript in the "Manuscript Attach Files" section below.
-                                </span>
+                                </span>-->
                                 
                             </p>
                         </div>
@@ -414,19 +445,29 @@
                                     </div>
                                     <div class="col-span-3 sm:col-span-2">
                                         <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                        Authors
+                                        Co-Author(s)
+                                        </label>
+                                        <VueMultiselect 
+                                        v-model="manuscriptForm.corresponding_authors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="correspondingAuthorSelect.options" :multiple="true" :searchable="true" :loading="correspondingAuthorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindCorrespondingAuthors">
+                                            </VueMultiselect>
+                                    </div>
+                                    <div class="col-span-3 sm:col-span-2">
+                                        <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                        Author(s)
                                         </label>
                                         <VueMultiselect 
                                         v-model="manuscriptForm.authors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors">
                                             </VueMultiselect>
                                     </div>
-                                    <div class="col-span-3 sm:col-span-2">
-                                        <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                        Co-Authors
-                                        </label>
-                                        <VueMultiselect 
-                                        v-model="manuscriptForm.corresponding_authors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="correspondingAuthorSelect.options" :multiple="true" :searchable="true" :loading="correspondingAuthorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindCorrespondingAuthors">
-                                            </VueMultiselect>
+                                    <div v-show="!authIsReviewer()" class="col-span-3 sm:col-span-2">
+                                        <div class="col-span-3 sm:col-span-2">
+                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                            Request Editor(s)
+                                            </label>
+                                            <VueMultiselect 
+                                            v-model="manuscriptForm.editors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="true" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
+                                                </VueMultiselect>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -451,9 +492,9 @@
                             <div class="px-4 sm:px-0">
                                 <h3 class="text-lg font-medium leading-6 text-gray-900">Review Preferences</h3>
                                 <p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
-                                    In view of your work in the field, your name has been recommended, as a reviewer.  Please suggest other reviewer's name if you are unable to review this manuscript. Thank You
+                                    In view of your work in the field, your name has been recommended, as a reviewer. Please suggest other reviewer's name if you are unable to review this manuscript. Thank You
                                 </p>
-                                <p v-show="authIsAuthor()" class="mt-1 text-sm text-gray-600">
+                                <p v-show="!authIsReviewer()" class="mt-1 text-sm text-gray-600">
                                 Please name specific reviewers to be assigned to your submission. The request will be taken under advisement by the Editor. If you do not request any reviewers, your submission will be assigned to the appropriate reviewer(s) as determined by the Editorial staff.
                                 </p>
                             </div>
@@ -462,20 +503,10 @@
                             <form @submit.prevent="saveManuscript()" >
                                 <div class="shadow sm:rounded-md sm:overflow-hidden">
                                 <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                    <div v-show="!authIsReviewer()" class="grid grid-cols-3 gap-6">
-                                        <div class="col-span-3 sm:col-span-2">
-                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                            Request Editor
-                                            </label>
-                                            <VueMultiselect 
-                                            v-model="manuscriptForm.editors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="true" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
-                                                </VueMultiselect>
-                                        </div>
-                                    </div>
                                     <div class="grid grid-cols-3 gap-6">
                                         <div class="col-span-3 sm:col-span-2">
                                             <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                            Suggest Reviewers
+                                            Suggest Reviewer(s)
                                             </label>
                                             <div class="mt-1 flex rounded-md shadow-sm">
                                             <VueMultiselect 
@@ -484,8 +515,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    
                                 </div>
                                 <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                                     <button class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -497,13 +526,11 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="hidden sm:block" aria-hidden="true">
                     <div class="py-5">
                         <div class="border-t border-gray-200" />
                     </div>
                 </div>
-
                 <div>
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
@@ -601,18 +628,19 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="hidden sm:block" aria-hidden="true">
                     <div class="py-5">
                         <div class="border-t border-gray-200" />
                     </div>
                 </div>
-
                 <div>
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
                             <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Attach Files</h3>
+                            <span v-show="authIsReviewer()">
+                                You have been assigned to review this manuscript, please download the manuscript in the "Manuscript Attach Files" section.
+                            </span>
                             <p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
                                 Please upload your reviewer comments in a new file name using Words Document file.  Please make sure that your comments can be clearly understood by the authors. You are given 30 working days for this cycle of reviewing process. Thank You
                             </p>
@@ -692,13 +720,11 @@
                         </div>
                     </div>
                 </div>
-
                 <div v-show="authIsAuthor()" class="hidden sm:block" aria-hidden="true">
                     <div class="py-5">
                         <div class="border-t border-gray-200" />
                     </div>
                 </div>
-                
                 <div v-show="authIsAuthor()" class="mt-10 sm:mt-0">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
@@ -896,7 +922,6 @@
     },
     props: {
         manuscript: Object,
-        users: Object,
         attachTypes: Array,
         articleTypes: Array,
         errors: Object,
@@ -912,6 +937,7 @@
             showAcceptModal: false,
             showRejectModal: false,
             showSubmitReviewModal: false,
+            showSubmitToEditorModal: false,
             isShow: false,
             authorSelect: {
                 isLoading: false,
@@ -939,7 +965,7 @@
                 duration: 5000,
                 dismissible: true
             }) 
-        },  
+        },
         saveManuscript() {
             this.manuscriptForm.authors = this.manuscriptForm.authors_obj.map((user) => user.id);
             this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map((user) => user.id)
@@ -992,6 +1018,10 @@
         },
         submitForReview() {
             this.manuscriptForm.status = "Submit For Review";
+            this.saveManuscript();
+        },
+        submitToEditor() {
+            this.manuscriptForm.status = "Submit To Editor";
             this.saveManuscript();
         },
         acceptWithoutChanges() {

@@ -48,6 +48,10 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
     Route::post('/manuscript-store', [ManuscriptController::class, 'store'])->name('manuscript.store');
 
+    Route::get('/manuscripts/{id}/create-final', [ManuscriptController::class, 'createFinal'])->name('manuscript.create.final');
+
+    Route::post('/manuscripts/{id}/store-final', [ManuscriptController::class, 'storeFinal'])->name('manuscript.store.final');
+
     Route::get('/manuscripts', [ManuscriptController::class, 'index'])->name('manuscript.index');
 
     Route::get('/manuscripts/{id}/edit', [ManuscriptController::class, 'edit'])->name('manuscript.edit');

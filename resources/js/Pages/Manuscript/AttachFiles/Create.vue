@@ -3,7 +3,7 @@
         <Layout :auth="auth.user.data">
             <template v-slot:header>
                 <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-                    Submit a Manuscript
+                    Submit Manuscript
                 </h2>
             </template>
             <template v-slot:default>

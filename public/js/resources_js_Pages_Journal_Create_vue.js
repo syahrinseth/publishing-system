@@ -131,7 +131,7 @@ var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   "class": "text-lg font-medium leading-6 text-gray-900"
 }, "General Information"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
   "class": "mt-1 text-sm text-gray-600"
-}, " This information will be displayed publicly so be careful what you share. ")])], -1
+}, " Please select type of manuscript in the dropdown menu. ")])], -1
 /* HOISTED */
 );
 

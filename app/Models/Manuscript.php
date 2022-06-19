@@ -218,7 +218,7 @@ class Manuscript extends Model
             Mail::to(auth()->user()->email)->queue(new ManuscriptReviewThanksNotification($this));
             return true;
         
-        } elseif($this->authIsPublisher() && in_array($input, [$statusList[7]['name']])) {
+        } elseif(auth()->user()->can('manuscripts.publish') && in_array($input, [$statusList[7]['name']])) {
         
             $this->status = $input;
             $this->update();
@@ -248,7 +248,7 @@ class Manuscript extends Model
      */
     public function authIsAuthor()
     {
-        if (in_array(Auth::user()->id, $this->authors ?? [])) {
+        if (in_array(Auth::user()->id, $this->authors->all() ?? [])) {
             return true;
         }
         return false;
@@ -260,7 +260,7 @@ class Manuscript extends Model
      */
     public function authIsEditor()
     {
-        if (in_array(Auth::user()->id, $this->editors ?? [])) {
+        if (in_array(Auth::user()->id, $this->editors->all() ?? [])) {
             return true;
         }
         return false;
@@ -272,19 +272,7 @@ class Manuscript extends Model
      */
     public function authIsReviewer()
     {
-        if (in_array(Auth::user()->id, $this->reviewers ?? [])) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Validate if auth is publisher of the manuscript.
-     * @return boolean
-     */
-    public function authIsPublisher()
-    {
-        if (in_array(Auth::user()->id, $this->publishers ?? [])) {
+        if (in_array(Auth::user()->id, $this->reviewers->all() ?? [])) {
             return true;
         }
         return false;

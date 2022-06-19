@@ -14,4 +14,8 @@ class ManuscriptMember extends Model
 
     protected static $logAttributes = ["*"];
     protected static $logOnlyDirty = true;
+
+    public function user(){
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 }

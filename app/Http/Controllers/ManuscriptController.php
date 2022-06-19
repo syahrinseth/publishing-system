@@ -76,11 +76,24 @@ class ManuscriptController extends Controller
     public function create()
     {
         return Inertia::render('Manuscript/Create', [
-            'types' => [
-                ['id' => 1, 'name' => 'Full Length Article'],
-                ['id' => 2, 'name' => 'Review'],
-                ['id' => 3, 'name' => 'Short Communication'],
-            ]
+            'articleTypes' => Manuscript::getTypes(),
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     * @param Int $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createFinal($id)
+    {
+        $manuscript = new ManuscriptResource(Manuscript::findOrFail($id));
+        return Inertia::render('Manuscript/CreateFinal', [
+            'manuscript' => $manuscript,
+            'attachTypes' => ManuscriptAttachFile::$types,
+            'articleTypes' => Manuscript::getTypes(),
+            'manuscriptStatusList' => Manuscript::getStatusList($manuscript->id)
         ]);
     }
 
@@ -94,18 +107,49 @@ class ManuscriptController extends Controller
     {
         $request->validate([
             'type' => 'required',
+            'authors' => 'required',
+            'editors' => 'required',
+            'reviewers' => 'required',
+            'title' => 'required',
         ]);
 
         $manuscript = new Manuscript();
         $manuscript->type = $request->type;
-        $manuscript->status = 'Submit For Review';
+        $manuscript->title = $request->title;
+        $manuscript->status = 'Draft';
         $manuscript->save();
         $manuscript->setEditors(User::whereIn('id', $request->editors ?? [])->get());
         $manuscript->setReviewers(User::whereIn('id', $request->reviewers ?? [])->get());
         $manuscript->setAuthors(User::whereIn('id', $request->authors ?? [])->get());
-        $manuscript->setCoAuthors(User::whereIn('id', $request->corresponding_authors ?? [])->get());
+        $manuscript->setCoAuthors(User::whereIn('id', [auth()->id()])->get());
         $manuscript->generateManuscriptNumber();
         $manuscript->update();
+
+        if ($request->is('api/*')) {
+            return response()->json(new ManuscriptResource($manuscript));
+        }
+
+        return Redirect::route('manuscript.create.final', [
+            'id' => $manuscript->id
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function storeFinal(Request $request, $id)
+    {
+        $request->validate([
+            'is_confirm_grant_numbers' => 'required',
+            'is_acknowledge' => 'required'
+        ]);
+
+        $manuscript = Manuscript::findOrFail($id);
+        $manuscript->status = 'Submit To Editor';
         $coAuthors = $manuscript->correspondingAuthors->map(function($user) {
             return User::find($user->user_id)->email;
         });
@@ -217,34 +261,44 @@ class ManuscriptController extends Controller
 
         $manuscript = Manuscript::where('id', $id);
         $manuscript = $manuscript->firstOrFail();
-        $manuscript->type = $request->type;
-        $manuscript->setEditors(User::whereIn('id', $request->editors ?? [])->get());
-        $manuscript->setReviewers(User::whereIn('id', $request->reviewers ?? [])->get());
-        $manuscript->setAuthors(User::whereIn('id', $request->authors ?? [])->get());
-        $manuscript->setCoAuthors(User::whereIn('id', $request->corresponding_authors ?? [])->get());
-        $manuscript->title = $request->title;
-        $manuscript->short_title = $request->short_title;
-        $manuscript->abstract = $request->abstract;
-        // Assign status
-        if ($manuscript->status != $request->status) {
-
-            if (!$manuscript->assignStatus($request->status)) {
-                // Response error for fail to assign status.
-                if ($request->is('api/*')) {
-                    return response()->json(new ManuscriptResource($manuscript), 401);
-                }
-                
-                return redirect()->back()->withErrors([
-                    'status' => 'You don\'t have the permission to change manuscript status into "' . $request->status . '".'
-                ]);
-            }
-
+        $manuscript->type = $request->type ?? $manuscript->type;
+        if ($request->editors != null) {
+            $manuscript->setEditors(User::whereIn('id', $request->editors)->get());
         }
-        $manuscript->keywords = $request->keywords;
-        $manuscript->funding_information = $request->funding_information;
+        if ($request->reviewers != null) {
+            $manuscript->setReviewers(User::whereIn('id', $request->reviewers)->get());
+        }
+        if ($request->authors != null) {
+            $manuscript->setAuthors(User::whereIn('id', $request->authors)->get());
+        }
+        if ($request->corresponding_authors != null) {
+            $manuscript->setCoAuthors(User::whereIn('id', $request->corresponding_authors)->get());
+        }
+        $manuscript->title = $request->title ?? $manuscript->title;
+        $manuscript->short_title = $request->short_title ?? $manuscript->short_title;
+        $manuscript->abstract = $request->abstract ?? $manuscript->abstract;
+        // Assign status
+        if (!empty($request->status)) {
+            if ($manuscript->status != $request->status) {
+
+                if (!$manuscript->assignStatus($request->status)) {
+                    // Response error for fail to assign status.
+                    if ($request->is('api/*')) {
+                        return response()->json(new ManuscriptResource($manuscript), 401);
+                    }
+                    
+                    return redirect()->back()->withErrors([
+                        'status' => 'You don\'t have the permission to change manuscript status into "' . $request->status . '".'
+                    ]);
+                }
+    
+            }
+        }
+        $manuscript->keywords = $request->keywords ?? $manuscript->keywords;
+        $manuscript->funding_information = $request->funding_information ?? $manuscript->funding_information;
         $manuscript->additional_informations = [
-            'is_confirm_grant_numbers' => $request->is_confirm_grant_numbers ?? false,
-            'is_acknowledge' => $request->is_acknowledge ?? false
+            'is_confirm_grant_numbers' => $request->is_confirm_grant_numbers == null ? (empty($manuscript->additional_informations['is_confirm_grant_numbers']) ? false : true) : $request->is_confirm_grant_numbers,
+            'is_acknowledge' => $request->is_acknowledge == null ? (empty($manuscript->additional_informations['is_acknowledge']) ? false : true) : $request->is_acknowledge
         ];
         $manuscript->update();
 
@@ -274,9 +328,7 @@ class ManuscriptController extends Controller
             return response()->json(new ManuscriptResource($manuscript));
         }
 
-        return Redirect::route('manuscript.edit', [
-            'id' => $manuscript->id,
-        ]);
+        return Redirect::back();
     }
 
     /**
@@ -498,22 +550,22 @@ class ManuscriptController extends Controller
         }
 
         // Send mail
-        $users = $manuscript->correspondingAuthors->map(function($user) {
-            return $user['email'];
+        $users = $manuscript->correspondingAuthors->map(function($member) {
+            return $member->user->email;
         });
         if (!empty($users)) {
             Mail::to($users)->queue(new ManuscriptAttachCreated($manuscript, $attach));
         }
 
-        $users = collect($manuscript->authors)->map(function($user) {
-            return $user['email'];
+        $users = collect($manuscript->authors)->map(function($member) {
+            return $member->user->email;
         });
         if (!empty($users)) {
             Mail::to($users)->queue(new ManuscriptAttachCreated($manuscript, $attach));
         }
 
-        $users = collect($manuscript->editors)->map(function($user) {
-            return $user['email'];
+        $users = collect($manuscript->editors)->map(function($member) {
+            return $member->user->email;
         });
         if (!empty($users)) {
             Mail::to($users)->queue(new ManuscriptAttachCreated($manuscript, $attach));
@@ -522,6 +574,12 @@ class ManuscriptController extends Controller
         // Response
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptAttachCreated($manuscript, $attach));
+        }
+
+        if (!empty($request->redirectBack)) {
+            return Redirect::route('manuscript.create.final', [
+                'id' => $id
+            ]);
         }
 
         return Redirect::route('manuscript.edit', [

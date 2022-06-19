@@ -200,7 +200,7 @@ import Toast from './Components/Toast'
 // }
 let navigation = [
   { name: 'Dashboard', href: '/admin/', disabled: false },
-  { name: 'Submit a Manuscript', href: '/admin/manuscript-create', disabled: false },
+  { name: 'Submit Manuscript', href: '/admin/manuscript-create', disabled: false },
   { name: 'Manuscript Overview', href: '/admin/manuscripts', disabled: false },
   { name: 'Journal Overview', href: '/admin/journals', disabled: false},
   { name: 'Users', href: '/admin/users', disabled: false },
@@ -269,7 +269,7 @@ export default {
           val.disabled = true;
         }
 
-        if(user.permissions_attribute.manuscripts.show == false && (val.name == 'Manuscript Overview' || val.name == 'Submit a manuscript')) {
+        if(user.permissions_attribute.manuscripts.show == false && (val.name == 'Manuscript Overview' || val.name == 'Submit manuscript')) {
           val.disabled = true;
         }
 

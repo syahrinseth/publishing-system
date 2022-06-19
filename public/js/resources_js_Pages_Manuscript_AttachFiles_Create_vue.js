@@ -167,7 +167,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
   "class": "text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate"
-}, " Submit a Manuscript ", -1
+}, " Submit Manuscript ", -1
 /* HOISTED */
 );
 
