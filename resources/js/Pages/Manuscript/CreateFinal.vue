@@ -620,6 +620,7 @@
             });
         },
         submitToEditor() {
+            this.manuscriptForm.status = "Submit To Editor";
             this.manuscriptForm.post(`/admin/manuscripts/${this.$props.manuscript.data.id}/store-final`, {
                 preserveScroll: true,
                 onError: (errors) => {
@@ -819,6 +820,7 @@
         const manuscriptForm = useForm({
             is_confirm_grant_numbers: props.manuscript.data.is_confirm_grant_numbers,
             is_acknowledge: props.manuscript.data.is_acknowledge,
+            status: null
         });
 
         const attachForm = useForm({

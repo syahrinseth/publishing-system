@@ -2352,6 +2352,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     submitToEditor: function submitToEditor() {
       var _this2 = this;
 
+      this.manuscriptForm.status = "Submit To Editor";
       this.manuscriptForm.post("/admin/manuscripts/".concat(this.$props.manuscript.data.id, "/store-final"), {
         preserveScroll: true,
         onError: function onError(errors) {
@@ -2670,7 +2671,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   setup: function setup(props) {
     var manuscriptForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_6__.useForm)({
       is_confirm_grant_numbers: props.manuscript.data.is_confirm_grant_numbers,
-      is_acknowledge: props.manuscript.data.is_acknowledge
+      is_acknowledge: props.manuscript.data.is_acknowledge,
+      status: null
     });
     var attachForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_6__.useForm)({
       id: null,

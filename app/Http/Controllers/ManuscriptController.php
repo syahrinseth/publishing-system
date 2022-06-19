@@ -147,12 +147,12 @@ class ManuscriptController extends Controller
             'is_confirm_grant_numbers' => 'required',
             'is_acknowledge' => 'required'
         ]);
-
         $manuscript = Manuscript::findOrFail($id);
         $manuscript->status = 'Submit To Editor';
         $coAuthors = $manuscript->correspondingAuthors->map(function($user) {
             return User::find($user->user_id)->email;
         });
+        $manuscript->update();
         Mail::to($coAuthors)->queue(new ManuscriptCreated($manuscript));
 
         if ($request->is('api/*')) {

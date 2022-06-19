@@ -2337,17 +2337,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     saveManuscript: function saveManuscript() {
       var _this = this;
 
-      this.manuscriptForm.authors = this.manuscriptForm.authors_obj.map(function (user) {
-        return user.id;
+      this.manuscriptForm.authors = this.manuscriptForm.authors_obj.map(function (member) {
+        return member.user_id;
       });
-      this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map(function (user) {
-        return user.id;
+      this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map(function (member) {
+        return member.user_id;
       });
-      this.manuscriptForm.editors = this.manuscriptForm.editors_obj.map(function (user) {
-        return user.id;
+      this.manuscriptForm.editors = this.manuscriptForm.editors_obj.map(function (member) {
+        return member.user_id;
       });
-      this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map(function (user) {
-        return user.id;
+      this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map(function (member) {
+        return member.user_id;
       });
       this.manuscriptForm.post("/admin/manuscripts/".concat(this.$props.manuscript.data.id, "/update"), {
         preserveScroll: true,
@@ -2676,19 +2676,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       "abstract": props.manuscript.data["abstract"],
       keywords: props.manuscript.data.keywords,
       authors: props.manuscript.data.authors.map(function (val) {
-        return val.id;
+        return val.user_id;
       }),
       authors_obj: props.manuscript.data.authors,
       corresponding_authors: props.manuscript.data.corresponding_authors.map(function (val) {
-        return val.id;
+        return val.user_id;
       }),
       corresponding_authors_obj: props.manuscript.data.corresponding_authors,
       editors: props.manuscript.data.editors.map(function (val) {
-        return val.id;
+        return val.user_id;
       }),
       editors_obj: props.manuscript.data.editors,
       reviewers: props.manuscript.data.reviewers.map(function (val) {
-        return val.id;
+        return val.user_id;
       }),
       reviewers_obj: props.manuscript.data.reviewers,
       funding_information: props.manuscript.data.funding_information,
