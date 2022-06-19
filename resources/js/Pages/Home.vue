@@ -13,17 +13,19 @@
           <h4 class="font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate mb-4">Overview</h4>
           <div class="grid grid-cols-4 gap-3 mb-5">
             <div v-for="overview in overviewCards" :key="`overview-${overview.name}`" class="max-w-sm flex p-6 bg-white rounded-lg shadow">
-              <div class="flex-shrink-0 self-center">
-                <i :class="[overview.icon, overview.color]" class="fa fa-2xl"></i>
-              </div>
-              <div class="ml-6 pt-1">
-                <h4 class="text-md text-gray-700">
-                  {{ overview.name }}
-                </h4>
-                <p class="text-xl text-gray-500">
-                  {{ overview.value }}
-                </p>
-              </div>
+                <div class="flex-shrink-0 self-center">
+                  <i :class="[overview.icon, overview.color]" class="fa fa-2xl"></i>
+                </div>
+                <div class="ml-6 pt-1">
+                  <Link :href="overview.link == `` ? `#` : `/admin/manuscripts?${overview.link}`">
+                    <h4 class="text-md text-gray-700">
+                      {{ overview.name }}
+                    </h4>
+                    <p class="text-xl text-gray-500">
+                      {{ overview.value }}
+                    </p>
+                  </Link>
+                </div>
             </div>
           </div>
           <h4 class="font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate my-4">Actions</h4>
@@ -103,36 +105,42 @@
         {
           name: 'Draft Manuscripts',
           value: props.manuscript_overview.total_draft,
+          link: props.manuscript_overview.total_draft_link,
           color: 'text-gray-700',
           icon: 'fa-file-lines'
         },
         {
           name: 'Submit to Editor Manuscripts',
           value: props.manuscript_overview.total_submit_to_editor,
+          link: props.manuscript_overview.total_submit_to_editor_link,
           color: 'text-blue-700',
           icon: 'fa-file-lines'
         },
         {
           name: 'In Review Manuscripts',
           value: props.manuscript_overview.total_review,
+          link: props.manuscript_overview.total_review_link,
           color: 'text-blue-700',
           icon: 'fa-magnifying-glass'
         },
         {
           name: 'Rejected Manuscripts',
           value: props.manuscript_overview.total_rejected,
+          link: props.manuscript_overview.total_rejected_link,
           color: 'text-red-700',
           icon: 'fa-thumbs-down'
         },
         {
           name: 'Approved Manuscripts',
           value: props.manuscript_overview.total_approved,
+          link: props.manuscript_overview.total_approved_link,
           color: 'text-green-700',
           icon: 'fa-thumbs-up'
         },
         {
           name: 'Published Manuscripts',
           value: props.manuscript_overview.total_published,
+          link: props.manuscript_overview.total_published_link,
           color: 'text-teal-700',
           icon: 'fa-upload'
         },

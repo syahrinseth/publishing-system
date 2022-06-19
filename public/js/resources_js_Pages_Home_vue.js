@@ -60,31 +60,37 @@ __webpack_require__.r(__webpack_exports__);
     var overviewCards = [{
       name: 'Draft Manuscripts',
       value: props.manuscript_overview.total_draft,
+      link: props.manuscript_overview.total_draft_link,
       color: 'text-gray-700',
       icon: 'fa-file-lines'
     }, {
       name: 'Submit to Editor Manuscripts',
       value: props.manuscript_overview.total_submit_to_editor,
+      link: props.manuscript_overview.total_submit_to_editor_link,
       color: 'text-blue-700',
       icon: 'fa-file-lines'
     }, {
       name: 'In Review Manuscripts',
       value: props.manuscript_overview.total_review,
+      link: props.manuscript_overview.total_review_link,
       color: 'text-blue-700',
       icon: 'fa-magnifying-glass'
     }, {
       name: 'Rejected Manuscripts',
       value: props.manuscript_overview.total_rejected,
+      link: props.manuscript_overview.total_rejected_link,
       color: 'text-red-700',
       icon: 'fa-thumbs-down'
     }, {
       name: 'Approved Manuscripts',
       value: props.manuscript_overview.total_approved,
+      link: props.manuscript_overview.total_approved_link,
       color: 'text-green-700',
       icon: 'fa-thumbs-up'
     }, {
       name: 'Published Manuscripts',
       value: props.manuscript_overview.total_published,
+      link: props.manuscript_overview.total_published_link,
       color: 'text-teal-700',
       icon: 'fa-upload'
     }];
@@ -261,11 +267,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([[overview.icon, overview.color], "fa fa-2xl"])
         }, null, 2
         /* CLASS */
-        )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(overview.name), 1
-        /* TEXT */
-        ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(overview.value), 1
-        /* TEXT */
-        )])]);
+        )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
+          href: overview.link == "" ? "#" : "/admin/manuscripts?".concat(overview.link)
+        }, {
+          "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+            return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(overview.name), 1
+            /* TEXT */
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(overview.value), 1
+            /* TEXT */
+            )];
+          }),
+          _: 2
+          /* DYNAMIC */
+
+        }, 1032
+        /* PROPS, DYNAMIC_SLOTS */
+        , ["href"])])]);
       }), 128
       /* KEYED_FRAGMENT */
       ))]), _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Table, null, {

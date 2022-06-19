@@ -48,7 +48,6 @@ class ManuscriptController extends Controller
     public function index(Request $request, ManuscriptFilters $manuscriptFilters)
     {   
         $manuscripts = Manuscript::filter($manuscriptFilters);
-        
         if (!auth()->user()->can('manuscripts.show_all')) {
             ManuscriptMember::where('user_id', auth()->user())
                 ->where(function($q) {
@@ -58,7 +57,6 @@ class ManuscriptController extends Controller
                         ->orWhere('role', 'reviewer');
                 })->firstOrFail();
         }
-
         $manuscripts = new ManuscriptCollection($manuscripts->get());
 
         if ($request->is('api/*')) {
@@ -187,7 +185,7 @@ class ManuscriptController extends Controller
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));
         }
-        
+
         return Inertia::render('Manuscript/Edit', [
             'manuscript' => new ManuscriptResource($manuscript),
             'users' => $users,

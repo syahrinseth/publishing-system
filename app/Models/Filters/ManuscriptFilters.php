@@ -29,6 +29,11 @@ class ManuscriptFilters extends QueryFilter
         return $this->builder->orderBy('updated_at', $order);
     }
 
+    public function ids($ids = [])
+    {
+        return $this->builder->whereIn('id', $ids);
+    }
+
     public function search($input = null)
     {
         return $this->builder->where(function($query) use ($input) {
