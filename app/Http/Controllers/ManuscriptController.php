@@ -27,6 +27,7 @@ use App\Http\Resources\ManuscriptCommentResource;
 use App\Http\Resources\ManuscriptCommentCollection;
 use App\Http\Resources\ManuscriptAttachFileCommentResource;
 use App\Http\Resources\ManuscriptAttachFileCommentCollection;
+use App\Models\ManuscriptMember;
 
 class ManuscriptController extends Controller
 {
@@ -49,13 +50,13 @@ class ManuscriptController extends Controller
         $manuscripts = Manuscript::filter($manuscriptFilters);
         
         if (!auth()->user()->can('manuscripts.show_all')) {
-            $manuscripts->where(function($query) {
-                $query->whereJsonContains('authors', Auth::user()->id)
-                    ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
-                    ->orWhereJsonContains('editors', Auth::user()->id)
-                    ->orWhereJsonContains('reviewers', Auth::user()->id)
-                    ->orWhereJsonContains('publishers', Auth::user()->id);
-            });
+            ManuscriptMember::where('user_id', auth()->user())
+                ->where(function($q) {
+                    $q->where('role', 'author')
+                        ->orWhere('role', 'corresponding author')
+                        ->orWhere('role', 'editor')
+                        ->orWhere('role', 'reviewer');
+                })->firstOrFail();
         }
 
         $manuscripts = new ManuscriptCollection($manuscripts->get());
@@ -101,12 +102,14 @@ class ManuscriptController extends Controller
         $manuscript->type = $request->type;
         $manuscript->status = 'Submit For Review';
         $manuscript->save();
-        // Assign co author
-        $manuscript->assignCoAuthor(auth()->user());
+        $manuscript->setEditors(User::whereIn('id', $request->editors ?? [])->get());
+        $manuscript->setReviewers(User::whereIn('id', $request->reviewers ?? [])->get());
+        $manuscript->setAuthors(User::whereIn('id', $request->authors ?? [])->get());
+        $manuscript->setCoAuthors(User::whereIn('id', $request->corresponding_authors ?? [])->get());
         $manuscript->generateManuscriptNumber();
         $manuscript->update();
         $coAuthors = $manuscript->correspondingAuthors->map(function($user) {
-            return $user['email'];
+            return User::find($user->user_id)->email;
         });
         Mail::to($coAuthors)->queue(new ManuscriptCreated($manuscript));
 
@@ -131,12 +134,13 @@ class ManuscriptController extends Controller
         $manuscript = Manuscript::where('id', $id);
 
         if (!auth()->user()->can('manuscripts.show_all')) {
-            $manuscript->where(function($query) {
-                $query->whereJsonContains('authors', Auth::user()->id)
-                ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
-                ->orWhereJsonContains('editors', Auth::user()->id)
-                ->orWhereJsonContains('reviewers', Auth::user()->id);
-            });
+            ManuscriptMember::where('user_id', auth()->user())
+                ->where(function($q) {
+                    $q->where('role', 'author')
+                        ->orWhere('role', 'corresponding author')
+                        ->orWhere('role', 'editor')
+                        ->orWhere('role', 'reviewer');
+                })->firstOrFail();
         }
             
         $manuscript = $manuscript->firstOrFail();
@@ -167,12 +171,13 @@ class ManuscriptController extends Controller
         $manuscript = Manuscript::where('id', $id);
 
         if (!auth()->user()->can('manuscripts.show_all')) {
-            $manuscript->where(function($query) {
-                $query->whereJsonContains('authors', Auth::user()->id)
-                ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
-                ->orWhereJsonContains('editors', Auth::user()->id)
-                ->orWhereJsonContains('reviewers', Auth::user()->id);
-            });
+            ManuscriptMember::where('user_id', auth()->user())
+                ->where(function($q) {
+                    $q->where('role', 'author')
+                        ->orWhere('role', 'corresponding author')
+                        ->orWhere('role', 'editor')
+                        ->orWhere('role', 'reviewer');
+                })->firstOrFail();
         }
             
         $manuscript = $manuscript->firstOrFail();
@@ -201,22 +206,24 @@ class ManuscriptController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $manuscript = Manuscript::where('id', $id);
 
         if (!auth()->user()->can('manuscripts.show_all')) {
-            $manuscript->where(function($query) {
-                $query->whereJsonContains('authors', Auth::user()->id)
-                ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
-                ->orWhereJsonContains('editors', Auth::user()->id)
-                ->orWhereJsonContains('reviewers', Auth::user()->id);
-            });
+            ManuscriptMember::where('user_id', auth()->user())
+                ->where(function($q) {
+                    $q->where('role', 'author')
+                        ->orWhere('role', 'corresponding author')
+                        ->orWhere('role', 'editor')
+                        ->orWhere('role', 'reviewer');
+                })->firstOrFail();
         }
-            
+
+        $manuscript = Manuscript::where('id', $id);
         $manuscript = $manuscript->firstOrFail();
-        
         $manuscript->type = $request->type;
-        $manuscript->editors = $request->editors ?? [];
-        $manuscript->reviewers = $request->reviewers ?? [];
+        $manuscript->setEditors(User::whereIn('id', $request->editors ?? [])->get());
+        $manuscript->setReviewers(User::whereIn('id', $request->reviewers ?? [])->get());
+        $manuscript->setAuthors(User::whereIn('id', $request->authors ?? [])->get());
+        $manuscript->setCoAuthors(User::whereIn('id', $request->corresponding_authors ?? [])->get());
         $manuscript->title = $request->title;
         $manuscript->short_title = $request->short_title;
         $manuscript->abstract = $request->abstract;
@@ -236,10 +243,7 @@ class ManuscriptController extends Controller
 
         }
         $manuscript->keywords = $request->keywords;
-        $manuscript->authors = $request->authors ?? [];
-        $manuscript->corresponding_authors = $request->corresponding_authors ?? [];
         $manuscript->funding_information = $request->funding_information;
-        $manuscript->publishers = $request->publishers ?? [];
         $manuscript->additional_informations = [
             'is_confirm_grant_numbers' => $request->is_confirm_grant_numbers ?? false,
             'is_acknowledge' => $request->is_acknowledge ?? false
@@ -248,21 +252,21 @@ class ManuscriptController extends Controller
 
         // Send mail
         $users = $manuscript->correspondingAuthors->map(function($user) {
-            return $user['email'];
+            return User::find($user['user_id'])->email;
         });
         if (!empty($users)) {
             Mail::to($users)->queue(new ManuscriptUpdated($manuscript));
         }
 
         $users = $manuscript->authors->map(function($user) {
-            return $user['email'];
+            return User::find($user['user_id'])->email;
         });
         if (!empty($users)) {
             Mail::to($users)->queue(new ManuscriptUpdated($manuscript));
         }
 
         $users = $manuscript->editors->map(function($user) {
-            return $user['email'];
+            return User::find($user['user_id'])->email;
         });
         if (!empty($users)) {
             Mail::to($users)->queue(new ManuscriptUpdated($manuscript));

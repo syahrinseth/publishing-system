@@ -324,7 +324,7 @@
                                 </div>
                                 <div class="w-full mt-3 grid grid-col-1 gap-4">
                                     <a href="#" @click="acceptWithoutChanges" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm">
-                                        Accept without changes
+                                        Accepted Without Changes
                                     </a>
                                     <a href="#" @click="acceptWithMinorChanges" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm">
                                         Accept with minor changes
@@ -995,7 +995,7 @@
             this.saveManuscript();
         },
         acceptWithoutChanges() {
-            this.manuscriptForm.status = "Accept Without Changes";
+            this.manuscriptForm.status = "Accepted Without Changes";
             this.saveManuscript();
         },
         acceptWithMinorChanges() {
@@ -1082,8 +1082,8 @@
             let auth_id = this.$props.auth.user.data.id;
             let manuscriptAuthors = this.manuscript.data.authors;
             // Filter auth roles
-            let result = manuscriptAuthors.filter(function(user) {
-                if (user.id == auth_id) {
+            let result = manuscriptAuthors.filter(function(member) {
+                if (member.user_id == auth_id) {
                     return true;
                 }
                 return false;
@@ -1094,8 +1094,8 @@
             let auth_id = this.$props.auth.user.data.id;
             let manuscriptAuthors = this.manuscript.data.corresponding_authors;
             // Filter auth roles
-            let result = manuscriptAuthors.filter(function(user) {
-                if (user.id == auth_id) {
+            let result = manuscriptAuthors.filter(function(member) {
+                if (member.user_id == auth_id) {
                     return true;
                 }
                 return false;
@@ -1106,8 +1106,8 @@
             let auth_id = this.$props.auth.user.data.id;
             let manuscriptEditors = this.manuscript.data.editors;
             // Filter auth roles
-            let result = manuscriptEditors.filter(function(user) {
-                if (user.id == auth_id) {
+            let result = manuscriptEditors.filter(function(member) {
+                if (member.user_id == auth_id) {
                     return true;
                 }
                 return false;
@@ -1118,8 +1118,8 @@
             let auth_id = this.$props.auth.user.data.id;
             let manuscriptReviewers = this.manuscript.data.reviewers;
             // Filter auth roles
-            let result = manuscriptReviewers.filter(function(user) {
-                if (user.id == auth_id) {
+            let result = manuscriptReviewers.filter(function(member) {
+                if (member.user_id == auth_id) {
                     return true;
                 }
                 return false;

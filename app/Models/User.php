@@ -62,9 +62,14 @@ class User extends Authenticatable
         return $filters->apply($query);
     }
 
-    public function reviewerManuscripts()
+    /**
+     * Get manuscript reviewed
+     * 
+     * @return Collection
+     */
+    public function manuscriptReviewed()
     {
-        return Manuscript::whereJsonContains('reviewers', $this->id)->get();
+        return Manuscript::leftJoin('manuscript_members', 'manuscripts.id', '=', 'manuscript_members.manuscript_id')->where('manuscript_members.user_id', $this->id)->where('manuscript_members.role', 'reviewer')->where('manuscript_members.reviewed', '!=', null)->get();
     }
     
     /**
@@ -122,7 +127,7 @@ class User extends Authenticatable
         })->get();
         $total = 0;
         foreach($reviewers as $reviewer) {
-            $total += $reviewer->reviewerManuscripts()->count();
+            $total += $reviewer->manuscriptReviewed()->count();
         }
         return $total;
     }

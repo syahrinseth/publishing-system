@@ -2403,7 +2403,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.saveManuscript();
     },
     acceptWithoutChanges: function acceptWithoutChanges() {
-      this.manuscriptForm.status = "Accept Without Changes";
+      this.manuscriptForm.status = "Accepted Without Changes";
       this.saveManuscript();
     },
     acceptWithMinorChanges: function acceptWithMinorChanges() {
@@ -2602,8 +2602,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var auth_id = this.$props.auth.user.data.id;
       var manuscriptAuthors = this.manuscript.data.authors; // Filter auth roles
 
-      var result = manuscriptAuthors.filter(function (user) {
-        if (user.id == auth_id) {
+      var result = manuscriptAuthors.filter(function (member) {
+        if (member.user_id == auth_id) {
           return true;
         }
 
@@ -2615,8 +2615,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var auth_id = this.$props.auth.user.data.id;
       var manuscriptAuthors = this.manuscript.data.corresponding_authors; // Filter auth roles
 
-      var result = manuscriptAuthors.filter(function (user) {
-        if (user.id == auth_id) {
+      var result = manuscriptAuthors.filter(function (member) {
+        if (member.user_id == auth_id) {
           return true;
         }
 
@@ -2628,8 +2628,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var auth_id = this.$props.auth.user.data.id;
       var manuscriptEditors = this.manuscript.data.editors; // Filter auth roles
 
-      var result = manuscriptEditors.filter(function (user) {
-        if (user.id == auth_id) {
+      var result = manuscriptEditors.filter(function (member) {
+        if (member.user_id == auth_id) {
           return true;
         }
 
@@ -2641,8 +2641,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var auth_id = this.$props.auth.user.data.id;
       var manuscriptReviewers = this.manuscript.data.reviewers; // Filter auth roles
 
-      var result = manuscriptReviewers.filter(function (user) {
-        if (user.id == auth_id) {
+      var result = manuscriptReviewers.filter(function (member) {
+        if (member.user_id == auth_id) {
           return true;
         }
 
@@ -4571,7 +4571,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               return $options.acceptWithoutChanges && $options.acceptWithoutChanges.apply($options, arguments);
             }),
             "class": "w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm"
-          }, " Accept without changes "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+          }, " Accepted Without Changes "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
             href: "#",
             onClick: _cache[22] || (_cache[22] = function () {
               return $options.acceptWithMinorChanges && $options.acceptWithMinorChanges.apply($options, arguments);

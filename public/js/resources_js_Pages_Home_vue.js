@@ -54,7 +54,6 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     auth: Object,
     manuscript_overview: Object,
-    activities: Object,
     nextSteps: Object
   },
   setup: function setup(props) {
@@ -62,6 +61,11 @@ __webpack_require__.r(__webpack_exports__);
       name: 'Draft Manuscripts',
       value: props.manuscript_overview.total_draft,
       color: 'text-gray-700',
+      icon: 'fa-file-lines'
+    }, {
+      name: 'Submit to Editor Manuscripts',
+      value: props.manuscript_overview.total_submit_to_editor,
+      color: 'text-blue-700',
       icon: 'fa-file-lines'
     }, {
       name: 'In Review Manuscripts',
@@ -217,6 +221,15 @@ var _hoisted_18 = {
 
 var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("View");
 
+var _hoisted_20 = {
+  "class": "px-6 py-4 whitespace-nowrap"
+};
+var _hoisted_21 = {
+  "class": "px-6 py-4 whitespace-nowrap"
+};
+
+var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("View");
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Head = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Head");
 
@@ -263,7 +276,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.nextSteps.publisher.data, function (step, index) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
               key: "step-author-".concat(index)
-            }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("Manuscript \"".concat(step.title || step.type['name'], "\" is ready to be publish by you. Please review the manuscript.")), 1
+            }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("Manuscript \"".concat(step.manuscript_no, " - ").concat(step.title || step.type['name'], "\" is ready to be publish by you. Please review the manuscript.")), 1
             /* TEXT */
             ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_12, [$props.auth.user.data.permissions_attribute.manuscripts.edit == true ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Link, {
               key: 0,
@@ -281,10 +294,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             , ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
           }), 128
           /* KEYED_FRAGMENT */
-          )), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.nextSteps.reviewer.data, function (step, index) {
+          )), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.nextSteps.editor.data, function (step, index) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
               key: "step-author-".concat(index)
-            }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("Manuscript \"".concat(step.title || step.type['name'], "\" is ready to be review by you. Please review the manuscript.")), 1
+            }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("Manuscript \"".concat(step.manuscript_no, " - ").concat(step.title || step.type['name'], "\" is ready to be edit by you. Please review the manuscript.")), 1
             /* TEXT */
             ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_15, [$props.auth.user.data.permissions_attribute.manuscripts.edit == true ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Link, {
               key: 0,
@@ -302,10 +315,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             , ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
           }), 128
           /* KEYED_FRAGMENT */
-          )), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.nextSteps.author.data, function (step, index) {
+          )), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.nextSteps.reviewer.data, function (step, index) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
               key: "step-author-".concat(index)
-            }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("Manuscript \"".concat(step.title || step.type['name'], "\" is in status \"").concat(step.status, "\". Please review the manuscript.")), 1
+            }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("Manuscript \"".concat(step.manuscript_no, " - ").concat(step.title || step.type['name'], "\" is ready to be review by you. Please review the manuscript.")), 1
             /* TEXT */
             ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_18, [$props.auth.user.data.permissions_attribute.manuscripts.edit == true ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Link, {
               key: 0,
@@ -323,12 +336,33 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             , ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
           }), 128
           /* KEYED_FRAGMENT */
+          )), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.nextSteps.author.data, function (step, index) {
+            return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
+              key: "step-author-".concat(index)
+            }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)("Manuscript \"".concat(step.manuscript_no, " - ").concat(step.title || step.type['name'], "\" is in status \"").concat(step.status, "\". Please review the manuscript.")), 1
+            /* TEXT */
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_21, [$props.auth.user.data.permissions_attribute.manuscripts.edit == true ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Link, {
+              key: 0,
+              href: "/admin/manuscripts/".concat(step.id, "/edit"),
+              "class": "text-indigo-600 hover:text-indigo-900 px-2"
+            }, {
+              "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                return [_hoisted_22];
+              }),
+              _: 2
+              /* DYNAMIC */
+
+            }, 1032
+            /* PROPS, DYNAMIC_SLOTS */
+            , ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
+          }), 128
+          /* KEYED_FRAGMENT */
           ))];
         }),
         _: 1
         /* STABLE */
 
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <h4 class=\"font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate my-4\">Recent Activities</h4>\n          <Table>\n            <template v-slot:header>\n              <tr>\n                <th class=\"px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider\">\n                  Time\n                </th>\n                <th class=\"px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider\">\n                  Activity\n                </th>\n              </tr>\n            </template>\n            <template v-slot:body>\n              <tr v-for=\"activity in activities.data\" :key=\"`activity-${activity.id}`\">\n                <td class=\"px-6 py-4 whitespace-nowrap\">\n                  {{ activity.created_at }}\n                </td>\n                <td class=\"px-6 py-4 whitespace-nowrap\">\n                  <h4 class=\"text-gray-700\">{{ activity.subject_type }}</h4>\n                  <span v-if=\"activity.description == 'updated'\">\n                    <div class=\"grid grid-cols-3 justify-items-stretch\" v-if=\"activity.properties['attributes'].length != 0\">\n                      <div>\n                        <p v-for=\"(value, name) in activity.properties['old'] || []\" :key=\"`prop-${value}`\">\n                          {{ name }}: <span class=\"text-red-700\">{{ value }}</span>\n                        </p>\n                      </div>\n                      <div class=\"justify-self-center\">\n                        ->\n                      </div>\n                      <div>\n                        <p v-for=\"(value, name) in activity.properties['attributes']\" :key=\"`prop-${value}`\">\n                          {{ name }}: <span class=\"text-green-700\">{{ value }}</span>\n                        </p>\n                      </div>\n                    </div>\n                    <div v-else>\n                      N/a\n                    </div>\n                  </span>\n                </td>\n              </tr>\n            </template>\n          </Table> ")];
+      })];
     }),
     _: 1
     /* STABLE */

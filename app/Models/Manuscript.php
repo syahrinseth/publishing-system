@@ -62,7 +62,7 @@ class Manuscript extends Model
             'color' => 'red'
         ],
         [
-            'name' => "Accept Without Changes",
+            'name' => "Accepted Without Changes",
             'color' => 'green'
         ],
         [
@@ -76,7 +76,11 @@ class Manuscript extends Model
         [
             'name' => "Published",
             'color' => 'indigo'
-        ]
+        ],
+        [
+            'name' => "Submit To Editor",
+            'color' => 'blue'
+        ],
     ];
 
     /**
@@ -85,7 +89,7 @@ class Manuscript extends Model
      */
     public function authors()
     {
-        return $this->hasMany(ManuscriptMember::class, 'id', 'manuscript_id')->where('role', 'author');
+        return $this->hasMany(ManuscriptMember::class, 'manuscript_id', 'id')->where('role', 'author');
     }
 
     /**
@@ -94,7 +98,7 @@ class Manuscript extends Model
      */
     public function correspondingAuthors()
     {
-        return $this->hasMany(ManuscriptMember::class, 'id', 'manuscript_id')->where('role', 'corresponding author');
+        return $this->hasMany(ManuscriptMember::class, 'manuscript_id', 'id')->where('role', 'corresponding author');
     }
 
     /**
@@ -103,7 +107,7 @@ class Manuscript extends Model
      */
     public function editors()
     {
-        return $this->hasMany(ManuscriptMember::class, 'id', 'manuscript_id')->where('role', 'editor');
+        return $this->hasMany(ManuscriptMember::class, 'manuscript_id', 'id')->where('role', 'editor');
     }
 
     /**
@@ -112,7 +116,7 @@ class Manuscript extends Model
      */
     public function reviewers()
     {
-        return $this->hasMany(ManuscriptMember::class, 'id', 'manuscript_id')->where('role', 'reviewer');
+        return $this->hasMany(ManuscriptMember::class, 'manuscript_id', 'id')->where('role', 'reviewer');
     }
 
     /**
@@ -328,7 +332,7 @@ class Manuscript extends Model
      */
     public function members()
     {
-        return $this->hasMany(ManuscriptMember::class, 'id', 'manuscript_id');
+        return $this->hasMany(ManuscriptMember::class, 'manuscript_id', 'id');
     }
 
     /**
@@ -344,6 +348,80 @@ class Manuscript extends Model
         $member->user_id = $user->id;
         $member->role = 'corresponding author';
         $member->save();
+        return $this;
+    }
+
+    /**
+     * Set authors.
+     * @param Collection || Array $users
+     * 
+     * @return Manuscript
+     */
+    public function setAuthors($users)
+    {
+        return $this->setMembers($users, 'author');
+    }
+
+    /**
+     * Set co authors.
+     * @param Collection || Array $users
+     * 
+     * @return Manuscript
+     */
+    public function setCoAuthors($users)
+    {
+        return $this->setMembers($users, 'corresponding author');
+    }
+
+    /**
+     * Set reviewers.
+     * @param Collection || Array $users
+     * 
+     * @return Manuscript
+     */
+    public function setReviewers($users)
+    {
+        return $this->setMembers($users, 'reviewer');
+    }
+
+    /**
+     * Set editors.
+     * @param Collection || Array $users
+     * 
+     * @return Manuscript
+     */
+    public function setEditors($users)
+    {
+        return $this->setMembers($users, 'editor');
+    }
+
+    /**
+     * Set members
+     * @param Collection $users
+     * @param String $roleName
+     * 
+     * @return Manuscript
+     */
+    protected function setMembers($users, $roleName)
+    {
+        $members = $this->members->where('role', $roleName);
+        foreach ($users as $user) {
+            if ($members->where('user_id', $user->id)->count() > 0) {
+                $members = $members->where('user_id', '!=', $user->id);
+            } else {
+                $member = new ManuscriptMember();
+                $member->manuscript_id = $this->id;
+                $member->user_id = $user->id;
+                $member->role = $roleName;
+                $member->save();
+            }
+        }
+        foreach ($members as $member) {
+            $m = ManuscriptMember::find($member->id);
+            if (!empty($m)) {
+                $m->delete();
+            }
+        }
         return $this;
     }
 }

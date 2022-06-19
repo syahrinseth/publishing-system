@@ -27,63 +27,80 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // Query Manuscripts
         $manuscripts = Manuscript::query();
-
         if (!auth()->user()->can('manuscripts.show_all')) {
-            $manuscripts->whereJsonContains('authors', Auth::user()->id)
-            ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
-            ->orWhereJsonContains('editors', Auth::user()->id)
-            ->orWhereJsonContains('reviewers', Auth::user()->id);
+            $manuscripts->whereHas('members', function($q) {
+                $q->where('user_id', auth()->id());
+            });
         }
-        
         $manuscripts = $manuscripts->get();
-        
-
-        // $manuscript_activities
-        $activities = Activity::where('causer_id', Auth::user()->id)->orderBy('created_at', 'desc')->get()->take(10);
 
         // Next Steps
+        // Author Steps
         $authorNextSteps = Manuscript::whereIn('status', ['Draft', 'Rejected']);
-        if (!auth()->user()->can('manuscripts.show_all')) {
-            $authorNextSteps ->whereJsonContains('authors', Auth::user()->id)
-            ->orWhereJsonContains('corresponding_authors', Auth::user()->id)
-            ->orWhereJsonContains('editors', Auth::user()->id);
-        }
+        // if (!auth()->user()->can('manuscripts.show_all')) {
+            $authorNextSteps->whereHas('members', function($q) {
+                $q->where('user_id', auth()->id())
+                    ->whereIn('role', ['author', 'corresponding author']);
+            });
+        // }
         $authorNextSteps = $authorNextSteps->get();
 
+        // Editor Steps
+        $editorNextSteps = Manuscript::whereIn('status', ['Submit To Editor', 'Rejected', 'Rejected Invite To Resubmit', 'Accepted With Minor Changes', 'Accepted With Major Changes']);
+        // if (!auth()->user()->can('manuscripts.show_all')) {
+            $editorNextSteps->whereHas('members', function($q) {
+                $q->where('user_id', auth()->id())
+                    ->where('role', 'editor');
+            });
+        // }
+        $editorNextSteps = $editorNextSteps->get();
+
+        // Reviewer Steps
         $reviewerNextSteps = Manuscript::where('status', 'Submit For Review');
-        if (!auth()->user()->can('manuscripts.show_all')) {
-            $reviewerNextSteps->whereJsonContains('reviewers', Auth::user()->id);
-        }
+        // if (!auth()->user()->can('manuscripts.show_all')) {
+            $reviewerNextSteps->whereHas('members', function($q) {
+                $q->where('user_id', auth()->id())
+                    ->where('role', 'reviewer');
+            });
+        // }
         $reviewerNextSteps = $reviewerNextSteps->get();
 
-        $publisherNextSteps = Manuscript::whereIn('status', ['Approved']);
-        if (!auth()->user()->can('manuscripts.show_all')) {
-            $publisherNextSteps->whereJsonContains('publishers', Auth::user()->id);
+        // Publisher Steps
+        $publisherNextSteps = Manuscript::where('status', 'like', '%Accepted%');
+        if (!(auth()->user()->can('manuscripts.show_all') && auth()->user()->can('manuscripts.publish'))) {
+            $publisherNextSteps->whereHas('members', function($q) {
+                $q->where('user_id', auth()->id())
+                    ->where('role', 'publisher');
+            });
         }
         $publisherNextSteps = $publisherNextSteps->get();
         
+        // Filter Manuscript Status card
         $total_draft = $manuscripts->where('status', 'Draft')->count();
+        $total_submit_to_editor = $manuscripts->where('status', 'Submit To Editor')->count();
         $total_review = $manuscripts->where('status', 'Submit For Review')->count();
-        $total_rejected = $manuscripts->where('status', 'Rejected')->count();
-        $total_approved = $manuscripts->where('status', 'Approved')->count();
+        $total_rejected = $manuscripts->whereIn('status', ['Rejected', 'Rejected Invite To Resubmit', ])->count();
+        $total_approved = $manuscripts->whereIn('status', ['Accepted Without Changes', 'Accepted With Minor Changes', 'Accepted With Major Changes'])->count();
         $total_published = $manuscripts->where('status', 'Published')->count();
         $total_reviewers_reviewed_manuscripts = User::getTotalReviewersReviewedManuscripts();
 
         return Inertia::render('Home', [
             'manuscript_overview' => [
                 'total_draft' => $total_draft,
+                'total_submit_to_editor' => $total_submit_to_editor,
                 'total_review' => $total_review,
                 'total_rejected' => $total_rejected,
                 'total_approved' => $total_approved,
                 'total_published' => $total_published,
                 'total_reviewers_reviewed_manuscripts' => $total_reviewers_reviewed_manuscripts
             ],
-            'activities' => new ActivityCollection($activities),
             'nextSteps' => [
                 'author' => new ManuscriptCollection($authorNextSteps),
                 'reviewer' => new ManuscriptCollection($reviewerNextSteps),
-                'publisher' => new ManuscriptCollection($publisherNextSteps)
+                'publisher' => new ManuscriptCollection($publisherNextSteps),
+                'editor' => new ManuscriptCollection($editorNextSteps)
             ]
         ]);
     }
