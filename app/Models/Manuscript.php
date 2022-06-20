@@ -89,7 +89,7 @@ class Manuscript extends Model
      */
     public function authors()
     {
-        return $this->hasMany(ManuscriptMember::class, 'manuscript_id', 'id')->where('role', 'author');
+        return $this->hasMany(ManuscriptMember::class, 'manuscript_id', 'id')->where('role', 'authors');
     }
 
     /**

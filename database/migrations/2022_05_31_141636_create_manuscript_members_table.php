@@ -27,64 +27,64 @@ class CreateManuscriptMembersTable extends Migration
         });
 
         // Migrate existing data to new table.
-        $manuscripts = Manuscript::all();
-        foreach($manuscripts as $key => $manuscript) {
-            // Populate authors.
-            $authors = $manuscript->authors ?? [];
-            foreach ($authors as $author) {
-                $member = new ManuscriptMember();
-                $member->manuscript_id = $manuscript->id;
-                $member->user_id = $author;
-                $member->role = 'author';
-                $member->save();
-            }
-            $corresponding_authors = $manuscript->corresponding_authors ?? [];
-            foreach ($corresponding_authors as $author) {
-                $member = new ManuscriptMember();
-                $member->manuscript_id = $manuscript->id;
-                $member->user_id = $author;
-                $member->role = 'corresponding author';
-                $member->save();
-            }
+        // $manuscripts = Manuscript::all();
+        // foreach($manuscripts as $key => $manuscript) {
+        //     // Populate authors.
+        //     $authors = $manuscript->authors ?? [];
+        //     foreach ($authors as $author) {
+        //         $member = new ManuscriptMember();
+        //         $member->manuscript_id = $manuscript->id;
+        //         $member->user_id = $author;
+        //         $member->role = 'author';
+        //         $member->save();
+        //     }
+        //     $corresponding_authors = $manuscript->corresponding_authors ?? [];
+        //     foreach ($corresponding_authors as $author) {
+        //         $member = new ManuscriptMember();
+        //         $member->manuscript_id = $manuscript->id;
+        //         $member->user_id = $author;
+        //         $member->role = 'corresponding author';
+        //         $member->save();
+        //     }
 
-            // Populate editors.
-            $editors = $manuscript->editors ?? [];
-            foreach ($editors as $author) {
-                $member = new ManuscriptMember();
-                $member->manuscript_id = $manuscript->id;
-                $member->user_id = $author;
-                $member->role = 'editor';
-                $member->save();
-            }
+        //     // Populate editors.
+        //     $editors = $manuscript->editors ?? [];
+        //     foreach ($editors as $author) {
+        //         $member = new ManuscriptMember();
+        //         $member->manuscript_id = $manuscript->id;
+        //         $member->user_id = $author;
+        //         $member->role = 'editor';
+        //         $member->save();
+        //     }
 
-            // Populate reviewers.
-            $reviewers = $manuscript->reviewers ?? [];
-            foreach ($reviewers as $author) {
-                $member = new ManuscriptMember();
-                $member->manuscript_id = $manuscript->id;
-                $member->user_id = $author;
-                $member->role = 'reviewer';
-                $member->save();
-            }
+        //     // Populate reviewers.
+        //     $reviewers = $manuscript->reviewers ?? [];
+        //     foreach ($reviewers as $author) {
+        //         $member = new ManuscriptMember();
+        //         $member->manuscript_id = $manuscript->id;
+        //         $member->user_id = $author;
+        //         $member->role = 'reviewer';
+        //         $member->save();
+        //     }
 
-            // Populate publishers.
-            $publishers = $manuscript->publishers ?? [];
-            foreach ($publishers as $author) {
-                $member = new ManuscriptMember();
-                $member->manuscript_id = $manuscript->id;
-                $member->user_id = $author;
-                $member->role = 'publisher';
-                $member->save();
-            }
-        }
+        //     // Populate publishers.
+        //     $publishers = $manuscript->publishers ?? [];
+        //     foreach ($publishers as $author) {
+        //         $member = new ManuscriptMember();
+        //         $member->manuscript_id = $manuscript->id;
+        //         $member->user_id = $author;
+        //         $member->role = 'publisher';
+        //         $member->save();
+        //     }
+        // }
 
-        // Remove manuscript member related columns
-        Schema::table('manuscripts', function(Blueprint $table) {
-            $table->dropColumn('authors');
-            $table->dropColumn('corresponding_authors');
-            $table->dropColumn('editors');
-            $table->dropColumn('reviewers');
-        });
+        // // Remove manuscript member related columns
+        // Schema::table('manuscripts', function(Blueprint $table) {
+        //     $table->dropColumn('authors');
+        //     $table->dropColumn('corresponding_authors');
+        //     $table->dropColumn('editors');
+        //     $table->dropColumn('reviewers');
+        // });
     }
 
     /**
