@@ -25,31 +25,31 @@
                     </div>
                     <div class="mt-5 flex lg:mt-0 lg:ml-4">
 
-                        <span class="sm:ml-3" v-if="(manuscript.data.status == `Draft`) && (authIsAuthor())">
+                        <span class="sm:ml-3" v-if="(manuscript.data.status == `Draft`) && (viewAs == `author` || viewAs == `corresponding author`)">
                             <a href="#" @click="showSubmitToEditorModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                 <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 Submit To Editor
                             </a>
                         </span>
-                        <span class="sm:ml-3" v-if="(manuscript.data.status == `Rejected Invite To Resubmit`) && (authIsAuthor() || authIsEditor())">
+                        <span class="sm:ml-3" v-if="(manuscript.data.status == `Rejected Invite To Resubmit` || manuscript.data.status == `Submit To Editor`) && (viewAs == `editor`)">
                             <a href="#" @click="showSubmitReviewModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                 <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 Submit For Review
                             </a>
                         </span>
-                        <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && authIsReviewer()">
+                        <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (viewAs == `reviewer`)">
                             <a href="#" @click="showRejectModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                 <XCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 Reject
                             </a>
                         </span>
-                        <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && authIsReviewer()">
+                        <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (viewAs == `reviewer`)">
                             <a href="#" @click="showAcceptModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                 <CheckCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 Accept
                             </a>
                         </span>
-                        <span class="sm:ml-3" v-if="manuscript.data.status.includes('Accept') && authIsPublisher()">
+                        <span class="sm:ml-3" v-if="manuscript.data.status.includes('Accept') && (viewAs == `publisher`)">
                             <a href="#" @click="showPublishModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 <PaperAirplaneIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 Publish
@@ -351,7 +351,6 @@
                         </button>
                     </template>
                 </Modal>
-
                 <Modal :show="showSubmitReviewModal" @close="showSubmitReviewModal = false;">
                     <template v-slot:default>
                         <div class="sm:flex sm:items-start">
@@ -378,7 +377,6 @@
                         </button>
                     </template>
                 </Modal>
-
                 <Modal :show="showAcceptModal" @close="showAcceptModal = false;">
                     <template v-slot:default>
                         <div class="sm:flex sm:items-start">
@@ -411,7 +409,6 @@
                         </button>
                     </template>
                 </Modal>
-
                 <Modal :show="showRejectModal" @close="showRejectModal = false;">
                     <template v-slot:default>
                         <div class="sm:flex sm:items-start">
@@ -437,6 +434,31 @@
                     <template v-slot:footer>
                         
                         <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showRejectModal = false">
+                            Cancel
+                        </button>
+                    </template>
+                </Modal>
+                <Modal :show="showPublishModal" @close="showPublishModal = false;">
+                    <template v-slot:default>
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <ExclamationIcon class="h-6 w-6 text-indigo-600" aria-hidden="true" />
+                            </div>
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Publish Manuscript </DialogTitle>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                </div>
+                                <div class="w-full mt-3 grid grid-col-1 gap-4">
+                                    <a href="#" @click="publishManuscript" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm">
+                                        Publish
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-slot:footer>
+                        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showPublishModal = false">
                             Cancel
                         </button>
                     </template>
@@ -1034,6 +1056,7 @@
             attach_files: [],
             showUploadAttachModal: false,
             showUpdateAttachModel: false,
+            showPublishModal: false,
             showAcceptModal: false,
             showRejectModal: false,
             showSubmitReviewModal: false,
@@ -1142,6 +1165,10 @@
         },
         reject() {
             this.manuscriptForm.status = "Rejected";
+            this.saveManuscript();
+        },
+        publishManuscript() {
+            this.manuscriptForm.status = "Published";
             this.saveManuscript();
         },
         asyncFindEditors: _.debounce(async function(query) {
