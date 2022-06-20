@@ -20,7 +20,7 @@ class UserTableSeeder extends Seeder
             $user = new User();
             $user->name = "Super Admin";
             $user->email = "superadmin@example.com";
-            $user->password = encrypt(12345678);
+            $user->password = bcrypt(12345678);
             $user->save();
         } else {
             $user = User::where('name', 'Super Admin')->first();
