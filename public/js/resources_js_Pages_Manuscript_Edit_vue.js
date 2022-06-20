@@ -3113,34 +3113,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     submitForReview: function submitForReview() {
       this.manuscriptForm.status = "Submit For Review";
       this.saveManuscript();
+      this.showSubmitReviewModal = false;
     },
     submitToEditor: function submitToEditor() {
       this.manuscriptForm.status = "Submit To Editor";
       this.saveManuscript();
+      this.showSubmitToEditorModal = false;
     },
     acceptWithoutChanges: function acceptWithoutChanges() {
       this.manuscriptForm.status = "Accepted Without Changes";
       this.saveManuscript();
+      this.showAcceptModal = false;
     },
     acceptWithMinorChanges: function acceptWithMinorChanges() {
       this.manuscriptForm.status = "Accepted With Minor Changes";
       this.saveManuscript();
+      this.showAcceptModal = false;
     },
     acceptWithMajorChanges: function acceptWithMajorChanges() {
       this.manuscriptForm.status = "Accepted With Major Changes";
       this.saveManuscript();
+      this.showAcceptModal = false;
     },
     rejectInviteToResubmit: function rejectInviteToResubmit() {
       this.manuscriptForm.status = "Rejected Invite To Resubmit";
       this.saveManuscript();
+      this.showRejectModal = false;
     },
     reject: function reject() {
       this.manuscriptForm.status = "Rejected";
       this.saveManuscript();
+      this.showRejectModal = false;
     },
     publishManuscript: function publishManuscript() {
       this.manuscriptForm.status = "Published";
       this.saveManuscript();
+      this.showPublishModal = false;
     },
     asyncFindEditors: _.debounce( /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(query) {
@@ -4229,7 +4237,7 @@ var _hoisted_92 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": "mt-2"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
   "class": "text-sm text-gray-500"
-}, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?")], -1
+}, "Are you sure to submit this manuscript to the editor(s)?")], -1
 /* HOISTED */
 );
 
@@ -4252,7 +4260,7 @@ var _hoisted_98 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": "mt-2"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
   "class": "text-sm text-gray-500"
-}, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?")], -1
+}, "Are you sure to submit this manuscript to the reviewer(s)?")], -1
 /* HOISTED */
 );
 
@@ -4266,7 +4274,7 @@ var _hoisted_101 = {
   "class": "mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
 };
 var _hoisted_102 = {
-  "class": "mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left"
+  "class": "mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
 };
 
 var _hoisted_103 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Accept Manuscript ");
@@ -4275,7 +4283,7 @@ var _hoisted_104 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
   "class": "mt-2"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
   "class": "text-sm text-gray-500"
-}, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?")], -1
+}, "Are you sure to accept this manuscript?")], -1
 /* HOISTED */
 );
 
@@ -4289,7 +4297,7 @@ var _hoisted_107 = {
   "class": "mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
 };
 var _hoisted_108 = {
-  "class": "mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left"
+  "class": "mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full"
 };
 
 var _hoisted_109 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Reject Manuscript ");
@@ -4298,7 +4306,7 @@ var _hoisted_110 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
   "class": "mt-2"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
   "class": "text-sm text-gray-500"
-}, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?")], -1
+}, "Are you sure to reject this manuscript?")], -1
 /* HOISTED */
 );
 
@@ -4321,7 +4329,7 @@ var _hoisted_116 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
   "class": "mt-2"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
   "class": "text-sm text-gray-500"
-}, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?")], -1
+}, "Are you sure to publish this manuscript?")], -1
 /* HOISTED */
 );
 

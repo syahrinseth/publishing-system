@@ -335,7 +335,7 @@
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Submit To Editor </DialogTitle>
                                 <div class="mt-2">
-                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                    <p class="text-sm text-gray-500">Are you sure to submit this manuscript to the editor(s)?</p>
                                 </div>
                                 <div class="w-full mt-3 grid grid-col-1 gap-4">
                                     <a href="#" @click="submitToEditor()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:w-auto sm:text-sm">
@@ -360,7 +360,7 @@
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Submit For Review </DialogTitle>
                                 <div class="mt-2">
-                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                    <p class="text-sm text-gray-500">Are you sure to submit this manuscript to the reviewer(s)?</p>
                                 </div>
                                 <div class="w-full mt-3 grid grid-col-1 gap-4">
                                     <a href="#" @click="submitForReview" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:w-auto sm:text-sm">
@@ -371,7 +371,6 @@
                         </div>
                     </template>
                     <template v-slot:footer>
-                        
                         <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showSubmitReviewModal = false">
                             Cancel
                         </button>
@@ -383,10 +382,10 @@
                             <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
                             <ExclamationIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
                             </div>
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Accept Manuscript </DialogTitle>
                                 <div class="mt-2">
-                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                    <p class="text-sm text-gray-500">Are you sure to accept this manuscript?</p>
                                 </div>
                                 <div class="w-full mt-3 grid grid-col-1 gap-4">
                                     <a href="#" @click="acceptWithoutChanges" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm">
@@ -403,7 +402,6 @@
                         </div>
                     </template>
                     <template v-slot:footer>
-                        
                         <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showAcceptModal = false">
                             Cancel
                         </button>
@@ -415,10 +413,10 @@
                             <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
                             <ExclamationIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
                             </div>
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Reject Manuscript </DialogTitle>
                                 <div class="mt-2">
-                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                    <p class="text-sm text-gray-500">Are you sure to reject this manuscript?</p>
                                 </div>
                                 <div class="w-full mt-3 grid grid-col-1 gap-4">
                                     <a href="#" @click="rejectInviteToResubmit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:w-auto sm:text-sm">
@@ -432,7 +430,6 @@
                         </div>
                     </template>
                     <template v-slot:footer>
-                        
                         <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showRejectModal = false">
                             Cancel
                         </button>
@@ -447,7 +444,7 @@
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Publish Manuscript </DialogTitle>
                                 <div class="mt-2">
-                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                    <p class="text-sm text-gray-500">Are you sure to publish this manuscript?</p>
                                 </div>
                                 <div class="w-full mt-3 grid grid-col-1 gap-4">
                                     <a href="#" @click="publishManuscript" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm">
@@ -1142,34 +1139,42 @@
         submitForReview() {
             this.manuscriptForm.status = "Submit For Review";
             this.saveManuscript();
+            this.showSubmitReviewModal = false;
         },
         submitToEditor() {
             this.manuscriptForm.status = "Submit To Editor";
             this.saveManuscript();
+            this.showSubmitToEditorModal = false;
         },
         acceptWithoutChanges() {
             this.manuscriptForm.status = "Accepted Without Changes";
             this.saveManuscript();
+            this.showAcceptModal = false;
         },
         acceptWithMinorChanges() {
             this.manuscriptForm.status = "Accepted With Minor Changes";
             this.saveManuscript();
+            this.showAcceptModal = false;
         },
         acceptWithMajorChanges() {
             this.manuscriptForm.status = "Accepted With Major Changes";
             this.saveManuscript();
+            this.showAcceptModal = false;
         },
         rejectInviteToResubmit() {
             this.manuscriptForm.status = "Rejected Invite To Resubmit";
             this.saveManuscript();
+            this.showRejectModal = false;
         },
         reject() {
             this.manuscriptForm.status = "Rejected";
             this.saveManuscript();
+            this.showRejectModal = false;
         },
         publishManuscript() {
             this.manuscriptForm.status = "Published";
             this.saveManuscript();
+            this.showPublishModal = false;
         },
         asyncFindEditors: _.debounce(async function(query) {
             this.editorSelect.isLoading = true;
