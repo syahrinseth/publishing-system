@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('queue:work --stop-when-empty')->everyFiveMinutes()->withoutOverlapping();
         $schedule->command('queue:retry all')->hourly()->withoutOverlapping();
+        $schedule->command('manuscript:remind-reviewer')->weekly()->withoutOverlapping();
     }
 
     /**
