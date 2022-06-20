@@ -205,7 +205,7 @@ class Manuscript extends Model
     public function assignStatus($input)
     {
         $statusList = Manuscript::$statusList;
-        if (($this->authIsEditor() || $this->authIsAuthor()) && in_array($input, [$statusList[0]['name'], $statusList[1]['name']])) {
+        if (($this->authIsEditor() || $this->authIsAuthor()) && in_array($input, [$statusList[0]['name'], $statusList[1]['name'], $statusList[8]['name']])) {
 
             $this->status = $input;
             $this->update();
@@ -249,6 +249,8 @@ class Manuscript extends Model
     public function authIsAuthor()
     {
         if (in_array(Auth::user()->id, $this->authors->map(function($q){return $q->user_id;})->all() ?? [])) {
+            return true;
+        } elseif(in_array(Auth::user()->id, $this->correspondingAuthors->map(function($q){return $q->user_id;})->all() ?? [])) {
             return true;
         }
         return false;
