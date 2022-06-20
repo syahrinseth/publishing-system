@@ -537,7 +537,7 @@
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                             <div class="px-4 sm:px-0">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900">List Of Reviewers</h3>
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">Reviewers Status</h3>
                                 <p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
                                     In view of your work in the field, your name has been recommended, as a reviewer.  Please suggest other reviewer's name if you are unable to review this manuscript. Thank You
                                 </p>
@@ -556,27 +556,15 @@
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                     Review Status
                                                 </th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Date Reviewed
-                                                </th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Attach
-                                                </th>
                                             </tr>
                                         </template>
                                         <template v-slot:body>
-                                            <tr >
+                                            <tr v-for="reviewer in $props.manuscript.data.reviewers" :key="reviewer.id">
                                                 <td class="px-6 py-4 whitespace-nowrap">
-                                                    Reviewer One
+                                                    {{ $props.manuscript.data.reviewers_in_users.filter((v) => v.id == reviewer.user_id)[0]['name'] }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
-                                                    Reviewed
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    10 Jan 2022
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <a herf="#" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
+                                                    {{ reviewer.reviewed == null ? 'N/a' : reviewer.reviewed }}
                                                 </td>
                                             </tr>
                                         </template>
