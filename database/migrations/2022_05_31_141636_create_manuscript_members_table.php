@@ -78,13 +78,13 @@ class CreateManuscriptMembersTable extends Migration
         //     }
         // }
 
-        // // Remove manuscript member related columns
-        // Schema::table('manuscripts', function(Blueprint $table) {
-        //     $table->dropColumn('authors');
-        //     $table->dropColumn('corresponding_authors');
-        //     $table->dropColumn('editors');
-        //     $table->dropColumn('reviewers');
-        // });
+        // Remove manuscript member related columns
+        Schema::table('manuscripts', function(Blueprint $table) {
+            $table->dropColumn('authors');
+            $table->dropColumn('corresponding_authors');
+            $table->dropColumn('editors');
+            $table->dropColumn('reviewers');
+        });
     }
 
     /**
