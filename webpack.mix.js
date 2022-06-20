@@ -20,3 +20,7 @@ mix.js('resources/js/app.js', 'public/js').vue()
             chunkFilename: 'js/[name].js?id=[chunkhash]',
           }
         });
+
+if (mix.inProduction()) {
+    mix.version();
+}
