@@ -152,6 +152,10 @@ class ManuscriptController extends Controller
         $coAuthors = $manuscript->correspondingAuthors->map(function($user) {
             return User::find($user->user_id)->email;
         });
+        $manuscript->additional_informations = [
+            'is_confirm_grant_numbers' => $request->is_confirm_grant_numbers == null ? (empty($manuscript->additional_informations['is_confirm_grant_numbers']) ? false : true) : $request->is_confirm_grant_numbers,
+            'is_acknowledge' => $request->is_acknowledge == null ? (empty($manuscript->additional_informations['is_acknowledge']) ? false : true) : $request->is_acknowledge
+        ];
         $manuscript->update();
         Mail::to($coAuthors)->queue(new ManuscriptCreated($manuscript));
 
@@ -691,9 +695,7 @@ class ManuscriptController extends Controller
             return response()->json();
         }
 
-        return Redirect::route('manuscript.edit', [
-            'id' => $manuscript->id
-        ]);
+        return Redirect::back();
     }
 
     /**

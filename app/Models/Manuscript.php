@@ -248,7 +248,7 @@ class Manuscript extends Model
      */
     public function authIsAuthor()
     {
-        if (in_array(Auth::user()->id, $this->authors->all() ?? [])) {
+        if (in_array(Auth::user()->id, $this->authors->map(function($q){return $q->user_id;})->all() ?? [])) {
             return true;
         }
         return false;
@@ -260,7 +260,7 @@ class Manuscript extends Model
      */
     public function authIsEditor()
     {
-        if (in_array(Auth::user()->id, $this->editors->all() ?? [])) {
+        if (in_array(Auth::user()->id, $this->editors->map(function($q){return $q->user_id;})->all() ?? [])) {
             return true;
         }
         return false;
@@ -272,7 +272,7 @@ class Manuscript extends Model
      */
     public function authIsReviewer()
     {
-        if (in_array(Auth::user()->id, $this->reviewers->all() ?? [])) {
+        if (in_array(Auth::user()->id, $this->reviewers->map(function($q){return $q->user_id;})->all() ?? [])) {
             return true;
         }
         return false;
