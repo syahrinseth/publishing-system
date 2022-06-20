@@ -89,7 +89,7 @@ class Manuscript extends Model
      */
     public function authors()
     {
-        return $this->hasMany(ManuscriptMember::class, 'manuscript_id', 'id')->where('role', 'authors');
+        return $this->hasMany(ManuscriptMember::class, 'manuscript_id', 'id')->where('role', 'author');
     }
 
     /**
@@ -299,15 +299,17 @@ class Manuscript extends Model
     {
         $tempRole = 'unknown';
         // Find author
-        if (Manuscript::where('id', $this->id)->whereJsonContains('authors', auth()->id())->exists()){
+        $members = ManuscriptMember::where('user_id', auth()->id());
+
+        if ($members->where('role', 'author')->exists()) {
             $tempRole = 'author';
-        } else if(Manuscript::where('id', $this->id)->whereJsonContains('corresponding_authors', auth()->id())->exists()) {
+        } elseif ($members->where('role', 'corresponding author')->exists()) {
             $tempRole = 'corresponding author';
-        } else if(Manuscript::where('id', $this->id)->whereJsonContains('reviewers', auth()->id())) {
+        } elseif ($members->where('role', 'reviewer')->exists()) {
             $tempRole = 'reviewer';
-        } else if (Manuscript::where('id', $this->id)->whereJsonContains('editors', auth()->id())) {
+        } elseif ($members->where('role', 'editor')->exists()) {
             $tempRole = 'editor';
-        } else if (Manuscript::where('id', $this->id)->whereJsonContains('publishers', auth()->id())) {
+        } elseif(auth()->can('manuscripts.show_all') && auth()->can('manuscripts.publish')) {
             $tempRole = 'publisher';
         }
         return $tempRole;

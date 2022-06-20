@@ -265,16 +265,16 @@ class ManuscriptController extends Controller
         $manuscript = Manuscript::where('id', $id);
         $manuscript = $manuscript->firstOrFail();
         $manuscript->type = $request->type ?? $manuscript->type;
-        if ($request->editors != null) {
+        if (is_array($request->editors)) {
             $manuscript->setEditors(User::whereIn('id', $request->editors)->get());
         }
-        if ($request->reviewers != null) {
+        if (is_array($request->reviewers)) {
             $manuscript->setReviewers(User::whereIn('id', $request->reviewers)->get());
         }
-        if ($request->authors != null) {
+        if (is_array($request->authors)) {
             $manuscript->setAuthors(User::whereIn('id', $request->authors)->get());
         }
-        if ($request->corresponding_authors != null) {
+        if (is_array($request->corresponding_authors)) {
             $manuscript->setCoAuthors(User::whereIn('id', $request->corresponding_authors)->get());
         }
         $manuscript->title = $request->title ?? $manuscript->title;

@@ -17,10 +17,6 @@
                                 <DocumentReportIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
                                 {{ manuscript.data.status }}
                             </div>
-                            <!-- <div class="mt-2 flex items-center text-sm text-gray-500">
-                                <UserIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                {{ manuscript.data.authors.map(x => x.name).join(', ') }}
-                            </div> -->
                             <div class="mt-2 flex items-center text-sm text-gray-500">
                                 <CalendarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
                                 {{ manuscript.data.created_at_date }}
@@ -86,8 +82,49 @@
                         </Menu> -->
                     </div>
                 </div>
+                <hr class="my-4">
                 <div class="flex mt-1">
-                    <span class="flex-none pr-1" v-show="authIsAuthor()">
+                    <!-- This example requires Tailwind CSS v2.0+ -->
+                    <Listbox as="div" v-model="viewAs" class="w-64">
+                        <ListboxLabel class="block text-sm font-medium text-gray-700">View As</ListboxLabel>
+                        <div class="mt-1 relative">
+                        <ListboxButton class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <span class="flex items-center">
+                            <!-- <img :src="selected.avatar" alt="" class="flex-shrink-0 h-6 w-6 rounded-full" /> -->
+                            <svg class="h-4 w-4 rounded-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span class="ml-3 block truncate capitalize">{{ viewAs }}</span>
+                            </span>
+                            <span class="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                            <SelectorIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+                            </span>
+                        </ListboxButton>
+
+                        <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                            <ListboxOptions class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                            <ListboxOption as="template" v-for="person in viewAsList" :key="person" :value="person" v-slot="{ active, viewAs }">
+                                <li :class="[active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9']">
+                                <div class="flex items-center">
+                                    <!-- <img :src="person.avatar" alt="" class="flex-shrink-0 h-6 w-6 rounded-full" /> -->
+                                    <svg class="h-4 w-4 rounded-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                    <span :class="[viewAs ? 'font-semibold' : 'font-normal', 'ml-3 block truncate']" class="capitalize">
+                                    {{ person }}
+                                    </span>
+                                </div>
+
+                                <span v-if="viewAs" :class="[active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4']">
+                                    <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                                </span>
+                                </li>
+                            </ListboxOption>
+                            </ListboxOptions>
+                        </transition>
+                        </div>
+                    </Listbox>
+                    <!-- <span class="flex-none pr-1" v-show="authIsAuthor()">
                         <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
                             <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                             You are an Author
@@ -116,7 +153,7 @@
                             <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                             You are a Publisher
                         </div>
-                    </span>
+                    </span> -->
                 </div>
             </template>
             <template v-slot:default>
@@ -404,20 +441,23 @@
                         </button>
                     </template>
                 </Modal>
-                <div v-if="!authIsReviewer()" class="mt-10 sm:mt-0">
+                <div v-if="viewAs == `author` || viewAs == `corresponding author` || viewAs == `editor` || viewAs == `publisher`" class="mt-10 sm:mt-0">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
                             <h3 class="text-lg font-medium leading-6 text-gray-900">General Information</h3>
                             <p class="mt-1 text-sm text-gray-600">
-                                <span v-show="authIsAuthor()">
+                                <span v-show="viewAs == `author` || viewAs == `corresponding author`">
                                     Please identify your submission's areas of interest and specialization by selecting one or more classifications.
                                 </span>
-                                <span v-show="authIsReviewer()">
+                                <!--<span v-show="authIsReviewer()">
                                     You have been assigned to review this manuscript, please download the manuscript in the "Manuscript Attach Files" section below.
-                                </span>
-                                <span v-show="authIsEditor()">
+                                </span>-->
+                                <span v-show="viewAs == `editor`">
                                     You have been assigned as an Editor. Please select reviewers and notify the reviewers to review manuscripts. Thank you
+                                </span>
+                                <span v-show="viewAs == `publisher`">
+                                    Manuscript general information.
                                 </span>
                             </p>
                         </div>
@@ -483,7 +523,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="hidden sm:block" aria-hidden="true">
+                <div v-if="viewAs == `author` || viewAs == `corresponding author` || viewAs == `editor` || viewAs == `publisher`" class="hidden sm:block" aria-hidden="true">
                     <div class="py-5">
                         <div class="border-t border-gray-200" />
                     </div>
@@ -493,11 +533,14 @@
                         <div class="md:col-span-1">
                             <div class="px-4 sm:px-0">
                                 <h3 class="text-lg font-medium leading-6 text-gray-900">Review Preferences</h3>
-                                <p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
+                                <p v-show="viewAs == `reviewer`" class="mt-1 text-sm text-gray-600">
                                     In view of your work in the field, your name has been recommended, as a reviewer. Please suggest other reviewer's name if you are unable to review this manuscript. Thank You
                                 </p>
-                                <p v-show="!authIsReviewer()" class="mt-1 text-sm text-gray-600">
+                                <p v-show="viewAs == `author` || viewAs == `corresponding author`" class="mt-1 text-sm text-gray-600">
                                 Please name specific reviewers to be assigned to your submission. The request will be taken under advisement by the Editor. If you do not request any reviewers, your submission will be assigned to the appropriate reviewer(s) as determined by the Editorial staff.
+                                </p>
+                                <p v-show="viewAs == `editor` || viewAs == `publisher`" class="mt-1 text-sm text-gray-600">
+                                The reviewer(s) are to be assigned to the manuscript.
                                 </p>
                             </div>
                         </div>
@@ -528,21 +571,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="hidden sm:block" aria-hidden="true">
+                <div v-show="viewAs == `editor` || viewAs == `publisher`" class="hidden sm:block" aria-hidden="true">
                     <div class="py-5">
                         <div class="border-t border-gray-200" />
                     </div>
                 </div>  
-                <div v-show="authIsEditor()">
+                <div v-show="viewAs == `editor` || viewAs == `publisher`">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                             <div class="px-4 sm:px-0">
                                 <h3 class="text-lg font-medium leading-6 text-gray-900">Reviewers Status</h3>
-                                <p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
-                                    In view of your work in the field, your name has been recommended, as a reviewer.  Please suggest other reviewer's name if you are unable to review this manuscript. Thank You
-                                </p>
-                                <p v-show="authIsAuthor()" class="mt-1 text-sm text-gray-600">
-                                Please name specific reviewers to be assigned to your submission. The request will be taken under advisement by the Editor. If you do not request any reviewers, your submission will be assigned to the appropriate reviewer(s) as determined by the Editorial staff.
+                                <p class="mt-1 text-sm text-gray-600">
+                                    Here's the list of reviewer(s) review status.
                                 </p>
                             </div>
                         </div>
@@ -572,22 +612,20 @@
                         </div>
                     </div>
                 </div>
-
-                <div v-show="!authIsEditor()" class="hidden sm:block" aria-hidden="true">
+                <div v-show="viewAs == `author` || viewAs == `corresponding author` || viewAs == `editor` || viewAs == `publisher`" class="hidden sm:block" aria-hidden="true">
                     <div class="py-5">
                         <div class="border-t border-gray-200" />
                     </div>
                 </div>
-
-                <div v-show="!authIsEditor()">
+                <div v-show="viewAs == `author` || viewAs == `corresponding author` || viewAs == `editor` || viewAs == `publisher`">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
                             <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Data</h3>
-                            <p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
+                            <!--<p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
                                 Please make sure the manuscript attached here is the same manuscript as registered here.
-                            </p>
-                            <p v-show="authIsAuthor()" class="mt-1 text-sm text-gray-600">
+                            </p>-->
+                            <p class="mt-1 text-sm text-gray-600">
                                 When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
                             </p>
                         </div>
@@ -761,6 +799,11 @@
                                                     <span @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1">Delete</span>
                                                 </td>
                                             </tr>
+                                            <tr v-if="manuscript.data.attachments.length == 0">
+                                                <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center">
+                                                    No Data
+                                                </td>
+                                            </tr>
                                         </template>
                                     </Table>
                                 </div>
@@ -768,12 +811,12 @@
                         </div>
                     </div>
                 </div>
-                <div v-show="authIsAuthor()" class="hidden sm:block" aria-hidden="true">
+                <div v-show="viewAs == `author` || viewAs == `corresponding author`" class="hidden sm:block" aria-hidden="true">
                     <div class="py-5">
                         <div class="border-t border-gray-200" />
                     </div>
                 </div>
-                <div v-show="authIsAuthor()" class="mt-10 sm:mt-0">
+                <div v-show="viewAs == `author` || viewAs == `corresponding author`" class="mt-10 sm:mt-0">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
@@ -926,10 +969,11 @@
   CheckCircleIcon,
   CloudUploadIcon
 } from '@heroicons/vue/solid'
-  import { Menu, MenuButton, MenuItem, MenuItems, DialogTitle } from '@headlessui/vue'
+  import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions, Menu, MenuButton, MenuItem, MenuItems, DialogTitle } from '@headlessui/vue'
   import { useForm, Link } from '@inertiajs/inertia-vue3'
   import Toast from '../../Components/Toast'
   import CommentSectionCard from '../../Components/CommentSectionCard.vue'
+  import { SelectorIcon } from '@heroicons/vue/solid'
 
   export default {
     components: {
@@ -940,6 +984,12 @@
         MenuButton,
         MenuItem,
         MenuItems,
+        Listbox,
+        ListboxButton,
+        ListboxLabel,
+        ListboxOption,
+        ListboxOptions,
+        SelectorIcon,
         BriefcaseIcon,
         CalendarIcon,
         CheckIcon,
@@ -979,6 +1029,8 @@
     },
     data() {
         return {
+            viewAsList: [],
+            viewAs: 0,
             attach_files: [],
             showUploadAttachModal: false,
             showUpdateAttachModel: false,
@@ -1215,6 +1267,27 @@
             });
             return result.length > 0;
         },
+        setRoleView() {
+            this.viewAsList = [];
+            if (this.authIsAuthor()) {
+                this.viewAsList.push('author');
+            }
+            if (this.authIsCorrespondingAuthor()) {
+                this.viewAsList.push('corresponding author');
+            }
+            if (this.authIsEditor()) {
+                this.viewAsList.push('editor');
+            }
+            if (this.authIsReviewer()) {
+                this.viewAsList.push('reviewer');
+            }
+            if (this.authIsPublisher()) {
+                this.viewAsList.push('publisher');
+            }
+            if (this.viewAsList.length > 0) {
+                this.viewAs = this.viewAsList[0];
+            }
+        }
     },
     setup (props) {
         
@@ -1290,8 +1363,12 @@
 
         return { clearAttachForm, fillUpdateAttachForm, clearUpdateAttachForm, deleteAttachFile, manuscriptForm, attachForm, updateAttachForm }
     },
-    async mounted() {
-        // console.log(this.$page.props.auth.user)
+    async created() {
+        this.setRoleView();
+        this.asyncFindEditors()
+        this.asyncFindReviewers()
+        this.asyncFindAuthors()
+        this.asyncFindCorrespondingAuthors()
     }
   }
 </script>
