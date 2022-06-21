@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Mail\ManuscriptPublishedNotification;
 use App\Mail\ManuscriptPostReviewedNotification;
 use App\Mail\ManuscriptReviewThanksNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -235,6 +236,7 @@ class Manuscript extends Model
         
             $this->status = $input;
             $this->update();
+            $this->notifyMembersForPublished();
             return true;
         
         }
@@ -517,7 +519,36 @@ class Manuscript extends Model
         $users = collect($users)->unique()->all();
         
         if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptCreated($this));
+            Mail::to($users)->queue(new ManuscriptPostReviewedNotification($this));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Notify members for published manuscripts.
+     * 
+     * @return Manuscripts
+     */
+    public function notifyMembersForPublished()
+    {
+        $users = [];
+        $users = array_merge($users, $this->correspondingAuthors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = array_merge($users, $this->authors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = array_merge($users, $this->editors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = collect($users)->unique()->all();
+        
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptPublishedNotification($this));
         }
 
         return $this;

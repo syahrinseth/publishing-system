@@ -49,7 +49,7 @@ class ManuscriptController extends Controller
     {   
         $manuscripts = Manuscript::filter($manuscriptFilters);
         if (!auth()->user()->can('manuscripts.show_all')) {
-            ManuscriptMember::where('user_id', auth()->user())
+            ManuscriptMember::where('user_id', auth()->id())
                 ->where(function($q) {
                     $q->where('role', 'author')
                         ->orWhere('role', 'corresponding author')
@@ -177,7 +177,7 @@ class ManuscriptController extends Controller
         $manuscript = Manuscript::where('id', $id);
 
         if (!auth()->user()->can('manuscripts.show_all')) {
-            ManuscriptMember::where('user_id', auth()->user())
+            ManuscriptMember::where('user_id', auth()->id())
                 ->where(function($q) {
                     $q->where('role', 'author')
                         ->orWhere('role', 'corresponding author')
@@ -214,7 +214,7 @@ class ManuscriptController extends Controller
         $manuscript = Manuscript::where('id', $id);
 
         if (!auth()->user()->can('manuscripts.show_all')) {
-            ManuscriptMember::where('user_id', auth()->user())
+            ManuscriptMember::where('user_id', auth()->id())
                 ->where(function($q) {
                     $q->where('role', 'author')
                         ->orWhere('role', 'corresponding author')
@@ -250,7 +250,7 @@ class ManuscriptController extends Controller
     public function update(Request $request, $id)
     {
         if (!auth()->user()->can('manuscripts.show_all')) {
-            ManuscriptMember::where('user_id', auth()->user())
+            ManuscriptMember::where('user_id', auth()->id())
                 ->where(function($q) {
                     $q->where('role', 'author')
                         ->orWhere('role', 'corresponding author')
