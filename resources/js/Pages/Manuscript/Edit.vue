@@ -441,7 +441,7 @@
                             <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
                             <ExclamationIcon class="h-6 w-6 text-indigo-600" aria-hidden="true" />
                             </div>
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Publish Manuscript </DialogTitle>
                                 <div class="mt-2">
                                     <p class="text-sm text-gray-500">Are you sure to publish this manuscript?</p>
@@ -623,7 +623,7 @@
                                                     {{ $props.manuscript.data.reviewers_in_users.filter((v) => v.id == reviewer.user_id)[0]['name'] }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ reviewer.reviewed == null ? 'N/a' : reviewer.reviewed }}
+                                                    {{ reviewer.reviewed == null ? 'N/a' : `Reviewed at ${moment(reviewer.reviewed).format("DD/MM/YYYY")}` }}
                                                 </td>
                                             </tr>
                                         </template>
@@ -1322,6 +1322,8 @@
         }
     },
     setup (props) {
+
+        const moment = require('moment');
         
         const manuscriptForm = useForm({
             type: props.manuscript.data.type.id,
@@ -1393,7 +1395,7 @@
             }
         }
 
-        return { clearAttachForm, fillUpdateAttachForm, clearUpdateAttachForm, deleteAttachFile, manuscriptForm, attachForm, updateAttachForm }
+        return { clearAttachForm, fillUpdateAttachForm, clearUpdateAttachForm, deleteAttachFile, manuscriptForm, attachForm, updateAttachForm, moment }
     },
     async created() {
         this.setRoleView();

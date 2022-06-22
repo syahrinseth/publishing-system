@@ -49,7 +49,7 @@ class ManuscriptController extends Controller
     {   
         $manuscripts = Manuscript::filter($manuscriptFilters);
         if (!auth()->user()->can('manuscripts.show_all')) {
-            ManuscriptMember::where('user_id', auth()->user())
+            ManuscriptMember::where('user_id', auth()->id())
                 ->where(function($q) {
                     $q->where('role', 'author')
                         ->orWhere('role', 'corresponding author')
@@ -149,15 +149,12 @@ class ManuscriptController extends Controller
         ]);
         $manuscript = Manuscript::findOrFail($id);
         $manuscript->status = 'Submit To Editor';
-        $coAuthors = $manuscript->correspondingAuthors->map(function($user) {
-            return User::find($user->user_id)->email;
-        });
         $manuscript->additional_informations = [
             'is_confirm_grant_numbers' => $request->is_confirm_grant_numbers == null ? (empty($manuscript->additional_informations['is_confirm_grant_numbers']) ? false : true) : $request->is_confirm_grant_numbers,
             'is_acknowledge' => $request->is_acknowledge == null ? (empty($manuscript->additional_informations['is_acknowledge']) ? false : true) : $request->is_acknowledge
         ];
         $manuscript->update();
-        Mail::to($coAuthors)->queue(new ManuscriptCreated($manuscript));
+        $manuscript->notifyCreateManuscript();
 
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));
@@ -180,7 +177,7 @@ class ManuscriptController extends Controller
         $manuscript = Manuscript::where('id', $id);
 
         if (!auth()->user()->can('manuscripts.show_all')) {
-            ManuscriptMember::where('user_id', auth()->user())
+            ManuscriptMember::where('user_id', auth()->id())
                 ->where(function($q) {
                     $q->where('role', 'author')
                         ->orWhere('role', 'corresponding author')
@@ -217,7 +214,7 @@ class ManuscriptController extends Controller
         $manuscript = Manuscript::where('id', $id);
 
         if (!auth()->user()->can('manuscripts.show_all')) {
-            ManuscriptMember::where('user_id', auth()->user())
+            ManuscriptMember::where('user_id', auth()->id())
                 ->where(function($q) {
                     $q->where('role', 'author')
                         ->orWhere('role', 'corresponding author')
@@ -253,7 +250,7 @@ class ManuscriptController extends Controller
     public function update(Request $request, $id)
     {
         if (!auth()->user()->can('manuscripts.show_all')) {
-            ManuscriptMember::where('user_id', auth()->user())
+            ManuscriptMember::where('user_id', auth()->id())
                 ->where(function($q) {
                     $q->where('role', 'author')
                         ->orWhere('role', 'corresponding author')
@@ -306,26 +303,7 @@ class ManuscriptController extends Controller
         $manuscript->update();
 
         // Send mail
-        $users = $manuscript->correspondingAuthors->map(function($user) {
-            return User::find($user['user_id'])->email;
-        });
-        if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptUpdated($manuscript));
-        }
-
-        $users = $manuscript->authors->map(function($user) {
-            return User::find($user['user_id'])->email;
-        });
-        if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptUpdated($manuscript));
-        }
-
-        $users = $manuscript->editors->map(function($user) {
-            return User::find($user['user_id'])->email;
-        });
-        if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptUpdated($manuscript));
-        }
+        $manuscript->notifyUpdateManuscript();
 
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));

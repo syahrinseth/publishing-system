@@ -2,12 +2,19 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\QueryFilter;
+use App\Mail\ManuscriptCreated;
+use App\Mail\ManuscriptUpdated;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
+use App\Mail\ManuscriptEditorNotification;
+use App\Mail\ManuscriptReviewNotification;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Mail\ManuscriptPublishedNotification;
+use App\Mail\ManuscriptPostReviewedNotification;
 use App\Mail\ManuscriptReviewThanksNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -209,19 +216,45 @@ class Manuscript extends Model
 
             $this->status = $input;
             $this->update();
+            // Send notification to reviewers.
+            if ($statusList[1]['name'] == $input) {
+                $reviewers = $this->reviewers->map(function($q){return $q->user->email;})->values()->all();
+                if (!empty($reviewers)) {
+                    // Send notifications to reviewers.
+                    Mail::to($reviewers)->queue(new ManuscriptReviewNotification($this));
+                }
+            }
+            // Send notification to editor.
+            if ($statusList[8]['name'] == $input) {
+                $editors = $this->editors->map(function($q){return $q->user->email;})->values()->all();
+                if (!empty($editors)) {
+                    // Send notifications to editors.
+                    Mail::to($editors)->queue(new ManuscriptEditorNotification($this));
+                }
+            }
             return true;
         
         } elseif($this->authIsReviewer() && in_array($input, [$statusList[2]['name'], $statusList[3]['name'], $statusList[4]['name'], $statusList[5]['name'], $statusList[6]['name']])) {
         
             $this->status = $input;
             $this->update();
-            Mail::to(auth()->user()->email)->queue(new ManuscriptReviewThanksNotification($this));
+            // Update member reviewed
+            $reviewer = $this->reviewers->where('user_id', auth()->id())->first();
+            if (!empty($reviewer)) {
+                $reviewer->reviewed = Carbon::now();
+                $reviewer->update();
+                // Send thanks notification
+                Mail::to($reviewer->user->email)->queue(new ManuscriptReviewThanksNotification($this));
+            }
+            // Send notification to the rest of the members.
+            $this->notifyMembersForPostReviewed();
             return true;
         
         } elseif(auth()->user()->can('manuscripts.publish') && in_array($input, [$statusList[7]['name']])) {
         
             $this->status = $input;
             $this->update();
+            $this->notifyMembersForPublished();
             return true;
         
         }
@@ -414,6 +447,128 @@ class Manuscript extends Model
                 $m->delete();
             }
         }
+        return $this;
+    }
+
+    /**
+     * Send update notification email.
+     * @return Manuscript
+     */
+    public function notifyUpdateManuscript()
+    {
+        $users = [];
+        $users = array_merge($users, $this->correspondingAuthors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = array_merge($users, $this->authors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = array_merge($users, $this->editors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = collect($users)->unique()->all();
+        
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptUpdated($this));
+        }
+        return $this;
+    }
+
+    /**
+     * Send create notification email.
+     * @return Manuscript
+     */
+    public function notifyCreateManuscript()
+    {
+        $users = [];
+        $users = array_merge($users, $this->correspondingAuthors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = array_merge($users, $this->authors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = array_merge($users, $this->editors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = collect($users)->unique()->all();
+        
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptCreated($this));
+        }
+        return $this;
+
+    }
+
+    /**
+     * Send email notification to members (Authors, co authors, editors, publishers if accept).
+     * 
+     * @return Manuscript
+     */
+    public function notifyMembersForPostReviewed()
+    {
+        $users = [];
+        $users = array_merge($users, $this->correspondingAuthors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = array_merge($users, $this->authors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = array_merge($users, $this->editors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+        
+        if (stripos($this->status, "Accepted") !== false) {  
+            $publishers = User::permission(['manuscripts.publish'])->permission('manuscripts.show_all')->get()->map(function($user) {
+                return $user->email;
+            })->values()->all();
+            if (!empty($publishers)) {
+                Mail::to($publishers)->queue(new ManuscriptPostReviewedNotification($this));
+            }
+        }
+
+        $users = collect($users)->unique()->all();
+        
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptPostReviewedNotification($this));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Notify members for published manuscripts.
+     * 
+     * @return Manuscripts
+     */
+    public function notifyMembersForPublished()
+    {
+        $users = [];
+        $users = array_merge($users, $this->correspondingAuthors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = array_merge($users, $this->authors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = array_merge($users, $this->editors->map(function($member) {
+            return $member->user->email;
+        })->values()->all());
+
+        $users = collect($users)->unique()->all();
+        
+        if (!empty($users)) {
+            Mail::to($users)->queue(new ManuscriptPublishedNotification($this));
+        }
+
         return $this;
     }
 }
