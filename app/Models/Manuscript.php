@@ -7,6 +7,7 @@ use App\Models\User;
 use App\QueryFilter;
 use App\Mail\ManuscriptCreated;
 use App\Mail\ManuscriptUpdated;
+use App\Models\ManuscriptMember;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
@@ -216,6 +217,7 @@ class Manuscript extends Model
 
             $this->status = $input;
             $this->update();
+
             // Send notification to reviewers.
             if ($statusList[1]['name'] == $input) {
                 $reviewers = $this->reviewers->map(function($q){return $q->user->email;})->values()->all();
@@ -224,6 +226,7 @@ class Manuscript extends Model
                     Mail::to($reviewers)->queue(new ManuscriptReviewNotification($this));
                 }
             }
+
             // Send notification to editor.
             if ($statusList[8]['name'] == $input) {
                 $editors = $this->editors->map(function($q){return $q->user->email;})->values()->all();
@@ -235,19 +238,26 @@ class Manuscript extends Model
             return true;
         
         } elseif($this->authIsReviewer() && in_array($input, [$statusList[2]['name'], $statusList[3]['name'], $statusList[4]['name'], $statusList[5]['name'], $statusList[6]['name']])) {
-        
-            $this->status = $input;
-            $this->update();
+
             // Update member reviewed
             $reviewer = $this->reviewers->where('user_id', auth()->id())->first();
             if (!empty($reviewer)) {
+
+                // Update reviewer vote.
                 $reviewer->reviewed = Carbon::now();
+                $reviewer->reviewedVote = $input;
                 $reviewer->update();
+
+                // Validate manuscript review status and update status based on reviewers votes.
+                $this->setManuscriptStatus($input);
+                $this->update();
+
                 // Send thanks notification
                 Mail::to($reviewer->user->email)->queue(new ManuscriptReviewThanksNotification($this));
+
+                // Send notification to the rest of the members.
+                $this->notifyMembersForPostReviewed();
             }
-            // Send notification to the rest of the members.
-            $this->notifyMembersForPostReviewed();
             return true;
         
         } elseif(auth()->user()->can('manuscripts.publish') && in_array($input, [$statusList[7]['name']])) {
@@ -569,6 +579,58 @@ class Manuscript extends Model
             Mail::to($users)->queue(new ManuscriptPublishedNotification($this));
         }
 
+        return $this;
+    }
+
+    /**
+     * Set manuscript review status based on reviewers vote.
+     * @param String $status
+     */
+    public function setManuscriptStatus($status)
+    {
+        $totalReviewers = ManuscriptMember::where('manuscript_id', $this->id)->where('role', 'reviewer')->count();
+        $reviewersWithVote = ManuscriptMember::where('manuscript_id', $this->id)->where('role', 'reviewer')->where('reviewed', '!=', null)->get();
+        if ($totalReviewers > 1) {
+            if ($reviewersWithVote->count() > 1) {
+                
+                // Vote manuscript status and update status.
+                $memberVotes = $reviewersWithVote->groupBy('reviewedVote');
+
+                // Get rejected votes.
+                $rejectVotes = $memberVotes->filter(function($vote, $key){
+                    if (!str_contains($key, 'Accepted')) {
+                        return true;
+                    }
+                    return false;
+                });
+                
+                // Get accepted votes.
+                $acceptVotes = $memberVotes->filter(function($vote, $key){
+                    if (str_contains($key, 'Accepted')) {
+                        return true;
+                    }
+                    return false;
+                });
+
+                // Sort top votes and assign status.
+                if ($rejectVotes->count() >= $acceptVotes->count()) {
+                    // Get top rejected votes and assign status.
+                    $topVote = $rejectVotes->sortBy(function($group){
+                        return $group->count();
+                    })->last();
+                    $this->status = $topVote->first()->reviewedVote;
+                } else {
+                    // Get top accepted votes and assign status.
+                    $topVote = $acceptVotes->sortBy(function($group){
+                        return $group->count();
+                    })->last();
+                    $this->status = $topVote->first()->reviewedVote;
+                }
+            }
+        } else {
+            $this->status = $status;
+        }
+        
         return $this;
     }
 }
