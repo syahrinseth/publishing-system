@@ -10,6 +10,7 @@ use App\Mail\ManuscriptUpdated;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
+use App\Mail\ManuscriptEditorNotification;
 use App\Mail\ManuscriptReviewNotification;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Mail\ManuscriptPublishedNotification;
@@ -221,6 +222,14 @@ class Manuscript extends Model
                 if (!empty($reviewers)) {
                     // Send notifications to reviewers.
                     Mail::to($reviewers)->queue(new ManuscriptReviewNotification($this));
+                }
+            }
+            // Send notification to editor.
+            if ($statusList[8]['name'] == $input) {
+                $editors = $this->editors->map(function($q){return $q->user->email;})->values()->all();
+                if (!empty($editors)) {
+                    // Send notifications to editors.
+                    Mail::to($editors)->queue(new ManuscriptEditorNotification($this));
                 }
             }
             return true;
