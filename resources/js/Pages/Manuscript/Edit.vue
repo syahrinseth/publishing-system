@@ -520,7 +520,7 @@
                                         v-model="manuscriptForm.authors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors">
                                             </VueMultiselect>
                                     </div>
-                                    <div v-show="!authIsReviewer()" class="col-span-3 sm:col-span-2">
+                                    <div v-show="viewAs == `author` || viewAs == `corresponding author` || viewAs == `editor` || viewAs == `publisher`" class="col-span-3 sm:col-span-2">
                                         <div class="col-span-3 sm:col-span-2">
                                             <label for="company-website" class="block text-sm font-medium text-gray-700">
                                             Request Editor(s)
@@ -749,13 +749,13 @@
                         <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
                             <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Attach Files</h3>
-                            <span v-show="authIsReviewer()">
+                            <span v-show="viewAs == `reviewer`">
                                 You have been assigned to review this manuscript, please download the manuscript in the "Manuscript Attach Files" section.
                             </span>
-                            <p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
+                            <p v-show="viewAs == `reviewer`" class="mt-1 text-sm text-gray-600">
                                 Please upload your reviewer comments in a new file name using Words Document file.  Please make sure that your comments can be clearly understood by the authors. You are given 30 working days for this cycle of reviewing process. Thank You
                             </p>
-                            <p v-show="authIsAuthor()" class="mt-1 text-sm text-gray-600">
+                            <p v-show="viewAs == `author` || viewAs == `corresponding author`" class="mt-1 text-sm text-gray-600">
                                 When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
                             </p>
                         </div>
