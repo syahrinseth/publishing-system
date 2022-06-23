@@ -67,6 +67,8 @@
                                             </div>
                                         </div>
                                     </div>
+                                        <div class="px-4 py-3 bg-gray-50 text-right sm:px-6 h-12">
+                                        </div>
                                     </div>
                                 </form>
                                 </div>
@@ -102,6 +104,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6 h-12">
                                             </div>
                                             </div>
                                         </form>
@@ -193,6 +197,9 @@
 
                                             
                                         </div>
+
+                                    <div class="px-4 py-3 bg-gray-50 text-right sm:px-6 h-12">
+                                    </div>
                                         </div>
                                     </div>
                                 </div>
@@ -419,3 +426,9 @@ export default {
 }
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>
+
+<style>
+.multiselect--active {
+  z-index: 9999;
+}
+</style>
