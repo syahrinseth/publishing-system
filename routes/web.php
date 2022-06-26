@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ManuscriptController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicJournalController;
 
 /*
@@ -41,6 +42,12 @@ Route::get('/journals/{id}', [PublicJournalController::class, 'show'])->name('pu
 Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
     
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+
+    // Profile
+    Route::controller(ProfileController::class)->group(function() {
+        Route::get('/profile', 'edit')->name('profile.edit');
+        Route::put('/profile', 'update')->name('profile.update');
+    });
 
     // Manuscript Module
 
@@ -103,9 +110,6 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
     Route::post('/journals/{id}/update', [App\Http\Controllers\JournalController::class, 'update'])->name('journal.update');
 
     Route::post('/journals/{id}/destroy', [App\Http\Controllers\JournalController::class, 'destroy'])->name('journal.destroy');
-
-    // Profile Module
-    Route::get('/profile', [App\Http\Controllers\UserController::class, 'profile'])->name('profile');
 
     // User Module
 

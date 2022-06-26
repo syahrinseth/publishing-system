@@ -222,7 +222,7 @@ export default {
             });
         },
         onSubmit() {
-            this.userForm.post(`/admin/users/${this.$props.user.data.id}/update`, {
+            this.userForm.post(`/admin/profile`, {
                 preserveScroll: true,
                 onError: (errors) => {
                     Object.keys(errors).forEach((value, index) => {
@@ -238,6 +238,7 @@ export default {
     setup(props) {
         let user = props.user.data;
         const userForm = useForm({
+            _method: 'PUT',
             first_name: user.first_name,
             last_name: user.last_name,
             email: user.email,

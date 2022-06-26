@@ -49,13 +49,9 @@ class ManuscriptController extends Controller
     {   
         $manuscripts = Manuscript::filter($manuscriptFilters);
         if (!auth()->user()->can('manuscripts.show_all')) {
-            ManuscriptMember::where('user_id', auth()->id())
-                ->where(function($q) {
-                    $q->where('role', 'author')
-                        ->orWhere('role', 'corresponding author')
-                        ->orWhere('role', 'editor')
-                        ->orWhere('role', 'reviewer');
-                })->firstOrFail();
+            $manuscripts->whereHas('members', function($q) {
+                $q->where('user_id', auth()->id());
+            });
         }
         $manuscripts = new ManuscriptCollection($manuscripts->get());
 
@@ -177,13 +173,9 @@ class ManuscriptController extends Controller
         $manuscript = Manuscript::where('id', $id);
 
         if (!auth()->user()->can('manuscripts.show_all')) {
-            ManuscriptMember::where('user_id', auth()->id())
-                ->where(function($q) {
-                    $q->where('role', 'author')
-                        ->orWhere('role', 'corresponding author')
-                        ->orWhere('role', 'editor')
-                        ->orWhere('role', 'reviewer');
-                })->firstOrFail();
+            $manuscript->whereHas('members', function($q) {
+                $q->where('user_id', auth()->id());
+            });
         }
             
         $manuscript = $manuscript->firstOrFail();
@@ -214,13 +206,9 @@ class ManuscriptController extends Controller
         $manuscript = Manuscript::where('id', $id);
 
         if (!auth()->user()->can('manuscripts.show_all')) {
-            ManuscriptMember::where('user_id', auth()->id())
-                ->where(function($q) {
-                    $q->where('role', 'author')
-                        ->orWhere('role', 'corresponding author')
-                        ->orWhere('role', 'editor')
-                        ->orWhere('role', 'reviewer');
-                })->firstOrFail();
+            $manuscript->whereHas('members', function($q) {
+                $q->where('user_id', auth()->id());
+            });
         }
             
         $manuscript = $manuscript->firstOrFail();
@@ -249,17 +237,12 @@ class ManuscriptController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!auth()->user()->can('manuscripts.show_all')) {
-            ManuscriptMember::where('user_id', auth()->id())
-                ->where(function($q) {
-                    $q->where('role', 'author')
-                        ->orWhere('role', 'corresponding author')
-                        ->orWhere('role', 'editor')
-                        ->orWhere('role', 'reviewer');
-                })->firstOrFail();
-        }
-
         $manuscript = Manuscript::where('id', $id);
+        if (!auth()->user()->can('manuscripts.show_all')) {
+            $manuscript->whereHas('members', function($q) {
+                $q->where('user_id', auth()->id());
+            });
+        }
         $manuscript = $manuscript->firstOrFail();
         $manuscript->type = $request->type ?? $manuscript->type;
         if (is_array($request->editors)) {

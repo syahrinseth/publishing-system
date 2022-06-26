@@ -25,6 +25,7 @@ class UserResource extends JsonResource
             'address_1' => $this->address_1,
             'address_2' => $this->address_2,
             'postcode' => $this->postcode,
+            'field' => $this->field,
             'city' => $this->city,
             'state' => $this->state,
             'fax_no' => $this->fax_no,

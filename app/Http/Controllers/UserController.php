@@ -87,6 +87,7 @@ class UserController extends Controller
             $user->address_1 = $request->address_1;
             $user->address_2 = $request->address_2;
             $user->postcode = $request->postcode;
+            $user->field = $request->field;
             $user->city = $request->city;
             $user->state = $request->state;
             $user->fax_no = $request->fax_no;
@@ -191,6 +192,7 @@ class UserController extends Controller
             $user->address_1 = $request->address_1;
             $user->address_2 = $request->address_2;
             $user->postcode = $request->postcode;
+            $user->field = $request->field;
             $user->city = $request->city;
             $user->state = $request->state;
             $user->fax_no = $request->fax_no;
