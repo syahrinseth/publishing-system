@@ -3055,9 +3055,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map(function (member) {
         return member.id;
       });
-      this.manuscriptForm.editors = this.manuscriptForm.editors_obj.map(function (member) {
-        return member.id;
-      });
+      this.manuscriptForm.editors = [this.manuscriptForm.editors_obj];
       this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map(function (member) {
         return member.id;
       });
@@ -5718,7 +5716,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         placeholder: "Type to search",
         "open-direction": "bottom",
         options: $data.editorSelect.options,
-        multiple: true,
+        multiple: false,
         searchable: true,
         loading: $data.editorSelect.isLoading,
         "internal-search": false,

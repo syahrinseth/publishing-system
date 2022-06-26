@@ -526,7 +526,7 @@
                                             Request Editor(s)
                                             </label>
                                             <VueMultiselect 
-                                            v-model="manuscriptForm.editors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="true" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
+                                            v-model="manuscriptForm.editors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="false" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
                                                 </VueMultiselect>
                                         </div>
                                     </div>
@@ -1095,7 +1095,7 @@
         saveManuscript() {
             this.manuscriptForm.authors = this.manuscriptForm.authors_obj.map((member) => member.id);
             this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map((member) => member.id)
-            this.manuscriptForm.editors = this.manuscriptForm.editors_obj.map((member) => member.id);
+            this.manuscriptForm.editors = [this.manuscriptForm.editors_obj];
             this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map((member) => member.id);
             this.manuscriptForm.post(`/admin/manuscripts/${this.$props.manuscript.data.id}/update`, {
                 preserveScroll: true,

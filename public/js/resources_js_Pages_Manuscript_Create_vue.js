@@ -98,9 +98,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.manuscriptForm.corresponding_authors = _this.manuscriptForm.corresponding_authors_obj.map(function (user) {
                   return user.id;
                 });
-                _this.manuscriptForm.editors = _this.manuscriptForm.editors_obj.map(function (user) {
-                  return user.id;
-                });
+                _this.manuscriptForm.editors = [_this.manuscriptForm.editors_obj];
                 _this.manuscriptForm.reviewers = _this.manuscriptForm.reviewers_obj.map(function (user) {
                   return user.id;
                 });
@@ -694,7 +692,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         placeholder: "Type to search",
         "open-direction": "bottom",
         options: $data.editorSelect.options,
-        multiple: true,
+        multiple: false,
         searchable: true,
         loading: $data.editorSelect.isLoading,
         "internal-search": false,

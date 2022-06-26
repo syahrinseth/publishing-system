@@ -61,7 +61,7 @@
                                                     Request Editor(s) <span class="text-red-600">*</span>
                                                     </label>
                                                     <VueMultiselect 
-                                                    v-model="manuscriptForm.editors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="true" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
+                                                    v-model="manuscriptForm.editors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="false" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
                                                         </VueMultiselect>
                                                 </div>
                                             </div>
@@ -323,7 +323,7 @@ export default {
         async submit() {
             this.manuscriptForm.authors = this.manuscriptForm.authors_obj.map((user) => user.id);
             this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map((user) => user.id);
-            this.manuscriptForm.editors = this.manuscriptForm.editors_obj.map((user) => user.id);
+            this.manuscriptForm.editors = [this.manuscriptForm.editors_obj];
             this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map((user) => user.id);
             this.manuscriptForm.post(`/admin/manuscript-store`, {
                 preserveScroll: true,
