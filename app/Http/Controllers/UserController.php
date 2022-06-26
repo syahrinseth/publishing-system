@@ -71,7 +71,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'email' => 'required',
             'password' => ['required', 'confirmed', Password::min(8)],
         ]);
@@ -79,7 +80,8 @@ class UserController extends Controller
         try {
 
             $user = new User();
-            $user->name = $request->name;
+            $user->first_name = $request->first_name;
+            $user->last_name = $request->last_name;
             $user->email = $request->email;
             $user->affiliation = $request->affiliation;
             $user->address_1 = $request->address_1;
@@ -173,7 +175,8 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'email' => 'required|email',
             // 'password' => ['required', 'confirmed', Password::min(8)],
         ]);
@@ -181,7 +184,8 @@ class UserController extends Controller
         try {
 
             $user = User::findOrFail($id);
-            $user->name = $request->name;
+            $user->first_name = $request->first_name;
+            $user->last_name = $request->last_name;
             $user->email = $request->email;
             $user->affiliation = $request->affiliation;
             $user->address_1 = $request->address_1;

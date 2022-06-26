@@ -24,8 +24,12 @@
                         <input type="hidden" name="remember" value="true" />
                         <div class="rounded-md shadow-sm -space-y-px">
                         <div>
-                            <label for="name-address" class="sr-only">Name</label>
-                            <input v-model="registerForm.name" id="name-address" name="name" type="name" autocomplete="name" required="" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Name" />
+                            <label for="name-address" class="sr-only">First Name</label>
+                            <input v-model="registerForm.first_name" id="first-name" name="first_name" type="first_name" autocomplete="first_name" required="" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="First Name" />
+                        </div>
+                        <div>
+                            <label for="name-address" class="sr-only">Last Name</label>
+                            <input v-model="registerForm.last_name" id="last-name" name="last_name" type="last_name" autocomplete="last_name" required="" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Last Name" />
                         </div>
                         <div>
                             <label for="email-address" class="sr-only">Email address</label>
@@ -108,7 +112,8 @@ export default {
     },
     setup(props) {
         const registerForm = useForm({
-            name: null,
+            first_name: null,
+            last_name: null,
             email: null,
             password: null,
             password_confirmation: null

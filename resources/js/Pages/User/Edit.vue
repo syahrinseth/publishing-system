@@ -23,9 +23,13 @@
                         <form @submit.prevent="onSubmit()"  method="POST">
                         <div class="shadow sm:rounded-md sm:overflow-hidden">
                             <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                <div class="col-span-12 sm:col-span-12">
-                                    <label for="first-name" class="block text-sm font-medium text-gray-700">Full Name</label>
-                                    <input v-model="userForm.name" type="text" name="first-name" id="first-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                <div class="col-span-6 sm:col-span-6">
+                                    <label for="first-name" class="block text-sm font-medium text-gray-700">First Name</label>
+                                    <input v-model="userForm.first_name" type="text" name="first-name" id="first-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                </div>
+                                <div class="col-span-6 sm:col-span-6">
+                                    <label for="last-name" class="block text-sm font-medium text-gray-700">Last Name</label>
+                                    <input v-model="userForm.last_name" type="text" name="last-name" id="last-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
                                 </div>
                                 <div class="col-span-8 sm:col-span-8">
                                     <label for="field" class="block text-sm font-medium text-gray-700">Field</label>
@@ -234,7 +238,8 @@ export default {
     setup(props) {
         let user = props.user.data;
         const userForm = useForm({
-            name: user.name,
+            first_name: user.first_name,
+            last_name: user.last_name,
             email: user.email,
             address_1: user.address_1,
             address_2: user.address_2,
