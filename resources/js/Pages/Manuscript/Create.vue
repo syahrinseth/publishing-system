@@ -52,7 +52,7 @@
                                                 Author(s) <span class="text-red-600">*</span>
                                                 </label>
                                                 <VueMultiselect 
-                                                v-model="manuscriptForm.authors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors">
+                                                v-model="manuscriptForm.authors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors">
                                                     </VueMultiselect>
                                             </div>
                                             <div class="col-span-3 sm:col-span-2">
@@ -61,7 +61,7 @@
                                                     Request Editor(s) <span class="text-red-600">*</span>
                                                     </label>
                                                     <VueMultiselect 
-                                                    v-model="manuscriptForm.editors_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="false" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
+                                                    v-model="manuscriptForm.editors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="false" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
                                                         </VueMultiselect>
                                                 </div>
                                             </div>
@@ -99,7 +99,7 @@
                                                         </label>
                                                         <div class="mt-1 flex rounded-md shadow-sm">
                                                         <VueMultiselect 
-                                                        v-model="manuscriptForm.reviewers_obj" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers">
+                                                        v-model="manuscriptForm.reviewers_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers">
                                                             </VueMultiselect>
                                                         </div>
                                                     </div>
@@ -140,14 +140,14 @@
                                             <p class="mt-2 text-sm text-gray-500">
                                             </p>
                                             </div>
-                                            <div>
+                                            <!--<div>
                                             <label for="short_title" class="block text-sm font-medium text-gray-700">
                                                 Short Title
                                             </label>
                                             <div class="mt-1">
                                                 <textarea v-model="manuscriptForm.short_title" id="short_title" name="short_title" rows="1" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                             </div>
-                                            </div>
+                                            </div>-->
                                             <div>
                                             <label for="abstract" class="block text-sm font-medium text-gray-700">
                                                 Abstract
