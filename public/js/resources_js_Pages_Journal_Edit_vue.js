@@ -2135,9 +2135,16 @@ var message = ["vue.draggable", "draggable", "component", "for", "vue.js 2.0", "
     importManuscript: function importManuscript() {
       var _this = this;
 
-      this.journalForm.manuscripts = this.journalForm.manuscripts.concat(this.manuscripSelect.selected.map(function (x) {
+      if (this.manuscripSelect.selected.length == 0) {
+        return 0;
+      }
+
+      this.journalForm.manuscripts = this.list.map(function (x) {
+        return x.id;
+      }).concat(this.manuscripSelect.selected.map(function (x) {
         return x.id;
       }));
+      console.log(this.journalForm.manuscripts);
       this.journalForm.post("/admin/journals/".concat(this.$props.journal.data.id, "/update"), {
         preserveScroll: true,
         onError: function onError(errors) {
@@ -2147,10 +2154,12 @@ var message = ["vue.draggable", "draggable", "component", "for", "vue.js 2.0", "
         },
         onSuccess: function onSuccess(res) {
           _this.manuscripSelect.selected = [];
+          window.location.reload();
 
           _this.notification('Manuscript Imported.', 'success');
         }
       });
+      this.journalForm.manuscripts = [];
     },
     asyncFindManuscripts: _.debounce( /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(query) {
@@ -2164,8 +2173,9 @@ var message = ["vue.draggable", "draggable", "component", "for", "vue.js 2.0", "
                 return window.axios.get('/api/manuscripts', {
                   params: {
                     search: query,
-                    status: 'Published',
-                    excepts: this.journalForm.manuscripts
+                    isPublished: true,
+                    excepts: this.journalForm.manuscripts,
+                    isInOtherJournals: false
                   }
                 });
 
@@ -2280,6 +2290,7 @@ var message = ["vue.draggable", "draggable", "component", "for", "vue.js 2.0", "
       manuscript.order = index + 1;
       return manuscript;
     });
+    this.asyncFindManuscripts();
   },
   setup: function setup(props) {
     var journalForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__.useForm)({
@@ -2846,6 +2857,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             }),
             id: "ajax",
             label: "title",
+            "custom-label": function customLabel(v) {
+              return "".concat(v.manuscript_no, " - ").concat(v.title || 'Untitled');
+            },
             "track-by": "id",
             placeholder: "Type to search",
             "open-direction": "bottom",
@@ -2863,7 +2877,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             onSearchChange: $options.asyncFindManuscripts
           }, null, 8
           /* PROPS */
-          , ["modelValue", "options", "loading", "onSearchChange"])])])], 32
+          , ["modelValue", "custom-label", "options", "loading", "onSearchChange"])])])], 32
           /* HYDRATE_EVENTS */
           )])])])];
         }),

@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\ManuscriptController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PublicJournalController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\JournalController;
+use App\Http\Controllers\ManuscriptController;
+use App\Http\Controllers\PublicJournalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,5 +71,10 @@ Route::middleware('auth:sanctum')->group(function () {
     # Settings
     Route::get('/settings', [SettingController::class, 'index'])->name('api.setting.index');
     Route::put('/settings', [SettingControlle::class, 'update'])->name('api.setting.update');
+
+    // Journals
+    Route::controller(JournalController::class)->group(function () {
+        Route::get('/journals/{id}/manuscripts', 'indexManuscript')->name('api.journal.manuscript');
+    });
 
 });

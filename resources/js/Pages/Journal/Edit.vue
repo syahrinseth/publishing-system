@@ -188,7 +188,7 @@
                                                     <label for="company-website" class="block text-sm font-medium text-gray-700">
                                                     Manuscripts
                                                     </label>
-                                                    <VueMultiselect v-model="manuscripSelect.selected" id="ajax" label="title" track-by="id" placeholder="Type to search" open-direction="bottom" :options="manuscripSelect.options" :multiple="true" :searchable="true" :loading="manuscripSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindManuscripts">
+                                                    <VueMultiselect v-model="manuscripSelect.selected" id="ajax" label="title" :custom-label="(v) => `${v.manuscript_no} - ${v.title || 'Untitled'}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="manuscripSelect.options" :multiple="true" :searchable="true" :loading="manuscripSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindManuscripts">
                                                     </VueMultiselect>
                                                 </div>
                                             </div>
@@ -284,7 +284,11 @@ export default {
             this.list = this.list.sort((a, b) => a.order - b.order);
         },
         importManuscript() {
-            this.journalForm.manuscripts = this.journalForm.manuscripts.concat(this.manuscripSelect.selected.map(x => x.id));
+            if (this.manuscripSelect.selected.length == 0) {
+                return 0;
+            }
+            this.journalForm.manuscripts = this.list.map(x => x.id).concat(this.manuscripSelect.selected.map(x => x.id));
+            console.log(this.journalForm.manuscripts);
             this.journalForm.post(`/admin/journals/${this.$props.journal.data.id}/update`, {
                 preserveScroll: true,
                 onError: (errors) => {
@@ -294,17 +298,20 @@ export default {
                 },
                 onSuccess: (res) => {
                     this.manuscripSelect.selected = [];
+                    window.location.reload();
                     this.notification('Manuscript Imported.', 'success');
                 }
             });
+            this.journalForm.manuscripts = [];
         },
         asyncFindManuscripts: _.debounce(async function(query) {
             this.manuscripSelect.isLoading = true;
             let resp = await window.axios.get('/api/manuscripts', {
                 params: {
                     search: query,
-                    status: 'Published',
-                    excepts: this.journalForm.manuscripts
+                    isPublished: true,
+                    excepts: this.journalForm.manuscripts,
+                    isInOtherJournals: false
                 }
             });
             this.manuscripSelect.isLoading = false;
@@ -377,6 +384,7 @@ export default {
             manuscript.order = index + 1;
             return manuscript;
         });
+        this.asyncFindManuscripts();
     },
     setup(props) {
         const journalForm = useForm({

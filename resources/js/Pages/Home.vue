@@ -43,7 +43,7 @@
             <template v-slot:body>
               <tr v-for="(step, index) in nextSteps.publisher.data" :key="`step-author-${index}`">
                 <td class="px-6 py-4 whitespace-nowrap">
-                  {{ `Manuscript "${step.manuscript_no} - ${step.title || step.type['name']}" is ready to be publish by you. Please review the manuscript.` }}
+                  {{ `Manuscript "${step.manuscript_no} - ${step.title || step.type['name']}" has been reviewed by reviewers. Please review the manuscript.` }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>

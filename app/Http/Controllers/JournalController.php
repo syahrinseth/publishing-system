@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\JournalResource;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Resources\JournalCollection;
+use App\Http\Resources\JournalManuscriptCollection;
 
 class JournalController extends Controller
 {
@@ -76,7 +77,7 @@ class JournalController extends Controller
 
         $journal = new Journal();
         $journal->name = $request->name;
-        $journal->manuscripts = $request->manuscripts ?? [];
+        $journal->setManuscripts($request->manuscripts);
         $journal->date = $request->date;
         $journal->status = $request->status ?? 'draft';
         $journal->user_id = Auth::user()->id;
@@ -141,11 +142,11 @@ class JournalController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'manuscripts' => 'array|between:0,10'
+            'manuscripts' => 'array'
         ]);
         $journal = Journal::findOrfail($id);
         $journal->name = $request->name;
-        $journal->manuscripts = $request->manuscripts ?? [];
+        $journal->setManuscripts($request->manuscripts);
         $journal->date = $request->date;
         $journal->status = $request->status;
         $journal->update();
@@ -175,5 +176,15 @@ class JournalController extends Controller
         }
 
         return Redirect::route('journal.index');
+    }
+
+    public function indexManuscript(Request $request, $id)
+    {
+        $journal = Journal::findOrFail($id);
+        $manuscripts = $journal->rawManuscripts;
+        if ($request->is('api/*')) {
+            return response()->json(new JournalManuscriptCollection($manuscripts));
+        }
+        return abort(404);
     }
 }

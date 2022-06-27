@@ -68,7 +68,8 @@ class HomeController extends Controller
         $reviewerNextSteps = $reviewerNextSteps->get();
 
         // Publisher Steps
-        $publisherNextSteps = Manuscript::where('status', 'like', '%Accepted%');
+        $publisherNextSteps = Manuscript::where('status', 'like', '%Accepted%')
+            ->hasWhere();
         if (!(auth()->user()->can('manuscripts.show_all') && auth()->user()->can('manuscripts.publish'))) {
             $publisherNextSteps->whereHas('members', function($q) {
                 $q->where('user_id', auth()->id())

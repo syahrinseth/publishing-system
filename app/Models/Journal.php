@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Http\Resources\ManuscriptCollection;
+use App\Http\Resources\JournalManuscriptCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Journal extends Model
@@ -16,14 +17,6 @@ class Journal extends Model
     protected static $logAttributes = ["*"];
     protected static $logOnlyDirty = true;
 
-    /**
-     * The arrtibutes that should be cast.
-     * 
-     * @var array
-     */
-    protected $casts = [
-        'manuscripts' => 'array'
-    ];
 
     public static $statusList = [
         [
@@ -43,11 +36,36 @@ class Journal extends Model
      */
     public function manuscripts()
     {
-        $ids_ordered = implode(',', $this->manuscripts ?? []);
-        $manuscripts = Manuscript::whereIn('id', $this->manuscripts ?? []);
-        if ($ids_ordered != null) {
-            $manuscripts->orderByRaw("FIELD(id, $ids_ordered)");
+        return new JournalManuscriptCollection($this->hasMany(JournalManuscript::class, 'journal_id', 'id')->get());
+    }
+
+    /**
+     * The manuscripts that bolong to the journal.
+     * 
+     * @return Collection
+     */
+    public function rawManuscripts()
+    {
+        return $this->hasMany(JournalManuscript::class, 'journal_id', 'id');
+    }
+
+    public function setManuscripts($manuscript_ids)
+    {
+        $manuscripts = $this->rawManuscripts;
+        if (is_array($manuscript_ids)) {
+            foreach ($manuscripts as $manuscript) {
+                $m = JournalManuscript::find($manuscript->id);
+                if (!empty($m)) {
+                    $m->delete();
+                }
+            }
+            foreach ($manuscript_ids as $id) {
+                $jManuscript = new JournalManuscript();
+                $jManuscript->journal_id = $this->id;
+                $jManuscript->manuscript_id = $id;
+                $jManuscript->save();
+            }
         }
-        return new ManuscriptCollection($manuscripts->get());
+        return $this;
     }
 }

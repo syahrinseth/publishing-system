@@ -8,6 +8,7 @@ use App\QueryFilter;
 use App\Mail\ManuscriptCreated;
 use App\Mail\ManuscriptUpdated;
 use App\Models\ManuscriptMember;
+use App\Models\JournalManuscript;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
@@ -632,5 +633,10 @@ class Manuscript extends Model
         }
         
         return $this;
+    }
+
+    public function journal()
+    {
+        return $this->hasOne(JournalManuscript::class, 'manuscript_id', 'id');
     }
 }
