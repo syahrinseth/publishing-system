@@ -65,6 +65,10 @@ class ManuscriptAttachFile extends Model
             "id" => 12,
             "name" => "LaTeX Source Files"
         ],
+        [
+            "id" => 13,
+            "name" => "Plagiarism Report"
+        ]
     ];
 
     public function manuscript()

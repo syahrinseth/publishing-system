@@ -145,6 +145,20 @@ class ManuscriptController extends Controller
         ]);
         $manuscript = Manuscript::findOrFail($id);
         $manuscript->status = 'Submit To Editor';
+
+        // Validate submit to editor
+        $attachments = $manuscript->attachments->unique('type')->whereIn('type', [1, 5, 13]);
+        if ($attachments->count() != 3) {
+            // Response error for fail to assign status.
+            if ($request->is('api/*')) {
+                return response()->json(new ManuscriptResource($manuscript), 401);
+            }
+            
+            return redirect()->back()->withErrors([
+                'status' => '"Manuscript", "Cover Letter" and "Plagiarism Report" attached files are required. Please upload the following documents.'
+            ]);
+        }
+        
         $manuscript->additional_informations = [
             'is_confirm_grant_numbers' => $request->is_confirm_grant_numbers == null ? (empty($manuscript->additional_informations['is_confirm_grant_numbers']) ? false : true) : $request->is_confirm_grant_numbers,
             'is_acknowledge' => $request->is_acknowledge == null ? (empty($manuscript->additional_informations['is_acknowledge']) ? false : true) : $request->is_acknowledge
@@ -263,6 +277,21 @@ class ManuscriptController extends Controller
         // Assign status
         if (!empty($request->status)) {
             if ($manuscript->status != $request->status) {
+
+                // Validate submit to editor
+                if ($request->status == "Submit To Editor") {
+                    $attachments = $manuscript->attachments->unique('type')->whereIn('type', [1, 5, 13]);
+                    if ($attachments->count() != 3) {
+                        // Response error for fail to assign status.
+                        if ($request->is('api/*')) {
+                            return response()->json(new ManuscriptResource($manuscript), 401);
+                        }
+                        
+                        return redirect()->back()->withErrors([
+                            'status' => '"Manuscript", "Cover Letter" and "Plagiarism Report" attached files are required. Please upload the following documents.'
+                        ]);
+                    }
+                }
 
                 if (!$manuscript->assignStatus($request->status)) {
                     // Response error for fail to assign status.
