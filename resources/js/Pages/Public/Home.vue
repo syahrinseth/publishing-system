@@ -28,7 +28,7 @@
                         
                         <PopoverGroup as="nav" class="hidden md:flex space-x-10">
                             <a v-for="item in navigation" :key="item.name" :href="item.href" class="font-medium text-gray-500 hover:text-gray-900">{{ item.name }}</a>
-                            <Popover class="relative" v-slot="{ open }">
+                            <!--<Popover class="relative" v-slot="{ open }">
                                 <PopoverButton :class="[open ? 'text-gray-900' : 'text-gray-500', 'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']">
                                 <span>Features</span>
                                 <ChevronDownIcon :class="[open ? 'text-gray-600' : 'text-gray-400', 'ml-2 h-5 w-5 group-hover:text-gray-500']" aria-hidden="true" />
@@ -61,7 +61,7 @@
                                     </div>
                                 </PopoverPanel>
                                 </transition>
-                            </Popover>
+                            </Popover>-->
                             <a v-if="auth.user == null" href="/login" class="font-medium text-indigo-600 hover:text-indigo-500">Log in</a>
                             <Link v-else :href="`/admin`" class="font-medium text-indigo-600 hover:text-indigo-500">Dashboard</Link>
                         </PopoverGroup>
@@ -98,10 +98,10 @@
                     <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
                     <span class="block xl:inline">Journal of Smart</span>
                     {{ ' ' }}
-                    <span class="block text-indigo-600 xl:inline">Sensors and Materials</span>
+                    <span class="block text-indigo-600 xl:inline">Sensor and Materials</span>
                     </h1>
                     <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                      Journal of Smart Sensors and Materials (JSSM) is an interdisciplinary journal dedicated to publishing research and development in the field of sensing technology, chemical actuators and analytical microsystems, nanomaterial applications in sensing, solid-state devices for transducing physical signals. 
+                      Journal of Smart Sensor and Materials (JSSM) is an interdisciplinary journal dedicated to publishing research and development in the field of sensing technology, chemical actuators and analytical microsystems, nanomaterial applications in sensing, solid-state devices for transducing physical signals. 
                     </p>
                     <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                     <div class="rounded-md shadow">
@@ -125,7 +125,7 @@
                 <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase"></h2>
                 <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-white sm:text-4xl">Scope</p>
                 <p class="mt-4 max-w-2xl text-xl text-gray-300 lg:mx-auto">
-                  The scope of Journal of Smart Sensors and Materials (JSSM) encompasses, but is not restricted to, the following areas:
+                  The scope of Journal of Smart Sensor and Materials (JSSM) encompasses, but is not restricted to, the following areas:
                 </p>
             </div>
 
@@ -166,7 +166,7 @@
                       This Journal is published by the Malaysian Society for Sensor Technology Development or SENSOR as the sole scientific publication of the Society since 2019. The Journal is published in three issues per volume (per year) i.e. in April, August and December.
                     </p>
                     <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-                      Journal of Smart Sensors and Materials provides immediate open access to its content on the principle that making published articles freely access and downloadable to the public supports a greater global exchange of knowledge. Researchers from any countries are invited to publish their research articles in this journal.
+                      Journal of Smart Sensor and Materials provides immediate open access to its content on the principle that making published articles freely access and downloadable to the public supports a greater global exchange of knowledge. Researchers from any countries are invited to publish their research articles in this journal.
                     </p>
                     <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                       <div class="rounded-md shadow">
@@ -200,8 +200,8 @@
         <footer class="p-4 bg-white sm:p-6 dark:bg-gray-800">
       <div class="md:flex md:justify-between">
       <div class="mb-6 md:mb-0">
-      <a href="https://flowbite.com" class="flex items-center">
-      <img src="/img/logo.jpeg" class="mr-3 h-12 rounded shadow" alt="FlowBite Logo">
+      <a href="/" class="flex items-center">
+      <img src="/img/logo.jpeg" class="mr-3 h-12 rounded shadow" alt="Sensor Malaysia Logo">
       <!-- <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
         JSSM
       </span> -->

@@ -6,7 +6,7 @@
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="lg:text-center">
                             <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">Journal Published</h2>
-                            <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">Lorem ipsum, dolor sit amet.</p>
+                            <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"></p>
                         </div>
                     <div class="mt-10">
                         <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
@@ -21,7 +21,7 @@
                             </small>
                             </dt>
                             <dd class="mt-2 ml-16 text-base text-gray-500">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                               
                             </dd>
                         </div>
                         </dl>

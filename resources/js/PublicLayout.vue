@@ -27,7 +27,7 @@
                         
                         <PopoverGroup as="nav" class="hidden md:flex space-x-10">
                             <a v-for="item in navigation" :key="item.name" :href="item.href" class="font-medium text-gray-500 hover:text-gray-900">{{ item.name }}</a>
-                            <Popover class="relative" v-slot="{ open }">
+                            <!--<Popover class="relative" v-slot="{ open }">
                                 <PopoverButton :class="[open ? 'text-gray-900' : 'text-gray-500', 'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500']">
                                 <span>Features</span>
                                 <ChevronDownIcon :class="[open ? 'text-gray-600' : 'text-gray-400', 'ml-2 h-5 w-5 group-hover:text-gray-500']" aria-hidden="true" />
@@ -60,7 +60,7 @@
                                     </div>
                                 </PopoverPanel>
                                 </transition>
-                            </Popover>
+                            </Popover>-->
                             <a v-if="auth.user == null" href="/login" class="font-medium text-indigo-600 hover:text-indigo-500">Log in</a>
                             <Link v-else :href="`/admin`" class="font-medium text-indigo-600 hover:text-indigo-500">Dashboard</Link>
                         </PopoverGroup>
@@ -104,8 +104,8 @@
         <footer class="p-4 bg-white sm:p-6 dark:bg-gray-800">
           <div class="md:flex md:justify-between">
           <div class="mb-6 md:mb-0">
-          <a href="https://flowbite.com" class="flex items-center">
-          <img src="/img/logo.jpeg" class="mr-3 h-12 rounded shadow" alt="FlowBite Logo">
+          <a href="/" class="flex items-center">
+          <img src="/img/logo.jpeg" class="mr-3 h-12 rounded shadow" alt="Sensor Malaysia Logo">
           <!-- <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
             JSSM
           </span> -->
