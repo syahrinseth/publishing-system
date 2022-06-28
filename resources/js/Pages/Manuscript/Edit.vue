@@ -37,13 +37,13 @@
                                 Submit For Review
                             </a>
                         </span>
-                        <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (viewAs == `reviewer`) && hasNotReviewed()">
+                        <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (viewAs == `reviewer`) && canReview()">
                             <a href="#" @click="showRejectModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                 <XCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 Reject
                             </a>
                         </span>
-                        <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (viewAs == `reviewer`) && hasNotReviewed()">
+                        <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (viewAs == `reviewer`) && canReview()">
                             <a href="#" @click="showAcceptModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                 <CheckCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 Accept
@@ -171,7 +171,7 @@
                                                 <label for="company-website" class="block text-sm font-medium text-gray-700">
                                                 Type
                                                 </label>
-                                                <select class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="attachForm.type">
+                                                <select :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="attachForm.type">
                                                     <option value="" selected>Select</option>
                                                     <option v-for="type in attachTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
                                                 </select>
@@ -182,7 +182,7 @@
                                                 Notes
                                                 </label>
                                                 <div class="mt-1 flex rounded-md shadow-sm">
-                                                <textarea v-model="attachForm.description" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                                <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="attachForm.description" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                                 </div>
                                             </div>
                                         <div>
@@ -199,8 +199,8 @@
                                                     </p>
                                                     <div class="flex text-sm text-gray-600">
                                                         <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                        <span>Upload a file</span>
-                                                        <input id="file-upload" ref="file"  @change="onChangeSubmitAttachFile" type="file" class="sr-only" />
+                                                        <span :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null">Upload a file</span>
+                                                        <input :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" id="file-upload" ref="file"  @change="onChangeSubmitAttachFile" type="file" class="sr-only" />
                                                         <progress v-if="attachForm.progress" :value="attachForm.progress.percentage" max="100">
                                                         {{ attachForm.progress.percentage }}%
                                                         </progress>
@@ -219,9 +219,9 @@
                         </div>
                     </template>
                     <template v-slot:footer>
-                        <a href="#" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm" @click="submitAttach()">
+                        <span :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer" @click="cannotEditOnSubmit() ? `` : submitAttach()">
                             Upload
-                        </a>
+                        </span>
                         <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showUploadAttachModal = false" ref="cancelButtonRef">
                             Cancel
                         </button>
@@ -241,7 +241,7 @@
                                                 <label for="company-website" class="block text-sm font-medium text-gray-700">
                                                 Type
                                                 </label>
-                                                <select class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="updateAttachForm.type">
+                                                <select :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="updateAttachForm.type">
                                                     <option value="" selected>Select</option>
                                                     <option v-for="type in attachTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
                                                 </select>
@@ -252,7 +252,7 @@
                                             Notes
                                             </label>
                                             <div class="mt-1 flex rounded-md shadow-sm">
-                                            <textarea v-model="updateAttachForm.description" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                            <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="updateAttachForm.description" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                             </div>
                                         </div>
                                         <div v-show="updateAttachForm.file_name != null">
@@ -287,8 +287,8 @@
                                                     </p>
                                                     <div class="flex text-sm text-gray-600">
                                                         <label for="update-file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                        <span>Upload a file</span>
-                                                        <input id="update-file-upload" ref="file-update"  @change="onChangeUpdateAttachFile" type="file" class="sr-only" />
+                                                        <span :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null">Upload a file</span>
+                                                        <input :disabled="cannotEditOnSubmit()" id="update-file-upload" ref="file-update"  @change="onChangeUpdateAttachFile" type="file" class="sr-only" />
                                                         <progress v-if="updateAttachForm.progress" :value="updateAttachForm.progress.percentage" max="100">
                                                         {{ updateAttachForm.progress.percentage }}%
                                                         </progress>
@@ -318,9 +318,9 @@
                         </div>
                     </template>
                     <template v-slot:footer>
-                        <a href="#" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm" @click="updateAttach()">
+                        <span :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer" @click="cannotEditOnSubmit() ? `` : updateAttach()">
                             Update
-                        </a>
+                        </span>
                         <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showUpdateAttachModel = false; clearUpdateAttachForm()" ref="cancelButtonRef">
                             Cancel
                         </button>
@@ -499,7 +499,7 @@
                                         <label for="company-website" class="block text-sm font-medium text-gray-700">
                                         Article Type
                                         </label>
-                                        <select name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="manuscriptForm.type">
+                                        <select :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="manuscriptForm.type">
                                             <option value="" selected>Select</option>
                                             <option v-for="type in articleTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
                                         </select>
@@ -509,6 +509,7 @@
                                         Co-Author(s)
                                         </label>
                                         <VueMultiselect 
+                                        :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null"
                                         v-model="manuscriptForm.corresponding_authors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="correspondingAuthorSelect.options" :multiple="true" :searchable="true" :loading="correspondingAuthorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindCorrespondingAuthors">
                                             </VueMultiselect>
                                     </div>
@@ -516,7 +517,7 @@
                                         <label for="company-website" class="block text-sm font-medium text-gray-700">
                                         Author(s)
                                         </label>
-                                        <VueMultiselect 
+                                        <VueMultiselect :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null"
                                         v-model="manuscriptForm.authors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors">
                                             </VueMultiselect>
                                     </div>
@@ -525,7 +526,7 @@
                                             <label for="company-website" class="block text-sm font-medium text-gray-700">
                                             Request Editor(s)
                                             </label>
-                                            <VueMultiselect 
+                                            <VueMultiselect :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null"
                                             v-model="manuscriptForm.editors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="false" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
                                                 </VueMultiselect>
                                         </div>
@@ -533,7 +534,7 @@
                                 </div>
                             </div>
                             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                <button class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <button :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 Save
                                 </button>
                             </div>
@@ -573,7 +574,7 @@
                                             Suggest Reviewer(s)
                                             </label>
                                             <div class="mt-1 flex rounded-md shadow-sm">
-                                            <VueMultiselect 
+                                            <VueMultiselect :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null"
                                             v-model="manuscriptForm.reviewers_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers">
                                                 </VueMultiselect>
                                             </div>
@@ -581,7 +582,7 @@
                                     </div>
                                 </div>
                                 <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                    <button class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <button :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         Save
                                     </button>
                                 </div>
@@ -664,7 +665,7 @@
                                     Full Title
                                 </label>
                                 <div class="mt-1">
-                                    <textarea v-model="manuscriptForm.title" id="title" name="title" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.title" id="title" name="title" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500">
                                     
@@ -676,7 +677,7 @@
                                     Short Title
                                 </label>
                                 <div class="mt-1">
-                                    <textarea v-model="manuscriptForm.short_title" id="short_title" name="short_title" rows="1" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.short_title" id="short_title" name="short_title" rows="1" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                 </div>
                                 </div>
 
@@ -685,7 +686,7 @@
                                     Abstract
                                 </label>
                                 <div class="mt-1">
-                                    <textarea v-model="manuscriptForm.abstract" id="abstract" name="abstract" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.abstract" id="abstract" name="abstract" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500">
                                     Limit 300 words
@@ -697,7 +698,7 @@
                                     Keywords
                                 </label>
                                 <div class="mt-1">
-                                    <textarea v-model="manuscriptForm.keywords" id="keywords" name="keywords" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.keywords" id="keywords" name="keywords" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500">
                                     Please enter keywords separated by semicolons. Each individual keyword may be up to 256 characters in length.
@@ -709,7 +710,7 @@
                                     Authors
                                 </label>
                                 <div class="mt-1">
-                                    <textarea v-model="manuscriptForm.authors" id="authors" name="authors" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    <textarea  v-model="manuscriptForm.authors" id="authors" name="authors" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                 </div> -->
                                 <p class="mt-2 text-sm text-gray-500">
                                 </p>
@@ -720,7 +721,7 @@
                                     Funding Information
                                 </label>
                                 <div class="mt-1">
-                                    <textarea v-model="manuscriptForm.funding_information" id="funding_information" name="funding_information" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.funding_information" id="funding_information" name="funding_information" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500">
 
@@ -730,7 +731,7 @@
                                 
                             </div>
                             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <button :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 Save
                                 </button>
                             </div>
@@ -773,7 +774,7 @@
                                     </div>
                                     <div>
                                         <span class="sm:ml-3">
-                                            <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" @click="showUploadAttachModal = !showUploadAttachModal; ">
+                                            <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"  @click="showUploadAttachModal = !showUploadAttachModal; ">
                                                 Upload File 
                                             </button>
                                         </span>
@@ -821,7 +822,7 @@
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <span class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">View</span>
                                                     <a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
-                                                    <span @click="deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1">Delete</span>
+                                                    <span :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" @click="cannotEditOnSubmit() ? `` : deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1">Delete</span>
                                                 </td>
                                             </tr>
                                             <tr v-if="manuscript.data.attachments.length == 0">
@@ -861,7 +862,7 @@
                                     <div class="mt-4 space-y-4">
                                         <div class="flex items-start">
                                         <div class="flex items-center h-5">
-                                            <input v-model="manuscriptForm.is_confirm_grant_numbers" id="is_confirm_grant_numbers" name="is_confirm_grant_numbers" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                            <input :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.is_confirm_grant_numbers" id="is_confirm_grant_numbers" name="is_confirm_grant_numbers" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="is_confirm_grant_numbers" class="font-medium text-gray-700">I Confirm</label>
@@ -880,7 +881,7 @@
                                     <div class="mt-4 space-y-4">
                                         <div class="flex items-start">
                                         <div class="flex items-center h-5">
-                                            <input v-model="manuscriptForm.is_acknowledge" id="is_acknowledge" name="is_acknowledge" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                            <input :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.is_acknowledge" id="is_acknowledge" name="is_acknowledge" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="is_acknowledge" class="font-medium text-gray-700">I Acknowledge</label>
@@ -923,7 +924,7 @@
                                 </div>
                             </div>
                             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <button :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 Save
                                 </button>
                             </div>
@@ -1095,7 +1096,12 @@
         saveManuscript() {
             this.manuscriptForm.authors = this.manuscriptForm.authors_obj.map((member) => member.id);
             this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map((member) => member.id)
-            this.manuscriptForm.editors = [this.manuscriptForm.editors_obj];
+            if (Array.isArray(this.manuscriptForm.editors_obj)) {
+                this.manuscriptForm.editors = this.manuscriptForm.editors_obj.map((member) => member.id);
+            } else {
+                this.manuscriptForm.editors = ([this.manuscriptForm.editors_obj]).map((member) => member.id);
+            }
+            
             this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map((member) => member.id);
             this.manuscriptForm.post(`/admin/manuscripts/${this.$props.manuscript.data.id}/update`, {
                 preserveScroll: true,
@@ -1305,8 +1311,8 @@
             });
             return result.length > 0;
         },
-        hasNotReviewed() {
-            let total = this.manuscript.data.reviewers.filter((v) => (v.user_id == this. $props.auth.user.data.id && v.reviewed == null));
+        canReview() {
+            let total = this.manuscript.data.reviewers.filter((v) => (v.user_id == this. $props.auth.user.data.id && (v.reviewed == null || v.reviewedVote == `Rejected Invite To Resubmit` || v.reviewedVote == `Rejected`)));
             return total.length > 0;
         },
         setRoleView() {
@@ -1329,6 +1335,9 @@
             if (this.viewAsList.length > 0) {
                 this.viewAs = this.viewAsList[0];
             }
+        },
+        cannotEditOnSubmit(){
+            return this.$props.auth.user.data.permissions_attribute.manuscripts.edit_after_submit == false && (this.manuscript.data.status == `Submit To Editor` || this.manuscript.data.status == `Submit For Review` || this.manuscript.data.status == `Rejected` || this.manuscript.data.status == `Accepted Without Changes` || this.manuscript.data.status == `Published`);
         }
     },
     setup (props) {
@@ -1408,6 +1417,7 @@
         return { clearAttachForm, fillUpdateAttachForm, clearUpdateAttachForm, deleteAttachFile, manuscriptForm, attachForm, updateAttachForm, moment }
     },
     async created() {
+        // console.log(this.$props.auth.user.data.permissions_attribute.manuscripts.edit_after_submit)
         this.setRoleView();
         this.asyncFindEditors()
         this.asyncFindReviewers()

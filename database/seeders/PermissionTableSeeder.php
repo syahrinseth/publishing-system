@@ -28,7 +28,8 @@ class PermissionTableSeeder extends Seeder
             'show_all',
             'cover_letter',
             'conflict_of_interest',
-            'declaration_of_interest_statement'
+            'declaration_of_interest_statement',
+            'edit_after_submit',
         ],
         'journals' => [
             'create',

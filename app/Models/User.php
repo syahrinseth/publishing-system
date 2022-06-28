@@ -78,47 +78,28 @@ class User extends Authenticatable
      * 
      * @return array
      */
-    public function getPermissionsAttr()
+    public function roleBasedPermissions()
     {
-        return [  
-            'users' => [
-                'create' => $this->can('users.create'),
-                'show' => $this->can('users.show'),
-                'edit' => $this->can('users.edit'),
-                'destroy' => $this->can('users.destroy')
-            ],
-            'manuscripts' => [
-                'show' => $this->can('manuscripts.show'),
-                'edit' => $this->can('manuscripts.edit'),
-                'destroy' => $this->can('manuscripts.destroy'),
-                'publish' => $this->can('manuscripts.publish'),
-                'review' => $this->can('manuscripts.review'),
-                'show_all' => $this->can('manuscripts.show_all'),
-                'cover_letter' => $this->can('manuscripts.cover_letter'),
-                'conflict_of_interest' => $this->can('manuscripts.conflict_of_interest'),
-                'declaration_of_interest_statement' => $this->can('manuscripts.declaration_of_interest_statement'),
-            ],
-            'journals' => [
-                'create' => $this->can('journals.create'),
-                'show' => $this->can('journals.show'),
-                'edit' => $this->can('journals.edit'),
-                'destroy' => $this->can('journals.destroy'),
-                'show_all' => $this->can('journals.show_all'),
-            ],
-            'settings' => [
-                'show' => $this->can('settings.show'),
-                'edit' => $this->can('settings.edit'),
-                'destroy' => $this->can('settings.destroy')
-            ],
-            'dashboard' => [
-                'show' => $this->can('dashboard.show'),
-                'show_all' => $this->can('dashboard.show_all'),
-                'show_reviewers_status' => $this->can('dashboard.show_reviewers_status'),
-            ],
-            'roles_and_permissions' => [
-                'edit' => $this->can('roles_and_permissions.edit')
-            ]
-        ];
+        $roles = Role::all();
+        $permissions = collect();
+        $data = collect();
+        foreach ($roles as $role) {
+            $permissions = $permissions->merge($role->permissions);
+        }
+        $modules = $permissions->map(function($q) {
+            $exp = explode('.', $q->name);
+            return ['module' => $exp[0], "permission" => $exp[1]];
+        })->unique()->groupBy('module');
+        foreach ($modules as $key => $permissions) {
+            $listOfCan = collect();
+            foreach ($permissions as $permission) {
+                $listOfCan->prepend($this->can("{$permission['module']}.{$permission['permission']}"), $permission['permission']);
+            }
+            $data = $data->merge([
+                $key => $listOfCan
+            ]);
+        }
+        return $data->toArray();
     }
 
     public static function getTotalReviewersReviewedManuscripts()
