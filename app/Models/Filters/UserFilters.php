@@ -23,8 +23,11 @@ class UserFilters extends QueryFilter
     public function search($input = null)
     {
         return $this->builder->where(function($query) use ($input) {
-            $query->where('name', 'like', "%{$input}%")
-                ->orWhere('email', 'like', "%{$input}%");
+            $query->where('first_name', 'like', "%{$input}%")
+                ->orWhere('last_name', 'like', "%{$input}%")
+                ->orWhere('email', 'like', "%{$input}%")
+                ->orWhere('affiliation', 'like', "%{$input}%")
+                ->orWhere('field', 'like', "%{$input}%");
         });
     }
 }

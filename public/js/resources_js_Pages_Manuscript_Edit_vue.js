@@ -5662,7 +5662,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         id: "ajax",
         label: "first_name",
         "custom-label": function customLabel(value) {
-          return "".concat(value.first_name, " ").concat(value.last_name || "");
+          return "".concat(value.first_name, " ").concat(value.last_name || "", " ").concat(value.field == null ? "" : "- ".concat(value.field), " ").concat(value.affiliation == null ? "" : "- ".concat(value.affiliation));
         },
         "track-by": "id",
         placeholder: "Type to search",
@@ -5691,7 +5691,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         id: "ajax",
         label: "first_name",
         "custom-label": function customLabel(value) {
-          return "".concat(value.first_name, " ").concat(value.last_name || "");
+          return "".concat(value.first_name, " ").concat(value.last_name || "", " ").concat(value.field == null ? "" : "- ".concat(value.field), " ").concat(value.affiliation == null ? "" : "- ".concat(value.affiliation));
         },
         "track-by": "id",
         placeholder: "Type to search",
@@ -5720,7 +5720,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         id: "ajax",
         label: "first_name",
         "custom-label": function customLabel(value) {
-          return "".concat(value.first_name, " ").concat(value.last_name || "");
+          return "".concat(value.first_name, " ").concat(value.last_name || "", " ").concat(value.field == null ? "" : "- ".concat(value.field), " ").concat(value.affiliation == null ? "" : "- ".concat(value.affiliation));
         },
         "track-by": "id",
         placeholder: "Type to search",
@@ -5768,7 +5768,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         id: "ajax",
         label: "first_name",
         "custom-label": function customLabel(value) {
-          return "".concat(value.first_name, " ").concat(value.last_name || "");
+          return "".concat(value.first_name, " ").concat(value.last_name || "", " ").concat(value.field == null ? "" : "- ".concat(value.field), " ").concat(value.affiliation == null ? "" : "- ".concat(value.affiliation));
         },
         "track-by": "id",
         placeholder: "Type to search",
