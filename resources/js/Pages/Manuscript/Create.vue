@@ -323,7 +323,11 @@ export default {
         async submit() {
             this.manuscriptForm.authors = this.manuscriptForm.authors_obj.map((user) => user.id);
             this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map((user) => user.id);
-            this.manuscriptForm.editors = [this.manuscriptForm.editors_obj];
+            if (Array.isArray(this.manuscriptForm.editors_obj)) {
+                this.manuscriptForm.editors = this.manuscriptForm.editors_obj.map((member) => member.id);
+            } else {
+                this.manuscriptForm.editors = ([this.manuscriptForm.editors_obj]).map((member) => member.id);
+            }
             this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map((user) => user.id);
             this.manuscriptForm.post(`/admin/manuscript-store`, {
                 preserveScroll: true,

@@ -98,7 +98,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.manuscriptForm.corresponding_authors = _this.manuscriptForm.corresponding_authors_obj.map(function (user) {
                   return user.id;
                 });
-                _this.manuscriptForm.editors = [_this.manuscriptForm.editors_obj];
+
+                if (Array.isArray(_this.manuscriptForm.editors_obj)) {
+                  _this.manuscriptForm.editors = _this.manuscriptForm.editors_obj.map(function (member) {
+                    return member.id;
+                  });
+                } else {
+                  _this.manuscriptForm.editors = [_this.manuscriptForm.editors_obj].map(function (member) {
+                    return member.id;
+                  });
+                }
+
                 _this.manuscriptForm.reviewers = _this.manuscriptForm.reviewers_obj.map(function (user) {
                   return user.id;
                 });
