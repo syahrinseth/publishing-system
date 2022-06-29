@@ -5806,7 +5806,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               key: reviewer.id
             }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_172, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$props.manuscript.data.reviewers_in_users.filter(function (v) {
               return v.id == reviewer.user_id;
-            })[0]['name']), 1
+            })[0]['first_name']) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$props.manuscript.data.reviewers_in_users.filter(function (v) {
+              return v.id == reviewer.user_id;
+            })[0]['last_name']), 1
             /* TEXT */
             ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_173, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(reviewer.reviewed == null ? 'N/a' : "Reviewed at ".concat($setup.moment(reviewer.reviewed).format("DD/MM/YYYY"))), 1
             /* TEXT */

@@ -624,7 +624,7 @@
                                         <template v-slot:body>
                                             <tr v-for="reviewer in $props.manuscript.data.reviewers" :key="reviewer.id">
                                                 <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ $props.manuscript.data.reviewers_in_users.filter((v) => v.id == reviewer.user_id)[0]['name'] }}
+                                                    {{ $props.manuscript.data.reviewers_in_users.filter((v) => v.id == reviewer.user_id)[0]['first_name'] }} {{ $props.manuscript.data.reviewers_in_users.filter((v) => v.id == reviewer.user_id)[0]['last_name'] }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     {{ reviewer.reviewed == null ? 'N/a' : `Reviewed at ${moment(reviewer.reviewed).format("DD/MM/YYYY")}` }}

@@ -62,9 +62,6 @@
                                 Abstract
                                 </th> -->
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Authors
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Status
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -95,18 +92,16 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <!-- <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                </span> -->
-                                <div class="text-sm text-gray-500">{{ manuscript.manuscript_no }}</div>
-                                <div class="text-gray-900">{{ manuscript.title || 'N/a' }}</div>
-                                <div class="text-sm text-gray-500">{{ manuscript.type.name }}</div>
-                                </td>
-                                <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <p class="text-ellipsis overflow-hidden">{{ manuscript.abstract || 'N/a' }}</p>
-                                </td> -->
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ manuscript.authors.length > 0 ? manuscript.authors[0].name : 'N/a' }}
+                                <td class="px-6 py-4 whitespace-nowrap text-sm w-6">
+                                    <!-- <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    </span> -->
+                                    <div class="text-sm text-gray-500">{{ manuscript.manuscript_no }}</div>
+                                    <div class="text-gray-900">
+                                        <p class="break-words">
+                                            {{ manuscript.title || 'N/a' }}
+                                        </p>
+                                    </div>
+                                    <div class="text-sm text-gray-500">{{ manuscript.type.name }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ manuscript.status }}
