@@ -4379,7 +4379,7 @@ var _hoisted_128 = {
   "class": "mt-5 md:mt-0 md:col-span-2"
 };
 var _hoisted_129 = {
-  "class": "shadow overflow-hidden sm:rounded-md"
+  "class": "shadow sm:rounded-md"
 };
 var _hoisted_130 = {
   "class": "px-4 py-5 bg-white space-y-6 sm:p-6"
@@ -4492,7 +4492,7 @@ var _hoisted_156 = {
   "class": "mt-5 md:mt-0 md:col-span-2"
 };
 var _hoisted_157 = {
-  "class": "shadow sm:rounded-md sm:overflow-hidden"
+  "class": "shadow sm:rounded-md"
 };
 var _hoisted_158 = {
   "class": "px-4 py-5 bg-white space-y-6 sm:p-6"

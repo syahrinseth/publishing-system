@@ -364,7 +364,7 @@ var _hoisted_5 = {
   "class": "mt-5 md:mt-0 md:col-span-2"
 };
 var _hoisted_6 = {
-  "class": "shadow overflow-hidden sm:rounded-md"
+  "class": "shadow sm:rounded-md"
 };
 var _hoisted_7 = {
   "class": "px-4 py-5 bg-white space-y-6 sm:p-6"
@@ -459,7 +459,7 @@ var _hoisted_22 = {
   "class": "mt-5 md:mt-0 md:col-span-2"
 };
 var _hoisted_23 = {
-  "class": "shadow sm:rounded-md sm:overflow-hidden"
+  "class": "shadow sm:rounded-md"
 };
 var _hoisted_24 = {
   "class": "px-4 py-5 bg-white space-y-6 sm:p-6"
@@ -521,7 +521,7 @@ var _hoisted_33 = {
   "class": "mt-5 md:mt-0 md:col-span-2"
 };
 var _hoisted_34 = {
-  "class": "shadow sm:rounded-md sm:overflow-hidden"
+  "class": "shadow sm:rounded-md"
 };
 var _hoisted_35 = {
   "class": "px-4 py-5 bg-white space-y-6 sm:p-6"
