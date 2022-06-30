@@ -9,6 +9,7 @@ use App\Models\Manuscript;
 use Illuminate\Http\Request;
 use App\Mail\ManuscriptCreated;
 use App\Mail\ManuscriptUpdated;
+use App\Models\ManuscriptMember;
 use App\Models\ManuscriptComment;
 use App\Models\ManuscriptAttachFile;
 use Illuminate\Support\Facades\Auth;
@@ -24,10 +25,10 @@ use App\Http\Resources\ManuscriptCollection;
 use App\Http\Resources\ManuscriptAttachResource;
 use App\Models\Filters\ManuscriptCommentFilters;
 use App\Http\Resources\ManuscriptCommentResource;
+use App\Http\Resources\ManuscriptAttachCollection;
 use App\Http\Resources\ManuscriptCommentCollection;
 use App\Http\Resources\ManuscriptAttachFileCommentResource;
 use App\Http\Resources\ManuscriptAttachFileCommentCollection;
-use App\Models\ManuscriptMember;
 
 class ManuscriptController extends Controller
 {
@@ -240,7 +241,7 @@ class ManuscriptController extends Controller
 
         return Inertia::render('Manuscript/Edit', [
             'manuscript' => new ManuscriptResource($manuscript),
-            'attachments' => $manuscript->attachments()->orderBy('updated_at', 'desc')->paginate(3),
+            'attachments' => new ManuscriptAttachCollection($manuscript->attachments()->orderBy('updated_at', 'desc')->paginate(3)),
             'users' => $users,
             'attachTypes' => ManuscriptAttachFile::$types,
             'articleTypes' => Manuscript::getTypes(),

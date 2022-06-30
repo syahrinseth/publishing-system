@@ -762,7 +762,7 @@
                         </div>
                         </div>
                         <div class="mt-5 md:mt-0 md:col-span-2">
-                            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                            <div class="bg-white shadow sm:rounded-lg">
                                 <div class="flex justify-between px-4 py-5 sm:px-6">
                                     <div class="">
                                         <h3 class="text-lg leading-6 font-medium text-gray-900">
@@ -786,42 +786,42 @@
                                         <template v-slot:header>
                                             <tr>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Order
+                                                    #
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Items
+                                                    Name
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                     Size
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Last Modified
+                                                    Modified
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Actions
+                                                    
                                                 </th>
                                             </tr>
                                         </template>
                                         <template v-slot:body>
                                             <tr v-for="(attachment, index) in attachments.data.filter(function(attach) {if(auth.user.data.permissions_attribute.manuscripts.cover_letter == false && attach.type.name == `Cover Letter` || auth.user.data.permissions_attribute.manuscripts.conflict_of_interest == false && attach.type.name == `Conflict of Interest` || auth.user.data.permissions_attribute.manuscripts.declaration_of_interest_statement == false && attach.type.name == `Declaration of Interest Statement`) {return false;}return true;})" :key="attachment.id + '-attach'">
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ attachments.from + index }}
+                                                <td class="px-6 py-4 word-break">
+                                                    {{ attachments.meta.from + index }}
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                <td class="px-6 py-4 word-break">
                                                     <p>{{ attachment.type.name }}</p>
                                                     <small class="text-gray-500">
                                                         {{ attachment.description }}
                                                     </small>
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                <td class="px-6 py-4 word-break">
                                                     {{ attachment.size}}
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ attachment.updated_at}}
+                                                <td class="px-6 py-4 word-break">
+                                                    {{ attachment.updated_at }}
                                                 </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                <td class="px-6 py-4 word-break">
                                                     <span class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1" @click="showUpdateAttachModel = !showUpdateAttachModel; fillUpdateAttachForm(attachment);">View</span>
-                                                    <a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>
+                                                    <!--<a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>-->
                                                     <span :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" @click="cannotEditOnSubmit() ? `` : deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1">Delete</span>
                                                 </td>
                                             </tr>
@@ -835,7 +835,7 @@
                                 </div>
                             </div>
                             <div class="my-2 flex justify-end">
-                                <Pagination :links="attachments.links" :meta="attachments" />
+                                <Pagination :links="attachments.meta.links" :meta="attachments.meta" />
                             </div>
                         </div>
                     </div>
