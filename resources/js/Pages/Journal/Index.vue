@@ -52,55 +52,52 @@
             </div>
         </template>
         <template v-slot:default>
+            <Table>
+                <template v-slot:header>
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            #
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Name
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 
-            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-                
-                <div class="border-t border-gray-200">
-                    <Table>
-                        <template v-slot:header>
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    #
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Name
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Date
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-
-                                </th>
-                            </tr>
-                        </template>
-                        <template v-slot:body>
-                            <tr v-for="(journal, index) in journals.data" :key="journal.id">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ index + 1 }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ journal.name }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ moment(journal.date).format('DD/MM/YYYY') }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ journal.status }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <form @submit.prevent="deleteJournal(journal)">
-                                        <Link v-if="journal.status == 'published'" :href="`/journals/${journal.id}`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
-                                        <Link v-if="auth.user.data.permissions_attribute.journals.edit == true" :href="`/admin/journals/${journal.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Edit</Link>
-                                        <button v-if="auth.user.data.permissions_attribute.journals.destroy == true" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </template>
-                    </Table>
-                </div>
+                        </th>
+                    </tr>
+                </template>
+                <template v-slot:body>
+                    <tr v-for="(journal, index) in journals.data" :key="journal.id">
+                        <td class="px-6 py-4 word-break">
+                            {{ journals.meta.from + index }}
+                        </td>
+                        <td class="px-6 py-4 word-break">
+                            {{ journal.name }}
+                        </td>
+                        <td class="px-6 py-4 word-break">
+                            {{ moment(journal.date).format('DD/MM/YYYY') }}
+                        </td>
+                        <td class="px-6 py-4 word-break">
+                            {{ journal.status }}
+                        </td>
+                        <td class="px-6 py-4 word-break">
+                            <form @submit.prevent="deleteJournal(journal)">
+                                <!-- <Link v-if="journal.status == 'published'" :href="`/journals/${journal.id}`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link> -->
+                                <Link v-if="auth.user.data.permissions_attribute.journals.edit == true" :href="`/admin/journals/${journal.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
+                                <button v-if="auth.user.data.permissions_attribute.journals.destroy == true" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </template>
+            </Table>
+            <div class="my-2 flex justify-end">
+                <Pagination :links="journals.meta.links" :meta="journals.meta" />
             </div>
             
         </template>
@@ -122,6 +119,7 @@ PencilIcon,
 import { useForm, Link } from '@inertiajs/inertia-vue3'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import moment from 'moment'
+import Pagination from '../../Components/Pagination.vue'
 
 let headermenu = [
     { 
@@ -137,6 +135,7 @@ export default {
         Layout,
         Table,
         Menu,
+        Pagination,
         MenuButton,
         MenuItem,
         MenuItems,

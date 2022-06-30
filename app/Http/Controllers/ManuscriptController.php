@@ -53,7 +53,7 @@ class ManuscriptController extends Controller
                 $q->where('user_id', auth()->id());
             });
         }
-        $manuscripts = new ManuscriptCollection($manuscripts->get());
+        $manuscripts = new ManuscriptCollection($manuscripts->orderBy('updated_at', 'desc')->paginate(5));
 
         if ($request->is('api/*')) {
             return response()->json($manuscripts);
@@ -235,6 +235,7 @@ class ManuscriptController extends Controller
 
         return Inertia::render('Manuscript/Edit', [
             'manuscript' => new ManuscriptResource($manuscript),
+            'attachments' => $manuscript->attachments()->orderBy('updated_at', 'desc')->paginate(3),
             'users' => $users,
             'attachTypes' => ManuscriptAttachFile::$types,
             'articleTypes' => Manuscript::getTypes(),

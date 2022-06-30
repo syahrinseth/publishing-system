@@ -46,88 +46,77 @@
         </template>
         <template v-slot:default>
 
-            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-                
-                <div class="border-t border-gray-200">
-                    <Table>
-                        <template v-slot:header>
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                #
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Title
-                                </th>
-                                <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Abstract
-                                </th> -->
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Last Modified
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Created
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <Table>
+                <template v-slot:header>
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-24">
+                        #
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-64">
+                        Title
+                        </th>
+                        <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Abstract
+                        </th> -->
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Last Modified
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Created
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 
-                                </th>
-                            </tr>
-                        </template>
-                        <template v-slot:body>
-                            <tr v-for="(manuscript, index) in manuscripts.data" :key="manuscript.id">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <!-- <div class="flex-shrink-0 h-10 w-10">
-                                        <img class="h-10 w-10 rounded-full" :src="person.order" alt="" />
-                                        </div> -->
-                                        <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">
-                                            {{ index + 1 }}
-                                        </div>
-                                        <div class="text-sm text-gray-500">
-                                            <!-- {{ person.email }} -->
-                                        </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm w-6">
-                                    <!-- <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    </span> -->
-                                    <div class="text-sm text-gray-500">{{ manuscript.manuscript_no }}</div>
-                                    <div class="text-gray-900">
-                                        <p class="break-words">
-                                            {{ manuscript.title || 'N/a' }}
-                                        </p>
-                                    </div>
-                                    <div class="text-sm text-gray-500">{{ manuscript.type.name }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ manuscript.status }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ manuscript.updated_at }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ manuscript.created_at_date }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${manuscript.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Edit</Link>
-                                    <a :href="`/admin/manuscripts/${manuscript.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-2" target="_blank">Download</a>
-                                    <a v-if="auth.user.data.permissions_attribute.manuscripts.destroy == true" href="#" @click="deleteManuscript(manuscript)" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</a>
-                                </td>
-                            </tr>
-                        </template>
-                    </Table>
-                </div>
+                        </th>
+                    </tr>
+                </template>
+                <template v-slot:body>
+                    <tr v-for="(manuscript, index) in manuscripts.data" :key="manuscript.id">
+                        <td class="px-6 py-4 word-break">
+                            <div class="flex items-center">
+                                <!-- <div class="flex-shrink-0 h-10 w-10">
+                                <img class="h-10 w-10 rounded-full" :src="person.order" alt="" />
+                                </div> -->
+                                <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">
+                                    {{ manuscripts.meta.from + index }}
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    <!-- {{ person.email }} -->
+                                </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 word-break text-sm">
+                            <!-- <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            </span> -->
+                            <div class="text-sm text-gray-500">{{ manuscript.manuscript_no }}</div>
+                            <p class="text-gray-900">
+                                {{ manuscript.title || 'N/a' }}
+                            </p>
+                            <div class="text-sm text-gray-500">{{ manuscript.type.name }}</div>
+                        </td>
+                        <td class="px-6 py-4 word-break text-sm text-gray-500">
+                        {{ manuscript.status }}
+                        </td>
+                        <td class="px-6 py-4 word-break text-sm text-gray-500">
+                        {{ manuscript.updated_at }}
+                        </td>
+                        <td class="px-6 py-4 word-break text-sm text-gray-500">
+                        {{ manuscript.created_at_date }}
+                        </td>
+                        <td class="px-6 py-4 word-break text-right text-sm font-medium">
+                            <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${manuscript.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
+                            <a v-if="auth.user.data.permissions_attribute.manuscripts.destroy == true" href="#" @click="deleteManuscript(manuscript)" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</a>
+                        </td>
+                    </tr>
+                </template>
+            </Table>
+            <div class="my-2 flex justify-end">
+                <Pagination :links="manuscripts.meta.links" :meta="manuscripts.meta" />
             </div>
-
-            <!-- <div class="hidden sm:block" aria-hidden="true">
-                <div class="py-5">
-                    <div class="border-t border-gray-200" />
-                </div>
-            </div> -->
 
             
         </template>
@@ -149,9 +138,11 @@
   PlusIcon
 } from '@heroicons/vue/solid'
   import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+  import Pagination from '../../Components/Pagination.vue'
 
   export default {
       components: {
+            Pagination,
             Layout,
             Table,
             Menu,
@@ -191,7 +182,7 @@
         }
     },
     async created() {
-        
+        console.log(this.manuscripts);
     }
   }
 </script>

@@ -803,9 +803,9 @@
                                             </tr>
                                         </template>
                                         <template v-slot:body>
-                                            <tr v-for="(attachment, index) in manuscript.data.attachments.filter(function(attach) {if(auth.user.data.permissions_attribute.manuscripts.cover_letter == false && attach.type.name == `Cover Letter` || auth.user.data.permissions_attribute.manuscripts.conflict_of_interest == false && attach.type.name == `Conflict of Interest` || auth.user.data.permissions_attribute.manuscripts.declaration_of_interest_statement == false && attach.type.name == `Declaration of Interest Statement`) {return false;}return true;})" :key="attachment.id + '-attach'">
+                                            <tr v-for="(attachment, index) in attachments.data.filter(function(attach) {if(auth.user.data.permissions_attribute.manuscripts.cover_letter == false && attach.type.name == `Cover Letter` || auth.user.data.permissions_attribute.manuscripts.conflict_of_interest == false && attach.type.name == `Conflict of Interest` || auth.user.data.permissions_attribute.manuscripts.declaration_of_interest_statement == false && attach.type.name == `Declaration of Interest Statement`) {return false;}return true;})" :key="attachment.id + '-attach'">
                                                 <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ index + 1 }}
+                                                    {{ attachments.from + index }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <p>{{ attachment.type.name }}</p>
@@ -825,7 +825,7 @@
                                                     <span :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" @click="cannotEditOnSubmit() ? `` : deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1">Delete</span>
                                                 </td>
                                             </tr>
-                                            <tr v-if="manuscript.data.attachments.length == 0">
+                                            <tr v-if="attachments.data.length == 0">
                                                 <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center">
                                                     No Data
                                                 </td>
@@ -833,6 +833,9 @@
                                         </template>
                                     </Table>
                                 </div>
+                            </div>
+                            <div class="my-2 flex justify-end">
+                                <Pagination :links="attachments.links" :meta="attachments" />
                             </div>
                         </div>
                     </div>
@@ -1000,12 +1003,14 @@
   import Toast from '../../Components/Toast'
   import CommentSectionCard from '../../Components/CommentSectionCard.vue'
   import { SelectorIcon } from '@heroicons/vue/solid'
+  import Pagination from '../../Components/Pagination.vue'
 
   export default {
     components: {
         VueMultiselect,
         Layout,
         Table,
+        Pagination,
         Menu,
         MenuButton,
         MenuItem,
@@ -1046,6 +1051,7 @@
     },
     props: {
         manuscript: Object,
+        attachments: Object,
         attachTypes: Array,
         articleTypes: Array,
         errors: Object,
@@ -1418,6 +1424,7 @@
     },
     async created() {
         // console.log(this.$props.auth.user.data.permissions_attribute.manuscripts.edit_after_submit)
+        console.log('attachments', this.attachments);
         this.setRoleView();
         this.asyncFindEditors()
         this.asyncFindReviewers()

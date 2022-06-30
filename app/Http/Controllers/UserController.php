@@ -36,7 +36,7 @@ class UserController extends Controller
     public function index(UserFilters $userFilters)
     {
         $users = User::filter($userFilters);
-        $users = new UserCollection($users->get());
+        $users = new UserCollection($users->orderBy('updated_at', 'desc')->paginate(5));
 
         if (request()->is('api/*')) {
             return response()->json($users);

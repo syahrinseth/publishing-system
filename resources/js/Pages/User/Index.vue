@@ -23,13 +23,13 @@
         </template>
         <template v-slot:default>
 
-            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <!-- <div class="bg-white shadow sm:rounded-lg">
                 
-                <div class="border-t border-gray-200">
+                <div class="border-t border-gray-200"> -->
                     <Table>
                         <template v-slot:header>
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-24">
                                 #
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -44,7 +44,7 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Last Modified
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
 
                                 </th>
                             </tr>
@@ -58,7 +58,7 @@
                                         </div> -->
                                         <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900">
-                                            {{ index + 1 }}
+                                            {{ users.meta.from + index }}
                                         </div>
                                         <div class="text-sm text-gray-500">
                                             <!-- {{ person.email }} -->
@@ -66,32 +66,46 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">{{ user.name }}</div>
+                                <td class="px-6 py-4 word-break">
+                                    <div class="text-sm text-gray-900">
+                                        <p>{{ user.first_name }} {{ user.last_name }}</p>
+                                        <p>
+                                            <small class="text-gray-600">
+                                                {{ user.field }}
+                                            </small>
+                                        </p>
+                                        <p>
+                                            <small class="text-gray-600">
+                                            {{ user.affiliation }}
+                                            </small>
+                                        </p>
+                                    </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td class="px-6 py-4 word-break text-sm text-gray-500">
                                 <!-- <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                 </span> -->
                                 {{ user.email || 'N/a' }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td class="px-6 py-4 word-break text-sm text-gray-500">
                                     {{ user.roles.length == 0 ? 'N/a' : user.roles.map((e) => e.name).join(', ') }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td class="px-6 py-4 word-break text-sm text-gray-500">
                                 {{ user.updated_at }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <form @submit.prevent="deleteUser(user)">
-                                        <Link v-if="auth.user.data.permissions_attribute.users.edit == true" :href="`/admin/users/${user.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Edit</Link>
+                                        <Link v-if="auth.user.data.permissions_attribute.users.edit == true" :href="`/admin/users/${user.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
                                         <button v-if="auth.user.data.permissions_attribute.users.destroy == true" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</button>
                                     </form>
                                 </td>
                             </tr>
                         </template>
                     </Table>
-                </div>
-            </div>
-            
+                <!-- </div>
+            </div> -->
+            <div class="my-2 flex justify-end">
+                <Pagination :links="users.meta.links" :meta="users.meta" />
+            </div>            
         </template>
     </Layout>
 </template>
@@ -112,12 +126,14 @@
     } from '@heroicons/vue/solid'
     import { useForm, Link } from '@inertiajs/inertia-vue3'
     import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+    import Pagination from '../../Components/Pagination.vue'
 
     export default {
         components: {
             Layout,
             Table,
             Menu,
+            Pagination,
             MenuButton,
             MenuItem,
             MenuItems,

@@ -35,7 +35,7 @@ class JournalController extends Controller
         }
             
         $journals = $journals->orderBy('updated_at', 'desc')
-            ->get();
+            ->paginate(5);
         $journals = new JournalCollection($journals);
 
         if (request()->is('api/*')) {
