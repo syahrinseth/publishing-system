@@ -47,20 +47,25 @@ class ManuscriptController extends Controller
      */
     public function index(Request $request, ManuscriptFilters $manuscriptFilters)
     {   
+        $request->validate([
+            'direction' => ['in:asc,desc'],
+            'field' => ['in:title,status,updated_at,created_at']
+        ]);
         $manuscripts = Manuscript::filter($manuscriptFilters);
         if (!auth()->user()->can('manuscripts.show_all')) {
             $manuscripts->whereHas('members', function($q) {
                 $q->where('user_id', auth()->id());
             });
         }
-        $manuscripts = new ManuscriptCollection($manuscripts->orderBy('updated_at', 'desc')->paginate(5));
+        $manuscripts = new ManuscriptCollection($manuscripts->orderBy('updated_at', 'desc')->paginate(5)->appends(request()->query()));
 
         if ($request->is('api/*')) {
             return response()->json($manuscripts);
         }
-
+        
         return Inertia::render('Manuscript/Index', [
-            'manuscripts' => $manuscripts
+            'manuscripts' => $manuscripts,
+            'filters' => $request->all(['search', 'field', 'direction'])
         ]);
     }
 

@@ -46,9 +46,18 @@ class ManuscriptFilters extends QueryFilter
     {
         return $this->builder->where(function($query) use ($input) {
             $query->where('title', 'like', "%{$input}%")
+                ->orWhere('manuscript_no', 'like', "%{$input}%")
                 ->orWhere('abstract', 'like', "%{$input}%")
                 ->orWhere('keywords', 'like', "%{$input}%")
                 ->orWhere('status', 'like', "%{$input}%");
         });
+    }
+
+    public function field($field)
+    {
+        if (request()->has(['direction'])) {
+            return $this->builder->orderBy($field, request('direction'));
+        }
+        return $this->builder;
     }
 }

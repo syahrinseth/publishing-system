@@ -45,27 +45,63 @@
             </div>
         </template>
         <template v-slot:default>
-
+            <div class="w-full flex">
+                <div class="w-64 my-3">
+                    <input type="text" name="search" v-model="params.search" id="search" placeholder="Search" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
+                </div>
+              </div>
             <Table>
                 <template v-slot:header>
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-24">
                         #
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-64">
-                        Title
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-64 cursor-pointer " @click="sort('title')">
+                        <div class="columns-2">
+                            <div>
+                                Title 
+                            </div>
+                            <div>
+                                <SortDescendingIcon v-if="(params.direction === 'desc' ? true : false) && (params.field === 'title')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                <SortAscendingIcon v-if="(params.direction === 'asc' ? true : false) && (params.field === 'title')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                            </div>
+                        </div>
                         </th>
                         <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Abstract
                         </th> -->
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Status
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" @click="sort('status')">
+                            <div class="columns-2">
+                                <div>
+                                    Status
+                                </div>
+                                <div>
+                                    <SortDescendingIcon v-if="(params.direction === 'desc' ? true : false) && (params.field === 'status')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                    <SortAscendingIcon v-if="(params.direction === 'asc' ? true : false) && (params.field === 'status')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                </div>
+                            </div>
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Last Modified
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" @click="sort('updated_at')">
+                            <div class="columns-2">
+                                <div>
+                                    Modified
+                                </div>
+                                <div>
+                                    <SortDescendingIcon v-if="(params.direction === 'desc' ? true : false) && (params.field === 'updated_at')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                    <SortAscendingIcon v-if="(params.direction === 'asc' ? true : false) && (params.field === 'updated_at')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                </div>
+                            </div>
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Created
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" @click="sort('created_at')">
+                            <div class="columns-2">
+                                <div>
+                                    Created
+                                </div>
+                                <div>
+                                    <SortDescendingIcon v-if="(params.direction === 'desc' ? true : false) && (params.field === 'created_at')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                    <SortAscendingIcon v-if="(params.direction === 'asc' ? true : false) && (params.field === 'created_at')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                </div>
+                            </div>
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 
@@ -135,10 +171,13 @@
   LinkIcon,
   LocationMarkerIcon,
   PencilIcon,
+  SortAscendingIcon,
+  SortDescendingIcon,
   PlusIcon
 } from '@heroicons/vue/solid'
   import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
   import Pagination from '../../Components/Pagination.vue'
+  import { Inertia } from '@inertiajs/inertia'
 
   export default {
       components: {
@@ -158,18 +197,41 @@
             LocationMarkerIcon,
             PencilIcon,
             PlusIcon,
-            Link
+            Link,
+            SortAscendingIcon,
+            SortDescendingIcon,
       },
     props: {
         manuscripts: Object,
+        filters: Object,
         auth: Object
     },
     data() {
         return {
-
+            params: {
+                search: this.filters.search,
+                field: this.filters.field,
+                direction: this.filters.direction,
+            },
+        }
+    },
+    watch: {
+        params: {
+            handler: _.debounce(async function() {
+                let params = _.pickBy(this.params);
+                Inertia.get(`/admin/manuscripts`, params, {
+                    replace: true,
+                    preserveState: true
+                });
+            }, 300),
+            deep: true
         }
     },
     methods: {
+        sort(field) {
+            this.params.field = field;
+            this.params.direction = this.params.direction === 'asc' ? 'desc' : 'asc';
+        },
         async deleteManuscript(manuscript) {
             const deleteAttachForm = useForm({
                 _method: 'post'
