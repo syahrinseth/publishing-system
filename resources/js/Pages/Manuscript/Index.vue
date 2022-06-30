@@ -49,7 +49,7 @@
                 <div class="w-64 my-3">
                     <input type="text" name="search" v-model="params.search" id="search" placeholder="Search" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
                 </div>
-              </div>
+            </div>
             <Table>
                 <template v-slot:header>
                     <tr>
@@ -153,8 +153,6 @@
             <div class="my-2 flex justify-end">
                 <Pagination :links="manuscripts.meta.links" :meta="manuscripts.meta" />
             </div>
-
-            
         </template>
     </Layout>
 </template>

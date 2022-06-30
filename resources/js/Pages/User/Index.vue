@@ -22,87 +22,118 @@
             </div>
         </template>
         <template v-slot:default>
+            <div class="w-full flex">
+                <div class="w-64 my-3">
+                    <input type="text" name="search" v-model="params.search" id="search" placeholder="Search" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
+                </div>
+            </div>
+            <Table>
+                <template v-slot:header>
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-24">
+                        #
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" @click="sort('first_name')">
+                            <div class="columns-2">
+                                <div>
+                                    Name
+                                </div>
+                                <div>
+                                    <SortDescendingIcon v-if="(params.direction === 'desc' ? true : false) && (params.field === 'first_name')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                    <SortAscendingIcon v-if="(params.direction === 'asc' ? true : false) && (params.field === 'first_name')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" @click="sort('email')">
+                            <div class="columns-2">
+                                <div>
+                                    email
+                                </div>
+                                <div>
+                                    <SortDescendingIcon v-if="(params.direction === 'desc' ? true : false) && (params.field === 'email')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                    <SortAscendingIcon v-if="(params.direction === 'asc' ? true : false) && (params.field === 'email')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <div class="columns-2">
+                                <div>
+                                    Roles
+                                </div>
+                                <div>
+                                    <SortDescendingIcon v-if="(params.direction === 'desc' ? true : false) && (params.field === 'roles')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                    <SortAscendingIcon v-if="(params.direction === 'asc' ? true : false) && (params.field === 'roles')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" @click="sort('updated_at')">
+                            <div class="columns-2">
+                                <div>
+                                    Modified
+                                </div>
+                                <div>
+                                    <SortDescendingIcon v-if="(params.direction === 'desc' ? true : false) && (params.field === 'updated_at')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                    <SortAscendingIcon v-if="(params.direction === 'asc' ? true : false) && (params.field === 'updated_at')" class="-ml-1 mr-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
 
-            <!-- <div class="bg-white shadow sm:rounded-lg">
-                
-                <div class="border-t border-gray-200"> -->
-                    <Table>
-                        <template v-slot:header>
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-24">
-                                #
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Name
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Email
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Roles
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Last Modified
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
-
-                                </th>
-                            </tr>
-                        </template>
-                        <template v-slot:body>
-                            <tr v-for="(user, index) in users.data" :key="user.id">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <!-- <div class="flex-shrink-0 h-10 w-10">
-                                        <img class="h-10 w-10 rounded-full" :src="person.order" alt="" />
-                                        </div> -->
-                                        <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">
-                                            {{ users.meta.from + index }}
-                                        </div>
-                                        <div class="text-sm text-gray-500">
-                                            <!-- {{ person.email }} -->
-                                        </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 word-break">
-                                    <div class="text-sm text-gray-900">
-                                        <p>{{ user.first_name }} {{ user.last_name }}</p>
-                                        <p>
-                                            <small class="text-gray-600">
-                                                {{ user.field }}
-                                            </small>
-                                        </p>
-                                        <p>
-                                            <small class="text-gray-600">
-                                            {{ user.affiliation }}
-                                            </small>
-                                        </p>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 word-break text-sm text-gray-500">
-                                <!-- <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                </span> -->
-                                {{ user.email || 'N/a' }}
-                                </td>
-                                <td class="px-6 py-4 word-break text-sm text-gray-500">
-                                    {{ user.roles.length == 0 ? 'N/a' : user.roles.map((e) => e.name).join(', ') }}
-                                </td>
-                                <td class="px-6 py-4 word-break text-sm text-gray-500">
-                                {{ user.updated_at }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <form @submit.prevent="deleteUser(user)">
-                                        <Link v-if="auth.user.data.permissions_attribute.users.edit == true" :href="`/admin/users/${user.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
-                                        <button v-if="auth.user.data.permissions_attribute.users.destroy == true" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </template>
-                    </Table>
-                <!-- </div>
-            </div> -->
+                        </th>
+                    </tr>
+                </template>
+                <template v-slot:body>
+                    <tr v-for="(user, index) in users.data" :key="user.id">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <!-- <div class="flex-shrink-0 h-10 w-10">
+                                <img class="h-10 w-10 rounded-full" :src="person.order" alt="" />
+                                </div> -->
+                                <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">
+                                    {{ users.meta.from + index }}
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    <!-- {{ person.email }} -->
+                                </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 word-break">
+                            <div class="text-sm text-gray-900">
+                                <p>{{ user.first_name }} {{ user.last_name }}</p>
+                                <p>
+                                    <small class="text-gray-600">
+                                        {{ user.field }}
+                                    </small>
+                                </p>
+                                <p>
+                                    <small class="text-gray-600">
+                                    {{ user.affiliation }}
+                                    </small>
+                                </p>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 word-break text-sm text-gray-500">
+                        <!-- <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        </span> -->
+                        {{ user.email || 'N/a' }}
+                        </td>
+                        <td class="px-6 py-4 word-break text-sm text-gray-500">
+                            {{ user.roles.length == 0 ? 'N/a' : user.roles.map((e) => e.name).join(', ') }}
+                        </td>
+                        <td class="px-6 py-4 word-break text-sm text-gray-500">
+                        {{ user.updated_at }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <form @submit.prevent="deleteUser(user)">
+                                <Link v-if="auth.user.data.permissions_attribute.users.edit == true" :href="`/admin/users/${user.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
+                                <button v-if="auth.user.data.permissions_attribute.users.destroy == true" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </template>
+            </Table>
             <div class="my-2 flex justify-end">
                 <Pagination :links="users.meta.links" :meta="users.meta" />
             </div>            
@@ -122,11 +153,14 @@
         LocationMarkerIcon,
         PencilIcon,
         UserIcon,
+        SortAscendingIcon,
+        SortDescendingIcon,
         UserAddIcon
     } from '@heroicons/vue/solid'
     import { useForm, Link } from '@inertiajs/inertia-vue3'
     import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
     import Pagination from '../../Components/Pagination.vue'
+    import { Inertia } from '@inertiajs/inertia'
 
     export default {
         components: {
@@ -137,6 +171,8 @@
             MenuButton,
             MenuItem,
             MenuItems,
+            SortAscendingIcon,
+            SortDescendingIcon,
             BriefcaseIcon,
             CalendarIcon,
             CheckIcon,
@@ -174,6 +210,10 @@
                     dismissible: true
                 })
             },
+            sort(field) {
+                this.params.field = field;
+                this.params.direction = this.params.direction === 'asc' ? 'desc' : 'asc';
+            }
         },
         setup(props) {
             const deleteForm = useForm();
@@ -181,9 +221,31 @@
                 deleteForm
             };
         },
+        data() {
+            return {
+                params: {
+                    search: this.filters.search,
+                    field: this.filters.field,
+                    direction: this.filters.direction
+                }
+            };
+        },
+        watch: {
+            params: {
+                handler: _.debounce(function() {
+                    let params = _.pickBy(this.params);
+                    Inertia.get(`/admin/users`, params, {
+                        replace: true,
+                        preserveState: true
+                    });
+                }, 300),
+                deep: true
+            }
+        },
         props: {
             users: Object,
-            auth: Object
+            auth: Object,
+            filters: Object
         },
     }
 </script>

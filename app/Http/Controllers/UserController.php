@@ -35,17 +35,22 @@ class UserController extends Controller
      */
     public function index(UserFilters $userFilters)
     {
+        request()->validate([
+            'direction' => ['in:asc,desc'],
+            'field' => ['in:first_name,email,updated_at,created_at']
+        ]);
         $users = User::filter($userFilters);
-        $users = new UserCollection($users->orderBy('updated_at', 'desc')->paginate(5));
+        $users = new UserCollection($users->orderBy('updated_at', 'desc')->paginate(5)->appends(request()->query()));
 
         if (request()->is('api/*')) {
             return response()->json($users);
         }
 
         $data = [
-            'users' => $users
+            'users' => $users,
+            'filters' => request()->all(['search', 'field', 'direction'])
         ];
-
+// dd($data);
         return Inertia::render('User/Index', $data);
     }
 

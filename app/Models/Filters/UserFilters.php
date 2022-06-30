@@ -30,4 +30,12 @@ class UserFilters extends QueryFilter
                 ->orWhere('field', 'like', "%{$input}%");
         });
     }
+
+    public function field($field)
+    {
+        if (request()->has(['direction'])) {
+            return $this->builder->orderBy($field, request('direction'));
+        }
+        return $this->builder;
+    }
 }
