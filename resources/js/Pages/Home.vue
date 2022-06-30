@@ -11,7 +11,7 @@
         </template>
         <template v-slot:default>
           <h4 class="font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate mb-4">Overview</h4>
-          <div class="grid grid-cols-4 gap-3 mb-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
             <div v-for="overview in overviewCards" :key="`overview-${overview.name}`" class="max-w-sm flex p-6 bg-white rounded-lg shadow">
                 <div class="flex-shrink-0 self-center">
                   <i :class="[overview.icon, overview.color]" class="fa fa-2xl"></i>
@@ -36,41 +36,46 @@
                   Description
                 </th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
+                  
                 </th>
               </tr>
             </template>
             <template v-slot:body>
               <tr v-for="(step, index) in nextSteps.publisher.data" :key="`step-author-${index}`">
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-6 py-4 word-break">
                   {{ `Manuscript "${step.manuscript_no} - ${step.title || step.type['name']}" has been reviewed by reviewers. Please review the manuscript.` }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-6 py-4 word-break">
                   <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
                 </td>
               </tr>
               <tr v-for="(step, index) in nextSteps.editor.data" :key="`step-author-${index}`">
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-6 py-4 word-break">
                   {{ `Manuscript "${step.manuscript_no} - ${step.title || step.type['name']}" is ready to be edit by you. Please review the manuscript.` }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-6 py-4 word-break">
                   <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
                 </td>
               </tr>
               <tr v-for="(step, index) in nextSteps.reviewer.data" :key="`step-author-${index}`">
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-6 py-4 word-break">
                   {{ `Manuscript "${step.manuscript_no} - ${step.title || step.type['name']}" is ready to be review by you. Please review the manuscript.` }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-6 py-4 word-break">
                   <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
                 </td>
               </tr>
               <tr v-for="(step, index) in nextSteps.author.data" :key="`step-author-${index}`">
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-6 py-4 word-break">
                   {{ `Manuscript "${step.manuscript_no} - ${step.title || step.type['name']}" is in status "${step.status}". Please review the manuscript.` }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-6 py-4 word-break">
                   <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${step.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
+                </td>
+              </tr>
+              <tr v-if="nextSteps.author.data.length == 0 && nextSteps.reviewer.data.length == 0 && nextSteps.editor.data.length == 0 && nextSteps.publisher.data.length == 0">
+                <td colspan="2" class="text-center text-gray-600 px-6 py-4">
+                  No Data
                 </td>
               </tr>
             </template>
@@ -136,13 +141,6 @@
           link: props.manuscript_overview.total_approved_link,
           color: 'text-green-700',
           icon: 'fa-thumbs-up'
-        },
-        {
-          name: 'Published Manuscripts',
-          value: props.manuscript_overview.total_published,
-          link: props.manuscript_overview.total_published_link,
-          color: 'text-teal-700',
-          icon: 'fa-upload'
         },
       ];
 
