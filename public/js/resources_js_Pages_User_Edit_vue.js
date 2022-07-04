@@ -563,7 +563,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* PROPS */
       , _hoisted_29)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("img", {
         key: 2,
-        src: $setup.userForm.photo,
+        src: "/storage/".concat($setup.userForm.photo),
         alt: ""
       }, null, 8
       /* PROPS */

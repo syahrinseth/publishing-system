@@ -32,7 +32,7 @@ class UserResource extends JsonResource
             'country' => $this->country,
             'website_url' => $this->website_url,
             'about' => $this->about,
-            'photo' => $this->photo == null ? null : asset($this->photo),
+            'photo' => $this->photo,
             'affiliation' => $this->affiliation,
             'updated_at' => $this->updated_at->diffForHumans(),
             'created_at' => $this->created_at->diffForHumans()
