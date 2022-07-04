@@ -58,15 +58,21 @@
                                 </div>
 
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700"> Photo </label>
+                                    <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                     <div class="mt-1 flex items-center">
-                                    <span class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
-                                        <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                        </svg>
-                                    </span>
-                                    <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Change</button>
+                                        <span class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
+                                            <svg v-if="userPhoto == null && userForm.photo == null" class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                            </svg> 
+                                            <img v-else-if="userPhoto != null" :src="userPhoto" alt="">
+                                            <img v-else :src="userForm.photo" alt="">
+                                        </span>
+                                        <span class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Change
+                                        </span>
                                     </div>
+                                    <input @change="onChangeProfileImage" id="file-upload" ref="file" type="file" class="sr-only" />
+                                    </label>
                                 </div>
                             </div>
                             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
@@ -212,6 +218,11 @@ export default {
         roles: Array,
         auth: Object
     },
+    data() {
+        return {
+            userPhoto: null
+        }
+    },
     methods: {
         notification(message, type = 'success') {
             this.$toast.open({
@@ -233,9 +244,13 @@ export default {
                     this.notification('Saved', 'success');
                 }
             });
+        },
+        onChangeProfileImage(e) {
+            this.userPhoto = URL.createObjectURL(e.target.files[0]);
+            this.userForm.photo = e.target.files[0];
         }
     },
-    setup(props) {
+    setup(props, context) {
         let user = props.user.data;
         const userForm = useForm({
             first_name: user.first_name,
@@ -257,7 +272,7 @@ export default {
         });
 
         return {
-            userForm
+            userForm,
         };
     },
 }

@@ -106,6 +106,11 @@ class ProfileController extends Controller
             $user->about = $request->about;
             $user->website_url = $request->website_url;
             $user->country = $request->country;
+            if ($request->hasFile('photo')) {
+                $id = auth()->id();
+                $path = $request->photo->store("users/{$id}/photos", 'public');
+                $user->photo = $path;
+            }
             if (!empty($request->roles) && count($request->roles) > 0) {
                 $user->roles()->detach(); 
                 $user->assignRole($request->roles);
