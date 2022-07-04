@@ -16,14 +16,15 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        if (!User::where('name', 'Super Admin')->exists()) {
+        if (!User::where('first_name', 'Super')->exists()) {
             $user = new User();
-            $user->name = "Super Admin";
+            $user->first_name = "Super";
+            $user->last_name = "Admin";
             $user->email = "superadmin@example.com";
             $user->password = bcrypt(12345678);
             $user->save();
         } else {
-            $user = User::where('name', 'Super Admin')->first();
+            $user = User::where('first_name', 'Super')->where('last_name', 'Admin')->first();
         }
 
         $role = Role::find(1);

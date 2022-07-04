@@ -199,18 +199,20 @@ class ManuscriptController extends Controller
         }
             
         $manuscript = $manuscript->firstOrFail();
-
-        $users = User::all();
         
+        $users = User::all();
+
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));
         }
 
-        return Inertia::render('Manuscript/Edit', [
+        return Inertia::render('Manuscript/Show', [
             'manuscript' => new ManuscriptResource($manuscript),
+            'attachments' => new ManuscriptAttachCollection($manuscript->attachments()->orderBy('updated_at', 'desc')->paginate(100)),
             'users' => $users,
             'attachTypes' => ManuscriptAttachFile::$types,
-            'articleTypes' => Manuscript::getTypes()
+            'articleTypes' => Manuscript::getTypes(),
+            'manuscriptStatusList' => Manuscript::getStatusList($manuscript->id)
         ]);
     }
 
@@ -241,7 +243,8 @@ class ManuscriptController extends Controller
 
         return Inertia::render('Manuscript/Edit', [
             'manuscript' => new ManuscriptResource($manuscript),
-            'attachments' => new ManuscriptAttachCollection($manuscript->attachments()->orderBy('updated_at', 'desc')->paginate(3)),
+            'attachments' => new ManuscriptAttachCollection($manuscript->attachments()->orderBy('updated_at', 'desc')->paginate(100)),
+            'filters' => $request->all(['search', 'field', 'direction', 'viewAs']),
             'users' => $users,
             'attachTypes' => ManuscriptAttachFile::$types,
             'articleTypes' => Manuscript::getTypes(),

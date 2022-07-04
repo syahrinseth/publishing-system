@@ -49,12 +49,12 @@
                                 Accept
                             </a>
                         </span>
-                        <!--<span class="sm:ml-3" v-if="manuscript.data.status.includes('Accept') && (viewAs == `publisher`)">
+                        <span class="sm:ml-3" v-if="manuscript.data.status.includes('Accept') && (viewAs == `publisher`)">
                             <a href="#" @click="showPublishModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 <PaperAirplaneIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                 Publish
                             </a>
-                        </span>-->
+                        </span>
                         <span class="sm:ml-3" v-if="manuscript.data.status == `Published`">
                             <a :href="`/admin/manuscripts/${manuscript.data.id}/download`" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
                                 <DownloadIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
@@ -803,7 +803,7 @@
                                             </tr>
                                         </template>
                                         <template v-slot:body>
-                                            <tr v-for="(attachment, index) in attachments.data.filter(function(attach) {if(auth.user.data.permissions_attribute.manuscripts.cover_letter == false && attach.type.name == `Cover Letter` || auth.user.data.permissions_attribute.manuscripts.conflict_of_interest == false && attach.type.name == `Conflict of Interest` || auth.user.data.permissions_attribute.manuscripts.declaration_of_interest_statement == false && attach.type.name == `Declaration of Interest Statement`) {return false;}return true;})" :key="attachment.id + '-attach'">
+                                            <tr v-for="(attachment, index) in attachments.data.filter(function(attach) {if(viewAs == `reviewer` && (attach.type.name == `Cover Letter` || attach.type.name == `Conflict of Interest` || attach.type.name == `Declaration of Interest Statement`)) {return false;}return true;})" :key="attachment.id + '-attach'">
                                                 <td class="px-6 py-4 word-break">
                                                     {{ attachments.meta.from + index }}
                                                 </td>
@@ -1052,6 +1052,7 @@
     props: {
         manuscript: Object,
         attachments: Object,
+        filters: Object,
         attachTypes: Array,
         articleTypes: Array,
         errors: Object,
