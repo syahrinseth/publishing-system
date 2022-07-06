@@ -1,6 +1,5 @@
 <template>
     <div>
-        <!-- <Toast v-show="errors != null"/> -->
         <Layout :auth="auth.user.data">
             <template v-slot:header>
                 <div class="lg:flex lg:items-center lg:justify-between">
@@ -1425,7 +1424,6 @@
     },
     async created() {
         // console.log(this.$props.auth.user.data.permissions_attribute.manuscripts.edit_after_submit)
-        console.log('attachments', this.attachments);
         this.setRoleView();
         this.asyncFindEditors()
         this.asyncFindReviewers()

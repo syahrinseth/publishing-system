@@ -365,6 +365,15 @@ class ManuscriptController extends Controller
         $manuscript = Manuscript::findOrFail($id);
         $attachments = ManuscriptAttachFile::where('manuscript_id', $manuscript->id)
             ->get();
+        
+        if ($attachments->count() == 0) {
+            if ($request->is('api/*')) {
+                return response('', 403)->json();
+            }
+            return back()->withErrors([
+                'status' => 'There\'s nothing to download.'
+            ]);
+        }
 
         // Create a main template file to merge with
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
