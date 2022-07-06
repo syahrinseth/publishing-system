@@ -3567,8 +3567,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           switch (_context5.prev = _context5.next) {
             case 0:
               // console.log(this.$props.auth.user.data.permissions_attribute.manuscripts.edit_after_submit)
-              console.log('attachments', _this5.attachments);
-
               _this5.setRoleView();
 
               _this5.asyncFindEditors();
@@ -3579,7 +3577,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
               _this5.asyncFindCorrespondingAuthors();
 
-            case 6:
+            case 5:
             case "end":
               return _context5.stop();
           }
@@ -5111,7 +5109,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_Layout = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Layout");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <Toast v-show=\"errors != null\"/> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Layout, {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Layout, {
     auth: $props.auth.user.data
   }, {
     header: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
