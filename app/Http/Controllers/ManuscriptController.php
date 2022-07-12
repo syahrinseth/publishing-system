@@ -436,7 +436,7 @@ class ManuscriptController extends Controller
         foreach ($attachments as $attachment) {
 
             // Check for supported file for combine
-            if ($attachment->canMerge()) {
+            if ($attachment->canMerge() && $attachment->type == 1) {
 
                 // Create pages for manuscript attachment contains
                 if (str_contains(Storage::mimeType($attachment->file_location), 'word')) {
@@ -459,6 +459,7 @@ class ManuscriptController extends Controller
 
                     $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
                     $PDFWriter->save(storage_path('app') . '/' . "{$attachment->file_location}.html");
+
                 }
 
                 // Load html file
@@ -542,13 +543,13 @@ class ManuscriptController extends Controller
     {
         $request->validate([
             'type' => 'required',
-            'file' => 'required|mimes:doc,docx'
+            'file' => $request->type == 1 ? 'required|mimes:doc,docx' : 'required|mimes:doc,docx,pdf'
         ]);
 
         $manuscript = Manuscript::findOrFail($id);
         $attach = new ManuscriptAttachFile;   
         $attach->manuscript_id = $id;
-        $attach->type = $request->type ?? "Full Length Article";
+        $attach->type = $request->type ?? 1;
         $attach->description = $request->description;
         $attach->size = 0;
         $attach->save();
@@ -562,26 +563,7 @@ class ManuscriptController extends Controller
         }
 
         // Send mail
-        $users = $manuscript->correspondingAuthors->map(function($member) {
-            return $member->user->email;
-        });
-        if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptAttachCreated($manuscript, $attach));
-        }
-
-        $users = collect($manuscript->authors)->map(function($member) {
-            return $member->user->email;
-        });
-        if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptAttachCreated($manuscript, $attach));
-        }
-
-        $users = collect($manuscript->editors)->map(function($member) {
-            return $member->user->email;
-        });
-        if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptAttachCreated($manuscript, $attach));
-        }
+        $manuscript->notifyCreateAttachToMembers($attach);
 
         // Response
         if ($request->is('api/*')) {
@@ -627,7 +609,7 @@ class ManuscriptController extends Controller
     {
         $request->validate([
             'type' => 'required',
-            'file' => 'mimes:doc,docx'
+            'file' => $request->type == 1 ? 'required|mimes:doc,docx' : 'required|mimes:doc,docx,pdf'
         ]);
 
         $manuscript = Manuscript::findOrFail($id);
@@ -649,26 +631,7 @@ class ManuscriptController extends Controller
         }
 
         // Send mail
-        $users = $manuscript->correspondingAuthors->map(function($user) {
-            return $user['email'];
-        });
-        if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptAttachUpdated($manuscript, $attach));
-        }
-
-        $users = $manuscript->authors->map(function($user) {
-            return $user['email'];
-        });
-        if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptAttachUpdated($manuscript, $attach));
-        }
-
-        $users = $manuscript->editors->map(function($user) {
-            return $user['email'];
-        });
-        if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptAttachUpdated($manuscript, $attach));
-        }
+        $manuscript->notifyUpdateAttachToMembers($attach);
 
         // Response
         if ($request->is('api/*')) {

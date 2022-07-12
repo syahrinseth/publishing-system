@@ -206,8 +206,11 @@
                                                         </label>
                                                         <p class="pl-1">or drag and drop</p>
                                                     </div>
-                                                    <p class="text-xs text-gray-500">
+                                                    <p v-if="attachForm.type == 1" class="text-xs text-gray-500">
                                                         DOC, DOCX up to 50MB
+                                                    </p>
+                                                    <p v-else class="text-xs text-gray-500">
+                                                        DOC, DOCX, PDF up to 50MB
                                                     </p>
                                                 </div>
                                             </div>
@@ -294,8 +297,11 @@
                                                         </label>
                                                         <p class="pl-1">or drag and drop</p>
                                                     </div>
-                                                    <p class="text-xs text-gray-500">
+                                                    <p v-if="updateAttachForm.type == 1" class="text-xs text-gray-500">
                                                         DOC, DOCX up to 50MB
+                                                    </p>
+                                                    <p v-else class="text-xs text-gray-500">
+                                                        DOC, DOCX, PDF up to 50MB
                                                     </p>
                                                 </div>
                                             </div>
@@ -1137,6 +1143,7 @@
                 },
                 onSuccess: () => {
                     this.notification('Saved', 'success');
+                    this.showUploadAttachModal = false;
                 }
             });
             this.clearAttachForm();
@@ -1151,6 +1158,7 @@
                 },
                 onSuccess: () => {
                     this.notification('Saved', 'success');
+                    this.showUpdateAttachModel = false;
                 }
             });
         },
