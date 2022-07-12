@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Mail\ManuscriptAttachCreated;
 use Carbon\Carbon;
 use App\Models\User;
 use App\QueryFilter;
@@ -11,6 +12,7 @@ use App\Models\ManuscriptMember;
 use App\Models\JournalManuscript;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\ManuscriptAttachUpdated;
 use Illuminate\Database\Eloquent\Model;
 use App\Mail\ManuscriptEditorNotification;
 use App\Mail\ManuscriptReviewNotification;
@@ -638,5 +640,63 @@ class Manuscript extends Model
     public function journal()
     {
         return $this->hasOne(JournalManuscript::class, 'manuscript_id', 'id');
+    }
+
+    /**
+     * Notify members for update attach file.
+     * @param ManuscriptAttachFile $attach
+     * 
+     * @return boolean
+     */
+    public function notifyUpdateAttachToMembers($attach)
+    {
+        $emails = [];
+
+        $coAuthors = $this->correspondingAuthors->map(function($member) {
+            return $member->user->email;
+        })->toArray();
+
+        $authors = $this->authors->map(function($member) {
+            return $member->user->email;
+        })->toArray();
+
+        $editors = $this->editors->map(function($member) {
+            return $member->user->email;
+        })->toArray();
+
+        $emails = collect(array_merge($coAuthors, $authors, $editors))->unique()->values()->all();
+
+        if (!empty($emails)) {
+            Mail::to($emails)->queue(new ManuscriptAttachUpdated($this, $attach));
+        }
+    }
+
+    /**
+     * Notify members for create attach file.
+     * @param ManuscriptAttachFile $attach
+     * 
+     * @return boolean
+     */
+    public function notifyCreateAttachToMembers($attach)
+    {
+        $emails = [];
+
+        $coAuthors = $this->correspondingAuthors->map(function($member) {
+            return $member->user->email;
+        })->toArray();
+
+        $authors = $this->authors->map(function($member) {
+            return $member->user->email;
+        })->toArray();
+
+        $editors = $this->editors->map(function($member) {
+            return $member->user->email;
+        })->toArray();
+
+        $emails = collect(array_merge($coAuthors, $authors, $editors))->unique()->values()->all();
+
+        if (!empty($emails)) {
+            Mail::to($emails)->queue(new ManuscriptAttachCreated($this, $attach));
+        }
     }
 }
