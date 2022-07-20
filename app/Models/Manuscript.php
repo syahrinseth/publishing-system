@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Mail\ManuscriptAttachCreated;
 use Carbon\Carbon;
 use App\Models\User;
 use App\QueryFilter;
@@ -12,12 +11,14 @@ use App\Models\ManuscriptMember;
 use App\Models\JournalManuscript;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\ManuscriptAttachCreated;
 use App\Mail\ManuscriptAttachUpdated;
 use Illuminate\Database\Eloquent\Model;
 use App\Mail\ManuscriptEditorNotification;
 use App\Mail\ManuscriptReviewNotification;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Mail\ManuscriptPublishedNotification;
+use App\Mail\ManuscriptInviteMemberNotification;
 use App\Mail\ManuscriptPostReviewedNotification;
 use App\Mail\ManuscriptReviewThanksNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -452,6 +453,8 @@ class Manuscript extends Model
                 $member->user_id = $user->id;
                 $member->role = $roleName;
                 $member->save();
+                // Send Invitation Notification
+                Mail::to($user)->queue(new ManuscriptInviteMemberNotification($this, $user, $roleName));
             }
         }
         foreach ($members as $member) {
