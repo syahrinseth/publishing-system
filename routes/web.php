@@ -7,10 +7,11 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ManuscriptController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicJournalController;
 
 /*
@@ -150,4 +151,9 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
     // Settings
     Route::get('/settings', [SettingController::class, 'index'])->name('setting.index');
     Route::post('/settings', [SettingController::class, 'update'])->name('setting.update');
+
+    // Faqs
+    Route::controller(FaqController::class)->group(function() {
+        Route::get('faqs', 'index')->name('faq.index');
+    });
 });
