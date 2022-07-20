@@ -101,6 +101,9 @@
                   </MenuItems>
                 </transition>
               </Menu>
+              <Link href="/admin/faqs" class="text-gray-900 hover:bg-gray-700 hover:text-white px-1 py-1 mx-1 rounded-md text-sm font-medium" preserve-state preserve-scroll>
+                <SupportIcon class="block h-6 w-6 mx-1" aria-hidden="true" />
+              </Link>
             </div>
           </div>
           <div class="-mr-2 flex md:hidden">
@@ -157,7 +160,7 @@
       </div>
     </header>
     <main class="bg-gray-100 px-2 md:px-0">
-      <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 min-h-screen">
         <!-- Replace with your content -->
         <!-- <div class="px-4 py-6 sm:px-0">
           <div class="border-4 border-dashed border-gray-200 rounded-lg h-96" />

@@ -16,8 +16,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var faqs = [{
-  name: "How to assign reviewers in manuscript as an Editor?",
-  desc: "<h2 class=\"text-gray-700 text-lg font-bold\">\n                Step 1\n            </h2>\n            <img src=\"/img/faq/faq1.png\" class=\"rounded shadow-full w-3/4 mx-auto border-gray-400 my-3\" alt=\"faq1\">\n            <p class=\"text-gray-600\">\n                On the <b>Dashboard</b> page, navigate to the Action section. This section will suggest to you what to do next. Click <b>'View'</b> button on the desired list to view the related manuscript.\n            </p>\n            <h2 class=\"text-gray-700 text-lg font-bold mt-3\">\n                Step 2\n            </h2>\n            <img src=\"/img/faq/faq2.png\" class=\"rounded shadow-full w-3/4 mx-auto border-gray-400 my-3\" alt=\"faq1\"/>\n            <p class=\"text-gray-600\">\n                On the Manuscript edit page, navigate to the <b>Review Preferences</b> section, and include reviewers by selecting or typing the reviewer's name or email.\n            </p>\n            <h2 class=\"text-gray-700 text-lg font-bold mt-3\">\n                Step 3\n            </h2>\n            <p class=\"text-gray-600\">\n                Click <b>'Save'</b> button to save the changes.\n            </p>",
+  name: "How to assign reviewers in manuscript as an editor?",
+  desc: "<h2 class=\"text-gray-700 text-lg font-bold\">\n                Step 1:\n            </h2>\n            <img src=\"/img/faq/faq1.png\" class=\"rounded shadow-full w-3/4 mx-auto border-gray-400 my-3\" alt=\"faq1\">\n            <p class=\"text-gray-600\">\n                On the <b>Dashboard</b> page, navigate to the Action section. This section will suggest to you what to do next. Click <b>'View'</b> button on the desired list to view the related manuscript.\n            </p>\n            <h2 class=\"text-gray-700 text-lg font-bold mt-3\">\n                Step 2:\n            </h2>\n            <img src=\"/img/faq/faq2.png\" class=\"rounded shadow-full w-3/4 mx-auto border-gray-400 my-3\" alt=\"faq1\"/>\n            <p class=\"text-gray-600\">\n                On the Manuscript edit page, navigate to the <b>Review Preferences</b> section, and include reviewers by selecting or typing the reviewer's name or email.\n            </p>\n            <h2 class=\"text-gray-700 text-lg font-bold mt-3\">\n                Step 3:\n            </h2>\n            <p class=\"text-gray-600\">\n                Click <b>'Save'</b> button to save the changes.\n            </p>",
+  role: 'Editor',
+  hide: true
+}, {
+  name: "How to submit manuscript to reviewers?",
+  desc: "<p class=\"text-gray-600\">\n                After inviting <b>Reviewers</b> into the manuscript, it's time to submit manuscript for review. This will <b>Notify</b> the reviewers associated with the manuscript.\n            </p>\n            <h2 class=\"text-gray-700 text-lg font-bold mt-3\">\n                Step 1:\n            </h2>\n            <img src=\"/img/faq/faq3.png\" class=\"rounded shadow-full w-3/4 mx-auto border-gray-400 my-3\" alt=\"faq3\">\n            <p class=\"text-gray-600\">\n                Go to the <b>Manuscripts</b> Page by clicking the <b>Manuscripts</b> menu at the top of the screen.\n            </p>\n            <h2 class=\"text-gray-700 text-lg font-bold mt-3\">\n                Step 2:\n            </h2>\n            <img src=\"/img/faq/faq4.png\" class=\"rounded shadow-full w-3/4 mx-auto border-gray-400 my-3\" alt=\"faq4\">\n            <p class=\"text-gray-600\">\n                Select <b>Manuscript</b> you want to edit, and click <b>View</b> button to go to the selected manuscript page.\n            </p>\n            <h2 class=\"text-gray-700 text-lg font-bold mt-3\">\n                Step 3:\n            </h2>\n            <img src=\"/img/faq/faq5.png\" class=\"rounded shadow-full w-3/4 mx-auto border-gray-400 my-3\" alt=\"faq5\"/>\n            <p class=\"text-gray-600\">\n                Before submiting the manuscript to reviewers, make sure the manuscript status is <b>Submit to Editor</b> as shown at the header part of the manuscript page.\n            </p>\n            <img src=\"/img/faq/faq6.png\" class=\"rounded shadow-full w-3/4 mx-auto border-gray-400 my-3\" alt=\"faq6\"/>\n            <p class=\"text-gray-600\">\n                You will be able to see the <b>Submit for Review</b> button at the header section on the top right corner.  \n            </p>\n            <div class=\"rounded-lg border-red-500 p-3 bg-red-100 my-2\">\n                <h2 class=\"text-red-900\">* If you can't see the <b>Submit for Review</b> button, this might be you have access more than one role on the selected manuscript. To solve this, select your role as an <b>Editor</b> at the left corner on the header section of the page. You will see a dropdown menu with the label <b>View As</b></h2>\n                <img src=\"/img/faq/faq7.png\" class=\"rounded shadow-full w-3/4 mx-auto border-gray-400 my-3\" alt=\"faq7\"/>\n            </div>\n            <h2 class=\"text-gray-700 text-lg font-bold mt-3\">\n                Step 4:\n            </h2>\n            <p class=\"text-gray-600\">\n                Click the <b>Submit to Reviewer</b> button to submit the manuscript to the reviewers.\n            </p>\n            <div class=\"rounded-lg border-red-500 p-3 bg-red-100 my-2\">\n                <h2 class=\"text-red-900\">* The <b>Reviewers</b> will be notified through <b>Email</b>.</h2>\n            </div>",
   role: 'Editor',
   hide: true
 }];
@@ -74,12 +79,12 @@ var _hoisted_2 = {
 
 var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
   "class": "text-gray-800 text-center text-2xl font-bold"
-}, " Frequently asked questions ", -1
+}, " Frequently Asked Questions ", -1
 /* HOISTED */
 );
 
 var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
-  "class": "my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8"
+  "class": "my-6 border-gray-300 sm:mx-auto dark:border-gray-300 lg:my-8"
 }, null, -1
 /* HOISTED */
 );
