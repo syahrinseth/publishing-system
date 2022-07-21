@@ -134,14 +134,16 @@
                             </p>
                             <div class="text-sm text-gray-500">{{ manuscript.type.name }}</div>
                         </td>
-                        <td class="px-6 py-4 word-break text-sm text-gray-500">
-                        {{ manuscript.status }}
+                        <td class="px-6 py-4 word-break text-sm">
+                            <span :class="`bg-` + manuscriptStatus.filter((el) => el.name == manuscript.status)[0].color + `-600`" class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white rounded-full">
+                                {{ manuscript.status }}
+                            </span>
                         </td>
                         <td class="px-6 py-4 word-break text-sm text-gray-500">
-                        {{ manuscript.updated_at }}
+                            {{ manuscript.updated_at }}
                         </td>
                         <td class="px-6 py-4 word-break text-sm text-gray-500">
-                        {{ manuscript.created_at_date }}
+                            {{ manuscript.created_at_date }}
                         </td>
                         <td class="px-6 py-4 word-break text-right text-sm font-medium">
                             <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${manuscript.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
@@ -202,7 +204,8 @@
     props: {
         manuscripts: Object,
         filters: Object,
-        auth: Object
+        auth: Object,
+        manuscriptStatus: Array,
     },
     data() {
         return {

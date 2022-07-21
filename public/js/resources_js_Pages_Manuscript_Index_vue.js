@@ -118,7 +118,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   props: {
     manuscripts: Object,
     filters: Object,
-    auth: Object
+    auth: Object,
+    manuscriptStatus: Array
   },
   data: function data() {
     return {
@@ -426,7 +427,7 @@ var _hoisted_28 = {
   "class": "text-sm text-gray-500"
 };
 var _hoisted_29 = {
-  "class": "px-6 py-4 word-break text-sm text-gray-500"
+  "class": "px-6 py-4 word-break text-sm"
 };
 var _hoisted_30 = {
   "class": "px-6 py-4 word-break text-sm text-gray-500"
@@ -642,9 +643,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             /* TEXT */
             ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.type.name), 1
             /* TEXT */
-            )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.status), 1
-            /* TEXT */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.updated_at), 1
+            )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+              "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["bg-" + $props.manuscriptStatus.filter(function (el) {
+                return el.name == manuscript.status;
+              })[0].color + "-600", "inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white rounded-full"])
+            }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.status), 3
+            /* TEXT, CLASS */
+            )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.updated_at), 1
             /* TEXT */
             ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.created_at_date), 1
             /* TEXT */

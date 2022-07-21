@@ -66,6 +66,7 @@ class ManuscriptController extends Controller
         
         return Inertia::render('Manuscript/Index', [
             'manuscripts' => $manuscripts,
+            'manuscriptStatus' => collect(Manuscript::$statusList),
             'filters' => $request->all(['search', 'field', 'direction'])
         ]);
     }
