@@ -14,6 +14,9 @@
                             </div>
                             <div class="mt-2 flex items-center text-sm text-gray-500">
                                 <DocumentReportIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                <!-- <span :class="`bg-` + $props.manuscriptStatus.filter((el) => el.name == manuscript.status)[0].color + `-600`" class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white rounded-full">
+                                    {{ manuscript.status }}
+                                </span> -->
                                 {{ manuscript.data.status }}
                             </div>
                             <div class="mt-2 flex items-center text-sm text-gray-500">
@@ -87,7 +90,7 @@
                     <Listbox as="div" v-model="viewAs" class="w-64">
                         <ListboxLabel class="block text-sm font-medium text-gray-700">View As</ListboxLabel>
                         <div class="mt-1 relative">
-                        <ListboxButton class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <ListboxButton class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             <span class="flex items-center">
                             <!-- <img :src="selected.avatar" alt="" class="flex-shrink-0 h-6 w-6 rounded-full" /> -->
                             <svg class="h-4 w-4 rounded-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
@@ -103,7 +106,7 @@
                         <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
                             <ListboxOptions class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
                             <ListboxOption as="template" v-for="person in viewAsList" :key="person" :value="person" v-slot="{ active, viewAs }">
-                                <li :class="[active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9']">
+                                <li :class="[active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-pointer select-none relative py-2 pl-3 pr-9']">
                                 <div class="flex items-center">
                                     <!-- <img :src="person.avatar" alt="" class="flex-shrink-0 h-6 w-6 rounded-full" /> -->
                                     <svg class="h-4 w-4 rounded-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
@@ -462,6 +465,28 @@
                     <template v-slot:footer>
                         <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showPublishModal = false">
                             Cancel
+                        </button>
+                    </template>
+                </Modal>
+                <Modal :show="showThanksModal" @close="showThanksModal = false;">
+                    <template v-slot:default>
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <ExclamationIcon class="h-6 w-6 text-green-600" aria-hidden="true" />
+                            </div>
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Thank you for your review. </DialogTitle>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">The manuscript status will update once the majority of the reviewers reviewed the manuscript.</p>
+                                </div>
+                                <div class="w-full mt-3 grid grid-col-1 gap-4">
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-slot:footer>
+                        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showThanksModal = false">
+                            Done
                         </button>
                     </template>
                 </Modal>
@@ -1063,7 +1088,8 @@
         errors: Object,
         message: String,
         auth: Object,
-        manuscriptStatusList: Array
+        manuscriptStatusList: Array,
+        manuscriptStatus: Array
     },
     data() {
         return {
@@ -1077,6 +1103,7 @@
             showRejectModal: false,
             showSubmitReviewModal: false,
             showSubmitToEditorModal: false,
+            showThanksModal: false,
             isShow: false,
             authorSelect: {
                 isLoading: false,
@@ -1097,11 +1124,11 @@
         }
     },
     methods: {      
-        notification(message, type = 'success') {
+        notification(message, type = 'success', duration = 5000) {
             this.$toast.open({
                 message: message,
                 type: type,
-                duration: 5000,
+                duration: duration,
                 dismissible: true
             }) 
         },
@@ -1172,30 +1199,40 @@
             this.saveManuscript();
             this.showSubmitToEditorModal = false;
         },
-        acceptWithoutChanges() {
+        async acceptWithoutChanges() {
             this.manuscriptForm.status = "Accepted Without Changes";
             this.saveManuscript();
             this.showAcceptModal = false;
+            await new Promise(r => setTimeout(r, 1000));
+            this.showThanksModal = true;
         },
-        acceptWithMinorChanges() {
+        async acceptWithMinorChanges() {
             this.manuscriptForm.status = "Accepted With Minor Changes";
             this.saveManuscript();
             this.showAcceptModal = false;
+            await new Promise(r => setTimeout(r, 1000));
+            this.showThanksModal = true;
         },
-        acceptWithMajorChanges() {
+        async acceptWithMajorChanges() {
             this.manuscriptForm.status = "Accepted With Major Changes";
             this.saveManuscript();
             this.showAcceptModal = false;
+            await new Promise(r => setTimeout(r, 1000));
+            this.showThanksModal = true;
         },
-        rejectInviteToResubmit() {
+        async rejectInviteToResubmit() {
             this.manuscriptForm.status = "Rejected Invite To Resubmit";
             this.saveManuscript();
             this.showRejectModal = false;
+            await new Promise(r => setTimeout(r, 1000));
+            this.showThanksModal = true;
         },
-        reject() {
+        async reject() {
             this.manuscriptForm.status = "Rejected";
             this.saveManuscript();
             this.showRejectModal = false;
+            await new Promise(r => setTimeout(r, 1000));
+            this.showThanksModal = true;
         },
         publishManuscript() {
             this.manuscriptForm.status = "Published";
@@ -1326,7 +1363,8 @@
             return result.length > 0;
         },
         canReview() {
-            let total = this.manuscript.data.reviewers.filter((v) => (v.user_id == this. $props.auth.user.data.id && (v.reviewed == null || v.reviewedVote == `Rejected Invite To Resubmit` || v.reviewedVote == `Rejected`)));
+            // let total = this.manuscript.data.reviewers.filter((v) => (v.user_id == this. $props.auth.user.data.id && (v.reviewed == null || v.reviewedVote == `Rejected Invite To Resubmit` || v.reviewedVote == `Rejected`)));
+            let total = this.manuscript.data.reviewers.filter((v) => (v.user_id == this. $props.auth.user.data.id && (v.reviewed == null)));
             return total.length > 0;
         },
         setRoleView() {
