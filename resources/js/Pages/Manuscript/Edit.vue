@@ -514,7 +514,7 @@
                                         Co-Author(s)
                                         </label>
                                         <VueMultiselect 
-                                        :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null"
+                                        :disabled="cannotEditOnSubmit() || (viewAs == 'publisher' || viewAs == 'editor')" :class="cannotEditOnSubmit() || (viewAs == 'publisher' || viewAs == 'editor') ? `cursor-not-allowed` : null"
                                         v-model="manuscriptForm.corresponding_authors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="correspondingAuthorSelect.options" :multiple="true" :searchable="true" :loading="correspondingAuthorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindCorrespondingAuthors">
                                             </VueMultiselect>
                                     </div>
@@ -522,7 +522,7 @@
                                         <label for="company-website" class="block text-sm font-medium text-gray-700">
                                         Author(s)
                                         </label>
-                                        <VueMultiselect :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null"
+                                        <VueMultiselect :disabled="cannotEditOnSubmit() || (viewAs == 'publisher' || viewAs == 'editor')" :class="cannotEditOnSubmit() || (viewAs == 'publisher' || viewAs == 'editor') ? `cursor-not-allowed` : null"
                                         v-model="manuscriptForm.authors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors">
                                             </VueMultiselect>
                                     </div>

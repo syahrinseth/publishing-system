@@ -5597,8 +5597,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ))], 10
       /* CLASS, PROPS */
       , _hoisted_138), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $setup.manuscriptForm.type]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_141, [_hoisted_142, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_VueMultiselect, {
-        disabled: $options.cannotEditOnSubmit(),
-        "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($options.cannotEditOnSubmit() ? "cursor-not-allowed" : null),
+        disabled: $options.cannotEditOnSubmit() || $data.viewAs == 'publisher' || $data.viewAs == 'editor',
+        "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($options.cannotEditOnSubmit() || $data.viewAs == 'publisher' || $data.viewAs == 'editor' ? "cursor-not-allowed" : null),
         modelValue: $setup.manuscriptForm.corresponding_authors_obj,
         "onUpdate:modelValue": _cache[39] || (_cache[39] = function ($event) {
           return $setup.manuscriptForm.corresponding_authors_obj = $event;
@@ -5626,8 +5626,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, null, 8
       /* PROPS */
       , ["disabled", "class", "modelValue", "custom-label", "options", "loading", "onSearchChange"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_143, [_hoisted_144, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_VueMultiselect, {
-        disabled: $options.cannotEditOnSubmit(),
-        "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($options.cannotEditOnSubmit() ? "cursor-not-allowed" : null),
+        disabled: $options.cannotEditOnSubmit() || $data.viewAs == 'publisher' || $data.viewAs == 'editor',
+        "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($options.cannotEditOnSubmit() || $data.viewAs == 'publisher' || $data.viewAs == 'editor' ? "cursor-not-allowed" : null),
         modelValue: $setup.manuscriptForm.authors_obj,
         "onUpdate:modelValue": _cache[40] || (_cache[40] = function ($event) {
           return $setup.manuscriptForm.authors_obj = $event;
