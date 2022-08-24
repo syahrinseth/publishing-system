@@ -66,7 +66,8 @@ class ManuscriptController extends Controller
         
         return Inertia::render('Manuscript/Index', [
             'manuscripts' => $manuscripts,
-            'filters' => $request->all(['search', 'field', 'direction'])
+            'manuscriptStatus' => collect(Manuscript::$statusList),
+            'filters' => $request->all(['search', 'field', 'direction']),
         ]);
     }
 
@@ -212,7 +213,8 @@ class ManuscriptController extends Controller
             'users' => $users,
             'attachTypes' => ManuscriptAttachFile::$types,
             'articleTypes' => Manuscript::getTypes(),
-            'manuscriptStatusList' => Manuscript::getStatusList($manuscript->id)
+            'manuscriptStatusList' => Manuscript::getStatusList($manuscript->id),
+            'manuscriptStatus' => collect(Manuscript::$statusList),
         ]);
     }
 
@@ -248,7 +250,8 @@ class ManuscriptController extends Controller
             'users' => $users,
             'attachTypes' => ManuscriptAttachFile::$types,
             'articleTypes' => Manuscript::getTypes(),
-            'manuscriptStatusList' => Manuscript::getStatusList($manuscript->id)
+            'manuscriptStatusList' => Manuscript::getStatusList($manuscript->id),
+            'manuscriptStatus' => collect(Manuscript::$statusList),
         ]);
     }
 
