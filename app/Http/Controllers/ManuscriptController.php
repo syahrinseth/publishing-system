@@ -147,8 +147,8 @@ class ManuscriptController extends Controller
     public function storeFinal(Request $request, $id)
     {
         $request->validate([
-            'is_confirm_grant_numbers' => 'required',
-            'is_acknowledge' => 'required'
+            'is_confirm_grant_numbers' => 'required|accepted',
+            'is_acknowledge' => 'required|accepted'
         ]);
         $manuscript = Manuscript::findOrFail($id);
         $manuscript->status = 'Submit To Editor';

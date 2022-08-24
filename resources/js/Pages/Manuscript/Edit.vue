@@ -797,6 +797,7 @@
                                         <h3 class="text-lg leading-6 font-medium text-gray-900">
                                             Attach Files
                                         </h3>
+                                        <JetInputError :message="manuscriptForm.errors.status" class="mt-2" />
                                         <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">
                                             Personal details and application.
                                         </p> -->
@@ -1033,10 +1034,12 @@
   import CommentSectionCard from '../../Components/CommentSectionCard.vue'
   import { SelectorIcon } from '@heroicons/vue/solid'
   import Pagination from '../../Components/Pagination.vue'
+  import JetInputError from '../../Components/InputError.vue';
 
   export default {
     components: {
         VueMultiselect,
+        JetInputError,
         Layout,
         Table,
         Pagination,

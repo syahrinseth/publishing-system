@@ -46,6 +46,7 @@
                                                         {{ type.name }}
                                                     </option>
                                                 </select>
+                                                <JetInputError :message="manuscriptForm.errors.type" class="mt-2" />
                                             </div>
                                             <div class="col-span-3 sm:col-span-2">
                                                 <label for="company-website" class="block text-sm font-medium text-gray-700">
@@ -54,6 +55,7 @@
                                                 <VueMultiselect 
                                                 v-model="manuscriptForm.authors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors">
                                                     </VueMultiselect>
+                                                <JetInputError :message="manuscriptForm.errors.authors" class="mt-2" />
                                             </div>
                                             <div class="col-span-3 sm:col-span-2">
                                                 <div class="col-span-3 sm:col-span-2">
@@ -63,6 +65,7 @@
                                                     <VueMultiselect 
                                                     v-model="manuscriptForm.editors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="false" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
                                                         </VueMultiselect>
+                                                    <JetInputError :message="manuscriptForm.errors.editors" class="mt-2" />
                                                 </div>
                                             </div>
                                         </div>
@@ -102,6 +105,7 @@
                                                         v-model="manuscriptForm.reviewers_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers">
                                                             </VueMultiselect>
                                                         </div>
+                                                        <JetInputError :message="manuscriptForm.errors.reviewers" class="mt-2" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -136,6 +140,7 @@
                                             </label>
                                             <div class="mt-1">
                                                 <textarea v-model="manuscriptForm.title" id="title" name="title" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                                <JetInputError :message="manuscriptForm.errors.title" class="mt-2" />
                                             </div>
                                             <p class="mt-2 text-sm text-gray-500">
                                             </p>
@@ -280,6 +285,7 @@ import { Link, useForm } from '@inertiajs/inertia-vue3'
 import { Inertia } from '@inertiajs/inertia'
 import Toast from '../../Components/Toast'
 import VueMultiselect from 'vue-multiselect'
+import JetInputError from '../../Components/InputError.vue';
 
 export default {
     components: {
@@ -287,6 +293,7 @@ export default {
         Link,
         Toast,
         VueMultiselect,
+        JetInputError
     },
     data() {
         return {
