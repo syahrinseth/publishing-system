@@ -9,7 +9,7 @@
     ```
   -->
   <div class="min-h-full">
-    <Disclosure as="nav" class="bg-white border border-b-gray-200" v-slot="{ open }">
+    <Disclosure as="nav" class="bg-white border border-b-gray-200 fixed top-0 z-50 min-w-full" v-slot="{ open }">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center">
@@ -145,7 +145,7 @@
       </DisclosurePanel>
     </Disclosure>
 
-    <header class="bg-white border border-b-gray-200 shadow-md">
+    <header class="bg-white border border-b-gray-200 shadow-md mt-10 pt-5">
       <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <!-- <h1 class="text-3xl font-bold text-gray-900">
         

@@ -2,17 +2,28 @@
 import { useForm } from '@inertiajs/inertia-vue3'
 import ActionMessage from '../../Components/ActionMessage.vue'
 
+const props = defineProps({
+    token: String,
+    csrfToken: String
+});
+
 const form = useForm({
     _method: 'POST',
-    email: null
+    email: null,
+    password: null,
+    password_confirmation: null,
+    token: props.token,
+    _token: props.csrfToken
 });
 
 const submitForm = () => {
-    form.post('/forgot-password', {
-        errorBag: 'submit',
+    form.post('/reset-password', {
+        errorBag: 'submitForm',
         preserveScroll: true,
         onSuccess: () => {
             form.email = null;
+            form.password = null;
+            form.password_confirmation = null;
         }
     })
 }
@@ -47,8 +58,16 @@ const submitForm = () => {
                             <label for="email-address" class="sr-only">Email address</label>
                             <input id="email-address" name="email" type="email" autocomplete="email" required="" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address" v-model="form.email" />
                         </div>
-                        <ActionMessage :on="form.recentlySuccessful" class="py-3">
-                            Password reset email sended. Please check your email to reset password.
+                        <div class="pb-3">
+                            <label for="password" class="sr-only">New Password</label>
+                            <input id="password" name="password" type="password" required="" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password" v-model="form.password" />
+                        </div>
+                        <div class="pb-3">
+                            <label for="password_confirmation" class="sr-only">Confirmation Password</label>
+                            <input id="password_confirmation" name="password_confirmation" type="password" required="" class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Confirmation Password" v-model="form.password_confirmation" />
+                        </div>
+                        <ActionMessage :on="form.recentlySuccessful" class="py-3 text-green-500">
+                            Password reset success
                         </ActionMessage>
                         <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Reset Password

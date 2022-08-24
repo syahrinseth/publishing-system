@@ -2,160 +2,159 @@
     <div>
         <Layout :auth="auth.user.data">
             <template v-slot:header>
-                <div class="lg:flex lg:items-center lg:justify-between">
-                    <div class="flex-1 min-w-0">
-                        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-                            {{ manuscript.data.manuscript_no }} - {{ manuscript.data.title || 'Untitled' }}
-                        </h2>
-                        <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
-                            <div class="mt-2 flex items-center text-sm text-gray-500">
-                            <BriefcaseIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                            {{ manuscript.data.type.name }}
-                            </div>
-                            <div class="mt-2 flex items-center text-sm text-gray-500">
-                                <DocumentReportIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                <!-- <span :class="`bg-` + $props.manuscriptStatus.filter((el) => el.name == manuscript.status)[0].color + `-600`" class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white rounded-full">
-                                    {{ manuscript.status }}
-                                </span> -->
-                                {{ manuscript.data.status }}
-                            </div>
-                            <div class="mt-2 flex items-center text-sm text-gray-500">
-                                <CalendarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                {{ manuscript.data.created_at_date }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-5 flex lg:mt-0 lg:ml-4">
-
-                        <span class="sm:ml-3" v-if="(manuscript.data.status == `Draft`) && (viewAs == `author` || viewAs == `corresponding author`)">
-                            <a href="#" @click="showSubmitToEditorModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                Submit To Editor
-                            </a>
-                        </span>
-                        <span class="sm:ml-3" v-if="(manuscript.data.status == `Rejected Invite To Resubmit` || manuscript.data.status == `Submit To Editor`) && (viewAs == `editor`)">
-                            <a href="#" @click="showSubmitReviewModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                Submit For Review
-                            </a>
-                        </span>
-                        <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (viewAs == `reviewer`) && canReview()">
-                            <a href="#" @click="showRejectModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                <XCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                Reject
-                            </a>
-                        </span>
-                        <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (viewAs == `reviewer`) && canReview()">
-                            <a href="#" @click="showAcceptModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                <CheckCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                Accept
-                            </a>
-                        </span>
-                        <span class="sm:ml-3" v-if="manuscript.data.status.includes('Accept') && (viewAs == `publisher`)">
-                            <a href="#" @click="showPublishModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                <PaperAirplaneIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                Publish
-                            </a>
-                        </span>
-                        <span class="sm:ml-3" v-if="manuscript.data.status == `Published`">
-                            <a :href="`/admin/manuscripts/${manuscript.data.id}/download`" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
-                                <DownloadIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                Build PDF
-                            </a>
-                        </span>
-
-                        <!-- Dropdown -->
-                        <!-- <Menu as="span" class="ml-3 relative sm:hidden">
-                            <MenuButton class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            More
-                            <ChevronDownIcon class="-mr-1 ml-2 h-5 w-5 text-gray-500" aria-hidden="true" />
-                            </MenuButton>
-
-                            <transition enter-active-class="transition ease-out duration-200" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
-                            <MenuItems class="origin-top-right absolute right-0 mt-2 -mr-1 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                <MenuItem v-slot="{ active }">
-                                <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Edit</a>
-                                </MenuItem>
-                                <MenuItem v-slot="{ active }">
-                                <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">View</a>
-                                </MenuItem>
-                            </MenuItems>
-                            </transition>
-                        </Menu> -->
-                    </div>
-                </div>
-                <hr class="my-4">
-                <div class="flex mt-1">
-                    <!-- This example requires Tailwind CSS v2.0+ -->
-                    <Listbox as="div" v-model="viewAs" class="w-64">
-                        <ListboxLabel class="block text-sm font-medium text-gray-700">View As</ListboxLabel>
-                        <div class="mt-1 relative">
-                        <ListboxButton class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <span class="flex items-center">
-                            <!-- <img :src="selected.avatar" alt="" class="flex-shrink-0 h-6 w-6 rounded-full" /> -->
-                            <svg class="h-4 w-4 rounded-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                            <span class="ml-3 block truncate capitalize">{{ viewAs }}</span>
-                            </span>
-                            <span class="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                            <SelectorIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
-                            </span>
-                        </ListboxButton>
-
-                        <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
-                            <ListboxOptions class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                            <ListboxOption as="template" v-for="person in viewAsList" :key="person" :value="person" v-slot="{ active, viewAs }">
-                                <li :class="[active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-pointer select-none relative py-2 pl-3 pr-9']">
-                                <div class="flex items-center">
-                                    <!-- <img :src="person.avatar" alt="" class="flex-shrink-0 h-6 w-6 rounded-full" /> -->
-                                    <svg class="h-4 w-4 rounded-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                    <span :class="[viewAs ? 'font-semibold' : 'font-normal', 'ml-3 block truncate']" class="capitalize">
-                                    {{ person }}
-                                    </span>
+                <div class="">
+                    <div class="lg:flex lg:items-center lg:justify-between">
+                        <div class="flex-1 min-w-0">
+                            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                                {{ manuscript.data.manuscript_no }} - {{ manuscript.data.title || 'Untitled' }}
+                            </h2>
+                            <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
+                                <div class="mt-2 flex items-center text-sm text-gray-500">
+                                <BriefcaseIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                {{ manuscript.data.type.name }}
                                 </div>
+                                <div class="mt-2 flex items-center text-sm text-gray-500">
+                                    <DocumentReportIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                    {{ manuscript.data.status }}
+                                </div>
+                                <div class="mt-2 flex items-center text-sm text-gray-500">
+                                    <CalendarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                    {{ manuscript.data.created_at_date }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-5 flex lg:mt-0 lg:ml-4">
 
-                                <span v-if="viewAs" :class="[active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4']">
-                                    <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                            <span class="sm:ml-3" v-if="(manuscript.data.status == `Draft`) && (viewAs == `author` || viewAs == `corresponding author` || viewAs == `publisher`)">
+                                <a href="#" @click="showSubmitToEditorModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                    <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                    Submit To Editor
+                                </a>
+                            </span>
+                            <span class="sm:ml-3" v-if="(manuscript.data.status == `Rejected Invite To Resubmit` || manuscript.data.status == `Submit To Editor`) && (viewAs == `editor`)">
+                                <a href="#" @click="showSubmitReviewModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                    <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                    Submit For Review
+                                </a>
+                            </span>
+                            <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (viewAs == `reviewer`) && canReview()">
+                                <a href="#" @click="showRejectModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    <XCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                    Reject
+                                </a>
+                            </span>
+                            <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (viewAs == `reviewer`) && canReview()">
+                                <a href="#" @click="showAcceptModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    <CheckCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                    Accept
+                                </a>
+                            </span>
+                            <span class="sm:ml-3" v-if="manuscript.data.status.includes('Accept') && (viewAs == `publisher`)">
+                                <a href="#" @click="showPublishModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <PaperAirplaneIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                    Publish
+                                </a>
+                            </span>
+                            <span class="sm:ml-3" v-if="manuscript.data.status == `Published`">
+                                <a :href="`/admin/manuscripts/${manuscript.data.id}/download`" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
+                                    <DownloadIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                    Build PDF
+                                </a>
+                            </span>
+
+                            <!-- Dropdown -->
+                            <!-- <Menu as="span" class="ml-3 relative sm:hidden">
+                                <MenuButton class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                More
+                                <ChevronDownIcon class="-mr-1 ml-2 h-5 w-5 text-gray-500" aria-hidden="true" />
+                                </MenuButton>
+
+                                <transition enter-active-class="transition ease-out duration-200" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+                                <MenuItems class="origin-top-right absolute right-0 mt-2 -mr-1 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    <MenuItem v-slot="{ active }">
+                                    <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Edit</a>
+                                    </MenuItem>
+                                    <MenuItem v-slot="{ active }">
+                                    <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">View</a>
+                                    </MenuItem>
+                                </MenuItems>
+                                </transition>
+                            </Menu> -->
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    <div class="flex mt-1">
+                        <!-- This example requires Tailwind CSS v2.0+ -->
+                        <Listbox as="div" v-model="viewAs" class="w-64 rounded-md p-4" :class="(viewAs == 'author' || viewAs == 'corresponding author') ? 'bg-indigo-500' : (viewAs == 'editor' ? 'bg-yellow-700' : (viewAs == 'reviewer' ? 'bg-orange-500' : (viewAs == 'publisher' ? 'bg-red-500' : 'bg-gray-500')))">
+                            <ListboxLabel class="block text-sm font-medium text-gray-100">View As</ListboxLabel>
+                            <div class="mt-1 relative">
+                            <ListboxButton class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <span class="flex items-center">
+                                <!-- <img :src="selected.avatar" alt="" class="flex-shrink-0 h-6 w-6 rounded-full" /> -->
+                                <svg class="h-4 w-4 rounded-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span class="ml-3 block truncate capitalize">{{ viewAs }}</span>
                                 </span>
-                                </li>
-                            </ListboxOption>
-                            </ListboxOptions>
-                        </transition>
-                        </div>
-                    </Listbox>
-                    <!-- <span class="flex-none pr-1" v-show="authIsAuthor()">
-                        <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
-                            <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                            You are an Author
-                        </div>
-                    </span>
-                    <span class="flex-none pr-1" v-show="authIsCorrespondingAuthor()">
-                        <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" target="_blank">
-                            <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                            You are a Co-Author
-                        </div>
-                    </span>
-                    <span class="flex-none pr-1" v-show="authIsEditor()">
-                        <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" target="_blank">
-                            <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                            You are an Editor
-                        </div>
-                    </span>
-                    <span class="flex-none pr-1" v-show="authIsReviewer()">
-                        <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" target="_blank">
-                            <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                            You are a Reviewer
-                        </div>
-                    </span>
-                    <span class="flex-none pr-1" v-show="authIsPublisher()">
-                        <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" target="_blank">
-                            <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                            You are a Publisher
-                        </div>
-                    </span> -->
+                                <span class="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <SelectorIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                </span>
+                            </ListboxButton>
+
+                            <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                                <ListboxOptions class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                                <ListboxOption as="template" v-for="person in viewAsList" :key="person" :value="person" v-slot="{ active, viewAs }">
+                                    <li :class="[active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-pointer select-none relative py-2 pl-3 pr-9']">
+                                    <div class="flex items-center">
+                                        <!-- <img :src="person.avatar" alt="" class="flex-shrink-0 h-6 w-6 rounded-full" /> -->
+                                        <svg class="h-4 w-4 rounded-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        </svg>
+                                        <span :class="[viewAs ? 'font-semibold' : 'font-normal', 'ml-3 block truncate']" class="capitalize">
+                                        {{ person }}
+                                        </span>
+                                    </div>
+
+                                    <span v-if="viewAs" :class="[active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4']">
+                                        <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                                    </span>
+                                    </li>
+                                </ListboxOption>
+                                </ListboxOptions>
+                            </transition>
+                            </div>
+                        </Listbox>
+                        <!-- <span class="flex-none pr-1" v-show="authIsAuthor()">
+                            <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
+                                <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                You are an Author
+                            </div>
+                        </span>
+                        <span class="flex-none pr-1" v-show="authIsCorrespondingAuthor()">
+                            <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" target="_blank">
+                                <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                You are a Co-Author
+                            </div>
+                        </span>
+                        <span class="flex-none pr-1" v-show="authIsEditor()">
+                            <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" target="_blank">
+                                <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                You are an Editor
+                            </div>
+                        </span>
+                        <span class="flex-none pr-1" v-show="authIsReviewer()">
+                            <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" target="_blank">
+                                <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                You are a Reviewer
+                            </div>
+                        </span>
+                        <span class="flex-none pr-1" v-show="authIsPublisher()">
+                            <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" target="_blank">
+                                <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                You are a Publisher
+                            </div>
+                        </span> -->
+                    </div>
                 </div>
             </template>
             <template v-slot:default>
@@ -539,7 +538,7 @@
                                         Co-Author(s)
                                         </label>
                                         <VueMultiselect 
-                                        :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null"
+                                        :disabled="cannotEditOnSubmit() || (viewAs == 'publisher' || viewAs == 'editor')" :class="cannotEditOnSubmit() || (viewAs == 'publisher' || viewAs == 'editor') ? `cursor-not-allowed` : null"
                                         v-model="manuscriptForm.corresponding_authors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="correspondingAuthorSelect.options" :multiple="true" :searchable="true" :loading="correspondingAuthorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindCorrespondingAuthors">
                                             </VueMultiselect>
                                     </div>
@@ -547,7 +546,7 @@
                                         <label for="company-website" class="block text-sm font-medium text-gray-700">
                                         Author(s)
                                         </label>
-                                        <VueMultiselect :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null"
+                                        <VueMultiselect :disabled="cannotEditOnSubmit() || (viewAs == 'publisher' || viewAs == 'editor')" :class="cannotEditOnSubmit() || (viewAs == 'publisher' || viewAs == 'editor') ? `cursor-not-allowed` : null"
                                         v-model="manuscriptForm.authors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors">
                                             </VueMultiselect>
                                     </div>
