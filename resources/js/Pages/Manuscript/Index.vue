@@ -128,20 +128,25 @@
                         <td class="px-6 py-4 word-break text-sm">
                             <!-- <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                             </span> -->
-                            <div class="text-sm text-gray-500">{{ manuscript.manuscript_no }}</div>
-                            <p class="text-gray-900">
-                                {{ manuscript.title || 'N/a' }}
-                            </p>
-                            <div class="text-sm text-gray-500">{{ manuscript.type.name }}</div>
+                            <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${manuscript.id}/edit`">
+                                <div class="text-sm text-gray-500 hover:text-gray-900">{{ manuscript.manuscript_no }}</div>
+                                <p class="text-gray-900">
+                                    {{ manuscript.title || 'N/a' }}
+                                </p>
+                                <div class="text-sm text-gray-500">{{ manuscript.type.name }}</div>
+                            </Link>
+                            
+                        </td>
+                        <td class="px-6 py-4 word-break text-sm">
+                            <span :class="`bg-` + manuscriptStatus.filter((el) => el.name == manuscript.status)[0].color + `-600`" class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white rounded-full">
+                                {{ manuscript.status }}
+                            </span>
                         </td>
                         <td class="px-6 py-4 word-break text-sm text-gray-500">
-                        {{ manuscript.status }}
+                            {{ manuscript.updated_at }}
                         </td>
                         <td class="px-6 py-4 word-break text-sm text-gray-500">
-                        {{ manuscript.updated_at }}
-                        </td>
-                        <td class="px-6 py-4 word-break text-sm text-gray-500">
-                        {{ manuscript.created_at_date }}
+                            {{ manuscript.created_at_date }}
                         </td>
                         <td class="px-6 py-4 word-break text-right text-sm font-medium">
                             <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${manuscript.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
@@ -202,7 +207,8 @@
     props: {
         manuscripts: Object,
         filters: Object,
-        auth: Object
+        auth: Object,
+        manuscriptStatus: Array,
     },
     data() {
         return {
