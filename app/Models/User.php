@@ -5,6 +5,7 @@ namespace App\Models;
 use App\QueryFilter;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Models\Permission;
@@ -112,5 +113,19 @@ class User extends Authenticatable
             $total += $reviewer->manuscriptReviewed()->count();
         }
         return $total;
+    }
+
+    /**
+     * @param array
+     * @param mix
+     * @param mix
+     * 
+     * @return void
+     */
+    public static function mailTo($users, $mailableClass, $object)
+    {
+        foreach ($users as $user) {
+            Mail::to($user)->queue(new $mailableClass($object, $user));
+        }
     }
 }

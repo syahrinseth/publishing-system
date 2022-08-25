@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use App\Models\Manuscript;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -19,13 +20,20 @@ class ManuscriptEditorNotification extends Mailable
     public $manuscript;
 
     /**
+     * User instance.
+     * @var User
+     */
+    public $user;
+
+    /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Manuscript $manuscript)
+    public function __construct(Manuscript $manuscript, User $user)
     {
         $this->manuscript = $manuscript;
+        $this->user = $user;
     }
 
     /**
