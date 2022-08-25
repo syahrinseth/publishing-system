@@ -313,13 +313,11 @@
                                                 <div class="border-t border-gray-200" />
                                             </div>
                                         </div>
-                                        <span v-if="updateAttachForm.id != null">
-                                            <CommentSectionCard
-                                                :manuscript-id="manuscript.data.id"
-                                                :manuscript-attach-id="updateAttachForm.id"
-                                                :auth="auth"
-                                                :from="viewAs"></CommentSectionCard>
-                                        </span>
+                                        <CommentSectionCard
+                                            :manuscript-id="manuscript.data.id"
+                                            :manuscript-attach-id="updateAttachForm.id"
+                                            :auth="auth"
+                                            :from="viewAs"></CommentSectionCard>
                                     </form>
                                 </div>
                             </div>
