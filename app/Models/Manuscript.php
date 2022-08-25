@@ -233,10 +233,10 @@ class Manuscript extends Model
 
             // Send notification to editor.
             if ($statusList[8]['name'] == $input) {
-                $editors = $this->editors->map(function($q){return $q->user->email;})->values()->all();
+                $editors = $this->editors->map(function($q){return $q->user;})->values()->all();
                 if (!empty($editors)) {
                     // Send notifications to editors.
-                    Mail::to($editors)->queue(new ManuscriptEditorNotification($this));
+                    User::mailTo($editors, ManuscriptEditorNotification::class, $this);
                 }
             }
             return true;
