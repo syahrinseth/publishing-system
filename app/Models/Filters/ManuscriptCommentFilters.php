@@ -23,4 +23,25 @@ class ManuscriptCommentFilters extends QueryFilter
             $query->where('text', 'like', "%{$input}%");
         });
     }
+
+    public function from($input)
+    {
+        return $this->builder->orWhere(function($query) use ($input) {
+            $query->where('from', 'like', "%{$input}%");
+        });
+    }
+
+    public function user_id($input)
+    {
+        return $this->builder->orWhere(function($query) use ($input) {
+            $query->where('user_id', 'like', "%{$input}%");
+        });
+    }
+
+    public function to($input)
+    {
+        return $this->builder->orWhere(function($query) use ($input) {
+            $query->where('to', 'like', "%{$input}%");
+        });
+    }
 }

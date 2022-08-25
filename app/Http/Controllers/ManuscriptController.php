@@ -702,12 +702,13 @@ class ManuscriptController extends Controller
     {
         $request->validate([
             'text' => 'required',
-            'to' => 'required'
+            'to' => 'required',
+            'from' => ''
         ]);
         $comment = new ManuscriptComment;
         $comment->manuscript_id = $id;
         $comment->user_id = auth()->id();
-        $comment->from = $comment->isFrom();
+        $comment->from = $request->from;
         $comment->text = $request->text;
         $comment->to = $request->to ?? 'all';
         $comment->save();
@@ -754,12 +755,13 @@ class ManuscriptController extends Controller
     {
         $request->validate([
             'text' => 'required',
-            'to' => 'required'
+            'to' => 'required',
+            'from' => ''
         ]);
         $comment = new ManuscriptAttachFileComment;
         $comment->manuscript_attach_id = $attachFileId;
         $comment->user_id = auth()->id();
-        $comment->from = $comment->isFrom(auth()->id());
+        $comment->from = $request->from;
         $comment->to = $request->to ?? 'all';
         $comment->text = $request->text;
         $comment->save();

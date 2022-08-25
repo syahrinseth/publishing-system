@@ -313,12 +313,11 @@
                                                 <div class="border-t border-gray-200" />
                                             </div>
                                         </div>
-                                        <span v-if="updateAttachForm.id != null">
-                                            <CommentSectionCard
-                                                :manuscript-id="manuscript.data.id"
-                                                :manuscript-attach-id="updateAttachForm.id"
-                                                :auth="auth"></CommentSectionCard>
-                                        </span>
+                                        <CommentSectionCard
+                                            :manuscript-id="manuscript.data.id"
+                                            :manuscript-attach-id="updateAttachForm.id"
+                                            :auth="auth"
+                                            :from="viewAs"></CommentSectionCard>
                                     </form>
                                 </div>
                             </div>
@@ -988,7 +987,8 @@
                                     <div class="grid gap-6">
                                         <CommentSectionCard
                                             :manuscript-id="manuscript.data.id"
-                                            :auth="auth"></CommentSectionCard>
+                                            :auth="auth"
+                                            :from="viewAs"></CommentSectionCard>
                                     </div>
                                 </div>
                             </div>
