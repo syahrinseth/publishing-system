@@ -17,15 +17,23 @@ class ManuscriptUpdated extends Mailable
      * @var \App\Models\Manuscript
      */
     public $manuscript;
+
+    /**
+     * User instance.
+     * 
+     * @var \App\Models\User
+     */
+    public $user;
     
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($manuscript)
+    public function __construct($manuscript, $user)
     {
         $this->manuscript = $manuscript;
+        $this->user = $user;
     }
 
     /**

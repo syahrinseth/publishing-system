@@ -474,21 +474,21 @@ class Manuscript extends Model
     {
         $users = [];
         $users = array_merge($users, $this->correspondingAuthors->map(function($member) {
-            return $member->user->email;
+            return $member->user;
         })->values()->all());
 
         $users = array_merge($users, $this->authors->map(function($member) {
-            return $member->user->email;
+            return $member->user;
         })->values()->all());
 
         $users = array_merge($users, $this->editors->map(function($member) {
-            return $member->user->email;
+            return $member->user;
         })->values()->all());
 
         $users = collect($users)->unique()->all();
         
         if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptUpdated($this));
+            User::mailTo($users, ManuscriptUpdated::class, $this);
         }
         return $this;
     }
