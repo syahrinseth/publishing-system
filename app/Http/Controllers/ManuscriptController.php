@@ -8,7 +8,6 @@ use Inertia\Inertia;
 use App\Models\Manuscript;
 use Illuminate\Http\Request;
 use App\Mail\ManuscriptCreated;
-use App\Mail\ManuscriptUpdated;
 use App\Models\ManuscriptMember;
 use App\Models\ManuscriptComment;
 use App\Models\ManuscriptAttachFile;

@@ -16,10 +16,17 @@
                 <div class="flex justify-center">
                     <img class="mx-auto h-32 w-auto" src="{{ asset('/img/logo.png') }}" alt="Logo" />
                 </div>
-                <h3 class="text-2xl">
-                    Manuscript {{ $manuscript->manuscript_no }} has been updated!
-                </h3>
-                <p>Click the link below to proceed to the manuscript page:</p>
+                <div class="mx-5 text-left">
+                    <p>Dear {{ $user->first_name }},</p>
+                    <br>
+                    <p>Your manuscript {{ $manuscript->manuscript_no }} has been updated.</p>
+                    <br>
+                    <p>Click the link below to proceed to the manuscript page:</p>
+                    <br>
+                    <p>Kind regards,</p>
+                    <p>Editor-In-Chief</p>
+                    <p>Journal of Smart Sensor and Materials (JSSM)</p>
+                </div>
                 <div class="mt-4">
                     <a href="{{ route('manuscript.edit', ['id' => $manuscript->id]) }}" class="px-2 py-2 text-blue-200 bg-blue-600 rounded">
                         Open
