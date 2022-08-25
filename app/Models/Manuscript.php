@@ -224,10 +224,10 @@ class Manuscript extends Model
 
             // Send notification to reviewers.
             if ($statusList[1]['name'] == $input) {
-                $reviewers = $this->reviewers->map(function($q){return $q->user->email;})->values()->all();
+                $reviewers = $this->reviewers->map(function($q){return $q->user;})->values()->all();
                 if (!empty($reviewers)) {
                     // Send notifications to reviewers.
-                    Mail::to($reviewers)->queue(new ManuscriptReviewNotification($this));
+                    User::mailTo($reviewers, ManuscriptReviewNotification::class, $this);
                 }
             }
 
@@ -530,30 +530,29 @@ class Manuscript extends Model
     {
         $users = [];
         $users = array_merge($users, $this->correspondingAuthors->map(function($member) {
-            return $member->user->email;
+            return $member->user;
         })->values()->all());
 
         $users = array_merge($users, $this->authors->map(function($member) {
-            return $member->user->email;
+            return $member->user;
         })->values()->all());
 
         $users = array_merge($users, $this->editors->map(function($member) {
-            return $member->user->email;
+            return $member->user;
         })->values()->all());
         
         if (stripos($this->status, "Accepted") !== false) {  
-            $publishers = User::permission(['manuscripts.publish'])->permission('manuscripts.show_all')->get()->map(function($user) {
-                return $user->email;
-            })->values()->all();
+            $publishers = User::permission(['manuscripts.publish'])->permission('manuscripts.show_all')->get();
+            // Send mail to publishers.
             if (!empty($publishers)) {
-                Mail::to($publishers)->queue(new ManuscriptPostReviewedNotification($this));
+                User::mailTo($publishers, ManuscriptPostReviewedNotification::class, $this);
             }
         }
 
         $users = collect($users)->unique()->all();
         
         if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptPostReviewedNotification($this));
+            User::mailTo($users, ManuscriptPostReviewedNotification::class, $this);
         }
 
         return $this;

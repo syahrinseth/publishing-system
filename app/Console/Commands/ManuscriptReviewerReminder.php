@@ -51,7 +51,7 @@ class ManuscriptReviewerReminder extends Command
             $reviewers = $manuscript->members->where('role', 'reviewer')->where('reviewed', null)->values()->all();
             // Send mail.
             foreach ($reviewers as $reviewer) {
-                Mail::to($reviewer->user->email)->queue(new ManuscriptReviewerNotification($manuscript));
+                Mail::to($reviewer->user->email)->queue(new ManuscriptReviewerNotification($manuscript, $reviewer->user));
             }
         }
         // Done.
