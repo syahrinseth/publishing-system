@@ -36,14 +36,16 @@
                 <div class="flex">
                     <div class="flex-none pr-2 py-2">
                         <div class="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                            <svg class="h-8 w-8 rounded-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                            <img v-if="comment.user.photo != null" class="h-8 w-8 rounded-full" :src="`/storage/${comment.user.photo}`" alt="" />
+                            <svg v-else class="h-8 w-8 rounded-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
                         </div>
                     </div>
                     <div class="grow">
                         <p class="text-gray-700">
-                            {{ comment.from }}
+                            <span v-if="comment.user.id == auth.user.data.id">You</span>
+                            <span v-else>{{ comment.from }}</span>
                         </p>
                         <small class="text-gray-500">
                             <!-- {{ comment.from_role }} -->
@@ -70,12 +72,6 @@
             </div>
         </div>
         <div class="col-span-3 sm:col-span-2 mb-2 mt-1">
-            <label for="company-website" class="block text-sm font-medium text-gray-700">
-            Add your comment
-            </label>
-            <div class="mt-1 flex rounded-md shadow-sm">
-                <textarea v-model="commentForm.text" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-            </div>
             <label for="company-website" class="block text-sm font-medium text-gray-700 mt-1">
             Send to
             </label>
@@ -86,6 +82,12 @@
                 <option value="reviewers">Reviewers</option>
                 <option value="publishers">Publishers</option>
             </select>
+            <label for="company-website" class="block text-sm mt-3 font-medium text-gray-700">
+            Add your comment
+            </label>
+            <div class="mt-1 flex rounded-md shadow-sm">
+                <textarea v-model="commentForm.text" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+            </div>
         </div>
         <div class="col-span-3 sm:col-span-2 mb-2 mt-1 flex">
             <div class="grow"></div>
@@ -112,12 +114,24 @@ export default {
     methods: {
         async fetchComments() {
             if (this.$props.manuscriptAttachId == null) {
-                let resp = await window.axios.get(`/api/manuscripts/${this.$props.manuscriptId}/comments`);
+                let resp = await window.axios.get(`/api/manuscripts/${this.$props.manuscriptId}/comments`, {
+                    params: {
+                        from: this.$props.from,
+                        user_id: this.$props.auth.user.data.id,
+                        to: this.$props.from
+                    }
+                });
                 if (resp.status == 200) {
                     return resp.data;
                 }
             } else {
-                let resp = await window.axios.get(`/api/manuscripts/${this.$props.manuscriptId}/attach-files/${this.$props.manuscriptAttachId}/comments`);
+                let resp = await window.axios.get(`/api/manuscripts/${this.$props.manuscriptId}/attach-files/${this.$props.manuscriptAttachId}/comments`, {
+                    params: {
+                        from: this.$props.from,
+                        user_id: this.$props.auth.user.data.id,
+                        to: this.$props.from,
+                    }
+                });
                 if (resp.status == 200) {
                     return resp.data;
                 }
@@ -169,17 +183,20 @@ export default {
     watch: {
         manuscriptAttachId: function(newVal, oldVal) {
             this.refresh();
+        },
+        from: function(newVal, oldVal) {
+            this.commentForm.from = newVal;
+            this.refresh();
         }
     },
     mounted() {
-        // console.log(this.$props);
         this.refresh();
     },
-    setup() {
+    setup(props) {
         const commentForm = useForm({
             text: "",
             to: "",
-            from: ""
+            from: props.from
         });
         return {
             commentForm
@@ -188,7 +205,8 @@ export default {
     props: {
         manuscriptId: Number,
         manuscriptAttachId: Number,
-        auth: Object
+        auth: Object,
+        from: String
     }
 }
 </script>

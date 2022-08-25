@@ -317,7 +317,8 @@
                                             <CommentSectionCard
                                                 :manuscript-id="manuscript.data.id"
                                                 :manuscript-attach-id="updateAttachForm.id"
-                                                :auth="auth"></CommentSectionCard>
+                                                :auth="auth"
+                                                :from="viewAs"></CommentSectionCard>
                                         </span>
                                     </form>
                                 </div>
@@ -988,7 +989,8 @@
                                     <div class="grid gap-6">
                                         <CommentSectionCard
                                             :manuscript-id="manuscript.data.id"
-                                            :auth="auth"></CommentSectionCard>
+                                            :auth="auth"
+                                            :from="viewAs"></CommentSectionCard>
                                     </div>
                                 </div>
                             </div>
