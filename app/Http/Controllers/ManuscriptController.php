@@ -764,6 +764,10 @@ class ManuscriptController extends Controller
         $comment->to = $request->to ?? 'all';
         $comment->text = $request->text;
         $comment->save();
+        
+        // Send email notification
+        $comment->notify();
+
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptAttachFileCommentResource($comment));
         }

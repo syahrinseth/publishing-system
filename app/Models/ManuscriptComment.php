@@ -62,54 +62,40 @@ class ManuscriptComment extends Model
             $emails = collect();
             $manuscript = Manuscript::where('id', $this->manuscript_id)->firstOrFail();
             if ($this->to == "all") {
-                $authors = $manuscript->authors->map(function($user){
-                    return $user['email'];
-                });
-                $emails = $emails->merge($authors);
-                
-                $co_authors = $manuscript->correspondingAuthors->map(function($user){
-                    return $user['email'];
-                });
-                $emails = $emails->merge($co_authors);
 
-                $editors = $manuscript->editors->map(function($user){
-                    return $user['email'];
+                $members = $manuscript->members->map(function($member){
+                    return $member->user->email;
                 });
-                $emails = $emails->merge($editors);
+                $emails = $emails->merge($members);
 
-                $reviewers = $manuscript->reviewers->map(function($user){
-                    return $user['email'];
-                });
-                $emails = $emails->merge($reviewers);
-
-                $publishers = User::whereHas('roles', function($q){$q->whereIn('name', ['Super Admin', 'Admin', 'Publisher']);})->get()->map(function($user){
-                    return $user['email'];
+                $publishers = User::whereHas('roles', function($q){$q->whereIn('name', ['Super Admin', 'Admin', 'Publisher']);})->get()->map(function($member){
+                    return $member->user->email;
                 });
                 $emails = $emails->merge($publishers);
 
             } elseif($this->to == "authors") {
 
-                $authors = $manuscript->authors->map(function($user){
-                    return $user['email'];
+                $authors = $manuscript->authors->map(function($member){
+                    return $member->user->email;
                 });
                 $emails = $emails->merge($authors);
 
-                $co_authors = $manuscript->correspondingAuthors->map(function($user){
-                    return $user['email'];
+                $co_authors = $manuscript->correspondingAuthors->map(function($member){
+                    return $member->user->email;
                 });
                 $emails = $emails->merge($co_authors);
 
             } elseif($this->to == "reviewers") {
 
-                $reviewers = $manuscript->reviewers->map(function($user){
-                    return $user['email'];
+                $reviewers = $manuscript->reviewers->map(function($member){
+                    return $member->user->email;
                 });
                 $emails = $emails->merge($reviewers);
 
             } elseif($this->to == "editors") {
 
-                $editors = $manuscript->editors->map(function($user){
-                    return $user['email'];
+                $editors = $manuscript->editors->map(function($member){
+                    return $member->user->email;
                 });
                 $emails = $emails->merge($editors);
 
@@ -119,10 +105,13 @@ class ManuscriptComment extends Model
                     return $user['email'];
                 });
                 $emails = $emails->merge($publishers);
+
             }
             if ($emails->count() > 0) {
+
                 Mail::to($emails)->queue(new ManuscriptCommentCreated($this));
                 return true;
+                
             }
             return false;
         } catch(Exception $e) {
