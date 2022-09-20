@@ -17,11 +17,11 @@
                     <img class="mx-auto h-32 w-auto" src="{{ asset('/img/logo.png') }}" alt="Logo" />
                 </div>
                 <h3 class="text-2xl">
-                    The {{ ucfirst($comment->from) }} have sent you a comment on Manuscript number {{ $comment->manuscript->manuscript_no }}! The message contains: "{{ $comment->text }}".
+                    The {{ ucfirst($comment->from) }} have sent you a comment on Manuscript number {{ $comment->attachFile->manuscript->manuscript_no }}! The message contains: "{{ $comment->text }}".
                 </h3>
                 <p>Click the link below to proceed to the manuscript page:</p>
                 <div class="mt-4">
-                    <a href="{{ route('manuscript.edit', ['id' => $comment->manuscript->id]) }}" class="px-2 py-2 text-blue-200 bg-blue-600 rounded">
+                    <a href="{{ route('manuscript.edit', ['id' => $comment->attachFile->manuscript->id]) }}" class="px-2 py-2 text-blue-200 bg-blue-600 rounded">
                         Open
                     </a>
                     <p class="mt-4 text-sm">If you’re having trouble clicking the "Open" button, copy
@@ -29,8 +29,8 @@
                         paste
                         the URL below
                         into your web browser:
-                        <a href="{{ route('manuscript.edit', ['id' => $comment->manuscript->id]) }}" class="text-blue-600">
-                            {{ route('manuscript.edit', ['id' => $comment->manuscript->id]) }}
+                        <a href="{{ route('manuscript.edit', ['id' => $comment->attachFile->manuscript->id]) }}" class="text-blue-600">
+                            {{ route('manuscript.edit', ['id' => $comment->attachFile->manuscript->id]) }}
                         </a>
                     </p>
                 </div>
