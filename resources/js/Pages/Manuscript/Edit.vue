@@ -124,36 +124,6 @@
                             </transition>
                             </div>
                         </Listbox>
-                        <!-- <span class="flex-none pr-1" v-show="authIsAuthor()">
-                            <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
-                                <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                You are an Author
-                            </div>
-                        </span>
-                        <span class="flex-none pr-1" v-show="authIsCorrespondingAuthor()">
-                            <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" target="_blank">
-                                <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                You are a Co-Author
-                            </div>
-                        </span>
-                        <span class="flex-none pr-1" v-show="authIsEditor()">
-                            <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" target="_blank">
-                                <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                You are an Editor
-                            </div>
-                        </span>
-                        <span class="flex-none pr-1" v-show="authIsReviewer()">
-                            <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" target="_blank">
-                                <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                You are a Reviewer
-                            </div>
-                        </span>
-                        <span class="flex-none pr-1" v-show="authIsPublisher()">
-                            <div href="#" class="inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" target="_blank">
-                                <UserIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                You are a Publisher
-                            </div>
-                        </span> -->
                     </div>
                 </div>
             </template>
@@ -1388,6 +1358,8 @@
             }
             if (this.viewAsList.length > 0) {
                 this.viewAs = this.viewAsList[0];
+            } else {
+                this.viewAs = 'unassigned';
             }
         },
         cannotEditOnSubmit(){
