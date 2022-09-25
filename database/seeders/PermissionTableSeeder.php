@@ -12,7 +12,8 @@ class PermissionTableSeeder extends Seeder
             'create',
             'show',
             'edit',
-            'destroy'
+            'destroy',
+            'receive_notification_for_new_register_user'
         ],
         'settings' => [
             'show',
