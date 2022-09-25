@@ -326,9 +326,6 @@ class ManuscriptController extends Controller
         ];
         $manuscript->update();
 
-        // Send mail
-        $manuscript->notifyUpdateManuscript();
-
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));
         }
