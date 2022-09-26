@@ -629,9 +629,6 @@ class ManuscriptController extends Controller
             $attach->update();
         }
 
-        // Send mail
-        $manuscript->notifyUpdateAttachToMembers($attach);
-
         // Response
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptAttachResource($attach));
