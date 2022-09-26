@@ -802,7 +802,7 @@
                                             </tr>
                                         </template>
                                         <template v-slot:body>
-                                            <tr v-for="(attachment, index) in attachments.data.filter(function(attach) {if(viewAs == `reviewer` && (attach.type.name == `Manuscript`)) {return true;}return false;})" :key="attachment.id + '-attach'">
+                                            <tr v-for="(attachment, index) in attachments.data.filter(function(attach) {if(viewAs == `reviewer` && (attach.type.name != `Manuscript`)) {return false;}return true;})" :key="attachment.id + '-attach'">
                                                 <td class="px-6 py-4 word-break">
                                                     {{ attachments.meta.from + index }}
                                                 </td>

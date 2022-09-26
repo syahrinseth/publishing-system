@@ -6137,11 +6137,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }),
         body: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
           return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.attachments.data.filter(function (attach) {
-            if ($data.viewAs == "reviewer" && attach.type.name == "Manuscript") {
-              return true;
+            if ($data.viewAs == "reviewer" && attach.type.name != "Manuscript") {
+              return false;
             }
 
-            return false;
+            return true;
           }), function (attachment, index) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
               key: attachment.id + '-attach'
