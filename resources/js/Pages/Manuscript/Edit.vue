@@ -802,7 +802,7 @@
                                             </tr>
                                         </template>
                                         <template v-slot:body>
-                                            <tr v-for="(attachment, index) in attachments.data.filter(function(attach) {if(viewAs == `reviewer` && (attach.type.name == `Cover Letter` || attach.type.name == `Conflict of Interest` || attach.type.name == `Declaration of Interest Statement`)) {return false;}return true;})" :key="attachment.id + '-attach'">
+                                            <tr v-for="(attachment, index) in attachments.data.filter(function(attach) {if(viewAs == `reviewer` && (attach.type.name == `Manuscript`)) {return true;}return false;})" :key="attachment.id + '-attach'">
                                                 <td class="px-6 py-4 word-break">
                                                     {{ attachments.meta.from + index }}
                                                 </td>
@@ -833,9 +833,9 @@
                                     </Table>
                                 </div>
                             </div>
-                            <div class="my-2 flex justify-end">
+                            <!-- <div class="my-2 flex justify-end">
                                 <Pagination :links="attachments.meta.links" :meta="attachments.meta" />
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

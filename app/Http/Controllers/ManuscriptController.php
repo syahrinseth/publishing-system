@@ -244,7 +244,7 @@ class ManuscriptController extends Controller
 
         return Inertia::render('Manuscript/Edit', [
             'manuscript' => new ManuscriptResource($manuscript),
-            'attachments' => new ManuscriptAttachCollection($manuscript->attachments()->orderBy('updated_at', 'desc')->paginate(100)),
+            'attachments' => new ManuscriptAttachCollection($manuscript->attachments()->orderBy('updated_at', 'desc')->paginate()),
             'filters' => $request->all(['search', 'field', 'direction', 'viewAs']),
             'users' => $users,
             'attachTypes' => ManuscriptAttachFile::$types,
