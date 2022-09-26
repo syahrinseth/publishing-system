@@ -4979,14 +4979,11 @@ var _hoisted_235 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 
 var _hoisted_236 = [_hoisted_235];
 var _hoisted_237 = {
-  "class": "my-2 flex justify-end"
-};
-var _hoisted_238 = {
   "class": "hidden sm:block",
   "aria-hidden": "true"
 };
 
-var _hoisted_239 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_238 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "py-5"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "border-t border-gray-200"
@@ -4994,15 +4991,15 @@ var _hoisted_239 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 /* HOISTED */
 );
 
-var _hoisted_240 = [_hoisted_239];
-var _hoisted_241 = {
+var _hoisted_239 = [_hoisted_238];
+var _hoisted_240 = {
   "class": "mt-10 sm:mt-0"
 };
-var _hoisted_242 = {
+var _hoisted_241 = {
   "class": "md:grid md:grid-cols-3 md:gap-6"
 };
 
-var _hoisted_243 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_242 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "md:col-span-1"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "px-4 sm:px-0"
@@ -5014,37 +5011,37 @@ var _hoisted_243 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 /* HOISTED */
 );
 
-var _hoisted_244 = {
+var _hoisted_243 = {
   "class": "mt-5 md:mt-0 md:col-span-2"
 };
-var _hoisted_245 = {
+var _hoisted_244 = {
   "class": "shadow overflow-hidden sm:rounded-md"
 };
-var _hoisted_246 = {
+var _hoisted_245 = {
   "class": "px-4 py-5 bg-white sm:p-6"
 };
-var _hoisted_247 = {
+var _hoisted_246 = {
   "class": "px-4 py-5 bg-white space-y-6 sm:p-6"
 };
 
-var _hoisted_248 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("legend", {
+var _hoisted_247 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("legend", {
   "class": "text-base font-medium text-gray-900"
 }, "Please confirm that you have mentioned all organizations that funded your research in the Acknowledgements section of your submission, including grant numbers where appropriate.", -1
 /* HOISTED */
 );
 
-var _hoisted_249 = {
+var _hoisted_248 = {
   "class": "mt-4 space-y-4"
 };
-var _hoisted_250 = {
+var _hoisted_249 = {
   "class": "flex items-start"
 };
-var _hoisted_251 = {
+var _hoisted_250 = {
   "class": "flex items-center h-5"
 };
-var _hoisted_252 = ["disabled"];
+var _hoisted_251 = ["disabled"];
 
-var _hoisted_253 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_252 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "ml-3 text-sm"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "for": "is_confirm_grant_numbers",
@@ -5055,7 +5052,7 @@ var _hoisted_253 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 /* HOISTED */
 );
 
-var _hoisted_254 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_253 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "hidden sm:block",
   "aria-hidden": "true"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
@@ -5066,24 +5063,24 @@ var _hoisted_254 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 /* HOISTED */
 );
 
-var _hoisted_255 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("legend", {
+var _hoisted_254 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("legend", {
   "class": "text-base font-medium text-gray-900"
 }, "Sensors Malaysia is an open access journal which charges an Article Publishing Charge (APC) to cover the cost associated with the publication process. All articles published Open Access will be immediately and permanently free on ScienceDirect for users to read, download, and use in accordance with the author’s selected Creative Commons user license. ", -1
 /* HOISTED */
 );
 
-var _hoisted_256 = {
+var _hoisted_255 = {
   "class": "mt-4 space-y-4"
 };
-var _hoisted_257 = {
+var _hoisted_256 = {
   "class": "flex items-start"
 };
-var _hoisted_258 = {
+var _hoisted_257 = {
   "class": "flex items-center h-5"
 };
-var _hoisted_259 = ["disabled"];
+var _hoisted_258 = ["disabled"];
 
-var _hoisted_260 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_259 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "ml-3 text-sm"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "for": "is_acknowledge",
@@ -5094,12 +5091,12 @@ var _hoisted_260 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 /* HOISTED */
 );
 
-var _hoisted_261 = {
+var _hoisted_260 = {
   "class": "px-4 py-3 bg-gray-50 text-right sm:px-6"
 };
-var _hoisted_262 = ["disabled"];
+var _hoisted_261 = ["disabled"];
 
-var _hoisted_263 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_262 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "hidden sm:block",
   "aria-hidden": "true"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
@@ -5110,14 +5107,14 @@ var _hoisted_263 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 /* HOISTED */
 );
 
-var _hoisted_264 = {
+var _hoisted_263 = {
   "class": "mt-10 sm:mt-0"
 };
-var _hoisted_265 = {
+var _hoisted_264 = {
   "class": "md:grid md:grid-cols-3 md:gap-6"
 };
 
-var _hoisted_266 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_265 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "md:col-span-1"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "px-4 sm:px-0"
@@ -5129,16 +5126,16 @@ var _hoisted_266 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElemen
 /* HOISTED */
 );
 
-var _hoisted_267 = {
+var _hoisted_266 = {
   "class": "mt-5 md:mt-0 md:col-span-2"
 };
-var _hoisted_268 = {
+var _hoisted_267 = {
   "class": "shadow overflow-hidden sm:rounded-md"
 };
-var _hoisted_269 = {
+var _hoisted_268 = {
   "class": "px-4 py-5 bg-white space-y-6 sm:p-6"
 };
-var _hoisted_270 = {
+var _hoisted_269 = {
   "class": "grid gap-6"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -5187,8 +5184,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Table = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Table");
 
   var _component_JetInputError = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("JetInputError");
-
-  var _component_Pagination = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Pagination");
 
   var _component_Layout = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Layout");
 
@@ -6142,11 +6137,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }),
         body: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
           return [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.attachments.data.filter(function (attach) {
-            if ($data.viewAs == "reviewer" && (attach.type.name == "Cover Letter" || attach.type.name == "Conflict of Interest" || attach.type.name == "Declaration of Interest Statement")) {
-              return false;
+            if ($data.viewAs == "reviewer" && attach.type.name == "Manuscript") {
+              return true;
             }
 
-            return true;
+            return false;
           }), function (attachment, index) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
               key: attachment.id + '-attach'
@@ -6184,18 +6179,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _: 1
         /* STABLE */
 
-      })])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_237, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Pagination, {
-        links: $props.attachments.meta.links,
-        meta: $props.attachments.meta
-      }, null, 8
-      /* PROPS */
-      , ["links", "meta"])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_238, _hoisted_240, 512
+      })])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"my-2 flex justify-end\">\n                                <Pagination :links=\"attachments.meta.links\" :meta=\"attachments.meta\" />\n                            </div> ")])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_237, _hoisted_239, 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.viewAs == "author" || $data.viewAs == "corresponding author"]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_241, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_242, [_hoisted_243, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_244, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.viewAs == "author" || $data.viewAs == "corresponding author"]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_240, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_241, [_hoisted_242, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_243, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
         onSubmit: _cache[55] || (_cache[55] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
           return $options.saveManuscript();
         }, ["prevent"]))
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_245, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_246, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_247, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("fieldset", null, [_hoisted_248, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_249, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_250, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_251, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_244, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_245, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_246, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("fieldset", null, [_hoisted_247, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_248, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_249, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_250, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
         disabled: $options.cannotEditOnSubmit(),
         "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$options.cannotEditOnSubmit() ? "cursor-not-allowed" : null, "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"]),
         "onUpdate:modelValue": _cache[53] || (_cache[53] = function ($event) {
@@ -6206,7 +6196,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         type: "checkbox"
       }, null, 10
       /* CLASS, PROPS */
-      , _hoisted_252), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $setup.manuscriptForm.is_confirm_grant_numbers]])]), _hoisted_253])])]), _hoisted_254, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("fieldset", null, [_hoisted_255, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_256, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_257, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_258, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+      , _hoisted_251), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $setup.manuscriptForm.is_confirm_grant_numbers]])]), _hoisted_252])])]), _hoisted_253, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("fieldset", null, [_hoisted_254, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_255, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_256, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_257, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
         disabled: $options.cannotEditOnSubmit(),
         "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$options.cannotEditOnSubmit() ? "cursor-not-allowed" : null, "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"]),
         "onUpdate:modelValue": _cache[54] || (_cache[54] = function ($event) {
@@ -6217,21 +6207,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         type: "checkbox"
       }, null, 10
       /* CLASS, PROPS */
-      , _hoisted_259), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $setup.manuscriptForm.is_acknowledge]])]), _hoisted_260])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"hidden sm:block\" aria-hidden=\"true\">\n                                        <div class=\"py-5\">\n                                            <div class=\"border-t border-gray-200\" />\n                                        </div>\n                                    </div>\n                                    <fieldset>\n                                    <div>\n                                        <legend class=\"text-base font-medium text-gray-900\">\n                                        In support of Open Science, Sensors and Actuators Reports offers its authors a free preprint posting service. Preprints provide early registration and dissemination of research, which facilitates early citations and collaboration. Please indicate below whether you would like to release your manuscript publicly as a preprint on the preprint server www.SSRN.com once it enters peer-review with the journal. Your choice will have no effect on the editorial process or outcome with the journal. Your preprint will remain globally available free to read whether the journal accepts or rejects your manuscript. For more information about posting to www.SSRN.com, please consult the SSRN Terms of Use and FAQs.</legend>\n                                    </div>\n                                    <div class=\"mt-4 space-y-4\">\n                                        <div class=\"flex items-center\">\n                                        <input id=\"push-everything\" name=\"push-notifications\" type=\"radio\" class=\"focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300\">\n                                        <label for=\"push-everything\" class=\"ml-3 block text-sm font-medium text-gray-700\">\n                                            Please select a response\n                                        </label>\n                                        </div>\n                                        <div class=\"flex items-center\">\n                                        <input id=\"push-email\" name=\"push-notifications\" type=\"radio\" class=\"focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300\">\n                                        <label for=\"push-email\" class=\"ml-3 block text-sm font-medium text-gray-700\">\n                                            YES, I want to share my research early and openly as a preprint.\n                                        </label>\n                                        </div>\n                                        <div class=\"flex items-center\">\n                                        <input id=\"push-nothing\" name=\"push-notifications\" type=\"radio\" class=\"focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300\">\n                                        <label for=\"push-nothing\" class=\"ml-3 block text-sm font-medium text-gray-700\">\n                                            NO, I don't want to share my research early and openly as a preprint.\n                                        </label>\n                                        </div>\n                                    </div>\n                                    </fieldset> ")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_261, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      , _hoisted_258), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $setup.manuscriptForm.is_acknowledge]])]), _hoisted_259])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"hidden sm:block\" aria-hidden=\"true\">\n                                        <div class=\"py-5\">\n                                            <div class=\"border-t border-gray-200\" />\n                                        </div>\n                                    </div>\n                                    <fieldset>\n                                    <div>\n                                        <legend class=\"text-base font-medium text-gray-900\">\n                                        In support of Open Science, Sensors and Actuators Reports offers its authors a free preprint posting service. Preprints provide early registration and dissemination of research, which facilitates early citations and collaboration. Please indicate below whether you would like to release your manuscript publicly as a preprint on the preprint server www.SSRN.com once it enters peer-review with the journal. Your choice will have no effect on the editorial process or outcome with the journal. Your preprint will remain globally available free to read whether the journal accepts or rejects your manuscript. For more information about posting to www.SSRN.com, please consult the SSRN Terms of Use and FAQs.</legend>\n                                    </div>\n                                    <div class=\"mt-4 space-y-4\">\n                                        <div class=\"flex items-center\">\n                                        <input id=\"push-everything\" name=\"push-notifications\" type=\"radio\" class=\"focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300\">\n                                        <label for=\"push-everything\" class=\"ml-3 block text-sm font-medium text-gray-700\">\n                                            Please select a response\n                                        </label>\n                                        </div>\n                                        <div class=\"flex items-center\">\n                                        <input id=\"push-email\" name=\"push-notifications\" type=\"radio\" class=\"focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300\">\n                                        <label for=\"push-email\" class=\"ml-3 block text-sm font-medium text-gray-700\">\n                                            YES, I want to share my research early and openly as a preprint.\n                                        </label>\n                                        </div>\n                                        <div class=\"flex items-center\">\n                                        <input id=\"push-nothing\" name=\"push-notifications\" type=\"radio\" class=\"focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300\">\n                                        <label for=\"push-nothing\" class=\"ml-3 block text-sm font-medium text-gray-700\">\n                                            NO, I don't want to share my research early and openly as a preprint.\n                                        </label>\n                                        </div>\n                                    </div>\n                                    </fieldset> ")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_260, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
         disabled: $options.cannotEditOnSubmit(),
         "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$options.cannotEditOnSubmit() ? "cursor-not-allowed" : null, "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"]),
         type: "submit"
       }, " Save ", 10
       /* CLASS, PROPS */
-      , _hoisted_262)])])], 32
+      , _hoisted_261)])])], 32
       /* HYDRATE_EVENTS */
       )])])], 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.viewAs == "author" || $data.viewAs == "corresponding author"]]), _hoisted_263, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_264, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_265, [_hoisted_266, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_267, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.viewAs == "author" || $data.viewAs == "corresponding author"]]), _hoisted_262, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_263, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_264, [_hoisted_265, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_266, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
         onSubmit: _cache[56] || (_cache[56] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
           return $options.saveManuscript();
         }, ["prevent"]))
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_268, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_269, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_270, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_CommentSectionCard, {
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_267, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_268, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_269, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_CommentSectionCard, {
         "manuscript-id": $props.manuscript.data.id,
         auth: $props.auth,
         from: $data.viewAs
