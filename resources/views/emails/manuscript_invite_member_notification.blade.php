@@ -19,7 +19,7 @@
                 <div class="mx-5 text-left">
                     <p>Dear {{ $user->first_name }},</p>
                     <br>
-                    <p>I’d like to invite you as an {{ strtoupper($roleName) }} to review a manuscript for the Journal of Journal of Smart Sensor and Materials (JSSM).</p>
+                    <p>I’d like to invite you as {{ strtoupper($roleName) }} to review a manuscript {{ $manuscript->manuscript_no }} for the Journal of Journal of Smart Sensor and Materials (JSSM).</p>
                     <br>
                     <p>Click the link below to proceed to the manuscript page:</p>
                     <br>
