@@ -1967,6 +1967,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.showAddUserModal = true;
       this.showAddUserModalDataIncludeIntoInput = 'editors';
     },
+    createNewReviewerModal: function createNewReviewerModal(newUser) {
+      this.assignNewUserIntoUserFormInputs(newUser);
+      this.showAddUserModal = true;
+      this.showAddUserModalDataIncludeIntoInput = 'reviewers';
+    },
     assignNewUserIntoUserFormInputs: function assignNewUserIntoUserFormInputs(newUser) {
       var parts = newUser.split(' ');
       var tag = {
@@ -1994,24 +1999,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _this.manuscriptForm.corresponding_authors = _this.manuscriptForm.corresponding_authors_obj.map(function (user) {
-                  return user.id;
-                });
-
-                if (Array.isArray(_this.manuscriptForm.editors_obj)) {
-                  _this.manuscriptForm.editors = _this.manuscriptForm.editors_obj.map(function (member) {
-                    return member.id;
-                  });
-                } else {
-                  _this.manuscriptForm.editors = [_this.manuscriptForm.editors_obj].map(function (member) {
-                    return member.id;
-                  });
-                }
-
-                _this.manuscriptForm.reviewers = _this.manuscriptForm.reviewers_obj.map(function (user) {
-                  return user.id;
-                });
-
                 _this.manuscriptForm.post("/admin/manuscript-store", {
                   preserveScroll: true,
                   onError: function onError(errors) {
@@ -2022,7 +2009,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   onSuccess: function onSuccess(res) {}
                 });
 
-              case 4:
+              case 1:
               case "end":
                 return _context.stop();
             }
@@ -2055,9 +2042,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                       _this2.manuscriptForm.authors.push(user);
                     } else if (_this2.showAddUserModalDataIncludeIntoInput == 'corresponding_authors') {
                       _this2.manuscriptForm.corresponding_authors.push(user);
-                    } else {
+                    } else if (_this2.showAddUserModalDataIncludeIntoInput == 'editors') {
                       _this2.manuscriptForm.editors.push(user);
+                    } else {
+                      _this2.manuscriptForm.reviewers.push(user);
                     }
+
+                    _this2.showAddUserModal = false;
+                    _this2.userForm.email = null;
                   }
                 })["catch"](function (err) {
                   if (err.response) {
@@ -2222,11 +2214,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       title: null,
       authors: [props.auth.user.data],
       corresponding_authors: [],
-      corresponding_authors_obj: [],
       editors: [],
-      editors_obj: [],
-      reviewers: [],
-      reviewers_obj: []
+      reviewers: []
     });
 
     var generateString = function generateString(length) {
@@ -2871,9 +2860,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, null, 8
       /* PROPS */
       , ["message"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [_hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_VueMultiselect, {
-        modelValue: $setup.manuscriptForm.corresponding_authors_obj,
+        modelValue: $setup.manuscriptForm.corresponding_authors,
         "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
-          return $setup.manuscriptForm.corresponding_authors_obj = $event;
+          return $setup.manuscriptForm.corresponding_authors = $event;
         }),
         id: "ajax",
         label: "first_name",
@@ -2894,18 +2883,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "max-height": 600,
         "show-no-results": false,
         "hide-selected": true,
-        onSearchChange: $options.asyncFindAuthors
+        onSearchChange: $options.asyncFindAuthors,
+        taggable: true,
+        onTag: $options.createNewCoAuthorModal,
+        "tag-placeholder": "Press enter to add new user"
       }, null, 8
       /* PROPS */
-      , ["modelValue", "custom-label", "options", "loading", "onSearchChange"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_JetInputError, {
+      , ["modelValue", "custom-label", "options", "loading", "onSearchChange", "onTag"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_JetInputError, {
         message: $setup.manuscriptForm.errors.corresponding_authors,
         "class": "mt-2"
       }, null, 8
       /* PROPS */
       , ["message"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_VueMultiselect, {
-        modelValue: $setup.manuscriptForm.editors_obj,
+        modelValue: $setup.manuscriptForm.editors,
         "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-          return $setup.manuscriptForm.editors_obj = $event;
+          return $setup.manuscriptForm.editors = $event;
         }),
         id: "ajax",
         label: "first_name",
@@ -2926,10 +2918,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "max-height": 600,
         "show-no-results": false,
         "hide-selected": true,
-        onSearchChange: $options.asyncFindEditors
+        onSearchChange: $options.asyncFindEditors,
+        taggable: true,
+        onTag: $options.createNewEditorModal,
+        "tag-placeholder": "Press enter to add new user"
       }, null, 8
       /* PROPS */
-      , ["modelValue", "custom-label", "options", "loading", "onSearchChange"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_JetInputError, {
+      , ["modelValue", "custom-label", "options", "loading", "onSearchChange", "onTag"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_JetInputError, {
         message: $setup.manuscriptForm.errors.editors,
         "class": "mt-2"
       }, null, 8
@@ -2941,9 +2936,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return _ctx.saveManuscript();
         }, ["prevent"]))
       }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, [_hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_VueMultiselect, {
-        modelValue: $setup.manuscriptForm.reviewers_obj,
+        modelValue: $setup.manuscriptForm.reviewers,
         "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
-          return $setup.manuscriptForm.reviewers_obj = $event;
+          return $setup.manuscriptForm.reviewers = $event;
         }),
         id: "ajax",
         label: "first_name",
@@ -2964,10 +2959,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "max-height": 600,
         "show-no-results": false,
         "hide-selected": true,
-        onSearchChange: $options.asyncFindReviewers
+        onSearchChange: $options.asyncFindReviewers,
+        taggable: true,
+        onTag: $options.createNewReviewerModal,
+        "tag-placeholder": "Press enter to add new user"
       }, null, 8
       /* PROPS */
-      , ["modelValue", "custom-label", "options", "loading", "onSearchChange"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_JetInputError, {
+      , ["modelValue", "custom-label", "options", "loading", "onSearchChange", "onTag"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_JetInputError, {
         message: $setup.manuscriptForm.errors.reviewers,
         "class": "mt-2"
       }, null, 8

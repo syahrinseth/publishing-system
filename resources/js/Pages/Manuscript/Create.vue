@@ -62,7 +62,7 @@
                                                 Co-Author(s) <span class="text-red-600">*</span>
                                                 </label>
                                                 <VueMultiselect 
-                                                v-model="manuscriptForm.corresponding_authors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors">
+                                                v-model="manuscriptForm.corresponding_authors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors" :taggable="true" @tag="createNewCoAuthorModal" tag-placeholder="Press enter to add new user">
                                                     </VueMultiselect>
                                                 <JetInputError :message="manuscriptForm.errors.corresponding_authors" class="mt-2" />
                                             </div>
@@ -72,7 +72,7 @@
                                                     Request Editor(s) <span class="text-red-600">*</span>
                                                     </label>
                                                     <VueMultiselect 
-                                                    v-model="manuscriptForm.editors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="false" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
+                                                    v-model="manuscriptForm.editors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="false" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors" :taggable="true" @tag="createNewEditorModal" tag-placeholder="Press enter to add new user">
                                                         </VueMultiselect>
                                                     <JetInputError :message="manuscriptForm.errors.editors" class="mt-2" />
                                                 </div>
@@ -111,7 +111,7 @@
                                                         </label>
                                                         <div class="mt-1 flex rounded-md shadow-sm">
                                                         <VueMultiselect 
-                                                        v-model="manuscriptForm.reviewers_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers">
+                                                        v-model="manuscriptForm.reviewers" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers" :taggable="true" @tag="createNewReviewerModal" tag-placeholder="Press enter to add new user">
                                                             </VueMultiselect>
                                                         </div>
                                                         <JetInputError :message="manuscriptForm.errors.reviewers" class="mt-2" />
@@ -337,6 +337,11 @@ export default {
             this.showAddUserModal = true;
             this.showAddUserModalDataIncludeIntoInput = 'editors';
         },
+        createNewReviewerModal(newUser) {
+            this.assignNewUserIntoUserFormInputs(newUser);
+            this.showAddUserModal = true;
+            this.showAddUserModalDataIncludeIntoInput = 'reviewers';
+        },
         assignNewUserIntoUserFormInputs(newUser) {
             const parts = newUser.split(' ');
 
@@ -358,13 +363,6 @@ export default {
             })
         },      
         async submit() {
-            this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map((user) => user.id);
-            if (Array.isArray(this.manuscriptForm.editors_obj)) {
-                this.manuscriptForm.editors = this.manuscriptForm.editors_obj.map((member) => member.id);
-            } else {
-                this.manuscriptForm.editors = ([this.manuscriptForm.editors_obj]).map((member) => member.id);
-            }
-            this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map((user) => user.id);
             this.manuscriptForm.post(`/admin/manuscript-store`, {
                 preserveScroll: true,
                 onError: (errors) => {
@@ -393,9 +391,13 @@ export default {
                             this.manuscriptForm.authors.push(user);
                         } else if(this.showAddUserModalDataIncludeIntoInput == 'corresponding_authors') {
                             this.manuscriptForm.corresponding_authors.push(user);
-                        } else {
+                        } else if (this.showAddUserModalDataIncludeIntoInput == 'editors') {
                             this.manuscriptForm.editors.push(user);
+                        } else {
+                            this.manuscriptForm.reviewers.push(user);
                         }
+                        this.showAddUserModal = false;
+                        this.userForm.email = null;
                     }
                 })
                 .catch((err) => {
@@ -475,11 +477,8 @@ export default {
             title: null,
             authors: [props.auth.user.data],
             corresponding_authors: [],
-            corresponding_authors_obj: [],
             editors: [],
-            editors_obj: [],
             reviewers: [],
-            reviewers_obj: [],
         });
 
         const generateString = (length) => {
