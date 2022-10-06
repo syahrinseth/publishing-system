@@ -32,6 +32,12 @@ class Manuscript extends Model
     protected static $logAttributes = ["*"];
     protected static $logOnlyDirty = true;
 
+    protected $fillable = [
+        'type',
+        'title',
+        'status'
+    ];
+
     /**
      * The attributes that should be cast.
      *
@@ -94,6 +100,14 @@ class Manuscript extends Model
             'color' => 'blue'
         ],
     ];
+
+    protected static function booted()
+    {
+        static::created(function($manuscript) {
+            $manuscript->generateManuscriptNumber();
+            $manuscript->update();
+        });
+    }
 
     /**
      * Get authors collection

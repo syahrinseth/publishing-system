@@ -53,9 +53,18 @@
                                                 Author(s) <span class="text-red-600">*</span>
                                                 </label>
                                                 <VueMultiselect 
-                                                v-model="manuscriptForm.authors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors">
-                                                    </VueMultiselect>
+                                                v-model="manuscriptForm.authors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors" :taggable="true" @tag="createNewAuthorModal" tag-placeholder="Press enter to add new user">
+                                                </VueMultiselect>
                                                 <JetInputError :message="manuscriptForm.errors.authors" class="mt-2" />
+                                            </div>
+                                            <div class="col-span-3 sm:col-span-2">
+                                                <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                                Co-Author(s) <span class="text-red-600">*</span>
+                                                </label>
+                                                <VueMultiselect 
+                                                v-model="manuscriptForm.corresponding_authors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors" :taggable="true" @tag="createNewCoAuthorModal" tag-placeholder="Press enter to add new user">
+                                                    </VueMultiselect>
+                                                <JetInputError :message="manuscriptForm.errors.corresponding_authors" class="mt-2" />
                                             </div>
                                             <div class="col-span-3 sm:col-span-2">
                                                 <div class="col-span-3 sm:col-span-2">
@@ -63,7 +72,7 @@
                                                     Request Editor(s) <span class="text-red-600">*</span>
                                                     </label>
                                                     <VueMultiselect 
-                                                    v-model="manuscriptForm.editors_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="false" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors">
+                                                    v-model="manuscriptForm.editors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="false" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors" :taggable="true" @tag="createNewEditorModal" tag-placeholder="Press enter to add new user">
                                                         </VueMultiselect>
                                                     <JetInputError :message="manuscriptForm.errors.editors" class="mt-2" />
                                                 </div>
@@ -102,7 +111,7 @@
                                                         </label>
                                                         <div class="mt-1 flex rounded-md shadow-sm">
                                                         <VueMultiselect 
-                                                        v-model="manuscriptForm.reviewers_obj" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers">
+                                                        v-model="manuscriptForm.reviewers" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers" :taggable="true" @tag="createNewReviewerModal" tag-placeholder="Press enter to add new user">
                                                             </VueMultiselect>
                                                         </div>
                                                         <JetInputError :message="manuscriptForm.errors.reviewers" class="mt-2" />
@@ -209,64 +218,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="hidden sm:block" aria-hidden="true">
-                                <div class="py-5">
-                                    <div class="border-t border-gray-200" />
-                                </div>
-                            </div> -->
-                            <!-- <div class="mt-10 sm:mt-0">
-                                <div class="md:grid md:grid-cols-3 md:gap-6">
-                                    <div class="md:col-span-1">
-                                    <div class="px-4 sm:px-0">
-                                        <h3 class="text-lg font-medium leading-6 text-gray-900">Additional Information</h3>
-                                        <p class="mt-1 text-sm text-gray-600">
-                                            Please respond to the presented questions/statements.
-                                        </p>
-                                    </div>
-                                    </div>
-                                    <div class="mt-5 md:mt-0 md:col-span-2">
-                                        <div class="shadow overflow-hidden sm:rounded-md">
-                                        <div class="px-4 py-5 bg-white sm:p-6">
-                                            <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                                <fieldset>
-                                                <legend class="text-base font-medium text-gray-900">Please confirm that you have mentioned all organizations that funded your research in the Acknowledgements section of your submission, including grant numbers where appropriate.</legend>
-                                                <div class="mt-4 space-y-4">
-                                                    <div class="flex items-start">
-                                                    <div class="flex items-center h-5">
-                                                        <input v-model="manuscriptForm.is_confirm_grant_numbers" id="is_confirm_grant_numbers" name="is_confirm_grant_numbers" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
-                                                    </div>
-                                                    <div class="ml-3 text-sm">
-                                                        <label for="is_confirm_grant_numbers" class="font-medium text-gray-700">I Confirm</label>
-                                                        <p class="text-gray-500">I confirm that I have mentioned all organizations that funded my research in the Acknowledgements section of my submission, including grant numbers where appropriate.</p>
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                                </fieldset>
-                                                <div class="hidden sm:block" aria-hidden="true">
-                                                    <div class="py-5">
-                                                        <div class="border-t border-gray-200" />
-                                                    </div>
-                                                </div>
-                                                <fieldset>
-                                                <legend class="text-base font-medium text-gray-900">Sensors Malaysia is an open access journal which charges an Article Publishing Charge (APC) to cover the cost associated with the publication process. All articles published Open Access will be immediately and permanently free on ScienceDirect for users to read, download, and use in accordance with the author’s selected Creative Commons user license. </legend>
-                                                <div class="mt-4 space-y-4">
-                                                    <div class="flex items-start">
-                                                    <div class="flex items-center h-5">
-                                                        <input v-model="manuscriptForm.is_acknowledge" id="is_acknowledge" name="is_acknowledge" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
-                                                    </div>
-                                                    <div class="ml-3 text-sm">
-                                                        <label for="is_acknowledge" class="font-medium text-gray-700">I Acknowledge</label>
-                                                        <p class="text-gray-500">As an Author, I acknowledge I need to pay the Article Publishing Charge if my manuscript is accepted for publication</p>
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                                </fieldset>
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
                             <div class="py-3 text-right">
                                 <button class="mx-1 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     Proceed
@@ -275,6 +226,44 @@
                         </div>
                     </div>
                 </form>
+                <Modal :show="showAddUserModal" @close="showAddUserModal = false;">
+                    <template v-slot:default>
+                        <div class="mt-2">
+                            <div>
+                                <div class="md:grid md:grid-cols-3 md:gap-6">
+                                <div class="md:col-span-1">
+                                    <div class="px-4 sm:px-0">
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900">Add New User</h3>
+                                    </div>
+                                </div>
+                                <div class="mt-5 md:mt-0 md:col-span-2">
+                                    <div class="shadow sm:rounded-md sm:overflow-hidden">
+                                        <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                                            <div class="col-span-12 sm:col-span-12">
+                                                <label for="first-name" class="block text-sm font-medium text-gray-700">First Name</label>
+                                                <input v-model="userForm.first_name" type="text" name="first-name" id="first-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                            </div>
+                                            <div class="col-span-12 sm:col-span-12">
+                                                <label for="last-name" class="block text-sm font-medium text-gray-700">Last Name</label>
+                                                <input v-model="userForm.last_name" type="text" name="last-name" id="last-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                            </div>
+                                            <div class="col-span-12 sm:col-span-12">
+                                                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                                <input v-model="userForm.email" type="text" name="email" id="email" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-slot:footer>
+                        <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                            <span @click="submitUserForm()" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer">Add</span>
+                        </div>
+                    </template>
+                </Modal>
             </template>
         </Layout>
   </div>
@@ -286,17 +275,31 @@ import { Inertia } from '@inertiajs/inertia'
 import Toast from '../../Components/Toast'
 import VueMultiselect from 'vue-multiselect'
 import JetInputError from '../../Components/InputError.vue';
+import Modal from '../../Components/Modal';
+import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions, Menu, MenuButton, MenuItem, MenuItems, DialogTitle } from '@headlessui/vue'
 
 export default {
     components: {
         Layout,
+        DialogTitle,
+        Modal,
         Link,
         Toast,
         VueMultiselect,
         JetInputError
     },
+    props: {
+        types: Array,
+        auth: Object,
+        articleTypes: Array,
+        authors: Array,
+        correspondingAuthors: Array,
+        editors: Array
+    },
     data() {
         return {
+            showAddUserModal: false,
+            showAddUserModalDataIncludeIntoInput: 'authors',
             input: {
                 type: "",
             },
@@ -319,6 +322,38 @@ export default {
         };
     },
     methods: {
+        createNewAuthorModal(newUser) {
+            this.assignNewUserIntoUserFormInputs(newUser);
+            this.showAddUserModal = true;
+            this.showAddUserModalDataIncludeIntoInput = 'authors';
+        },
+        createNewCoAuthorModal(newUser) {
+            this.assignNewUserIntoUserFormInputs(newUser);
+            this.showAddUserModal = true;
+            this.showAddUserModalDataIncludeIntoInput = 'corresponding_authors';
+        },
+        createNewEditorModal(newUser) {
+            this.assignNewUserIntoUserFormInputs(newUser);
+            this.showAddUserModal = true;
+            this.showAddUserModalDataIncludeIntoInput = 'editors';
+        },
+        createNewReviewerModal(newUser) {
+            this.assignNewUserIntoUserFormInputs(newUser);
+            this.showAddUserModal = true;
+            this.showAddUserModalDataIncludeIntoInput = 'reviewers';
+        },
+        assignNewUserIntoUserFormInputs(newUser) {
+            const parts = newUser.split(' ');
+
+            const tag = {
+                id: 0,
+                last_name: parts.pop(),
+                first_name: parts.pop()
+            };
+
+            this.userForm.first_name = tag['first_name'];
+            this.userForm.last_name = tag['last_name'];
+        },
         notification(message, type = 'success') {
             this.$toast.open({
                 message: message,
@@ -326,16 +361,8 @@ export default {
                 duration: 5000,
                 dismissible: true
             })
-        },
+        },      
         async submit() {
-            this.manuscriptForm.authors = this.manuscriptForm.authors_obj.map((user) => user.id);
-            this.manuscriptForm.corresponding_authors = this.manuscriptForm.corresponding_authors_obj.map((user) => user.id);
-            if (Array.isArray(this.manuscriptForm.editors_obj)) {
-                this.manuscriptForm.editors = this.manuscriptForm.editors_obj.map((member) => member.id);
-            } else {
-                this.manuscriptForm.editors = ([this.manuscriptForm.editors_obj]).map((member) => member.id);
-            }
-            this.manuscriptForm.reviewers = this.manuscriptForm.reviewers_obj.map((user) => user.id);
             this.manuscriptForm.post(`/admin/manuscript-store`, {
                 preserveScroll: true,
                 onError: (errors) => {
@@ -347,6 +374,44 @@ export default {
                     
                 }
             });
+        },
+        async submitUserForm() {
+            await window.axios.post('/api/users', {
+                first_name: this.userForm.first_name,
+                last_name: this.userForm.last_name,
+                email: this.userForm.email,
+                password: this.userForm.password,
+                password_confirmation: this.userForm.password
+            })
+                .then((res) => {
+                    if (res.status >= 200 && res.status < 300) {
+                        let user = res.data;
+                        this.notification('User added', 'success');
+                        if (this.showAddUserModalDataIncludeIntoInput == 'authors') {
+                            this.manuscriptForm.authors.push(user);
+                        } else if(this.showAddUserModalDataIncludeIntoInput == 'corresponding_authors') {
+                            this.manuscriptForm.corresponding_authors.push(user);
+                        } else if (this.showAddUserModalDataIncludeIntoInput == 'editors') {
+                            this.manuscriptForm.editors.push(user);
+                        } else {
+                            this.manuscriptForm.reviewers.push(user);
+                        }
+                        this.showAddUserModal = false;
+                        this.userForm.email = null;
+                    }
+                })
+                .catch((err) => {
+                    if (err.response) {
+                        let errors = err.response.data.errors;
+                        Object.keys(errors).forEach((value, index) => {
+                            this.notification(errors[value][0], 'error');
+                        });
+                    } else {
+                        this.notification(err.message, 'error');
+                    }
+                    
+                });
+            
         },
         notification(message, type = 'success') {
             this.$toast.open({
@@ -410,29 +475,41 @@ export default {
         const manuscriptForm = useForm({
             type: "",
             title: null,
-            authors: [],
-            authors_obj: [],
+            authors: [props.auth.user.data],
             corresponding_authors: [],
-            corresponding_authors_obj: [],
             editors: [],
-            editors_obj: [],
             reviewers: [],
-            reviewers_obj: [],
+        });
+
+        const generateString = (length) => {
+            let result = ' ';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const charactersLength = characters.length;
+            for ( let i = 0; i < length; i++ ) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+
+            return result;
+        }
+
+        const userForm = useForm({
+            first_name: null,
+            last_name: null,
+            email: null,
+            password: generateString(8),
+            password_confirmation: null
         });
 
         return {
-            manuscriptForm
+            manuscriptForm,
+            userForm,
+            generateString
         };
     },
     async created() {
         this.asyncFindAuthors();
         this.asyncFindEditors();
         this.asyncFindReviewers();
-    },
-    props: {
-        types: Array,
-        auth: Object,
-        articleTypes: Array,
     },
 }
 </script>
