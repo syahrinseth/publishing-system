@@ -107,25 +107,23 @@ class ManuscriptController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'type' => 'required',
-            'authors' => 'required',
-            'editors' => 'required',
-            'reviewers' => 'required',
-            'title' => 'required',
+        $validated = $request->validate([
+            'type' => 'required|numeric',
+            'title' => 'required|string',
+            'status' => 'nullable|string',
+            'authors' => 'required|array',
+            'corresponding_authors' => 'array',
+            'editors' => 'required|array',
+            'reviewers' => 'required|array',
         ]);
 
-        $manuscript = new Manuscript();
-        $manuscript->type = $request->type;
-        $manuscript->title = $request->title;
-        $manuscript->status = 'Draft';
-        $manuscript->save();
-        $manuscript->setEditors(User::whereIn('id', $request->editors ?? [])->get());
-        $manuscript->setReviewers(User::whereIn('id', $request->reviewers ?? [])->get());
-        $manuscript->setAuthors(User::whereIn('id', $request->authors ?? [])->get());
-        $manuscript->setCoAuthors(User::whereIn('id', [auth()->id()])->get());
-        $manuscript->generateManuscriptNumber();
-        $manuscript->update();
+        $manuscript = Manuscript::create($validated);
+        
+        if (empty($manuscript)) {
+            return abort(400);
+        }
+
+        ManuscriptMember::createMembers($manuscript, $validated);
 
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));

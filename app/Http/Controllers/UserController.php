@@ -63,7 +63,7 @@ class UserController extends Controller
     {
         $roles = Role::all();
         return Inertia::render('User/Create', [
-            'roles' => $roles
+            'roles' => $roles,
         ]);
     }
 
@@ -78,7 +78,7 @@ class UserController extends Controller
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required',
+            'email' => 'required|unique:users|email',
             'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 
@@ -103,7 +103,7 @@ class UserController extends Controller
                 $user->roles()->detach(); 
                 $user->assignRole($request->roles);
             } else {
-                $user->assignRole('User');
+                $user->assignRole('Author');
             }
             $user->password = bcrypt($request->password);
             $user->save();
@@ -183,7 +183,7 @@ class UserController extends Controller
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users',
             // 'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 
