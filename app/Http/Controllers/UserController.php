@@ -6,10 +6,12 @@ use Exception;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Mail\NewUserNotification;
 use Spatie\Permission\Models\Role;
 use App\Models\Filters\UserFilters;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Resources\UserCollection;
 use Illuminate\Support\Facades\Redirect;
 use Spatie\Permission\Models\Permission;
@@ -107,6 +109,9 @@ class UserController extends Controller
             }
             $user->password = bcrypt($request->password);
             $user->save();
+            
+            Mail::to($user->email)->queue(new NewUserNotification($user, $user));
+
 
         } catch(Exception $e) {
 
