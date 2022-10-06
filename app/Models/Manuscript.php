@@ -22,10 +22,11 @@ use App\Mail\ManuscriptInviteMemberNotification;
 use App\Mail\ManuscriptPostReviewedNotification;
 use App\Mail\ManuscriptReviewThanksNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Manuscript extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, SoftDeletes;
 
     protected $table = 'manuscripts';
 
