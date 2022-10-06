@@ -53,7 +53,7 @@
                                                 Author(s) <span class="text-red-600">*</span>
                                                 </label>
                                                 <VueMultiselect 
-                                                v-model="manuscriptForm.authors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors" :taggable="true" @tag="createNewAuthorModal" tag-placeholder="Press enter to add new user">
+                                                v-model="manuscriptForm.authors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors" :taggable="true" @tag="createNewAuthorModal" tag-placeholder="Press enter to add new user">
                                                 </VueMultiselect>
                                                 <JetInputError :message="manuscriptForm.errors.authors" class="mt-2" />
                                             </div>
@@ -62,7 +62,7 @@
                                                 Co-Author(s) <span class="text-red-600">*</span>
                                                 </label>
                                                 <VueMultiselect 
-                                                v-model="manuscriptForm.corresponding_authors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors" :taggable="true" @tag="createNewCoAuthorModal" tag-placeholder="Press enter to add new user">
+                                                v-model="manuscriptForm.corresponding_authors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" placeholder="Type to search" open-direction="bottom" :options="authorSelect.options" :multiple="true" :searchable="true" :loading="authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors" :taggable="true" @tag="createNewCoAuthorModal" tag-placeholder="Press enter to add new user">
                                                     </VueMultiselect>
                                                 <JetInputError :message="manuscriptForm.errors.corresponding_authors" class="mt-2" />
                                             </div>
@@ -72,7 +72,7 @@
                                                     Request Editor(s) <span class="text-red-600">*</span>
                                                     </label>
                                                     <VueMultiselect 
-                                                    v-model="manuscriptForm.editors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="false" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors" :taggable="true" @tag="createNewEditorModal" tag-placeholder="Press enter to add new user">
+                                                    v-model="manuscriptForm.editor" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" placeholder="Type to search" open-direction="bottom" :options="editorSelect.options" :multiple="false" :searchable="true" :loading="editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors" :taggable="true" @tag="createNewEditorModal" tag-placeholder="Press enter to add new user">
                                                         </VueMultiselect>
                                                     <JetInputError :message="manuscriptForm.errors.editors" class="mt-2" />
                                                 </div>
@@ -111,7 +111,7 @@
                                                         </label>
                                                         <div class="mt-1 flex rounded-md shadow-sm">
                                                         <VueMultiselect 
-                                                        v-model="manuscriptForm.reviewers" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers" :taggable="true" @tag="createNewReviewerModal" tag-placeholder="Press enter to add new user">
+                                                        v-model="manuscriptForm.reviewers" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers" :taggable="true" @tag="createNewReviewerModal" tag-placeholder="Press enter to add new user">
                                                             </VueMultiselect>
                                                         </div>
                                                         <JetInputError :message="manuscriptForm.errors.reviewers" class="mt-2" />
@@ -363,6 +363,7 @@ export default {
             })
         },      
         async submit() {
+            this.manuscriptForm.editors = [this.manuscriptForm.editor];
             this.manuscriptForm.post(`/admin/manuscript-store`, {
                 preserveScroll: true,
                 onError: (errors) => {
@@ -392,7 +393,7 @@ export default {
                         } else if(this.showAddUserModalDataIncludeIntoInput == 'corresponding_authors') {
                             this.manuscriptForm.corresponding_authors.push(user);
                         } else if (this.showAddUserModalDataIncludeIntoInput == 'editors') {
-                            this.manuscriptForm.editors.push(user);
+                            this.manuscriptForm.editor = user;
                         } else {
                             this.manuscriptForm.reviewers.push(user);
                         }
@@ -478,6 +479,7 @@ export default {
             authors: [props.auth.user.data],
             corresponding_authors: [],
             editors: [],
+            editor: null,
             reviewers: [],
         });
 

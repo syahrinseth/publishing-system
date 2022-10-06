@@ -1999,6 +1999,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                _this.manuscriptForm.editors = [_this.manuscriptForm.editor];
+
                 _this.manuscriptForm.post("/admin/manuscript-store", {
                   preserveScroll: true,
                   onError: function onError(errors) {
@@ -2009,7 +2011,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   onSuccess: function onSuccess(res) {}
                 });
 
-              case 1:
+              case 2:
               case "end":
                 return _context.stop();
             }
@@ -2043,7 +2045,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     } else if (_this2.showAddUserModalDataIncludeIntoInput == 'corresponding_authors') {
                       _this2.manuscriptForm.corresponding_authors.push(user);
                     } else if (_this2.showAddUserModalDataIncludeIntoInput == 'editors') {
-                      _this2.manuscriptForm.editors.push(user);
+                      _this2.manuscriptForm.editor = user;
                     } else {
                       _this2.manuscriptForm.reviewers.push(user);
                     }
@@ -2215,6 +2217,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       authors: [props.auth.user.data],
       corresponding_authors: [],
       editors: [],
+      editor: null,
       reviewers: []
     });
 
@@ -2834,7 +2837,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "custom-label": function customLabel(value) {
           return "".concat(value.first_name, " ").concat(value.last_name || "", " ").concat(value.field == null ? "" : "- ".concat(value.field), " ").concat(value.affiliation == null ? "" : "- ".concat(value.affiliation));
         },
-        "track-by": "id",
         placeholder: "Type to search",
         "open-direction": "bottom",
         options: $data.authorSelect.options,
@@ -2869,7 +2871,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "custom-label": function customLabel(value) {
           return "".concat(value.first_name, " ").concat(value.last_name || "", " ").concat(value.field == null ? "" : "- ".concat(value.field), " ").concat(value.affiliation == null ? "" : "- ".concat(value.affiliation));
         },
-        "track-by": "id",
         placeholder: "Type to search",
         "open-direction": "bottom",
         options: $data.authorSelect.options,
@@ -2895,16 +2896,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, null, 8
       /* PROPS */
       , ["message"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [_hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_VueMultiselect, {
-        modelValue: $setup.manuscriptForm.editors,
+        modelValue: $setup.manuscriptForm.editor,
         "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-          return $setup.manuscriptForm.editors = $event;
+          return $setup.manuscriptForm.editor = $event;
         }),
         id: "ajax",
         label: "first_name",
         "custom-label": function customLabel(value) {
           return "".concat(value.first_name, " ").concat(value.last_name || "", " ").concat(value.field == null ? "" : "- ".concat(value.field), " ").concat(value.affiliation == null ? "" : "- ".concat(value.affiliation));
         },
-        "track-by": "id",
         placeholder: "Type to search",
         "open-direction": "bottom",
         options: $data.editorSelect.options,
@@ -2945,7 +2945,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "custom-label": function customLabel(value) {
           return "".concat(value.first_name, " ").concat(value.last_name || "", " ").concat(value.field == null ? "" : "- ".concat(value.field), " ").concat(value.affiliation == null ? "" : "- ".concat(value.affiliation));
         },
-        "track-by": "id",
         placeholder: "Type to search",
         "open-direction": "bottom",
         options: $data.reviewerSelect.options,

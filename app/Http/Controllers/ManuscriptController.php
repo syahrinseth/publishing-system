@@ -122,7 +122,7 @@ class ManuscriptController extends Controller
         if (empty($manuscript)) {
             return abort(400);
         }
-
+        
         ManuscriptMember::createMembers($manuscript, $validated);
 
         if ($request->is('api/*')) {
