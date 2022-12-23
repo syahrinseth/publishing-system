@@ -632,13 +632,12 @@ class ManuscriptController extends Controller
     public function destroyAttachFile(Request $request, $id, $attachFileId)
     {
         $manuscript = Manuscript::findOrFail($id);
-        $attach = ManuscriptAttachFile::findOrFail($attachFileId);
+        $attach = ManuscriptAttachFile::findOrFail($attachFileId)
+            ->delete();
 
-        if (Storage::exists($attach->file_location)) {
-            Storage::delete($attach->file_location);
-        }
-
-        $attach->delete();
+        // if (Storage::exists($attach->file_location)) {
+        //     Storage::delete($attach->file_location);
+        // }
         
         if ($request->is('api/*')) {
             return response()->json();
