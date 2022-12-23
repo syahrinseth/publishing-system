@@ -24,7 +24,7 @@ class ManuscriptMember extends Model
         'reviewedVote'
     ];
 
-    public function user(){
+    public function user() {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
@@ -73,5 +73,54 @@ class ManuscriptMember extends Model
             ]);
         }
 
+    }
+
+    /**
+     * Sync members.
+     * 
+     * @param Manuscript $manuscript
+     * @param Array $input
+     * 
+     * @return Collection
+     */
+    public static function syncMembers(Manuscript $manuscript, $input, $member = 'author')
+    {
+        $members = static::query()
+            ->where('manuscript_id', $manuscript->id)
+            ->where('role', $member)
+            ->get();
+
+        foreach ($input as $input_user) {
+            $user_id = gettype($input_user) == 'integer' || gettype($input_user) == 'string' ? $input_user : $input_user['id'];
+            if ($members->count() == 0) {
+                static::firstOrCreate([
+                    'manuscript_id' => $manuscript->id,
+                    'user_id' => $user_id,
+                    'role' => $member
+                ]);
+            }
+            $members = $members->reject(function($value, $key) use ($user_id, $manuscript, $member) {
+                if (
+                    $value->user_id == $user_id
+                ) {
+                    return true;
+                }
+                static::firstOrCreate([
+                    'manuscript_id' => $manuscript->id,
+                    'user_id' => $user_id,
+                    'role' => $member
+                ]);
+                return false;
+            });
+        }
+
+        foreach ($members as $toDelete) {
+            $toDelete->delete();
+        }
+
+        return static::query()
+            ->where('manuscript_id', $manuscript->id)
+            ->where('role', $member)
+            ->get();
     }
 }

@@ -28,6 +28,7 @@ use App\Http\Resources\ManuscriptAttachCollection;
 use App\Http\Resources\ManuscriptCommentCollection;
 use App\Http\Resources\ManuscriptAttachFileCommentResource;
 use App\Http\Resources\ManuscriptAttachFileCommentCollection;
+use App\Http\Requests\UpdateManuscriptRequest;
 
 class ManuscriptController extends Controller
 {
@@ -224,7 +225,21 @@ class ManuscriptController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $manuscript = Manuscript::where('id', $id);
+        $manuscript = Manuscript::with([
+            'authors' => function($q) {
+                $q->with('user');
+            },
+            'correspondingAuthors' => function($q) {
+                $q->with('user');
+            },
+            'editors' => function($q) {
+                $q->with('user');
+            },
+            'reviewers' => function($q) {
+                $q->with('user');
+            }
+        ])
+            ->where('id', $id);
 
         if (!auth()->user()->can('manuscripts.show_all')) {
             $manuscript->whereHas('members', function($q) {
@@ -242,7 +257,7 @@ class ManuscriptController extends Controller
 
         return Inertia::render('Manuscript/Edit', [
             'manuscript' => new ManuscriptResource($manuscript),
-            'attachments' => new ManuscriptAttachCollection($manuscript->attachments()->orderBy('updated_at', 'desc')->paginate()),
+            'attachments' => ManuscriptAttachResource::collection($manuscript->attachments()->orderBy('updated_at', 'desc')->paginate()),
             'filters' => $request->all(['search', 'field', 'direction', 'viewAs']),
             'users' => $users,
             'attachTypes' => ManuscriptAttachFile::$types,
@@ -255,12 +270,13 @@ class ManuscriptController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Request\StoreManuscriptRequest $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateManuscriptRequest $request, $id)
     {
+        $validated = $request->validated();
         $manuscript = Manuscript::where('id', $id);
         if (!auth()->user()->can('manuscripts.show_all')) {
             $manuscript->whereHas('members', function($q) {
@@ -268,60 +284,27 @@ class ManuscriptController extends Controller
             });
         }
         $manuscript = $manuscript->firstOrFail();
-        $manuscript->type = $request->type ?? $manuscript->type;
-        if (is_array($request->editors)) {
-            $manuscript->setEditors(User::whereIn('id', $request->editors)->get());
-        }
-        if (is_array($request->reviewers)) {
-            $manuscript->setReviewers(User::whereIn('id', $request->reviewers)->get());
-        }
-        if (is_array($request->authors)) {
-            $manuscript->setAuthors(User::whereIn('id', $request->authors)->get());
-        }
-        if (is_array($request->corresponding_authors)) {
-            $manuscript->setCoAuthors(User::whereIn('id', $request->corresponding_authors)->get());
-        }
-        $manuscript->title = $request->title ?? $manuscript->title;
-        $manuscript->short_title = $request->short_title ?? $manuscript->short_title;
-        $manuscript->abstract = $request->abstract ?? $manuscript->abstract;
+        $manuscript->update($validated);
+
+        ManuscriptMember::syncMembers($manuscript, $validated['authors'], 'author');
+        ManuscriptMember::syncMembers($manuscript, $validated['corresponding_authors'], 'corresponding author');
+        ManuscriptMember::syncMembers($manuscript, $validated['editors'], 'editor');
+        ManuscriptMember::syncMembers($manuscript, $validated['reviewers'], 'reviewer');
+
         // Assign status
-        if (!empty($request->status)) {
-            if ($manuscript->status != $request->status) {
-
-                // Validate submit to editor
-                if ($request->status == "Submit To Editor") {
-                    $attachments = $manuscript->attachments->unique('type')->whereIn('type', [1, 5, 13]);
-                    if ($attachments->count() != 3) {
-                        // Response error for fail to assign status.
-                        if ($request->is('api/*')) {
-                            return response()->json(new ManuscriptResource($manuscript), 401);
-                        }
-                        
-                        return redirect()->back()->withErrors([
-                            'status' => '"Manuscript", "Cover Letter" and "Plagiarism Report" attached files are required. Please upload the following documents.'
-                        ]);
-                    }
+        if ($manuscript->isDirty('status')) {
+            if (!$manuscript->assignStatus($request->status)) {
+                // Response error for fail to assign status.
+                if ($request->is('api/*')) {
+                    return response()->json(new ManuscriptResource($manuscript), 401);
                 }
-
-                if (!$manuscript->assignStatus($request->status)) {
-                    // Response error for fail to assign status.
-                    if ($request->is('api/*')) {
-                        return response()->json(new ManuscriptResource($manuscript), 401);
-                    }
-                    
-                    return redirect()->back()->withErrors([
-                        'status' => 'You don\'t have the permission to change manuscript status into "' . $request->status . '".'
-                    ]);
-                }
-    
+                
+                return redirect()->back()->withErrors([
+                    'status' => 'You don\'t have the permission to change manuscript status into "' . $request->status . '".'
+                ]);
             }
         }
-        $manuscript->keywords = $request->keywords ?? $manuscript->keywords;
-        $manuscript->funding_information = $request->funding_information ?? $manuscript->funding_information;
-        $manuscript->additional_informations = [
-            'is_confirm_grant_numbers' => $request->is_confirm_grant_numbers == null ? (empty($manuscript->additional_informations['is_confirm_grant_numbers']) ? false : true) : $request->is_confirm_grant_numbers,
-            'is_acknowledge' => $request->is_acknowledge == null ? (empty($manuscript->additional_informations['is_acknowledge']) ? false : true) : $request->is_acknowledge
-        ];
+
         $manuscript->update();
 
         if ($request->is('api/*')) {
@@ -649,13 +632,12 @@ class ManuscriptController extends Controller
     public function destroyAttachFile(Request $request, $id, $attachFileId)
     {
         $manuscript = Manuscript::findOrFail($id);
-        $attach = ManuscriptAttachFile::findOrFail($attachFileId);
+        $attach = ManuscriptAttachFile::findOrFail($attachFileId)
+            ->delete();
 
-        if (Storage::exists($attach->file_location)) {
-            Storage::delete($attach->file_location);
-        }
-
-        $attach->delete();
+        // if (Storage::exists($attach->file_location)) {
+        //     Storage::delete($attach->file_location);
+        // }
         
         if ($request->is('api/*')) {
             return response()->json();
