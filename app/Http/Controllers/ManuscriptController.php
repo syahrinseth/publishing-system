@@ -598,6 +598,7 @@ class ManuscriptController extends Controller
         $attach->type = $request->type ?? $attach->type;
         $attach->description = $request->description ?? $attach->description;
         $attach->update();
+        $manuscript->notifyUpdateAttachToMembers($attach);
 
         if ($request->hasFile('file')) {
             if (Storage::exists($attach->file_location)) {

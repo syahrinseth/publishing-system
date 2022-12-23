@@ -692,7 +692,14 @@ class Manuscript extends Model
             return $member->user->email;
         })->toArray();
 
-        $emails = collect(array_merge($coAuthors, $authors, $editors))->unique()->values()->all();
+        $reviewers = [];
+        if ($attach->type == 1 && $this->status != "Draft") {
+            $reviewers = $this->reviewers->map(function($member) {
+                return $member->user->email;
+            })->toArray();
+        }
+
+        $emails = collect(array_merge($coAuthors, $authors, $editors, $reviewers))->unique()->values()->all();
 
         if (!empty($emails)) {
             Mail::to($emails)->queue(new ManuscriptAttachUpdated($this, $attach));
@@ -721,7 +728,14 @@ class Manuscript extends Model
             return $member->user->email;
         })->toArray();
 
-        $emails = collect(array_merge($coAuthors, $authors, $editors))->unique()->values()->all();
+        $reviewers = [];
+        if ($attach->type == 1 && $this->status != "Draft") {
+            $reviewers = $this->reviewers->map(function($member) {
+                return $member->user->email;
+            })->toArray();
+        }
+
+        $emails = collect(array_merge($coAuthors, $authors, $editors, $reviewers))->unique()->values()->all();
 
         if (!empty($emails)) {
             Mail::to($emails)->queue(new ManuscriptAttachCreated($this, $attach));
