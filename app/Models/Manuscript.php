@@ -36,7 +36,14 @@ class Manuscript extends Model
     protected $fillable = [
         'type',
         'title',
-        'status'
+        'status',
+        'category',
+        'short_title',
+        'abstract',
+        'keywords',
+        'funding_information',
+        'is_confirm_grant_numbers',
+        'is_acknowledge'
     ];
 
     /**
@@ -45,7 +52,7 @@ class Manuscript extends Model
      * @var array
      */
     protected $casts = [
-        'additional_informations' => 'array',
+
     ];
 
     public static $types = [
@@ -107,6 +114,10 @@ class Manuscript extends Model
         static::created(function($manuscript) {
             $manuscript->generateManuscriptNumber();
             $manuscript->update();
+        });
+
+        static::updating(function($manuscript) {
+            
         });
     }
 
