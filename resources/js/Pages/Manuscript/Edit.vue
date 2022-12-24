@@ -15,11 +15,21 @@
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
                                     <DocumentReportIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                    {{ manuscript.data.status }}
+                                    <span class="px-3 py-2 rounded-full text-white" :class="{
+                                        'bg-gray-500': manuscript.data.status == 'Draft',
+                                        'bg-blue-500': manuscript.data.status == 'Submit For Review',
+                                        'bg-red-500': manuscript.data.status == 'Rejected Invite To Resubmit',
+                                        'bg-red-500': manuscript.data.status == 'Rejected',
+                                        'bg-green-500': manuscript.data.status == 'Accepted Without Changes',
+                                        'bg-green-500': manuscript.data.status == 'Accepted With Minor Changes',
+                                        'bg-green-500': 'Accepted With Major Changes',
+                                        'bg-indigo-500': 'Published',
+                                        'bg-blue-500': 'Submit To Editor'
+                                    }">{{ manuscript.data.status }}</span>
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
                                     <CalendarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                    {{ manuscript.data.created_at_date }}
+                                    {{ moment(manuscript.data.created_at_date).format('MMMM Do, YYYY') }}
                                 </div>
                             </div>
                         </div>
