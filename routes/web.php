@@ -66,6 +66,8 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
     Route::post('/manuscripts/{id}/update', [ManuscriptController::class, 'update'])->name('manuscript.update');
 
+    Route::post('/manuscripts/{id}/update-status', [ManuscriptController::class, 'updateStatus'])->name('manuscript.updateStatus');
+
     Route::post('/manuscripts/{id}/destroy', [ManuscriptController::class, 'destroy'])->name('manuscript.destroy');
 
     Route::get('/manuscripts/{id}/download', [ManuscriptController::class, 'download'])->name('manuscript.download');

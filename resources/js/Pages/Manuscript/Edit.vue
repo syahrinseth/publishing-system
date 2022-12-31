@@ -16,15 +16,11 @@
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
                                     <DocumentReportIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
                                     <span class="px-3 py-2 rounded-full text-white" :class="{
-                                        'bg-gray-500': manuscript.data.status == 'Draft',
-                                        'bg-blue-500': manuscript.data.status == 'Submit For Review',
-                                        'bg-red-500': manuscript.data.status == 'Rejected Invite To Resubmit',
-                                        'bg-red-500': manuscript.data.status == 'Rejected',
-                                        'bg-green-500': manuscript.data.status == 'Accepted Without Changes',
-                                        'bg-green-500': manuscript.data.status == 'Accepted With Minor Changes',
-                                        'bg-green-500': 'Accepted With Major Changes',
-                                        'bg-indigo-500': 'Published',
-                                        'bg-blue-500': 'Submit To Editor'
+                                        'bg-gray-400': (manuscript.data.status == 'Draft'),
+                                        'bg-blue-400': (manuscript.data.status == 'Submit For Review') || (manuscript.data.status == 'Submit To Editor'),
+                                        'bg-red-400': (manuscript.data.status == 'Rejected Invite To Resubmit') || (manuscript.data.status == 'Rejected'),
+                                        'bg-green-400': (manuscript.data.status == 'Accepted Without Changes') || (manuscript.data.status == 'Accepted With Minor Changes') || (manuscript.data.status == 'Accepted With Major Changes'),
+                                        'bg-indigo-400': (manuscript.data.status == 'Published'),
                                     }">{{ manuscript.data.status }}</span>
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
@@ -1089,8 +1085,7 @@
         reviewers: props.manuscript.data.reviewers?.map(v => v?.user),
         funding_information: props.manuscript.data.funding_information,
         is_confirm_grant_numbers: props.manuscript.data.is_confirm_grant_numbers,
-        is_acknowledge: props.manuscript.data.is_acknowledge,
-        status: props.manuscript.data.status
+        is_acknowledge: props.manuscript.data.is_acknowledge
     });
 
     const attachForm = useForm({
@@ -1188,6 +1183,24 @@
             });
         
     };
+
+    const manuscriptStatusForm = useForm({
+        'status': null
+    });
+
+    const updateManuscriptStatus = () => {
+        manuscriptStatusForm.post(`/admin/manuscripts/${props.manuscript.data.id}/update-status`, {
+            preserveScroll: true,
+            onError: (errors) => {
+                Object.keys(errors).forEach((value, index) => {
+                    notification(errors[value], 'error');
+                });
+            },
+            onSuccess: (res) => {
+
+            }
+        });
+    }
 
     const createNewAuthorModal = (newUser) => {
         assignNewUserIntoUserFormInputs(newUser);
@@ -1289,60 +1302,60 @@
     };
 
     const submitForReview = () => {
-        manuscriptForm.status = "Submit For Review";
-        saveManuscript();
+        manuscriptStatusForm.status = "Submit For Review";
+        updateManuscriptStatus();
         data.showSubmitReviewModal = false;
     };
 
     const submitToEditor = () => {
-        manuscriptForm.status = "Submit To Editor";
-        saveManuscript();
+        manuscriptStatusForm.status = "Submit To Editor";
+        updateManuscriptStatus();
         data.showSubmitToEditorModal = false;
     };
 
     const acceptWithoutChanges = async () => {
-        manuscriptForm.status = "Accepted Without Changes";
-        saveManuscript();
+        manuscriptStatusForm.status = "Accepted Without Changes";
+        updateManuscriptStatus();
         data.showAcceptModal = false;
         await new Promise(r => setTimeout(r, 1000));
         data.showThanksModal = true;
     };
 
     const acceptWithMinorChanges = async () => {
-        manuscriptForm.status = "Accepted With Minor Changes";
-        saveManuscript();
+        manuscriptStatusForm.status = "Accepted With Minor Changes";
+        updateManuscriptStatus();
         data.showAcceptModal = false;
         await new Promise(r => setTimeout(r, 1000));
         data.showThanksModal = true;
     };
 
     const acceptWithMajorChanges = async () => {
-        manuscriptForm.status = "Accepted With Major Changes";
-        saveManuscript();
+        manuscriptStatusForm.status = "Accepted With Major Changes";
+        updateManuscriptStatus();
         data.showAcceptModal = false;
         await new Promise(r => setTimeout(r, 1000));
         data.showThanksModal = true;
     };
 
     const rejectInviteToResubmit = async () => {
-        manuscriptForm.status = "Rejected Invite To Resubmit";
-        saveManuscript();
+        manuscriptStatusForm.status = "Rejected Invite To Resubmit";
+        updateManuscriptStatus();
         data.showRejectModal = false;
         await new Promise(r => setTimeout(r, 1000));
         data.showThanksModal = true;
     };
 
     const reject = async () => {
-        manuscriptForm.status = "Rejected";
-        saveManuscript();
+        manuscriptStatusForm.status = "Rejected";
+        updateManuscriptStatus();
         data.showRejectModal = false;
         await new Promise(r => setTimeout(r, 1000));
         data.showThanksModal = true;
     };
 
     const publishManuscript = () => {
-        manuscriptForm.status = "Published";
-        saveManuscript();
+        manuscriptStatusForm.status = "Published";
+        updateManuscriptStatus();
         data.showPublishModal = false;
     };
 

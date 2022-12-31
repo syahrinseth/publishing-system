@@ -2940,8 +2940,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }),
       funding_information: props.manuscript.data.funding_information,
       is_confirm_grant_numbers: props.manuscript.data.is_confirm_grant_numbers,
-      is_acknowledge: props.manuscript.data.is_acknowledge,
-      status: props.manuscript.data.status
+      is_acknowledge: props.manuscript.data.is_acknowledge
     });
     var attachForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_6__.useForm)({
       id: null,
@@ -3054,6 +3053,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       };
     }();
 
+    var manuscriptStatusForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_6__.useForm)({
+      'status': null
+    });
+
+    var updateManuscriptStatus = function updateManuscriptStatus() {
+      manuscriptStatusForm.post("/admin/manuscripts/".concat(props.manuscript.data.id, "/update-status"), {
+        preserveScroll: true,
+        onError: function onError(errors) {
+          Object.keys(errors).forEach(function (value, index) {
+            notification(errors[value], 'error');
+          });
+        },
+        onSuccess: function onSuccess(res) {}
+      });
+    };
+
     var createNewAuthorModal = function createNewAuthorModal(newUser) {
       assignNewUserIntoUserFormInputs(newUser);
       data.showAddUserModal = true;
@@ -3154,14 +3169,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
 
     var submitForReview = function submitForReview() {
-      manuscriptForm.status = "Submit For Review";
-      saveManuscript();
+      manuscriptStatusForm.status = "Submit For Review";
+      updateManuscriptStatus();
       data.showSubmitReviewModal = false;
     };
 
     var submitToEditor = function submitToEditor() {
-      manuscriptForm.status = "Submit To Editor";
-      saveManuscript();
+      manuscriptStatusForm.status = "Submit To Editor";
+      updateManuscriptStatus();
       data.showSubmitToEditorModal = false;
     };
 
@@ -3171,8 +3186,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                manuscriptForm.status = "Accepted Without Changes";
-                saveManuscript();
+                manuscriptStatusForm.status = "Accepted Without Changes";
+                updateManuscriptStatus();
                 data.showAcceptModal = false;
                 _context2.next = 5;
                 return new Promise(function (r) {
@@ -3201,8 +3216,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                manuscriptForm.status = "Accepted With Minor Changes";
-                saveManuscript();
+                manuscriptStatusForm.status = "Accepted With Minor Changes";
+                updateManuscriptStatus();
                 data.showAcceptModal = false;
                 _context3.next = 5;
                 return new Promise(function (r) {
@@ -3231,8 +3246,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                manuscriptForm.status = "Accepted With Major Changes";
-                saveManuscript();
+                manuscriptStatusForm.status = "Accepted With Major Changes";
+                updateManuscriptStatus();
                 data.showAcceptModal = false;
                 _context4.next = 5;
                 return new Promise(function (r) {
@@ -3261,8 +3276,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                manuscriptForm.status = "Rejected Invite To Resubmit";
-                saveManuscript();
+                manuscriptStatusForm.status = "Rejected Invite To Resubmit";
+                updateManuscriptStatus();
                 data.showRejectModal = false;
                 _context5.next = 5;
                 return new Promise(function (r) {
@@ -3291,8 +3306,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                manuscriptForm.status = "Rejected";
-                saveManuscript();
+                manuscriptStatusForm.status = "Rejected";
+                updateManuscriptStatus();
                 data.showRejectModal = false;
                 _context6.next = 5;
                 return new Promise(function (r) {
@@ -3316,8 +3331,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }();
 
     var publishManuscript = function publishManuscript() {
-      manuscriptForm.status = "Published";
-      saveManuscript();
+      manuscriptStatusForm.status = "Published";
+      updateManuscriptStatus();
       data.showPublishModal = false;
     };
 
@@ -3634,6 +3649,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       clearAttachForm: clearAttachForm,
       deleteAttachFile: deleteAttachFile,
       submitUserForm: submitUserForm,
+      manuscriptStatusForm: manuscriptStatusForm,
+      updateManuscriptStatus: updateManuscriptStatus,
       createNewAuthorModal: createNewAuthorModal,
       createNewCoAuthorModal: createNewCoAuthorModal,
       createNewEditorModal: createNewEditorModal,
@@ -4136,8 +4153,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 
 var _hoisted_1 = {
   "class": ""
@@ -5324,8 +5339,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     auth: $props.auth.user.data
   }, {
     header: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      var _ref;
-
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.manuscript.data.manuscript_no) + " - " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.manuscript.data.title || 'Untitled'), 1
       /* TEXT */
       ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["BriefcaseIcon"], {
@@ -5337,11 +5350,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400",
         "aria-hidden": "true"
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
-        "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["px-3 py-2 rounded-full text-white", (_ref = {
-          'bg-gray-500': $props.manuscript.data.status == 'Draft',
-          'bg-blue-500': $props.manuscript.data.status == 'Submit For Review',
-          'bg-red-500': $props.manuscript.data.status == 'Rejected Invite To Resubmit'
-        }, _defineProperty(_ref, "bg-red-500", $props.manuscript.data.status == 'Rejected'), _defineProperty(_ref, 'bg-green-500', $props.manuscript.data.status == 'Accepted Without Changes'), _defineProperty(_ref, "bg-green-500", $props.manuscript.data.status == 'Accepted With Minor Changes'), _defineProperty(_ref, "bg-green-500", 'Accepted With Major Changes'), _defineProperty(_ref, 'bg-indigo-500', 'Published'), _defineProperty(_ref, "bg-blue-500", 'Submit To Editor'), _ref)])
+        "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["px-3 py-2 rounded-full text-white", {
+          'bg-gray-400': $props.manuscript.data.status == 'Draft',
+          'bg-blue-400': $props.manuscript.data.status == 'Submit For Review' || $props.manuscript.data.status == 'Submit To Editor',
+          'bg-red-400': $props.manuscript.data.status == 'Rejected Invite To Resubmit' || $props.manuscript.data.status == 'Rejected',
+          'bg-green-400': $props.manuscript.data.status == 'Accepted Without Changes' || $props.manuscript.data.status == 'Accepted With Minor Changes' || $props.manuscript.data.status == 'Accepted With Major Changes',
+          'bg-indigo-400': $props.manuscript.data.status == 'Published'
+        }])
       }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.manuscript.data.status), 3
       /* TEXT, CLASS */
       )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["CalendarIcon"], {
@@ -5451,8 +5466,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       key: person,
                       value: person
                     }, {
-                      "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function (_ref2) {
-                        var active = _ref2.active;
+                      "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function (_ref) {
+                        var active = _ref.active;
                         return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", {
                           "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-pointer select-none relative py-2 pl-3 pr-9'])
                         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <img :src=\"person.avatar\" alt=\"\" class=\"flex-shrink-0 h-6 w-6 rounded-full\" /> "), _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {

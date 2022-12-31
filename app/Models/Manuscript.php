@@ -36,7 +36,6 @@ class Manuscript extends Model
     protected $fillable = [
         'type',
         'title',
-        'status',
         'category',
         'short_title',
         'abstract',
@@ -243,7 +242,12 @@ class Manuscript extends Model
     public function assignStatus($input)
     {
         $statusList = Manuscript::$statusList;
-        if (($this->authIsEditor() || $this->authIsAuthor()) && in_array($input, [$statusList[0]['name'], $statusList[1]['name'], $statusList[8]['name']])) {
+        
+        if (
+            /* Validate if is author and editor and status is Draft and Submit For Review and Submit to editor */
+            ($this->authIsEditor() || $this->authIsAuthor()) && 
+            in_array($input, [$statusList[0]['name'], $statusList[1]['name'], $statusList[8]['name']])
+        ) {
 
             $this->status = $input;
             $this->update();
@@ -267,8 +271,11 @@ class Manuscript extends Model
             }
             return true;
         
-        } elseif($this->authIsReviewer() && in_array($input, [$statusList[2]['name'], $statusList[3]['name'], $statusList[4]['name'], $statusList[5]['name'], $statusList[6]['name']])) {
-
+        } elseif (
+            /* Validate if is reviewer and status is Draft and %Rejected%, %Accepted% */
+            $this->authIsReviewer() && 
+            in_array($input, [$statusList[2]['name'], $statusList[3]['name'], $statusList[4]['name'], $statusList[5]['name'], $statusList[6]['name']])
+        ) {
             // Update member reviewed
             $reviewer = $this->reviewers->where('user_id', auth()->id())->first();
             if (!empty($reviewer)) {
@@ -279,7 +286,7 @@ class Manuscript extends Model
                 $reviewer->update();
 
                 // Validate manuscript review status and update status based on reviewers votes.
-                $this->setManuscriptStatus($input);
+                $this->setManuscriptStatusForReviewers($input);
                 $this->update();
 
                 // Send thanks notification
@@ -290,7 +297,11 @@ class Manuscript extends Model
             }
             return true;
         
-        } elseif(auth()->user()->can('manuscripts.publish') && in_array($input, [$statusList[7]['name']])) {
+        } elseif(
+            // user can publish and manuscript published
+            auth()->user()->can('manuscripts.publish') && 
+            in_array($input, [$statusList[7]['name']])
+        ) {
         
             $this->status = $input;
             $this->update();
@@ -347,10 +358,10 @@ class Manuscript extends Model
      */
     public function authIsReviewer()
     {
-        if (in_array(Auth::user()->id, $this->reviewers->map(function($q){return $q->user_id;})->all() ?? [])) {
-            return true;
-        }
-        return false;
+        return static::whereHas('members', function($q) {
+            $q->where('role', 'reviewer')
+                ->where('user_id', auth()->id());
+        })->exists();
     }
 
     /**
@@ -616,52 +627,71 @@ class Manuscript extends Model
     /**
      * Set manuscript review status based on reviewers vote.
      * @param String $status
+     * 
+     * @return Manuscript
      */
-    public function setManuscriptStatus($status)
+    public function setManuscriptStatusForReviewers($status)
     {
-        $totalReviewers = ManuscriptMember::where('manuscript_id', $this->id)->where('role', 'reviewer')->count();
-        $reviewersWithVote = ManuscriptMember::where('manuscript_id', $this->id)->where('role', 'reviewer')->where('reviewed', '!=', null)->get();
-        if ($totalReviewers > 1) {
-            if ($reviewersWithVote->count() > 1) {
-                
-                // Vote manuscript status and update status.
-                $memberVotes = $reviewersWithVote->groupBy('reviewedVote');
-
-                // Get rejected votes.
-                $rejectVotes = $memberVotes->filter(function($vote, $key){
-                    if (!str_contains($key, 'Accepted')) {
-                        return true;
-                    }
-                    return false;
-                });
-                
-                // Get accepted votes.
-                $acceptVotes = $memberVotes->filter(function($vote, $key){
-                    if (str_contains($key, 'Accepted')) {
-                        return true;
-                    }
-                    return false;
-                });
-
-                // Sort top votes and assign status.
-                if ($rejectVotes->count() >= $acceptVotes->count()) {
-                    // Get top rejected votes and assign status.
-                    $topVote = $rejectVotes->sortBy(function($group){
-                        return $group->count();
-                    })->last();
-                    $this->status = $topVote->first()->reviewedVote;
-                } else {
-                    // Get top accepted votes and assign status.
-                    $topVote = $acceptVotes->sortBy(function($group){
-                        return $group->count();
-                    })->last();
-                    $this->status = $topVote->first()->reviewedVote;
-                }
-            }
-        } else {
-            $this->status = $status;
+        // Validate if auth is reviewer.
+        if (!$this->authIsReviewer()) {
+            return $this;
         }
+
+        // Set vote to current member
+        $authMember = ManuscriptMember::where('user_id', auth()->id())
+            ->where('manuscript_id', $this->id)
+            ->where('role', 'reviewer')
+            ->first();
         
+        if (empty($authMember)) {
+            return $this;
+        }
+
+        $authMember->update([
+            'reviewed' => Carbon::now(),
+            'reviewedVote' => $status
+        ]);
+
+        // Get all reviewers.
+        $allReviewers = $this->reviewers;
+
+        // Get reviewers with vote.
+        $votedReviewers = $this->reviewers->where('reviewed', '!=', null);
+
+        // If all reviewers has voted set get the status with majority voted.
+        if ($allReviewers->count() != $votedReviewers->count()) {
+            return $this;
+        }
+
+        $groupedVote = ManuscriptMember::where('manuscript_id', $this->id)
+            ->where('role', 'reviewer')
+            ->get()
+            ->groupBy('reviewedVote');
+
+        $topVote = [
+            'count' => 0,
+            'name' => null
+        ];
+
+        foreach ($groupedVote as $key => $vote) {
+            
+            if ($topVote['count'] < $vote->count()) {
+                $topVote['count'] = $vote->count();
+                $topVote['name'] = $key;
+            }
+
+            if (str_contains($key, 'Rejected')) {
+                $topVote['count'] = $vote->count();
+                $topVote['name'] = $key;
+                break;
+            }
+
+        }
+
+        // Validate top vote.
+        $this->status = $topVote['name'];
+        $this->update();
+
         return $this;
     }
 
