@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Manuscript;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\ManuscriptMember;
 use Illuminate\Support\Facades\Redirect;
 
@@ -32,11 +34,35 @@ class ManuscriptMemberController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  int                       $id
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'role' => 'required',
+            'status' => 'required',
+            'user_id' => Rule::requiredIf(empty($request->input('members'))),
+            'members' => 'nullable|array'
+        ]);
+
+        $user_ids = collect($validated['members'])
+                ?->map(function($member){ 
+                    return gettype($member) == 'integer' || gettype($member) == 'string' ? $member : $member['id']; 
+                });
+
+        $members = ManuscriptMember::createMembers(
+            Manuscript::findOrFail($id),
+            [
+                'reviewers' => $user_ids
+            ],
+        );
+
+        if (request()->is('api/*')) {
+            return response()->json();
+        }
+
+        return Redirect::back();
     }
 
     /**
@@ -66,11 +92,24 @@ class ManuscriptMemberController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
+     * @param  int  $member_id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $member_id)
     {
-        //
+        $validated = $request->validate([
+            'role' => 'required',
+            'status' => 'required'
+        ]);
+
+        ManuscriptMember::findOrFail($member_id)
+            ->update($validated);
+
+        if (request()->is('api/*')) {
+            return response()->json();
+        }
+
+        return Redirect::back();
     }
 
     /**

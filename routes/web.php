@@ -100,7 +100,9 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
     // Manuscript Members
     Route::controller(ManuscriptMemberController::class)->group(function() {
-        Route::post('/manuscripts/{id}/members/{mamber_id}/destroy', 'destroy')->name('manuscript.member.destroy');
+        Route::post('/manuscripts/{id}/member-create', 'store')->name('manuscript.member.store');
+        Route::post('/manuscripts/{id}/members/{manuscript_member_id}/update', 'update')->name('manuscript.member.update');
+        Route::post('/manuscripts/{id}/members/{member_id}/destroy', 'destroy')->name('manuscript.member.destroy');
     });
 
     // Journal Module
