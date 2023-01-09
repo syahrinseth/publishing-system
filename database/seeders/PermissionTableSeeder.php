@@ -31,6 +31,9 @@ class PermissionTableSeeder extends Seeder
             'conflict_of_interest',
             'declaration_of_interest_statement',
             'edit_after_submit',
+            'add_manuscript_reviewer',
+            'change_manuscript_reviewer_status',
+            'remove_manuscript_reviewer'
         ],
         'journals' => [
             'create',

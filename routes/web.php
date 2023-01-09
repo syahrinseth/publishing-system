@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ManuscriptController;
 use App\Http\Controllers\PublicJournalController;
+use App\Http\Controllers\ManuscriptMemberController;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +98,10 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
     // Route::get('manuscript-types', [App\Http\Controllers\ManuscriptController::class, 'indexManuscriptTypes'])->name('manuscript.indexManuscriptType');
 
+    // Manuscript Members
+    Route::controller(ManuscriptMemberController::class)->group(function() {
+        Route::post('/manuscripts/{id}/members/{mamber_id}/destroy', 'destroy')->name('manuscript.member.destroy');
+    });
 
     // Journal Module
 
