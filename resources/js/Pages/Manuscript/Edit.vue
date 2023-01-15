@@ -602,7 +602,7 @@
                                                 </div>
                                                 <div>
                                                     <span class="sm:ml-3">
-                                                        <button @click="onAddReviewer" type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                        <button v-if="data.viewAs != 'reviewer'" @click="onAddReviewer" type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                             Suggest Reviewer
                                                         </button>
                                                     </span>
@@ -645,14 +645,13 @@
                                                                 }">{{ reviewer.status }} <span v-show="reviewer.status == 'Accepted'">(Invitation Sent to Reviewer)</span></span>
                                                             </td>
                                                             <td class="px-6 py-4 word-break">
-                                                                
-                                                                <button v-if="reviewer.status == 'Pending' && (data.viewAs == 'Editor' || data.viewAs == `publisher`)" @click="onAcceptReviewer(reviewer.id)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm">
+                                                                <button v-if="reviewer.status == 'Pending' && (data.viewAs == 'editor' || data.viewAs == `publisher`)" @click="onAcceptReviewer(reviewer.id)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm">
                                                                     Accept
                                                                 </button>
-                                                                <button v-if="reviewer.status == 'Pending' && (data.viewAs == 'Editor' || data.viewAs == `publisher`)" @click="onRejectReviewer(reviewer.id)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
+                                                                <button v-if="reviewer.status == 'Pending' && (data.viewAs == 'editor' || data.viewAs == `publisher`)" @click="onRejectReviewer(reviewer.id)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
                                                                     Reject
                                                                 </button>
-                                                                <button @click="onRemoveReviewer(reviewer)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
+                                                                <button v-if="data.viewAs != 'reviewer'" @click="onRemoveReviewer(reviewer)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
                                                                     Remove
                                                                 </button>
                                                             </td>
