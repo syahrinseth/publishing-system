@@ -89,46 +89,6 @@
                                 <div class="py-5">
                                     <div class="border-t border-gray-200" />
                                 </div>
-                            </div>  
-                            <div>
-                                <div class="md:grid md:grid-cols-3 md:gap-6">
-                                    <div class="md:col-span-1">
-                                        <div class="px-4 sm:px-0">
-                                            <h3 class="text-lg font-medium leading-6 text-gray-900">Review Preferences</h3>
-                                            <p class="mt-1 text-sm text-gray-600">
-                                            Please name specific reviewers to be assigned to your submission. The request will be taken under advisement by the Editor. If you do not request any reviewers, your submission will be assigned to the appropriate reviewer(s) as determined by the Editorial staff.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="mt-5 md:mt-0 md:col-span-2">
-                                        <form @submit.prevent="saveManuscript()" >
-                                            <div class="shadow sm:rounded-md">
-                                            <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                                <div class="grid grid-cols-3 gap-6">
-                                                    <div class="col-span-3 sm:col-span-2">
-                                                        <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                                        Suggest Reviewer(s) <span class="text-red-600">*</span>
-                                                        </label>
-                                                        <div class="mt-1 flex rounded-md shadow-sm">
-                                                        <VueMultiselect 
-                                                        v-model="manuscriptForm.reviewers" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" placeholder="Type to search" open-direction="bottom" :options="reviewerSelect.options" :multiple="true" :searchable="true" :loading="reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers" :taggable="true" @tag="createNewReviewerModal" tag-placeholder="Press enter to add new user">
-                                                            </VueMultiselect>
-                                                        </div>
-                                                        <JetInputError :message="manuscriptForm.errors.reviewers" class="mt-2" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6 h-12">
-                                            </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="hidden sm:block" aria-hidden="true">
-                                <div class="py-5">
-                                    <div class="border-t border-gray-200" />
-                                </div>
                             </div>
                             <div>
                                 <div class="md:grid md:grid-cols-3 md:gap-6">

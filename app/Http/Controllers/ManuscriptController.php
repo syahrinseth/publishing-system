@@ -116,7 +116,7 @@ class ManuscriptController extends Controller
             'authors' => 'required|array',
             'corresponding_authors' => 'array',
             'editors' => 'required|array',
-            'reviewers' => 'required|array',
+            // 'reviewers' => 'required|array',
         ]);
 
         $manuscript = Manuscript::create($validated);
