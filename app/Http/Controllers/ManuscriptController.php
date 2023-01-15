@@ -405,20 +405,25 @@ class ManuscriptController extends Controller
         // Populate Main meta data
         $section->addText($manuscript->title, array('size' => 20, 'allCaps' => true, 'bold' => true), array('align' => "center", 'space' => array('before' => 0, 'after' => 280), ));
         $section->addText('Author\'s Name:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "center"));
-        $section->addText($manuscript->authors[0]['name'], array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center"));
-        $section->addText('University/Organisation', array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center", 'space' => array('before' => 0, 'after' => 280), ));
+        foreach ($manuscript->authors as $author) {
+            $section->addText("{$author->user->first_name} {$author->user->last_name} " . ($author->user->affiliation ? "- " . $author->user->affiliation : ""), array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center"));
+        }
+        // $section->addText('University/Organisation', array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center", 'space' => array('before' => 0, 'after' => 280), ));
         $section->addText('Co-Author\'s Name:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "center"));
-        $section->addText('University/Organisation', array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center", 'space' => array('before' => 0, 'after' => 280), ));
+        foreach ($manuscript->correspondingAuthors as $co_author) {
+            $section->addText("{$co_author->user->first_name} {$co_author->user->last_name} " . ($co_author->user->affiliation ? "- " . $co_author->user->affiliation : ""), array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center"));
+        }
+        
 
-        // Populate Abstract
+        // Populate Abstract & Keywords
         $section->addText('Abstract', array('size' => 20, 'allCaps' => true, 'bold' => true), array('align' => "center", 'space' => array('before' => 360, 'after' => 280), ));
         $section->addText($manuscript->abstract, array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "left", 'space' => array('before' => 0, 'after' => 280), ));
         $section->addText("Keywords:", array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "left"));
         $section->addText($manuscript->keywords, array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "left", 'space' => array('before' => 0, 'after' => 280), ));
 
         // Populate Article type
-        $section->addText('Article Type:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "left"));
-        $section->addText($manuscript->getType()['name'], array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "left", 'space' => array('before' => 0, 'after' => 280), ));
+        // $section->addText('Article Type:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "left"));
+        // $section->addText($manuscript->getType()['name'], array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "left", 'space' => array('before' => 0, 'after' => 280), ));
 
         // Populate Funding Information
         $section->addText('Funding Information:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "left"));
@@ -454,13 +459,14 @@ class ManuscriptController extends Controller
                     // Convert docs to html.
                     $phpWord = \PhpOffice\PhpWord\IOFactory::load(storage_path('app') . '/' . $attachment->file_location);
                     $phpWord->setDefaultFontName('times new romen');
-                    $section = $phpWord->addSection(array('borderColor' => '00FF00', 'borderSize' => 12));
+                    $section = $phpWord->addSection(array('borderColor' => '00FF00', 'borderSize' => 12, 'pageNumberingStart' => 1));
 
                     // Add top label
                     $section->addText($attachment->getType()['name']);
                     foreach($phpWord->getSections() as $i => $section) {
                         $section->setElementIndex($i);
                     }
+                    // $footer = $section->addFooter();
 
                     // sort sections
                     $phpWord->sortSections(function($a,$b) { 

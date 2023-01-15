@@ -151,6 +151,10 @@
                         <td class="px-6 py-4 word-break text-right text-sm font-medium">
                             <Link v-if="auth.user.data.permissions_attribute.manuscripts.edit == true" :href="`/admin/manuscripts/${manuscript.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
                             <a v-if="auth.user.data.permissions_attribute.manuscripts.destroy == true" href="#" @click="deleteManuscript(manuscript)" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</a>
+                            <a v-if="manuscript.status == `Published`" :href="`/admin/manuscripts/${manuscript.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-2" target="_blank">
+                                <DownloadIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                Download
+                            </a>
                         </td>
                     </tr>
                 </template>
