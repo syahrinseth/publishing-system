@@ -18,11 +18,12 @@ use App\Mail\ManuscriptEditorNotification;
 use App\Mail\ManuscriptReviewNotification;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Mail\ManuscriptPublishedNotification;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Mail\ManuscriptInviteMemberNotification;
 use App\Mail\ManuscriptPostReviewedNotification;
 use App\Mail\ManuscriptReviewThanksNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Mail\ManuscriptRejectedInviteToResubmitNotification;
 
 class Manuscript extends Model
 {
@@ -286,14 +287,15 @@ class Manuscript extends Model
                 $reviewer->update();
 
                 // Validate manuscript review status and update status based on reviewers votes.
-                $this->setManuscriptStatusForReviewers($input);
-                $this->update();
+                if ($this->setManuscriptStatusForReviewers($input)) {
+                    $this->update();
+                    // Send notification to the rest of the members.
+                    $this->notifyMembersForPostReviewed();
+                };
 
                 // Send thanks notification
                 Mail::to($reviewer->user->email)->queue(new ManuscriptReviewThanksNotification($this));
 
-                // Send notification to the rest of the members.
-                $this->notifyMembersForPostReviewed();
             }
             return true;
         
@@ -584,6 +586,13 @@ class Manuscript extends Model
             if (!empty($publishers)) {
                 User::mailTo($publishers, ManuscriptPostReviewedNotification::class, $this);
             }
+        } elseif ($this->status == 'Rejected Invite To Resubmit') {
+            $users = collect($users)->unique()->all();
+        
+            if (!empty($users)) {
+                User::mailTo($users, ManuscriptRejectedInviteToResubmitNotification::class, $this);
+            }
+            return $this;
         }
 
         $users = collect($users)->unique()->all();
@@ -628,13 +637,13 @@ class Manuscript extends Model
      * Set manuscript review status based on reviewers vote.
      * @param String $status
      * 
-     * @return Manuscript
+     * @return boolean
      */
     public function setManuscriptStatusForReviewers($status)
     {
         // Validate if auth is reviewer.
         if (!$this->authIsReviewer()) {
-            return $this;
+            return false;
         }
 
         // Set vote to current member
@@ -644,7 +653,7 @@ class Manuscript extends Model
             ->first();
         
         if (empty($authMember)) {
-            return $this;
+            return false;
         }
 
         $authMember->update([
@@ -660,7 +669,7 @@ class Manuscript extends Model
 
         // If all reviewers has voted set get the status with majority voted.
         if ($allReviewers->count() != $votedReviewers->count()) {
-            return $this;
+            return false;
         }
 
         $groupedVote = ManuscriptMember::where('manuscript_id', $this->id)
@@ -692,7 +701,7 @@ class Manuscript extends Model
         $this->status = $topVote['name'];
         $this->update();
 
-        return $this;
+        return true;
     }
 
     public function journal()

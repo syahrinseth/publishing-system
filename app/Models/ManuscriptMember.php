@@ -110,7 +110,7 @@ class ManuscriptMember extends Model
      * Sync members.
      * 
      * @param Manuscript $manuscript
-     * @param Array $input
+     * @param Array<User|integer> $input
      * 
      * @return Collection
      */
