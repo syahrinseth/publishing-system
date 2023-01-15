@@ -304,7 +304,6 @@ class ManuscriptController extends Controller
             ManuscriptMember::syncMembers($manuscript, $validated['authors'], 'author');
             ManuscriptMember::syncMembers($manuscript, $validated['corresponding_authors'], 'corresponding author');
             ManuscriptMember::syncMembers($manuscript, $validated['editors'], 'editor');
-            ManuscriptMember::syncMembers($manuscript, $validated['reviewers'], 'reviewer');
         }
 
         $manuscript->update();
