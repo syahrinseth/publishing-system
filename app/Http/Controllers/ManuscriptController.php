@@ -56,8 +56,16 @@ class ManuscriptController extends Controller
         $manuscripts = Manuscript::filter($manuscriptFilters);
         if (!auth()->user()->can('manuscripts.show_all')) {
             $manuscripts->whereHas('members', function($q) {
-                $q->where('user_id', auth()->id());
-            });
+                $q->where('user_id', auth()->id())
+                    ->where('role', 'author');;
+            })
+                ->orWhereHas('members', function($q) {
+                    $q->where('user_id', auth()->id())
+                        ->where('role', '!=', 'author')
+                        ->whereHas('manuscript', function($q) {
+                            $q->where('status', '!=', 'Draft');
+                        });
+                });
         }
         $manuscripts = new ManuscriptCollection($manuscripts->orderBy('updated_at', 'desc')->paginate(5)->appends(request()->query()));
 
