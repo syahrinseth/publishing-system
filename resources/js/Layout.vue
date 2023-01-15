@@ -9,8 +9,19 @@
     ```
   -->
   <div class="min-h-full">
-    <Disclosure as="nav" class="bg-white border border-b-gray-200 fixed top-0 z-50 min-w-full" v-slot="{ open }">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <Disclosure as="nav" class="sticky top-0 bg-white border border-b-gray-200 z-50 min-w-full" v-slot="{ open }">
+      
+
+      <Banner v-for="banner in banners"
+        :key="banner.id"
+        :show="banner.isOpen"
+        :text="banner.text"
+        :color="banner.color"
+        :accept-link="banner.accept_link"
+        :decline-link="banner.decline_link"
+        @close="banner.isOpen = false"></Banner>
+
+      <div class="h-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center">
             <div class="flex-shrink-0">
@@ -145,7 +156,7 @@
       </DisclosurePanel>
     </Disclosure>
 
-    <header class="bg-white border border-b-gray-200 shadow-md mt-10 pt-5">
+    <header class="bg-white border border-b-gray-200 shadow-md">
       <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <!-- <h1 class="text-3xl font-bold text-gray-900">
         
@@ -165,6 +176,7 @@
         <!-- <div class="px-4 py-6 sm:px-0">
           <div class="border-4 border-dashed border-gray-200 rounded-lg h-96" />
         </div> -->
+        
         <slot></slot>
         <!-- /End replace -->
       </div>
@@ -256,6 +268,7 @@ import {
   ViewGridIcon,
   XIcon,
 } from '@heroicons/vue/outline'
+import Banner from './Components/Banner.vue'
 
 // let user = {
 //   name: 'Tom Cook',
@@ -313,6 +326,7 @@ export default {
     PopoverButton,
     PopoverGroup,
     PopoverPanel,
+    Banner
   },
   watch: {
     auth(newVal, oldVal) {
@@ -383,6 +397,11 @@ export default {
   props: {
     auth: Object
   },
+  data() {
+    return {
+      banners: []
+    }
+  },
   setup(props) {
     return {
       navigation,
@@ -390,6 +409,15 @@ export default {
     }
   },
   created() {
+    this.banners = this.$props.auth?.manuscript_pending_members?.map((v) => {
+      return {
+        isOpen: true,
+        text: `You have a pending invitation to review a manuscript entitled "${v?.manuscript?.manuscript_no}".`,
+        color: 'red',
+        accept_link: `/admin/manuscripts/${v?.manuscript?.id}/members/${v?.id}/accept-invitation`,
+        decline_link: `/admin/manuscripts/${v?.manuscript?.id}/members/${v?.id}/decline-invitation`
+      };
+    });
     this.refreshNavBar();
   }
 }

@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ManuscriptController;
 use App\Http\Controllers\PublicJournalController;
+use App\Http\Controllers\ManuscriptMemberController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +67,8 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
     Route::post('/manuscripts/{id}/update', [ManuscriptController::class, 'update'])->name('manuscript.update');
 
+    Route::post('/manuscripts/{id}/update-status', [ManuscriptController::class, 'updateStatus'])->name('manuscript.updateStatus');
+
     Route::post('/manuscripts/{id}/destroy', [ManuscriptController::class, 'destroy'])->name('manuscript.destroy');
 
     Route::get('/manuscripts/{id}/download', [ManuscriptController::class, 'download'])->name('manuscript.download');
@@ -95,6 +98,14 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
 
     // Route::get('manuscript-types', [App\Http\Controllers\ManuscriptController::class, 'indexManuscriptTypes'])->name('manuscript.indexManuscriptType');
 
+    // Manuscript Members
+    Route::controller(ManuscriptMemberController::class)->group(function() {
+        Route::post('/manuscripts/{id}/member-create', 'store')->name('manuscript.member.store');
+        Route::post('/manuscripts/{id}/members/{manuscript_member_id}/update', 'update')->name('manuscript.member.update');
+        Route::post('/manuscripts/{id}/members/{member_id}/destroy', 'destroy')->name('manuscript.member.destroy');
+        Route::get('/manuscripts/{id}/members/{member_id}/accept-invitation', 'acceptInvitation')->name('manuscript.member.acceptInvitation');
+        Route::get('/manuscripts/{id}/members/{member_id}/decline-invitation', 'declineInvitation')->name('manuscript.member.declineInvitation');
+    });
 
     // Journal Module
 

@@ -21,14 +21,15 @@ use App\Models\Filters\ManuscriptFilters;
 use App\Http\Resources\ManuscriptResource;
 use App\Models\ManuscriptAttachFileComment;
 use App\Http\Resources\ManuscriptCollection;
+use App\Http\Requests\UpdateManuscriptRequest;
 use App\Http\Resources\ManuscriptAttachResource;
 use App\Models\Filters\ManuscriptCommentFilters;
 use App\Http\Resources\ManuscriptCommentResource;
 use App\Http\Resources\ManuscriptAttachCollection;
 use App\Http\Resources\ManuscriptCommentCollection;
+use App\Http\Requests\UpdateManuscriptStatusRequest;
 use App\Http\Resources\ManuscriptAttachFileCommentResource;
 use App\Http\Resources\ManuscriptAttachFileCommentCollection;
-use App\Http\Requests\UpdateManuscriptRequest;
 
 class ManuscriptController extends Controller
 {
@@ -286,27 +287,49 @@ class ManuscriptController extends Controller
         $manuscript = $manuscript->firstOrFail();
         $manuscript->update($validated);
 
-        ManuscriptMember::syncMembers($manuscript, $validated['authors'], 'author');
-        ManuscriptMember::syncMembers($manuscript, $validated['corresponding_authors'], 'corresponding author');
-        ManuscriptMember::syncMembers($manuscript, $validated['editors'], 'editor');
-        ManuscriptMember::syncMembers($manuscript, $validated['reviewers'], 'reviewer');
-
-        // Assign status
-        if ($manuscript->isDirty('status')) {
-            if (!$manuscript->assignStatus($request->status)) {
-                // Response error for fail to assign status.
-                if ($request->is('api/*')) {
-                    return response()->json(new ManuscriptResource($manuscript), 401);
-                }
-                
-                return redirect()->back()->withErrors([
-                    'status' => 'You don\'t have the permission to change manuscript status into "' . $request->status . '".'
-                ]);
-            }
+        if (
+            !empty($validated['authors']) ||
+            !empty($validated['corresponding_authors']) ||
+            !empty($validated['editor']) ||
+            !empty($validated['reviewer'])
+        ) {
+            ManuscriptMember::syncMembers($manuscript, $validated['authors'], 'author');
+            ManuscriptMember::syncMembers($manuscript, $validated['corresponding_authors'], 'corresponding author');
+            ManuscriptMember::syncMembers($manuscript, $validated['editors'], 'editor');
+            ManuscriptMember::syncMembers($manuscript, $validated['reviewers'], 'reviewer');
         }
 
         $manuscript->update();
 
+        if ($request->is('api/*')) {
+            return response()->json(new ManuscriptResource($manuscript));
+        }
+
+        return Redirect::back();
+    }
+
+    /**
+     * Update manuscript status controller.
+     * @param \App\Http\Requests\UpdateManuscriptStatusRequest $request
+     * @param integer $id
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function updateStatus(UpdateManuscriptStatusRequest $request, $id)
+    {
+        $manuscript = Manuscript::findOrFail($id);
+        // Assign status
+        if (!$manuscript->assignStatus($request->status)) {
+            // Response error for fail to assign status.
+            if ($request->is('api/*')) {
+                return response()->json(new ManuscriptResource($manuscript), 401);
+            }
+            
+            return redirect()->back()->withErrors([
+                'status' => 'You don\'t have the permission to change manuscript status into "' . $request->status . '".'
+            ]);
+        }
+        
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));
         }

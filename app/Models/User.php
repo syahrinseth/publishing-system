@@ -128,4 +128,26 @@ class User extends Authenticatable
             Mail::to($user)->queue(new $mailableClass($object, $user));
         }
     }
+
+    /**
+     * Get Manuscript Members related to this user.
+     * 
+     */
+    public function manuscriptMembers()
+    {
+        return $this->hasMany(ManuscriptMember::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get pending manuscript member invitations.
+     * @return Collection
+     */
+    public function getPendingManuscriptMemberInvitations()
+    {
+        return ManuscriptMember::whereHas('manuscript')
+            ->where('user_id', $this->id)
+            ->where('status', 'Accepted')
+            ->with('manuscript')
+            ->get();
+    }
 }

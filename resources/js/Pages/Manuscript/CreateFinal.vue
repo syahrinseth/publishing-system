@@ -618,7 +618,6 @@
             }) 
         },
         saveManuscript() {
-            this.manuscriptForm.status = "Draft";
             this.manuscriptForm.post(`/admin/manuscripts/${this.$props.manuscript.data.id}/update`, {
                 preserveScroll: true,
                 onError: (errors) => {
@@ -632,7 +631,6 @@
             });
         },
         submitToEditor() {
-            this.manuscriptForm.status = "Submit To Editor";
             this.manuscriptForm.post(`/admin/manuscripts/${this.$props.manuscript.data.id}/store-final`, {
                 preserveScroll: true,
                 onError: (errors) => {
@@ -832,6 +830,8 @@
     setup (props) {
 
         const manuscriptForm = useForm({
+            title: props.manuscript.data.title,
+            type: props.manuscript.data.type.id,
             is_confirm_grant_numbers: props.manuscript.data.is_confirm_grant_numbers,
             is_acknowledge: props.manuscript.data.is_acknowledge,
             status: null

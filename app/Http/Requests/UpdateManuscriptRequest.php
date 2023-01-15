@@ -38,7 +38,6 @@ class UpdateManuscriptRequest extends FormRequest
             'funding_information' => 'nullable',
             'is_confirm_grant_numbers' => 'required|boolean',
             'is_acknowledge' => 'required|boolean',
-            'status' => 'required|in:Draft,Submit For Review,Rejected Invite To Resubmit,Rejected,Accepted Without Changes,Accepted With Minor Changes,Accepted With Major Changes,Published,Submit To Editor'
         ];
     }
 

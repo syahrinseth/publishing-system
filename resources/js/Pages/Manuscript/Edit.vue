@@ -15,11 +15,17 @@
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
                                     <DocumentReportIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                    {{ manuscript.data.status }}
+                                    <span class="px-3 py-2 rounded-full text-white" :class="{
+                                        'bg-gray-400': (manuscript.data.status == 'Draft'),
+                                        'bg-blue-400': (manuscript.data.status == 'Submit For Review') || (manuscript.data.status == 'Submit To Editor'),
+                                        'bg-red-400': (manuscript.data.status == 'Rejected Invite To Resubmit') || (manuscript.data.status == 'Rejected'),
+                                        'bg-green-400': (manuscript.data.status == 'Accepted Without Changes') || (manuscript.data.status == 'Accepted With Minor Changes') || (manuscript.data.status == 'Accepted With Major Changes'),
+                                        'bg-indigo-400': (manuscript.data.status == 'Published'),
+                                    }">{{ manuscript.data.status }}</span>
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
                                     <CalendarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                    {{ manuscript.data.created_at_date }}
+                                    {{ moment(manuscript.data.created_at_date).format('MMMM Do, YYYY') }}
                                 </div>
                             </div>
                         </div>
@@ -438,6 +444,55 @@
                         </button>
                     </template>
                 </Modal>
+                <Modal :show="data.showAddReviewerModal" @close="data.showAddReviewerModal = false;">
+                    <template v-slot:default>
+                        <div class="sm:flex sm:items-start">
+                            <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                                    Suggest Reviewer
+                                </DialogTitle>
+                                <div class="mt-2 h-80">
+                                    <form @submit.prevent="submitAttach">
+                                        <div class="grid grid-cols-3 gap-6 mb-2">
+                                            <div class="col-span-3 sm:col-span-3">
+                                                <VueMultiselect 
+                                                    :disabled="cannotEditOnSubmit()" 
+                                                    :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null"
+                                                    v-model="reviewerForm.members" label="first_name" 
+                                                    :custom-label="(value) => `${value.first_name} ${value.last_name} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" 
+                                                    track-by="id"
+                                                    placeholder="Type to search" 
+                                                    open-direction="bottom" 
+                                                    :options="data.reviewerSelect.options" 
+                                                    :multiple="true" 
+                                                    :searchable="true" 
+                                                    :loading="data.reviewerSelect.isLoading" 
+                                                    :internal-search="false" 
+                                                    :options-limit="300" 
+                                                    :max-height="600" 
+                                                    :max="1"
+                                                    @search-change="asyncFindReviewers" 
+                                                    :taggable="true" 
+                                                    @tag="createNewReviewerModal" 
+                                                    tag-placeholder="Press enter to add new user">
+                                                    </VueMultiselect>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-slot:footer>
+                        <span :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm cursor-pointer" @click="cannotEditOnSubmit() ? `` : submitAddReviewer()">
+                            Submit
+                        </span>
+                        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="data.showAddReviewerModal = false" ref="cancelButtonRef">
+                            Cancel
+                        </button>
+                        <span v-show="reviewerForm.recentlySuccessful" class="py-2 text-gray-600">Submitted</span>
+                    </template>
+                </Modal>
                 <div v-if="data.viewAs == `author` || data.viewAs == `corresponding author` || data.viewAs == `editor` || data.viewAs == `publisher`" class="mt-10 sm:mt-0">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
@@ -534,27 +589,84 @@
                             </div>
                         </div>
                         <div class="mt-5 md:mt-0 md:col-span-2">
-                            <form @submit.prevent="saveManuscript()" >
-                                <div class="shadow sm:rounded-md">
-                                <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                    <div class="grid grid-cols-3 gap-6">
-                                        <div class="col-span-3 sm:col-span-2">
-                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                            Suggest Reviewer(s)
-                                            </label>
-                                            <div class="mt-1 flex rounded-md shadow-sm">
-                                            <VueMultiselect :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null"
-                                            v-model="manuscriptForm.reviewers" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="data.reviewerSelect.options" :multiple="true" :searchable="true" :loading="data.reviewerSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindReviewers" :taggable="true" @tag="createNewReviewerModal" tag-placeholder="Press enter to add new user">
-                                                </VueMultiselect>
+                            <form>
+                                <div class="bg-white rounded-md">
+                                    <div class="">
+                                        <div class="">
+                                            <div class="flex justify-between p-5">
+                                                <div class="">
+                                                    <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                                        Reviewer(s)
+                                                    </h3>
+                                                    <JetInputError :message="manuscriptForm.errors.reviewers" class="mt-2" />
+                                                </div>
+                                                <div>
+                                                    <span class="sm:ml-3">
+                                                        <button @click="onAddReviewer" type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                            Suggest Reviewer
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-span-3 border-gray-200 text-sm">
+                                                <Table>
+                                                    <template v-slot:header>
+                                                        <tr>
+                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                #
+                                                            </th>
+                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                Name
+                                                            </th>
+                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                Status
+                                                            </th>
+                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                            </th>
+                                                        </tr>
+                                                    </template>
+                                                    <template v-slot:body>
+                                                        <tr v-for="(reviewer, index) in manuscriptForm.reviewers" :key="reviewer.id + '-reviewer'">
+                                                            <td class="px-6 py-4 word-break">
+                                                                {{ index + 1 }}
+                                                            </td>
+                                                            <td class="px-6 py-4 word-break">
+                                                                <p>{{ reviewer.user.first_name }} {{ reviewer.user.last_name }}</p>
+                                                                <small class="text-gray-500">
+                                                                    {{ reviewer.user.email }}
+                                                                </small>
+                                                            </td>
+                                                            <td class="px-6 py-4 word-break">
+                                                                <span :class="{
+                                                                    'text-green-600': (reviewer.status == 'Active'),
+                                                                    'text-red-600': (reviewer.status == 'Rejected'),
+                                                                    'text-blue-600': (reviewer.status == 'Accepted'),
+                                                                    'text-orange-600': (reviewer.status == 'Pending')
+                                                                }">{{ reviewer.status }} <span v-show="reviewer.status == 'Accepted'">(Invitation Sent to Reviewer)</span></span>
+                                                            </td>
+                                                            <td class="px-6 py-4 word-break">
+                                                                
+                                                                <button v-if="reviewer.status == 'Pending' && (data.viewAs == 'Editor' || data.viewAs == `publisher`)" @click="onAcceptReviewer(reviewer.id)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm">
+                                                                    Accept
+                                                                </button>
+                                                                <button v-if="reviewer.status == 'Pending' && (data.viewAs == 'Editor' || data.viewAs == `publisher`)" @click="onRejectReviewer(reviewer.id)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
+                                                                    Reject
+                                                                </button>
+                                                                <button @click="onRemoveReviewer(reviewer)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
+                                                                    Remove
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr v-if="manuscriptForm.reviewers.length == 0">
+                                                            <td colspan="3" class="px-6 py-4 whitespace-nowrap text-center">
+                                                                No Data
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </Table>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                    <button :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Save
-                                    </button>
-                                </div>
                                 </div>
                             </form>
                         </div>
@@ -569,7 +681,7 @@
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                             <div class="px-4 sm:px-0">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900">Reviewers Status</h3>
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">Reviewers Review Status</h3>
                                 <p class="mt-1 text-sm text-gray-600">
                                     Here's the list of reviewer(s) review status.
                                 </p>
@@ -577,33 +689,33 @@
                         </div>
                         <div class="mt-5 md:mt-0 md:col-span-2">
                             <Table>
-                                        <template v-slot:header>
-                                            <tr>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Name
-                                                </th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Status
-                                                </th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Review
-                                                </th>
-                                            </tr>
-                                        </template>
-                                        <template v-slot:body>
-                                            <tr v-for="reviewer in manuscript.data.reviewers" :key="reviewer.id">
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ manuscript.data.reviewers_in_users.filter((v) => v.id == reviewer.user_id)[0]['first_name'] }} {{ manuscript.data.reviewers_in_users.filter((v) => v.id == reviewer.user_id)[0]['last_name'] }}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ reviewer.reviewed == null ? 'N/a' : `Reviewed at ${moment(reviewer.reviewed).format("DD/MM/YYYY")}` }}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap" :class="(reviewer.reviewedVote == null ? false : reviewer.reviewedVote.includes('Accepted')) ? 'text-green-600' : 'text-red-600'">
-                                                    {{ reviewer.reviewedVote == null ? 'N/a' : reviewer.reviewedVote }}
-                                                </td>
-                                            </tr>
-                                        </template>
-                                    </Table>
+                                <template v-slot:header>
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Status
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Review
+                                        </th>
+                                    </tr>
+                                </template>
+                                <template v-slot:body>
+                                    <tr v-for="reviewer in manuscript.data.reviewers" :key="reviewer.id">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ manuscript.data.reviewers_in_users.filter((v) => v.id == reviewer.user_id)[0]['first_name'] }} {{ manuscript.data.reviewers_in_users.filter((v) => v.id == reviewer.user_id)[0]['last_name'] }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ reviewer.reviewed == null ? 'N/a' : `Reviewed at ${moment(reviewer.reviewed).format("DD/MM/YYYY")}` }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap" :class="(reviewer.reviewedVote == null ? false : reviewer.reviewedVote.includes('Accepted')) ? 'text-green-600' : 'text-red-600'">
+                                            {{ reviewer.reviewedVote == null ? 'N/a' : reviewer.reviewedVote }}
+                                        </td>
+                                    </tr>
+                                </template>
+                            </Table>
                         </div>
                     </div>
                 </div>
@@ -1044,6 +1156,7 @@
         showSubmitReviewModal: false,
         showSubmitToEditorModal: false,
         showThanksModal: false,
+        showAddReviewerModal: false,
         isShow: false,
         authorSelect: {
             isLoading: false,
@@ -1076,11 +1189,10 @@
         authors: props.manuscript.data.authors.map(v => v?.user),
         corresponding_authors: props.manuscript.data.corresponding_authors.map(v => v?.user),
         editors: props.manuscript.data.editors?.map(v => v?.user),
-        reviewers: props.manuscript.data.reviewers?.map(v => v?.user),
+        reviewers: props.manuscript.data.reviewers?.map(v => v),
         funding_information: props.manuscript.data.funding_information,
         is_confirm_grant_numbers: props.manuscript.data.is_confirm_grant_numbers,
-        is_acknowledge: props.manuscript.data.is_acknowledge,
-        status: props.manuscript.data.status
+        is_acknowledge: props.manuscript.data.is_acknowledge
     });
 
     const attachForm = useForm({
@@ -1178,6 +1290,24 @@
             });
         
     };
+
+    const manuscriptStatusForm = useForm({
+        'status': null
+    });
+
+    const updateManuscriptStatus = () => {
+        manuscriptStatusForm.post(`/admin/manuscripts/${props.manuscript.data.id}/update-status`, {
+            preserveScroll: true,
+            onError: (errors) => {
+                Object.keys(errors).forEach((value, index) => {
+                    notification(errors[value], 'error');
+                });
+            },
+            onSuccess: (res) => {
+
+            }
+        });
+    }
 
     const createNewAuthorModal = (newUser) => {
         assignNewUserIntoUserFormInputs(newUser);
@@ -1279,60 +1409,60 @@
     };
 
     const submitForReview = () => {
-        manuscriptForm.status = "Submit For Review";
-        saveManuscript();
+        manuscriptStatusForm.status = "Submit For Review";
+        updateManuscriptStatus();
         data.showSubmitReviewModal = false;
     };
 
     const submitToEditor = () => {
-        manuscriptForm.status = "Submit To Editor";
-        saveManuscript();
+        manuscriptStatusForm.status = "Submit To Editor";
+        updateManuscriptStatus();
         data.showSubmitToEditorModal = false;
     };
 
     const acceptWithoutChanges = async () => {
-        manuscriptForm.status = "Accepted Without Changes";
-        saveManuscript();
+        manuscriptStatusForm.status = "Accepted Without Changes";
+        updateManuscriptStatus();
         data.showAcceptModal = false;
         await new Promise(r => setTimeout(r, 1000));
         data.showThanksModal = true;
     };
 
     const acceptWithMinorChanges = async () => {
-        manuscriptForm.status = "Accepted With Minor Changes";
-        saveManuscript();
+        manuscriptStatusForm.status = "Accepted With Minor Changes";
+        updateManuscriptStatus();
         data.showAcceptModal = false;
         await new Promise(r => setTimeout(r, 1000));
         data.showThanksModal = true;
     };
 
     const acceptWithMajorChanges = async () => {
-        manuscriptForm.status = "Accepted With Major Changes";
-        saveManuscript();
+        manuscriptStatusForm.status = "Accepted With Major Changes";
+        updateManuscriptStatus();
         data.showAcceptModal = false;
         await new Promise(r => setTimeout(r, 1000));
         data.showThanksModal = true;
     };
 
     const rejectInviteToResubmit = async () => {
-        manuscriptForm.status = "Rejected Invite To Resubmit";
-        saveManuscript();
+        manuscriptStatusForm.status = "Rejected Invite To Resubmit";
+        updateManuscriptStatus();
         data.showRejectModal = false;
         await new Promise(r => setTimeout(r, 1000));
         data.showThanksModal = true;
     };
 
     const reject = async () => {
-        manuscriptForm.status = "Rejected";
-        saveManuscript();
+        manuscriptStatusForm.status = "Rejected";
+        updateManuscriptStatus();
         data.showRejectModal = false;
         await new Promise(r => setTimeout(r, 1000));
         data.showThanksModal = true;
     };
 
     const publishManuscript = () => {
-        manuscriptForm.status = "Published";
-        saveManuscript();
+        manuscriptStatusForm.status = "Published";
+        updateManuscriptStatus();
         data.showPublishModal = false;
     };
 
@@ -1500,6 +1630,81 @@
 
     const cannotEditOnSubmit = () => {
         return props.auth.user.data.permissions_attribute.manuscripts.edit_after_submit == false && (props.manuscript.data.status == `Submit To Editor` || props.manuscript.data.status == `Submit For Review` || props.manuscript.data.status == `Rejected` || props.manuscript.data.status == `Accepted Without Changes` || props.manuscript.data.status == `Published`);
+    }
+
+    const onRemoveReviewer = (reviewer) => {
+        if (confirm(`Are you sure to remove "${reviewer?.user?.first_name} ${reviewer?.user?.last_name}"?`)) {
+            const deleteReviewerForm = useForm({
+                _method: 'POST'
+            });
+            deleteReviewerForm.post(`/admin/manuscripts/${props.manuscript.data.id}/members/${reviewer.id}/destroy`,{
+                preserveScroll: true,
+                onSuccess: () => {
+                    manuscriptForm.reviewers = props.manuscript.data.reviewers;
+                }
+            });
+        }
+    }
+
+    const onAddReviewer = () => {
+        data.showAddReviewerModal = true;
+    }
+
+    const reviewerForm = useForm({
+        _method: 'POST',
+        members: [],
+        role: 'reviewer',
+        status: 'Pending',
+    });
+
+    const submitAddReviewer = () => {
+        reviewerForm.post(`/admin/manuscripts/${props.manuscript.data.id}/member-create`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                manuscriptForm.reviewers = props.manuscript.data.reviewers;
+                reviewerForm.members = [];
+            }
+        });
+    }
+
+    const onAcceptReviewer = (member_id) => {
+        const form = useForm({
+            _method: 'POST',
+            status: 'Accepted',
+            role: 'reviewer'
+        });
+        form.post(`/admin/manuscripts/${props.manuscript.data.id}/members/${member_id}/update`, {
+            preserveScroll: true,
+            onError: (errors) => {
+                Object.keys(errors).forEach((value, index) => {
+                    notification(errors[value], 'error');
+                });
+            },
+            onSuccess: (res) => {
+                notification('Saved.', 'success');
+                manuscriptForm.reviewers = props.manuscript.data.reviewers;
+            }
+        });
+    }
+
+    const onRejectReviewer = (member_id) => {
+        const form = useForm({
+            _method: 'POST',
+            status: 'Rejected',
+            role: 'reviewer'
+        });
+        form.post(`/admin/manuscripts/${props.manuscript.data.id}/members/${member_id}/update`, {
+            preserveScroll: true,
+            onError: (errors) => {
+                Object.keys(errors).forEach((value, index) => {
+                    notification(errors[value], 'error');
+                });
+            },
+            onSuccess: (res) => {
+                notification('Saved.', 'success');
+                manuscriptForm.reviewers = props.manuscript.data.reviewers;
+            }
+        });
     }
 
     onMounted(() => {
