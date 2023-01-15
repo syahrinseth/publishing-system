@@ -4754,7 +4754,7 @@ var _hoisted_131 = {
 var _hoisted_132 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Suggest Reviewer ");
 
 var _hoisted_133 = {
-  "class": "mt-2"
+  "class": "mt-2 h-80"
 };
 var _hoisted_134 = ["onSubmit"];
 var _hoisted_135 = {

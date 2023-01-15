@@ -771,4 +771,20 @@ class Manuscript extends Model
             Mail::to($emails)->queue(new ManuscriptAttachCreated($this, $attach));
         }
     }
+
+    /**
+     * Validate if member is exist in manuscript.
+     * @param int $manuscript_id
+     * @param int $user_id
+     * @param int $role
+     * 
+     * @return boolean
+     */
+    public static function memberIsExists($manuscript_id, $user_id, $role)
+    {
+        return ManuscriptMember::where('manuscript_id', $manuscript_id)
+            ->where('user_id', $user_id)
+            ->where('role', $role)
+            ->exists();
+    }
 }

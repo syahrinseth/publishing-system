@@ -60,39 +60,48 @@ class ManuscriptMember extends Model
 
         foreach ($input['authors'] ?? [] as $key => $value) {
             $user_id = gettype($value) == 'integer' || gettype($value) == 'string' ? $value : $value['id'];
-            ManuscriptMember::firstOrCreate([
-                'manuscript_id' => $manuscript->id,
-                'user_id' => $user_id,
-                'role' => 'author'
-            ]);
+            if (!Manuscript::memberIsExists(manuscript_id: $manuscript->id, user_id: $user_id, role: 'author')) {
+                ManuscriptMember::firstOrCreate([
+                    'manuscript_id' => $manuscript->id,
+                    'user_id' => $user_id,
+                    'role' => 'author'
+                ]);
+            }
         }
 
         foreach ($input['corresponding_authors'] ?? [] as $key => $value) {
             $user_id = gettype($value) == 'integer' || gettype($value) == 'string' ? $value : $value['id'];
-            ManuscriptMember::firstOrCreate([
-                'manuscript_id' => $manuscript->id,
-                'user_id' => $user_id,
-                'role' => 'corresponding author'
-            ]);
+            if (!Manuscript::memberIsExists(manuscript_id: $manuscript->id, user_id: $user_id, role: 'corresponding author')) {
+                ManuscriptMember::firstOrCreate([
+                    'manuscript_id' => $manuscript->id,
+                    'user_id' => $user_id,
+                    'role' => 'corresponding author'
+                ]);
+            }
+            
         }
 
         foreach ($input['editors'] ?? [] as $key => $value) {
             $user_id = gettype($value) == 'integer' || gettype($value) == 'string' ? $value : $value['id'];
-            ManuscriptMember::firstOrCreate([
-                'manuscript_id' => $manuscript->id,
-                'user_id' => $user_id,
-                'role' => 'editor'
-            ]);
+            if (!Manuscript::memberIsExists(manuscript_id: $manuscript->id, user_id: $user_id, role: 'editor')) {
+                ManuscriptMember::firstOrCreate([
+                    'manuscript_id' => $manuscript->id,
+                    'user_id' => $user_id,
+                    'role' => 'editor'
+                ]);
+            }
         }
 
         foreach ($input['reviewers'] ?? [] as $key => $value) {
             $user_id = gettype($value) == 'integer' || gettype($value) == 'string' ? $value : $value['id'];
-            ManuscriptMember::firstOrCreate([
-                'manuscript_id' => $manuscript->id,
-                'user_id' => $user_id,
-                'role' => 'reviewer',
-                'status' => 'Pending'
-            ]);
+            if (!Manuscript::memberIsExists(manuscript_id: $manuscript->id, user_id: $user_id, role: 'reviewer')) {
+                ManuscriptMember::firstOrCreate([
+                    'manuscript_id' => $manuscript->id,
+                    'user_id' => $user_id,
+                    'role' => 'reviewer',
+                    'status' => 'Pending'
+                ]);
+            }
         }
 
     }

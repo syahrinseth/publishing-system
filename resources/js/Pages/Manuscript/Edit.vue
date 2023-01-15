@@ -451,7 +451,7 @@
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
                                     Suggest Reviewer
                                 </DialogTitle>
-                                <div class="mt-2">
+                                <div class="mt-2 h-80">
                                     <form @submit.prevent="submitAttach">
                                         <div class="grid grid-cols-3 gap-6 mb-2">
                                             <div class="col-span-3 sm:col-span-3">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Manuscript;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -42,11 +43,11 @@ class ManuscriptMemberController extends Controller
         $validated = $request->validate([
             'role' => 'required',
             'status' => 'required',
-            'user_id' => Rule::requiredIf(empty($request->input('members'))),
-            'members' => 'nullable|array'
+            'user_id' => [Rule::requiredIf(empty($request->input('members')))],
+            'members' => ['nullable', 'array']
         ]);
 
-        $user_ids = collect($validated['members'])
+        $user_ids = collect($validated['members'] ?? [ $validated['user_id'] ])
                 ?->map(function($member){ 
                     return gettype($member) == 'integer' || gettype($member) == 'string' ? $member : $member['id']; 
                 });
@@ -123,6 +124,50 @@ class ManuscriptMemberController extends Controller
     {
         $member = ManuscriptMember::findOrFail($member_id)
             ->delete();
+
+        if (request()->is('api/*')) {
+            return response()->json();
+        }
+
+        return Redirect::back();
+    }
+
+    /**
+     * Accept Invitation
+     */
+    public function acceptInvitation(Request $request, $id, $member_id)
+    {
+        $member = ManuscriptMember::findOrFail($member_id);
+        if (auth()->id() != $member?->user_id) {
+            return abort(404);
+        }
+
+        $member->update([
+            'status' => 'Active'
+        ]);
+
+        if (request()->is('api/*')) {
+            return response()->json();
+        }
+
+        return Redirect::route('manuscript.edit', [
+            'id' => $id
+        ]);
+    }
+
+    /**
+     * Decline Invitation
+     */
+    public function declineInvitation(Request $request, $id, $member_id)
+    {
+        $member = ManuscriptMember::findOrFail($member_id);
+        if (auth()->id() != $member?->user_id) {
+            return abort(404);
+        }
+
+        $member->update([
+            'status' => 'Rejected'
+        ]);
 
         if (request()->is('api/*')) {
             return response()->json();

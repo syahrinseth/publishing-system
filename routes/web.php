@@ -103,6 +103,8 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
         Route::post('/manuscripts/{id}/member-create', 'store')->name('manuscript.member.store');
         Route::post('/manuscripts/{id}/members/{manuscript_member_id}/update', 'update')->name('manuscript.member.update');
         Route::post('/manuscripts/{id}/members/{member_id}/destroy', 'destroy')->name('manuscript.member.destroy');
+        Route::get('/manuscripts/{id}/members/{member_id}/accept-invitation', 'acceptInvitation')->name('manuscript.member.acceptInvitation');
+        Route::get('/manuscripts/{id}/members/{member_id}/decline-invitation', 'declineInvitation')->name('manuscript.member.declineInvitation');
     });
 
     // Journal Module
