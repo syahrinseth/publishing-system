@@ -3286,9 +3286,7 @@ var _hoisted_67 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNo
 
 var _hoisted_68 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "mt-2"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "text-sm text-gray-500"
-}, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?")], -1
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <p class=\"text-sm text-gray-500\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p> ")], -1
 /* HOISTED */
 );
 
@@ -3309,9 +3307,7 @@ var _hoisted_73 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNo
 
 var _hoisted_74 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "mt-2"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "text-sm text-gray-500"
-}, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?")], -1
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <p class=\"text-sm text-gray-500\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p> ")], -1
 /* HOISTED */
 );
 
@@ -3332,9 +3328,7 @@ var _hoisted_79 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNo
 
 var _hoisted_80 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "mt-2"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "text-sm text-gray-500"
-}, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?")], -1
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <p class=\"text-sm text-gray-500\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p> ")], -1
 /* HOISTED */
 );
 
@@ -3565,9 +3559,7 @@ var _hoisted_127 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVN
 
 var _hoisted_128 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "mt-2"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
-  "class": "text-sm text-gray-500"
-}, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?")], -1
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <p class=\"text-sm text-gray-500\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p> ")], -1
 /* HOISTED */
 );
 

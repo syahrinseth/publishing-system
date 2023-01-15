@@ -233,7 +233,7 @@
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Submit For Review </DialogTitle>
                                 <div class="mt-2">
-                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                    <!-- <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p> -->
                                 </div>
                                 <div class="w-full mt-3 grid grid-col-1 gap-4">
                                     <a href="#" @click="submitForReview" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:w-auto sm:text-sm">
@@ -260,7 +260,7 @@
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Accept Manuscript </DialogTitle>
                                 <div class="mt-2">
-                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                    <!-- <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p> -->
                                 </div>
                                 <div class="w-full mt-3 grid grid-col-1 gap-4">
                                     <a href="#" @click="acceptWithoutChanges" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm">
@@ -293,7 +293,7 @@
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Reject Manuscript </DialogTitle>
                                 <div class="mt-2">
-                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                    <!-- <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p> -->
                                 </div>
                                 <div class="w-full mt-3 grid grid-col-1 gap-4">
                                     <a href="#" @click="rejectInviteToResubmit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:w-auto sm:text-sm">
@@ -479,7 +479,7 @@
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Submit To Editor </DialogTitle>
                                 <div class="mt-2">
-                                    <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p>
+                                    <!-- <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p> -->
                                 </div>
                                 <div class="w-full mt-3 grid grid-col-1 gap-4">
                                     <a href="#" @click="submitToEditor()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:w-auto sm:text-sm">
