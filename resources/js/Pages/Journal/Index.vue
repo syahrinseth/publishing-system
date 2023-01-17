@@ -88,8 +88,8 @@
                         </td>
                         <td class="px-6 py-4 word-break">
                             <form @submit.prevent="deleteJournal(journal)">
-                                <!-- <Link v-if="journal.status == 'published'" :href="`/journals/${journal.id}`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link> -->
-                                <Link v-if="auth.user.data.permissions_attribute.journals.edit == true" :href="`/admin/journals/${journal.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
+                                <Link v-if="journal.status == 'published'" :href="`/journals/${journal.id}`" class="text-indigo-600 hover:text-indigo-900 px-2">View</Link>
+                                <Link v-if="auth.user.data.permissions_attribute.journals.edit == true" :href="`/admin/journals/${journal.id}/edit`" class="text-indigo-600 hover:text-indigo-900 px-2">Edit</Link>
                                 <button v-if="auth.user.data.permissions_attribute.journals.destroy == true" class="text-indigo-600 hover:text-indigo-900 px-2">Delete</button>
                             </form>
                         </td>
