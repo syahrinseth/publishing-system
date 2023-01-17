@@ -7,10 +7,11 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use App\Http\Resources\ManuscriptCollection;
 use App\Http\Resources\JournalManuscriptCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Journal extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, SoftDeletes;
 
     protected $table = 'journals';
 

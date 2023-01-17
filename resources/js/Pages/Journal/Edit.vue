@@ -87,82 +87,55 @@
                             </div>
                         </div>
 
-                        
-                        
                         <div class="border-t border-gray-200 text-sm">
-                            <table class="min-w-full divide-y divide-gray-200 table-fixed">
-                                <thead class="bg-gray-50">
+                            <Table>
+                                <template v-slot:header>
                                     <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-24">
+                                        #
                                         </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            #
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase w-64 cursor-pointer">
                                             Title
                                         </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                                             Type
                                         </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Authors
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                                             Status
                                         </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Last Modified
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                                            Last Updated At
                                         </th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            
+
                                         </th>
                                     </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <draggable
-                                        tag="transition-group"
-                                        v-model="list"
-                                        v-bind="dragOptions"
-                                        @start="drag = true"
-                                        @end="drag = false"
-                                        item-key="order"
-                                    >
-                                        <template #item="{ element }">
-                                            <tr :key="element.id + '-attach'" class="list-group-item">
-                                                <td class="px-6 py-4 whitespace-nowrap cursor-move" :class="
-                                                    element.fixed ? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'
-                                                "
-                                                @click="element.fixed = !element.fixed"
-                                                aria-hidden="true">
-                                                    <MenuIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true"/>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ element.order }}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ element.title }}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ element.type.name }}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ element.authors.map(x => x.name).join(', ') }}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ element.status}}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{ element.updated_at}}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                </td>
-                                            </tr>
-                                        </template>
-                                    </draggable>
-                                    <rawDisplayer class="col-3" :value="list" title="List" />
-                                </tbody>
-                            </table>
+                                </template>
+                                <template v-slot:body>
+                                    <tr v-for="(manuscript, index) in journal.data.manuscripts" :key="manuscript.id">
+                                        <td class="px-6 py-4 word-break">
+                                            {{ index + 1 }}
+                                        </td>
+                                        <td class="px-6 py-4 word-break text-sm">
+                                            {{ manuscript.title ?? 'Untitled' }}
+                                        </td>
+                                        <td class="px-6 py-4 word-break text-sm">
+                                            {{ manuscript.type?.name }}
+                                        </td>
+                                        <td class="px-6 py-4 word-break text-sm text-gray-500">
+                                            {{ manuscript.status }}
+                                        </td>
+                                        <td class="px-6 py-4 word-break text-sm text-gray-500">
+                                            {{ manuscript.updated_at }}
+                                        </td>
+                                        <td class="px-6 py-4 word-break text-right text-sm font-medium">
+                                            <button v-if="auth.user.data.permissions_attribute.journals.edit == true" @click="onRemoveManuscript(manuscript)" class="text-red-600 hover:text-red-900 px-2">
+                                                Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </Table>
                         </div>
 
                         <div class="shadow sm:rounded-md sm:overflow-hidden">
@@ -288,8 +261,7 @@ export default {
                 return 0;
             }
             this.journalForm.manuscripts = this.list.map(x => x.id).concat(this.manuscripSelect.selected.map(x => x.id));
-            console.log(this.journalForm.manuscripts);
-            this.journalForm.post(`/admin/journals/${this.$props.journal.data.id}/update`, {
+            this.journalForm.post(`/admin/journals/${this.$props.journal.data.id}/manuscript-create`, {
                 preserveScroll: true,
                 onError: (errors) => {
                     Object.keys(errors).forEach((value, index) => {
@@ -377,13 +349,25 @@ export default {
                     }
                 });
             }
+        },
+        async onRemoveManuscript(manuscript) {
+            if (confirm('Are you sure to remove this manuscript from the invoice?')) {
+                // this.manuscriptForm.post(`/admin/journals/${this.$props.journal.data.id}/manuscripts/${manuscript.id}/destroy`, {
+                //     preserveScroll: true,
+                //     onSuccess: () => {
+
+                //     }
+                // });
+                let resp = await window.axios.post(`/admin/journals/${this.$props.journal.data.id}/manuscripts/${manuscript.id}/destroy`, {
+                    params: {
+
+                    }
+                });
+                console.log(resp);
+            }
         }
     },
     created() {
-        this.list = this.journal.data.manuscripts.map((manuscript, index) => {
-            manuscript.order = index + 1;
-            return manuscript;
-        });
         this.asyncFindManuscripts();
     },
     setup(props) {
@@ -395,8 +379,11 @@ export default {
             user_id: props.journal.data.user_id
         });
 
+        const manuscriptForm = useForm();
+
         return {
-            journalForm
+            journalForm,
+            manuscriptForm
         };
     },
 }

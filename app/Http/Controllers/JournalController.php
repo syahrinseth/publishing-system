@@ -146,7 +146,6 @@ class JournalController extends Controller
         ]);
         $journal = Journal::findOrfail($id);
         $journal->name = $request->name;
-        $journal->setManuscripts($request->manuscripts);
         $journal->date = $request->date;
         $journal->status = $request->status;
         $journal->update();

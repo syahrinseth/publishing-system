@@ -16,7 +16,7 @@ class ManuscriptFilters extends QueryFilter
     
     public function isPublished()
     {
-        return $this->builder->whereIn('status', ['Accepted Without Changes', 'Accepted With Minor Changes', 'Accepted With Major Changes', 'Published']);
+        return $this->builder->whereIn('status', ['Published']);
     }
 
     public function isInOtherJournals($input)
