@@ -72,7 +72,8 @@ class JournalController extends Controller
             'date' => 'required',
             'status' => '',
             'manuscripts' => '',
-            'user_id' => ''
+            'user_id' => '',
+            'description' => 'nullable'
         ]);
 
         $journal = new Journal();
@@ -81,6 +82,7 @@ class JournalController extends Controller
         $journal->date = $request->date;
         $journal->status = $request->status ?? 'draft';
         $journal->user_id = Auth::user()->id;
+        $journal->description = $request->description;
         $journal->save();
 
         if ($request->is('api/*')) {
@@ -142,12 +144,15 @@ class JournalController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'manuscripts' => 'array'
+            'name' => 'required',
+            'date' => 'required',
+            'description' => 'nullable'
         ]);
         $journal = Journal::findOrfail($id);
         $journal->name = $request->name;
         $journal->date = $request->date;
         $journal->status = $request->status;
+        $journal->description = $request->description;
         $journal->update();
 
         if ($request->is('api/*')) {

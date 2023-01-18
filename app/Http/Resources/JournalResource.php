@@ -20,6 +20,7 @@ class JournalResource extends JsonResource
             'date' => $this->date,
             'status' => $this->status,
             'manuscripts' => $this->manuscripts(),
+            'description' => $this->description,
             'created_at' => $this->created_at->diffForHumans(),
             'updated_at' => $this->updated_at->diffForHumans()
         ];

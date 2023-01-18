@@ -51,6 +51,14 @@
                                         <div class="grid grid-cols-3 gap-6">
                                             <div class="col-span-3 sm:col-span-2">
                                                 <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                                Journal Description
+                                                </label>
+                                                <textarea v-model="journalForm.description" name="name" id="name" autocomplete="name" placeholder="Description Here" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="grid grid-cols-3 gap-6">
+                                            <div class="col-span-3 sm:col-span-2">
+                                                <label for="company-website" class="block text-sm font-medium text-gray-700">
                                                 Journal Date
                                                 </label>
                                                 <input v-model="journalForm.date" type="date" name="date" id="date" autocomplete="date" placeholder="Date Here" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
@@ -379,7 +387,8 @@ export default {
             date: moment(props.journal.data.date).format('YYYY-MM-DD'),
             status: props.journal.data.status,
             manuscripts: props.journal.data.manuscripts.map(x => x.id),
-            user_id: props.journal.data.user_id
+            user_id: props.journal.data.user_id,
+            description: props.journal.data.description
         });
 
         const manuscriptForm = useForm();
