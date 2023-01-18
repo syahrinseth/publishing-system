@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Journal;
 use Illuminate\Http\Request;
-use App\Http\Resources\JournalCollection;
 use App\Http\Resources\JournalResource;
+use App\Http\Resources\JournalCollection;
 
 class PublicJournalController extends Controller
 {
@@ -62,6 +63,12 @@ class PublicJournalController extends Controller
     {
         $journal = Journal::findOrFail($id);
         $journal = new JournalResource($journal);
+        $manuscripts = $journal->manuscripts();
+        $editorial_board = [
+            'publisher' => User::role(['Publisher'])->with('roles')->get(),
+            'editor' => User::role(['Editor'])->with('roles')->get(),
+            'chief_editor' => User::role(['Chief Editor'])->with('roles')->get(),
+        ];
 
         if (request()->is('api/*')) {
             return response()->json($journal);
@@ -69,6 +76,8 @@ class PublicJournalController extends Controller
 
         return Inertia::render('Public/Journal/Show', [
             'journal' => $journal,
+            'manuscripts' => $manuscripts,
+            'editorial_board' => $editorial_board
         ]);
     }
 

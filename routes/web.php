@@ -14,6 +14,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ManuscriptController;
 use App\Http\Controllers\PublicJournalController;
 use App\Http\Controllers\ManuscriptMemberController;
+use App\Http\Controllers\JournalManuscriptController;
 
 /*
 |--------------------------------------------------------------------------
@@ -122,6 +123,11 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {
     Route::post('/journals/{id}/update', [App\Http\Controllers\JournalController::class, 'update'])->name('journal.update');
 
     Route::post('/journals/{id}/destroy', [App\Http\Controllers\JournalController::class, 'destroy'])->name('journal.destroy');
+
+    Route::controller(JournalManuscriptController::class)->group(function() {
+        Route::post('/journals/{id}/manuscript-create', 'store')->name('journal.manuscript.store');
+        Route::post('/journals/{id}/manuscripts/{manuscript_id}/destroy', 'destroy')->name('journal.manuscript.destroy');
+    });
 
     // User Module
 
