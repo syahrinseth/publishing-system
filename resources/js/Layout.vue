@@ -9,7 +9,7 @@
     ```
   -->
   <div class="min-h-full">
-    <Disclosure as="nav" class="sticky top-0 bg-white border border-b-gray-200 z-50 min-w-full" v-slot="{ open }">
+    <Disclosure as="nav" class="bg-white border border-b-gray-200 z-50 min-w-full" v-slot="{ open }">
       
 
       <Banner v-for="banner in banners"
