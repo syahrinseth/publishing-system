@@ -52,7 +52,7 @@ class Manuscript extends Model
      * @var array
      */
     protected $casts = [
-
+        'date_published' => 'dateTime'
     ];
 
     public static $types = [
