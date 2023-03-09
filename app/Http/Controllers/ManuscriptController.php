@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use PDF;
+use FPDF;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Manuscript;
@@ -30,6 +31,7 @@ use App\Http\Resources\ManuscriptCommentCollection;
 use App\Http\Requests\UpdateManuscriptStatusRequest;
 use App\Http\Resources\ManuscriptAttachFileCommentResource;
 use App\Http\Resources\ManuscriptAttachFileCommentCollection;
+use \Jurosh\PDFMerge\PDFMerger;
 
 class ManuscriptController extends Controller
 {
@@ -376,19 +378,22 @@ class ManuscriptController extends Controller
         $attachments = ManuscriptAttachFile::where('manuscript_id', $manuscript->id)
             ->get();
         
+        // fetch manuscript cover page
         $mainTemplate = view('template.main', [
             'manuscript' => $manuscript,
             'attachFile'  => $attachments->first()
         ])->render();
-
+            
         // Fetch latest manuscript
         $attachment = $attachments->filter(function($value) {
-            if ($value->canMerge() && $value->type == 1) {
+            if ($value->canMerge()) {
                 return true;
             }
             return false;
         })?->sortByDesc('id')?->first();
-
+        // Fetch break template
+        $breakTemplate = file_get_contents( public_path() . "/break.html" );
+        
         if (empty($attachment)) {
             if ($request->is('api/*')) {
                 return response('', 403)->json();
@@ -403,7 +408,6 @@ class ManuscriptController extends Controller
         if (str_contains(Storage::mimeType($attachment->file_location), 'word')) {
 
             // Convert docs to html.
-            // $phpWord = \PhpOffice\PhpWord\IOFactory::load(storage_path('app') . '/' . $attachment->file_location);
             $phpWord = \PhpOffice\PhpWord\IOFactory::load(storage_path('app') . '/' . $attachment->file_location);
             $phpWord->setDefaultFontName('times new romen');
             $section = $phpWord->addSection(array('borderColor' => '00FF00', 'borderSize' => 12, 'pageNumberingStart' => 1));
@@ -424,171 +428,39 @@ class ManuscriptController extends Controller
             
             $attachTemplate = file_get_contents(storage_path('app') . "/{$attachment->file_location}.html" );
 
+            $pdf = PDF::loadHTML($mainTemplate . $breakTemplate . $attachTemplate);
+            $pdf->setPaper('A4', 'portrait');
+            // $pdf->setOptions(['footer-html', '/resources/views/template/footer.html']);
+            return $pdf->stream('merged.pdf');
+
         } elseif(str_contains(Storage::mimeType($attachment->file_location), 'pdf')) {
+            // Create a header for the manuscript
+            $pdf = PDF::loadHTML($mainTemplate);
+            $pdf->setPaper('A4', 'portrait');
+            $pdfContent = $pdf->output();
             
-        }
+            // Save the PDF header template to storage
+            $fileName = 'main_template.pdf';
+            $filePath = storage_path('app/' . "manuscripts/{$id}/$fileName");
+            file_put_contents($filePath, $pdfContent);
 
-        $breakTemplate = file_get_contents( public_path() . "/break.html" );
-
-        $pdf = PDF::loadHTML($mainTemplate . $breakTemplate . $attachTemplate);
-        $pdf->setPaper('A4', 'portrait');
-        // $pdf->setOptions(['footer-html', '/resources/views/template/footer.html']);
-        return $pdf->stream('merged.pdf');
-
-        if ($attachments->count() == 0) {
-            if ($request->is('api/*')) {
-                return response('', 403)->json();
-            }
-            return back()->withErrors([
-                'status' => 'There\'s nothing to download.'
-            ]);
-        }
-
-        // Create a main template file to merge with
-        $phpWord = new \PhpOffice\PhpWord\PhpWord();
-        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
-        $objWriter->save(storage_path('app') . "/manuscripts/{$manuscript->id}/main_template.html");
-
-        // Load main template
-        $mainTemp = PDF::loadFile(storage_path('app') . "/manuscripts/{$manuscript->id}/main_template.html")->getDomPDF()->get_dom();
-        
-        // $mainTempBody = $mainTemp->getElementsByTagName('body')->item(0);
-
-        $hasContent = false;
-
-        // Create page for manuscript meta data
-        $phpWord = new \PhpOffice\PhpWord\PhpWord();
-        $phpWord->setDefaultFontName('times new romen');
-        $section = $phpWord->addSection(array(
-            'marginLeft' => 1134,
-            'marginRight' => 1134,
-            'marginTop' => 1134,
-            'marginBottom' => 1134
-        ));
-        // $section->getStyle()->setPageNumberingStart(1);
-        // $footer = $section->addFooter();
-        // $footer->addPreserveText('Page {PAGE} of {NUMPAGES}', null, array('align' => 'center'));
-        $section->addText(config('app.name'), array(), array('space' => array('before' => 0, 'after' => 280)));
-
-        // Populate Main meta data
-        $section->addText($manuscript->title, array('size' => 20, 'allCaps' => true, 'bold' => true), array('align' => "center", 'space' => array('before' => 0, 'after' => 280), ));
-        $section->addText('Author\'s Name:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "center"));
-        foreach ($manuscript->authors as $author) {
-            $section->addText("{$author->user->first_name} {$author->user->last_name} " . ($author->user->affiliation ? "- " . $author->user->affiliation : ""), array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center"));
-        }
-        // $section->addText('University/Organisation', array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center", 'space' => array('before' => 0, 'after' => 280), ));
-        $section->addText('Co-Author\'s Name:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "center"));
-        foreach ($manuscript->correspondingAuthors as $co_author) {
-            $section->addText("{$co_author->user->first_name} {$co_author->user->last_name} " . ($co_author->user->affiliation ? "- " . $co_author->user->affiliation : ""), array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "center"));
-        }
-        
-
-        // Populate Abstract & Keywords
-        $section->addText('Abstract', array('size' => 20, 'allCaps' => true, 'bold' => true), array('align' => "center", 'space' => array('before' => 360, 'after' => 280), ));
-        $section->addText($manuscript->abstract, array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "left", 'space' => array('before' => 0, 'after' => 280), ));
-        $section->addText("Keywords:", array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "left"));
-        $section->addText($manuscript->keywords, array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "left", 'space' => array('before' => 0, 'after' => 280), ));
-
-        // Populate Article type
-        // $section->addText('Article Type:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "left"));
-        // $section->addText($manuscript->getType()['name'], array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "left", 'space' => array('before' => 0, 'after' => 280), ));
-
-        // Populate Funding Information
-        $section->addText('Funding Information:', array('size' => 12, 'allCaps' => false, 'bold' => true), array('align' => "left"));
-        $section->addText($manuscript->funding_information, array('size' => 12, 'allCaps' => false, 'bold' => false), array('align' => "left"));
-
-        $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
-        $PDFWriter->save(storage_path('app') . "/manuscripts/{$manuscript->id}/cover_template.html");
-        $htmlTemp = PDF::loadFile( storage_path('app') . "/manuscripts/{$manuscript->id}/cover_template.html" )->getDomPDF()->get_dom();
-        // return PDF::loadFile( storage_path('app') . "/manuscripts/{$manuscript->id}/cover_template.html" )->stream('dow.pdf');
-        foreach ($htmlTemp->documentElement->childNodes as $child) {
-            $import = $mainTemp->importNode($child, true);
-            if ($import) {
-                $mainTemp->documentElement->appendChild($import);
-            }
-        }
-        
-        // break page
-        foreach ($break->documentElement->childNodes as $child) {
-            $import = $mainTemp->importNode($child, true);
-            if ($import) {
-                $mainTemp->documentElement->appendChild($import);
-            }
-        }
-
-        foreach ($attachments as $attachment) {
-
-            // Check for supported file for combine
-            if ($attachment->canMerge() && $attachment->type == 1) {
-
-                // Create pages for manuscript attachment contains
-                if (str_contains(Storage::mimeType($attachment->file_location), 'word')) {
-
-                    // Convert docs to html.
-                    $phpWord = \PhpOffice\PhpWord\IOFactory::load(storage_path('app') . '/' . $attachment->file_location);
-                    $phpWord->setDefaultFontName('times new romen');
-                    $section = $phpWord->addSection(array('borderColor' => '00FF00', 'borderSize' => 12, 'pageNumberingStart' => 1));
-
-                    // Add top label
-                    $section->addText($attachment->getType()['name']);
-                    foreach($phpWord->getSections() as $i => $section) {
-                        $section->setElementIndex($i);
-                    }
-                    // $footer = $section->addFooter();
-
-                    // sort sections
-                    $phpWord->sortSections(function($a,$b) { 
-                        return $a->getElementIndex() < $b->getElementIndex();
-                    });
-
-                    $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
-                    $PDFWriter->save(storage_path('app') . '/' . "{$attachment->file_location}.html");
-
-                }
-
-                // Load html file
-                $htmlTemp = PDF::loadFile( storage_path('app') . "/{$attachment->file_location}.html" )->getDomPDF()->get_dom();
-                // $htmlBodyTemp = $htmlTemp->getElementsByTagName('body')->item(0);
-                // Merge html into one main html temp template
-                // foreach ($htmlBodyTemp->childNodes as $child) {
-                //     $import = $mainTemp->importNode($child, true);
-                //     if ($import) {
-                //         $mainTempBody->appendChild($import);
-                //     }
-                // }
-
-                foreach ($htmlTemp->documentElement->childNodes as $child) {
-                    $import = $mainTemp->importNode($child, true);
-                    if ($import) {
-                        $mainTemp->documentElement->appendChild($import);
-                    }
-                }
-
-                // break page
-                foreach ($break->documentElement->childNodes as $child) {
-                    $import = $mainTemp->importNode($child, true);
-                    if ($import) {
-                        $mainTemp->documentElement->appendChild($import);
-                    }
-                }
-
-                $hasContent = true;
-
-            }
+            // Create new instance of pdf
+            $pdf = new PDFMerger;
             
-        }
-
-        if ($hasContent) {
-
-            // Save Merged html
-            $mainTemp->save(storage_path('app') . "/manuscripts/{$manuscript->id}/final_template.html");
-            
-            // Download pdf from merged html
-            return PDF::loadFile( storage_path('app') . "/manuscripts/{$manuscript->id}/final_template.html" )->stream( 'final_template.pdf' );
-        
+            // merge the file
+            $pdf->addPDF($filePath, 'all', 'vertical')
+                ->addPDF(storage_path("app/{$attachment->file_location}"), 'all');
+                // ->addPDF('path/to/source/file2.pdf', 'all', 'horizontal');
+            // call merge, output format `file`
+            return $pdf->merge('browser', str_replace(' ', '-', $manuscript->title . ".pdf"));
         }
         
-        return PDF::loadFile( storage_path('app') . "/manuscripts/{$manuscript->id}/main_template.html" )->stream( 'final_template.pdf' );
+        if ($request->is('api/*')) {
+            return response('', 403)->json();
+        }
+        return back()->withErrors([
+            'status' => 'There\'s nothing to download.'
+        ]);
         
     }
 
@@ -693,7 +565,7 @@ class ManuscriptController extends Controller
     {
         $request->validate([
             'type' => 'required',
-            'file' => $request->type == 1 ? 'required|mimes:doc,docx' : 'required|mimes:doc,docx,pdf'
+            'file' => 'required|mimes:doc,docx,pdf'
         ]);
 
         $manuscript = Manuscript::findOrFail($id);

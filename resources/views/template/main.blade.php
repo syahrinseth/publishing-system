@@ -63,6 +63,14 @@
         width: 100%;
     }
 
+    .w-50 {
+      width: 50%;
+    }
+
+    .w-25 {
+      width: 25%;
+    }
+
     .footer {
         position: fixed;
         bottom: 0;
@@ -79,14 +87,39 @@
         text-align: right;
     }
 
-    border-none {
+    .border-none {
         border: none;
     }
+
+    .text-right {
+      text-align: right;
+    }
+
+    /** Define the header rules **/
+    header {
+            /* position: fixed; */
+            padding-left: 20px;
+            padding-right: 20px;
+            margin-bottom: 50px;
+        }
 
   </style>
 </head>
 <body>
     <!-- Your HTML goes here -->
+    <header class="">
+        <table class="w-full border-none">
+          <tr>
+              <td class="w-50 border-none">
+                {{ config('app.name') }}
+              </td>
+              <td class="w-25 text-right border-none">
+                1
+              </td>
+          </tr>
+            
+      </table>
+    </header>
     <div class="title">{{ $manuscript->title }}</div>
     <div class="authors">
         @php
@@ -104,13 +137,19 @@
         @endphp
         {{ implode(', ', $institutions->toArray()) }}
     </div>
-    <div class="keywords">Keywords: {{ $manuscript->keywords }}</div>
+    <div class="institution">
+        <p>(Received {{ $manuscript->created_at?->format('F j, Y') }}; accepted {{ $manuscript->date_published?->format('F j, Y') }})</p>
+    </div>
+    <div class="keywords"><b>Keywords:</b> {{ $manuscript->keywords }}</div>
     <div class="abstract">{{ $manuscript->abstract }}</div>
     <footer class="footer">
     <!-- Page <span class="pagenumber"></span> of <span class="pagecount"></span> -->
-        <small class="copyright">
+        <p class="copyright">
             {{ $manuscript->manuscript_no }} © {{ config('app.name') }}
-        </small>
+          </p>
+        <p class="copyright">
+            {{ $manuscript->manuscript_no }} © {{ config('app.name') }}
+          </p>
     </footer>
 </body>
 </html>

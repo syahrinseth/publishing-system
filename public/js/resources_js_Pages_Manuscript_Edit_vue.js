@@ -4371,7 +4371,7 @@ var _hoisted_31 = {
 };
 var _hoisted_32 = ["href"];
 
-var _hoisted_33 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Build PDF ");
+var _hoisted_33 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Download PDF ");
 
 var _hoisted_34 = {
   "class": "sm:flex sm:items-start"

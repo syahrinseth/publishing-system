@@ -131,7 +131,7 @@ class ManuscriptAttachFile extends Model
     {
         $mimeType = Storage::mimeType($this->file_location);
 
-        if(str_contains(strtolower($mimeType), 'word')) {
+        if((str_contains(strtolower($mimeType), 'word') || str_contains(strtolower($mimeType), 'pdf')) && $this->type == 1) {
 
             return true;
 
