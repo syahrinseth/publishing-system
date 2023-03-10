@@ -32,6 +32,7 @@ use App\Http\Requests\UpdateManuscriptStatusRequest;
 use App\Http\Resources\ManuscriptAttachFileCommentResource;
 use App\Http\Resources\ManuscriptAttachFileCommentCollection;
 use \Jurosh\PDFMerge\PDFMerger;
+use Illuminate\Validation\Rule;
 
 class ManuscriptController extends Controller
 {
@@ -498,8 +499,11 @@ class ManuscriptController extends Controller
     public function storeAttachFile(Request $request, $id)
     {
         $request->validate([
-            'type' => 'required',
-            'file' => $request->type == 1 ? 'required|mimes:doc,docx' : 'required|mimes:doc,docx,pdf'
+            'type' => ['required', $request->type == 1 ? Rule::unique('manuscript_attach_files')->where(function ($query) use($id, $request) {
+                return $query->where('manuscript_id', $id)
+                ->where('type', $request->type);
+            }) : 'integer'],
+            'file' => ['required','mimes:doc,docx,pdf']
         ]);
 
         $manuscript = Manuscript::findOrFail($id);
@@ -564,8 +568,11 @@ class ManuscriptController extends Controller
     public function updateAttachFile(Request $request, $id, $attachFileId)
     {
         $request->validate([
-            'type' => 'required',
-            'file' => 'required|mimes:doc,docx,pdf'
+            'type' => ['required', $request->type == 1 ? Rule::unique('manuscript_attach_files')->where(function ($query) use($id, $request) {
+                return $query->where('manuscript_id', $id)
+                ->where('type', $request->type);
+            })->ignore($attachFileId, 'id') : 'integer'],
+            'file' => 'nullable|mimes:doc,docx,pdf'
         ]);
 
         $manuscript = Manuscript::findOrFail($id);

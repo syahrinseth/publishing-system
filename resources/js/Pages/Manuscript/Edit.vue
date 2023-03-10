@@ -1411,9 +1411,9 @@
             onSuccess: () => {
                 notification('Saved', 'success');
                 data.showUploadAttachModal = false;
+                clearAttachForm();
             }
         });
-        clearAttachForm();
     };
 
     const updateAttach = () => {

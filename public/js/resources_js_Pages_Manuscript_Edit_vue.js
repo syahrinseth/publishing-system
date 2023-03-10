@@ -3157,9 +3157,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         onSuccess: function onSuccess() {
           notification('Saved', 'success');
           data.showUploadAttachModal = false;
+          clearAttachForm();
         }
       });
-      clearAttachForm();
     };
 
     var updateAttach = function updateAttach() {
