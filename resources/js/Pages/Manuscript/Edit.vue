@@ -25,53 +25,18 @@
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
                                     <CalendarIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                    {{ moment(manuscript.data.created_at_date).format('MMMM Do, YYYY') }}
+                                    {{ manuscript.data.created_at }}
                                 </div>
                             </div>
                         </div>
                         <div class="mt-5 flex lg:mt-0 lg:ml-4">
-                            <span class="sm:ml-3" v-if="(manuscript.data.status == `Draft`) && (data.viewAs == `author` || data.viewAs == `corresponding author` || data.viewAs == `publisher`)">
-                                <a href="#" @click="data.showSubmitToEditorModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                    <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                    Submit To Editor
-                                </a>
-                            </span>
-                            <span class="sm:ml-3" v-if="(manuscript.data.status == `Rejected Invite To Resubmit` || manuscript.data.status == `Submit To Editor`) && (data.viewAs == `editor`)">
-                                <a href="#" @click="data.showSubmitReviewModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                                    <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                    Submit For Review
-                                </a>
-                            </span>
-                            <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (data.viewAs == `reviewer`) && canReview()">
-                                <a href="#" @click="data.showRejectModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                    <XCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                    Reject
-                                </a>
-                            </span>
-                            <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (data.viewAs == `reviewer`) && canReview()">
-                                <a href="#" @click="data.showAcceptModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    <CheckCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                    Accept
-                                </a>
-                            </span>
-                            <span class="sm:ml-3" v-if="manuscript.data.status.includes('Accept') && (data.viewAs == `publisher`)">
-                                <a href="#" @click="data.showPublishModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    <PaperAirplaneIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                    Publish
-                                </a>
-                            </span>
-                            <span class="sm:ml-3" v-if="manuscript.data.status == `Published`">
-                                <a :href="`/admin/manuscripts/${manuscript.data.id}/download`" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
-                                    <DownloadIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                                    Build PDF
-                                </a>
-                            </span>
+                            
                         </div>
                     </div>
                     <hr class="my-4">
                     <div class="flex mt-1">
                         <!-- This example requires Tailwind CSS v2.0+ -->
-                        <Listbox as="div" v-model="data.viewAs" class="w-64 rounded-md p-4" :class="(data.viewAs == 'author' || data.viewAs == 'corresponding author') ? 'bg-indigo-500' : (data.viewAs == 'editor' ? 'bg-yellow-700' : (data.viewAs == 'reviewer' ? 'bg-orange-500' : (data.viewAs == 'publisher' ? 'bg-red-500' : 'bg-gray-500')))">
+                        <Listbox as="div" v-model="data.viewAs" class="w-64 rounded-md p-4 flex-1" :class="(data.viewAs == 'author' || data.viewAs == 'corresponding author') ? 'bg-indigo-500' : (data.viewAs == 'editor' ? 'bg-yellow-700' : (data.viewAs == 'reviewer' ? 'bg-orange-500' : (data.viewAs == 'publisher' ? 'bg-red-500' : 'bg-gray-500')))">
                             <ListboxLabel class="block text-sm font-medium text-gray-100">View As</ListboxLabel>
                             <div class="mt-1 relative">
                             <ListboxButton class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -110,6 +75,44 @@
                             </transition>
                             </div>
                         </Listbox>
+                        <div class="text-right">
+                            <span class="sm:ml-3" v-if="(manuscript.data.status == `Draft`) && (data.viewAs == `author` || data.viewAs == `corresponding author` || data.viewAs == `publisher`)">
+                                <a href="#" @click="data.showSubmitToEditorModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                    <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                    Submit To Editor
+                                </a>
+                            </span>
+                            <span class="sm:ml-3" v-if="(manuscript.data.status == `Rejected Invite To Resubmit` || manuscript.data.status == `Submit To Editor`) && (data.viewAs == `editor`)">
+                                <a href="#" @click="data.showSubmitReviewModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                    <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                    Submit For Review
+                                </a>
+                            </span>
+                            <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (data.viewAs == `reviewer`) && canReview()">
+                                <a href="#" @click="data.showRejectModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    <XCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                    Reject
+                                </a>
+                            </span>
+                            <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (data.viewAs == `reviewer`) && canReview()">
+                                <a href="#" @click="data.showAcceptModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    <CheckCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                    Accept
+                                </a>
+                            </span>
+                            <span class="sm:ml-3" v-if="manuscript.data.status.includes('Accept') && (data.viewAs == `publisher`)">
+                                <a href="#" @click="data.showPublishModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <PaperAirplaneIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                    Publish
+                                </a>
+                            </span>
+                            <span class="sm:ml-3" v-if="manuscript.data.status == `Published`">
+                                <a :href="`/admin/manuscripts/${manuscript.data.id}/download`" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
+                                    <DownloadIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                                    Download PDF
+                                </a>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </template>
@@ -399,7 +402,7 @@
                 </Modal>
                 <Modal :show="data.showPublishModal" @close="data.showPublishModal = false;">
                     <template v-slot:default>
-                        <div class="sm:flex sm:items-start">
+                        <div v-if="hasManuscriptToPublish()" class="sm:flex sm:items-start">
                             <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
                             <ExclamationIcon class="h-6 w-6 text-indigo-600" aria-hidden="true" />
                             </div>
@@ -415,6 +418,23 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-else>
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <ExclamationIcon class="h-6 w-6 text-indigo-600" aria-hidden="true" />
+                            </div>
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Missing Manuscript to Publish </DialogTitle>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-500">Before proceeding with publishing, please ensure that you have selected one of the attached files to be included for publish.</p>
+                                </div>
+                                <div class="w-full mt-3 grid grid-col-1 gap-4">
+                                    <a href="#manuscript-attach-files" @click="data.showPublishModal = false" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm">
+                                        Okey
+                                    </a>
+                                </div>
+                            </div>   
+                        </div> 
+
                     </template>
                     <template v-slot:footer>
                         <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="data.showPublishModal = false">
@@ -825,7 +845,7 @@
                         <div class="border-t border-gray-200" />
                     </div>
                 </div>
-                <div>
+                <div id="manuscript-attach-files">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
@@ -1178,6 +1198,10 @@
     const moment = require('moment');
     const helper = require('../../helper.js');
 
+    const hasManuscriptToPublish = () => {
+        return props.attachments?.data?.filter(v => v.for_publish)?.length > 0 ? true : false;
+    }
+
     const manuscriptForm = useForm({
         type: props.manuscript.data.type.id,
         category: "",
@@ -1387,9 +1411,9 @@
             onSuccess: () => {
                 notification('Saved', 'success');
                 data.showUploadAttachModal = false;
+                clearAttachForm();
             }
         });
-        clearAttachForm();
     };
 
     const updateAttach = () => {
