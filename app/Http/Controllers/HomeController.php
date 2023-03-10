@@ -31,7 +31,16 @@ class HomeController extends Controller
         $manuscripts = Manuscript::query();
         if (!auth()->user()->can('manuscripts.show_all')) {
             $manuscripts->whereHas('members', function($q) {
-                $q->where('user_id', auth()->id());
+                $q->where('user_id', auth()->id())
+                    ->where(function($q) {
+                        $q->where('role', 'author')
+                            ->orWhere(function($q) {
+                                $q->where('role', '!=', 'author')
+                                    ->whereHas('manuscript', function($q) {
+                                        $q->where('status', '!=', 'Draft');
+                                    });
+                            });
+                    });
             });
         }
         $manuscripts = $manuscripts->get();
