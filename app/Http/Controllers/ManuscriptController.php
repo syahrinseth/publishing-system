@@ -515,7 +515,7 @@ class ManuscriptController extends Controller
         $attach->save();
 
         if ($request->hasFile('file')) {
-            $path = $request->file->store("manuscripts/{$id}/attach-files/$attach->id");
+            $path = $request->file->storeAs("manuscripts/{$id}/attach-files/$attach->id", $request->file->getClientOriginalName());
             $attach->file_location = $path;
             $attach->file_name = $attach->getFileName();
             $attach->size = Storage::size($path);
@@ -587,7 +587,7 @@ class ManuscriptController extends Controller
             if (Storage::exists($attach->file_location)) {
                 Storage::delete($attach->file_location);
             }
-            $path = $request->file->store("manuscripts/{$id}/attach-files/$attach->id");
+            $path = $request->file->storeAs("manuscripts/{$id}/attach-files/$attach->id", $request->file->getClientOriginalName());
             $attach->file_location = $path;
             $attach->file_name = $attach->getFileName();
             $attach->size = Storage::size($path);
