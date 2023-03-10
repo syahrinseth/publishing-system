@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Mail\NewUserNotification;
 use Spatie\Permission\Models\Role;
 use App\Models\Filters\UserFilters;
@@ -188,7 +189,7 @@ class UserController extends Controller
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => ['required', 'email', Rule::unique('users')->ignore($id)],
             // 'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 

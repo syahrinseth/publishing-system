@@ -58,17 +58,20 @@ class ManuscriptController extends Controller
         ]);
         $manuscripts = Manuscript::filter($manuscriptFilters);
         if (!auth()->user()->can('manuscripts.show_all')) {
+            // can see all manuscript accept draft created from other author.
+            // validate if manuscript is draft from other author
             $manuscripts->whereHas('members', function($q) {
                 $q->where('user_id', auth()->id())
-                    ->where('role', 'author');;
-            })
-                ->orWhereHas('members', function($q) {
-                    $q->where('user_id', auth()->id())
-                        ->where('role', '!=', 'author')
-                        ->whereHas('manuscript', function($q) {
-                            $q->where('status', '!=', 'Draft');
-                        });
-                });
+                    ->where(function($q) {
+                        $q->where('role', 'author')
+                            ->orWhere(function($q) {
+                                $q->where('role', '!=', 'author')
+                                    ->whereHas('manuscript', function($q) {
+                                        $q->where('status', '!=', 'Draft');
+                                    });
+                            });
+                    });
+            });
         }
         $manuscripts = new ManuscriptCollection($manuscripts->orderBy('updated_at', 'desc')->paginate(5)->appends(request()->query()));
 
@@ -201,31 +204,7 @@ class ManuscriptController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $manuscript = Manuscript::where('id', $id);
-
-        if (!auth()->user()->can('manuscripts.show_all')) {
-            $manuscript->whereHas('members', function($q) {
-                $q->where('user_id', auth()->id());
-            });
-        }
-            
-        $manuscript = $manuscript->firstOrFail();
-        
-        $users = User::all();
-
-        if ($request->is('api/*')) {
-            return response()->json(new ManuscriptResource($manuscript));
-        }
-
-        return Inertia::render('Manuscript/Show', [
-            'manuscript' => new ManuscriptResource($manuscript),
-            'attachments' => new ManuscriptAttachCollection($manuscript->attachments()->orderBy('updated_at', 'desc')->paginate(100)),
-            'users' => $users,
-            'attachTypes' => ManuscriptAttachFile::$types,
-            'articleTypes' => Manuscript::getTypes(),
-            'manuscriptStatusList' => Manuscript::getStatusList($manuscript->id),
-            'manuscriptStatus' => collect(Manuscript::$statusList),
-        ]);
+        return abort(404);
     }
 
     /**
@@ -255,7 +234,16 @@ class ManuscriptController extends Controller
 
         if (!auth()->user()->can('manuscripts.show_all')) {
             $manuscript->whereHas('members', function($q) {
-                $q->where('user_id', auth()->id());
+                $q->where('user_id', auth()->id())
+                    ->where(function($q) {
+                        $q->where('role', 'author')
+                            ->orWhere(function($q) {
+                                $q->where('role', '!=', 'author')
+                                    ->whereHas('manuscript', function($q) {
+                                        $q->where('status', '!=', 'Draft');
+                                    });
+                            });
+                    });
             });
         }
             
