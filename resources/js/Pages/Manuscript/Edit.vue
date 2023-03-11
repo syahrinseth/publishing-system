@@ -36,7 +36,7 @@
                     <hr class="my-4">
                     <div class="flex mt-1">
                         <!-- This example requires Tailwind CSS v2.0+ -->
-                        <Listbox as="div" v-model="data.viewAs" class="w-64 rounded-md p-4 flex-1" :class="(data.viewAs == 'author' || data.viewAs == 'corresponding author') ? 'bg-indigo-500' : (data.viewAs == 'editor' ? 'bg-yellow-700' : (data.viewAs == 'reviewer' ? 'bg-orange-500' : (data.viewAs == 'publisher' ? 'bg-red-500' : 'bg-gray-500')))">
+                        <Listbox as="div" v-model="data.viewAs" class="w-64 rounded-md p-4 flex-1" :class="getRoleBgColor()">
                             <ListboxLabel class="block text-sm font-medium text-gray-100">View As</ListboxLabel>
                             <div class="mt-1 relative">
                             <ListboxButton class="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -76,11 +76,11 @@
                             </div>
                         </Listbox>
                         <div class="text-right">
-                            <span class="sm:ml-3" v-if="(manuscript.data.status == `Draft`) && (data.viewAs == `author` || data.viewAs == `corresponding author` || data.viewAs == `publisher`)">
-                                <a href="#" @click="data.showSubmitToEditorModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                            <span class="sm:ml-3" v-if="canSubmitToEditor()">
+                                <button type="button" @click="data.showSubmitToEditorModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                     <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                     Submit To Editor
-                                </a>
+                                </button>
                             </span>
                             <span class="sm:ml-3" v-if="(manuscript.data.status == `Rejected Invite To Resubmit` || manuscript.data.status == `Submit To Editor`) && (data.viewAs == `editor`)">
                                 <a href="#" @click="data.showSubmitReviewModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
@@ -100,7 +100,7 @@
                                     Accept
                                 </a>
                             </span>
-                            <span class="sm:ml-3" v-if="manuscript.data.status.includes('Accept') && (data.viewAs == `publisher`)">
+                            <span class="sm:ml-3" v-if="canPublish()">
                                 <a href="#" @click="data.showPublishModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <PaperAirplaneIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                     Publish
@@ -167,10 +167,7 @@
                                                         </label>
                                                         <p class="pl-1">or drag and drop</p>
                                                     </div>
-                                                    <p v-if="attachForm.type == 1" class="text-xs text-gray-500">
-                                                        DOC, DOCX up to 50MB
-                                                    </p>
-                                                    <p v-else class="text-xs text-gray-500">
+                                                    <p class="text-xs text-gray-500">
                                                         DOC, DOCX, PDF up to 50MB
                                                     </p>
                                                 </div>
@@ -513,599 +510,619 @@
                         <span v-show="reviewerForm.recentlySuccessful" class="py-2 text-gray-600">Submitted</span>
                     </template>
                 </Modal>
-                <div v-if="data.viewAs == `author` || data.viewAs == `corresponding author` || data.viewAs == `editor` || data.viewAs == `publisher`" class="mt-10 sm:mt-0">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                        <div class="px-4 sm:px-0">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">General Information</h3>
-                            <p class="mt-1 text-sm text-gray-600">
-                                <span v-show="data.viewAs == `author` || data.viewAs == `corresponding author`">
-                                    Please identify your submission's areas of interest and specialization by selecting one or more classifications.
-                                </span>
-                                <!--<span v-show="authIsReviewer()">
-                                    You have been assigned to review this manuscript, please download the manuscript in the "Manuscript Attach Files" section below.
-                                </span>-->
-                                <span v-show="data.viewAs == `editor`">
-                                    You have been assigned as an Editor. Please select reviewers and notify the reviewers to review manuscripts. Thank you
-                                </span>
-                                <span v-show="data.viewAs == `publisher`">
-                                    Manuscript general information.
-                                </span>
-                            </p>
-                        </div>
-                        </div>
-                        <div class="mt-5 md:mt-0 md:col-span-2">
-                        <form @submit.prevent="saveManuscript()">
-                            <div class="shadow sm:rounded-md">
-                            <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                <div class="grid grid-cols-3 gap-6">
-                                    <div class="col-span-3 sm:col-span-2">
-                                        <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                        Article Type
-                                        </label>
-                                        <select :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="manuscriptForm.type">
-                                            <option value="" selected>Select</option>
-                                            <option v-for="type in articleTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-span-3 sm:col-span-2">
-                                        <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                        Co-Author(s)
-                                        </label>
-                                        <VueMultiselect 
-                                        :disabled="cannotEditOnSubmit() || (data.viewAs == 'publisher' || data.viewAs == 'editor')" :class="cannotEditOnSubmit() || (data.viewAs == 'publisher' || data.viewAs == 'editor') ? `cursor-not-allowed` : null"
-                                        v-model="manuscriptForm.corresponding_authors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="data.correspondingAuthorSelect.options" :multiple="true" :searchable="true" :loading="data.correspondingAuthorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindCorrespondingAuthors" :taggable="true" @tag="createNewCoAuthorModal" tag-placeholder="Press enter to add new user">
-                                            </VueMultiselect>
-                                    </div>
-                                    <div class="col-span-3 sm:col-span-2">
-                                        <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                        Author(s)
-                                        </label>
-                                        <VueMultiselect :disabled="cannotEditOnSubmit() || (data.viewAs == 'publisher' || data.viewAs == 'editor')" :class="cannotEditOnSubmit() || (data.viewAs == 'publisher' || data.viewAs == 'editor') ? `cursor-not-allowed` : null"
-                                        v-model="manuscriptForm.authors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="data.authorSelect.options" :multiple="true" :searchable="true" :loading="data.authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors" :taggable="true" @tag="createNewAuthorModal" tag-placeholder="Press enter to add new user">
-                                            </VueMultiselect>
-                                    </div>
-                                    <div v-show="data.viewAs == `author` || data.viewAs == `corresponding author` || data.viewAs == `editor` || data.viewAs == `publisher`" class="col-span-3 sm:col-span-2">
+                <div v-if="isAuthor() || isEditor() || isReviewer() || isPublisher()">
+                    <div v-if="isAssigned()" class="mt-10 sm:mt-0">
+                        <div class="md:grid md:grid-cols-3 md:gap-6">
+                            <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">General Information</h3>
+                                <p class="mt-1 text-sm text-gray-600">
+                                    <span v-show="isAuthor()">
+                                        Please identify your submission's areas of interest and specialization by selecting one or more classifications.
+                                    </span>
+                                    <!--<span v-show="authIsReviewer()">
+                                        You have been assigned to review this manuscript, please download the manuscript in the "Manuscript Attach Files" section below.
+                                    </span>-->
+                                    <span v-show="isEditor()">
+                                        You have been assigned as an Editor. Please select reviewers and notify the reviewers to review manuscripts. Thank you
+                                    </span>
+                                    <span v-show="isPublisher()">
+                                        Manuscript general information.
+                                    </span>
+                                </p>
+                            </div>
+                            </div>
+                            <div class="mt-5 md:mt-0 md:col-span-2">
+                            <form @submit.prevent="saveManuscript()">
+                                <div class="shadow sm:rounded-md">
+                                <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                                    <div class="grid grid-cols-3 gap-6">
                                         <div class="col-span-3 sm:col-span-2">
                                             <label for="company-website" class="block text-sm font-medium text-gray-700">
-                                                Request Editor(s)
+                                            Article Type
                                             </label>
-                                            <VueMultiselect :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null"
-                                            v-model="manuscriptForm.editors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="data.editorSelect.options" :multiple="true" :searchable="true" :loading="data.editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors" :taggable="true" @tag="createNewEditorModal" tag-placeholder="Press enter to add new user">
+                                            <select :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="manuscriptForm.type">
+                                                <option value="" selected>Select</option>
+                                                <option v-for="type in articleTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-span-3 sm:col-span-2">
+                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                            Co-Author(s)
+                                            </label>
+                                            <VueMultiselect 
+                                            :disabled="cannotEditOnSubmit() || (isPublisher() || isEditor())" :class="cannotEditOnSubmit() || (isPublisher() || isEditor()) ? `cursor-not-allowed` : null"
+                                            v-model="manuscriptForm.corresponding_authors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="data.correspondingAuthorSelect.options" :multiple="true" :searchable="true" :loading="data.correspondingAuthorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindCorrespondingAuthors" :taggable="true" @tag="createNewCoAuthorModal" tag-placeholder="Press enter to add new user">
                                                 </VueMultiselect>
+                                        </div>
+                                        <div class="col-span-3 sm:col-span-2">
+                                            <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                            Author(s)
+                                            </label>
+                                            <VueMultiselect :disabled="cannotEditOnSubmit() || (isPublisher() || isEditor())" :class="cannotEditOnSubmit() || (isPublisher() || isEditor()) ? `cursor-not-allowed` : null"
+                                            v-model="manuscriptForm.authors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="data.authorSelect.options" :multiple="true" :searchable="true" :loading="data.authorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindAuthors" :taggable="true" @tag="createNewAuthorModal" tag-placeholder="Press enter to add new user">
+                                                </VueMultiselect>
+                                        </div>
+                                        <div v-show="isAssigned()" class="col-span-3 sm:col-span-2">
+                                            <div class="col-span-3 sm:col-span-2">
+                                                <label for="company-website" class="block text-sm font-medium text-gray-700">
+                                                    Request Editor(s)
+                                                </label>
+                                                <VueMultiselect :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null"
+                                                v-model="manuscriptForm.editors" id="ajax" label="first_name" :custom-label="(value) => `${value.first_name} ${value.last_name || ``} ${value.field == null ? `` : `- ${value.field}`} ${value.affiliation == null ? `` : `- ${value.affiliation}`}`" track-by="id" placeholder="Type to search" open-direction="bottom" :options="data.editorSelect.options" :multiple="true" :searchable="true" :loading="data.editorSelect.isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFindEditors" :taggable="true" @tag="createNewEditorModal" tag-placeholder="Press enter to add new user">
+                                                    </VueMultiselect>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                <button :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Save
-                                </button>
-                            </div>
-                            </div>
-                        </form>
-                        </div>
-                    </div>
-                </div>
-                <div v-if="data.viewAs == `author` || data.viewAs == `corresponding author` || data.viewAs == `editor` || data.viewAs == `publisher`" class="hidden sm:block" aria-hidden="true">
-                    <div class="py-5">
-                        <div class="border-t border-gray-200" />
-                    </div>
-                </div>  
-                <div>
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                            <div class="px-4 sm:px-0">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900">Review Preferences</h3>
-                                <p v-show="data.viewAs == `reviewer`" class="mt-1 text-sm text-gray-600">
-                                    In view of your work in the field, your name has been recommended, as a reviewer. Please suggest other reviewer's name if you are unable to review this manuscript.data. Thank You
-                                </p>
-                                <p v-show="data.viewAs == `author` || data.viewAs == `corresponding author`" class="mt-1 text-sm text-gray-600">
-                                Please name specific reviewers to be assigned to your submission. The request will be taken under advisement by the Editor. If you do not request any reviewers, your submission will be assigned to the appropriate reviewer(s) as determined by the Editorial staff.
-                                </p>
-                                <p v-show="data.viewAs == `editor` || data.viewAs == `publisher`" class="mt-1 text-sm text-gray-600">
-                                The reviewer(s) are to be assigned to the manuscript.data.
-                                </p>
+                                <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                                    <button :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Save
+                                    </button>
+                                </div>
+                                </div>
+                            </form>
                             </div>
                         </div>
-                        <div class="mt-5 md:mt-0 md:col-span-2">
-                            <form>
-                                <div class="bg-white rounded-md">
-                                    <div class="">
+                    </div>
+                    <div v-if="isAssigned()" class="hidden sm:block" aria-hidden="true">
+                        <div class="py-5">
+                            <div class="border-t border-gray-200" />
+                        </div>
+                    </div>  
+                    <div>
+                        <div class="md:grid md:grid-cols-3 md:gap-6">
+                            <div class="md:col-span-1">
+                                <div class="px-4 sm:px-0">
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900">Review Preferences</h3>
+                                    <p v-show="isReviewer()" class="mt-1 text-sm text-gray-600">
+                                        In view of your work in the field, your name has been recommended, as a reviewer. Please suggest other reviewer's name if you are unable to review this manuscript.data. Thank You
+                                    </p>
+                                    <p v-show="isAuthor()" class="mt-1 text-sm text-gray-600">
+                                    Please name specific reviewers to be assigned to your submission. The request will be taken under advisement by the Editor. If you do not request any reviewers, your submission will be assigned to the appropriate reviewer(s) as determined by the Editorial staff.
+                                    </p>
+                                    <p v-show="isEditor() || isPublisher()" class="mt-1 text-sm text-gray-600">
+                                    The reviewer(s) are to be assigned to the manuscript.data.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="mt-5 md:mt-0 md:col-span-2">
+                                <form>
+                                    <div class="bg-white rounded-md">
                                         <div class="">
-                                            <div class="flex justify-between p-5">
-                                                <div class="">
-                                                    <h3 class="text-lg leading-6 font-medium text-gray-900">
-                                                        Reviewer(s)
-                                                    </h3>
-                                                    <JetInputError :message="manuscriptForm.errors.reviewers" class="mt-2" />
+                                            <div class="">
+                                                <div class="flex justify-between p-5">
+                                                    <div class="">
+                                                        <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                                            Reviewer(s)
+                                                        </h3>
+                                                        <JetInputError :message="manuscriptForm.errors.reviewers" class="mt-2" />
+                                                    </div>
+                                                    <div>
+                                                        <span class="sm:ml-3">
+                                                            <button v-if="canSuggestReviewer()" @click="onAddReviewer" type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                                Suggest Reviewer
+                                                            </button>
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <span class="sm:ml-3">
-                                                        <button v-if="data.viewAs != 'reviewer'" @click="onAddReviewer" type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                                            Suggest Reviewer
-                                                        </button>
-                                                    </span>
+                                                <div class="col-span-3 border-gray-200 text-sm">
+                                                    <Table>
+                                                        <template v-slot:header>
+                                                            <tr>
+                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                    #
+                                                                </th>
+                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                    Name
+                                                                </th>
+                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                    Status
+                                                                </th>
+                                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                                </th>
+                                                            </tr>
+                                                        </template>
+                                                        <template v-slot:body>
+                                                            <tr v-for="(reviewer, index) in manuscriptForm.reviewers" :key="reviewer.id + '-reviewer'">
+                                                                <td class="px-6 py-4 word-break">
+                                                                    {{ index + 1 }}
+                                                                </td>
+                                                                <td class="px-6 py-4 word-break">
+                                                                    <p>{{ reviewer.user.first_name }} {{ reviewer.user.last_name }}</p>
+                                                                    <small class="text-gray-500">
+                                                                        {{ reviewer.user.email }}
+                                                                    </small>
+                                                                </td>
+                                                                <td class="px-6 py-4 word-break">
+                                                                    <span :class="{
+                                                                        'text-green-600': (reviewer.status == 'Active'),
+                                                                        'text-red-600': (reviewer.status == 'Rejected'),
+                                                                        'text-blue-600': (reviewer.status == 'Accepted'),
+                                                                        'text-orange-600': (reviewer.status == 'Pending')
+                                                                    }">{{ reviewer.status }} <span v-show="reviewer.status == 'Accepted'">(Invitation Sent to Reviewer)</span></span>
+                                                                </td>
+                                                                <td class="px-6 py-4 word-break">
+                                                                    <button v-if="canEditReviewerReviewStatus(reviewer)" @click="onAcceptReviewer(reviewer.id)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm">
+                                                                        Accept
+                                                                    </button>
+                                                                    <button v-if="canEditReviewerReviewStatus(reviewer)" @click="onRejectReviewer(reviewer.id)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
+                                                                        Reject
+                                                                    </button>
+                                                                    <button v-if="canRemoveReviewer()" @click="onRemoveReviewer(reviewer)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
+                                                                        Remove
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                            <tr v-if="manuscriptForm.reviewers.length == 0">
+                                                                <td colspan="4" class="px-6 py-4 whitespace-nowrap text-center">
+                                                                    No Data
+                                                                </td>
+                                                            </tr>
+                                                        </template>
+                                                    </Table>
                                                 </div>
                                             </div>
-                                            <div class="col-span-3 border-gray-200 text-sm">
-                                                <Table>
-                                                    <template v-slot:header>
-                                                        <tr>
-                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                #
-                                                            </th>
-                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                Name
-                                                            </th>
-                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                                Status
-                                                            </th>
-                                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                            </th>
-                                                        </tr>
-                                                    </template>
-                                                    <template v-slot:body>
-                                                        <tr v-for="(reviewer, index) in manuscriptForm.reviewers" :key="reviewer.id + '-reviewer'">
-                                                            <td class="px-6 py-4 word-break">
-                                                                {{ index + 1 }}
-                                                            </td>
-                                                            <td class="px-6 py-4 word-break">
-                                                                <p>{{ reviewer.user.first_name }} {{ reviewer.user.last_name }}</p>
-                                                                <small class="text-gray-500">
-                                                                    {{ reviewer.user.email }}
-                                                                </small>
-                                                            </td>
-                                                            <td class="px-6 py-4 word-break">
-                                                                <span :class="{
-                                                                    'text-green-600': (reviewer.status == 'Active'),
-                                                                    'text-red-600': (reviewer.status == 'Rejected'),
-                                                                    'text-blue-600': (reviewer.status == 'Accepted'),
-                                                                    'text-orange-600': (reviewer.status == 'Pending')
-                                                                }">{{ reviewer.status }} <span v-show="reviewer.status == 'Accepted'">(Invitation Sent to Reviewer)</span></span>
-                                                            </td>
-                                                            <td class="px-6 py-4 word-break">
-                                                                <button v-if="reviewer.status == 'Pending' && (data.viewAs == 'editor' || data.viewAs == `publisher`)" @click="onAcceptReviewer(reviewer.id)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm">
-                                                                    Accept
-                                                                </button>
-                                                                <button v-if="reviewer.status == 'Pending' && (data.viewAs == 'editor' || data.viewAs == `publisher`)" @click="onRejectReviewer(reviewer.id)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
-                                                                    Reject
-                                                                </button>
-                                                                <button v-if="data.viewAs != 'reviewer'" @click="onRemoveReviewer(reviewer)" type="button" class="mx-1 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
-                                                                    Remove
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr v-if="manuscriptForm.reviewers.length == 0">
-                                                            <td colspan="3" class="px-6 py-4 whitespace-nowrap text-center">
-                                                                No Data
-                                                            </td>
-                                                        </tr>
-                                                    </template>
-                                                </Table>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-show="canViewReviewerStatus()" class="hidden sm:block" aria-hidden="true">
+                        <div class="py-5">
+                            <div class="border-t border-gray-200" />
+                        </div>
+                    </div>  
+                    <div v-show="canViewReviewerStatus()">
+                        <div class="md:grid md:grid-cols-3 md:gap-6">
+                            <div class="md:col-span-1">
+                                <div class="px-4 sm:px-0">
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900">Reviewers Review Status</h3>
+                                    <p class="mt-1 text-sm text-gray-600">
+                                        Here's the list of reviewer(s) review status.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="mt-5 md:mt-0 md:col-span-2">
+                                <Table>
+                                    <template v-slot:header>
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Name
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Status
+                                            </th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Review
+                                            </th>
+                                        </tr>
+                                    </template>
+                                    <template v-slot:body>
+                                        <tr v-for="reviewer in manuscript.data.reviewers" :key="reviewer.id">
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ manuscript.data.reviewers_in_users.filter((v) => v.id == reviewer.user_id)[0]['first_name'] }} {{ manuscript.data.reviewers_in_users.filter((v) => v.id == reviewer.user_id)[0]['last_name'] }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ reviewer.reviewed == null ? 'N/a' : `Reviewed at ${moment(reviewer.reviewed).format("DD/MM/YYYY")}` }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap" :class="(reviewer.reviewedVote == null ? false : reviewer.reviewedVote.includes('Accepted')) ? 'text-green-600' : 'text-red-600'">
+                                                {{ reviewer.reviewedVote == null ? 'N/a' : reviewer.reviewedVote }}
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </Table>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-show="canViewManuscriptData()" class="hidden sm:block" aria-hidden="true">
+                        <div class="py-5">
+                            <div class="border-t border-gray-200" />
+                        </div>
+                    </div>
+                    <div v-show="canViewManuscriptData()">
+                        <div class="md:grid md:grid-cols-3 md:gap-6">
+                            <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Data</h3>
+                                <!--<p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
+                                    Please make sure the manuscript attached here is the same manuscript as registered here.
+                                </p>-->
+                                <p class="mt-1 text-sm text-gray-600">
+                                    When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
+                                </p>
+                            </div>
+                            </div>
+                            <div class="mt-5 md:mt-0 md:col-span-2">
+                            <form @submit.prevent="saveManuscript()">
+                                <div class="shadow sm:rounded-md sm:overflow-hidden">
+                                <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                                    <div>
+                                    <label for="title" class="block text-sm font-medium text-gray-700">
+                                        Full Title
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.title" id="title" name="title" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    </div>
+                                    <p class="mt-2 text-sm text-gray-500">
+                                        
+                                    </p>
+                                    </div>
+
+                                    <div>
+                                    <!--<label for="short_title" class="block text-sm font-medium text-gray-700">
+                                        Short Title
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.short_title" id="short_title" name="short_title" rows="1" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    </div>
+                                    </div>
+
+                                    <div>-->
+                                    <label for="abstract" class="block text-sm font-medium text-gray-700">
+                                        Abstract
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.abstract" id="abstract" name="abstract" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    </div>
+                                    <p class="mt-2 text-sm text-gray-500">
+                                        Limit 300 words
+                                    </p>
+                                    </div>
+
+                                    <div>
+                                    <label for="keywords" class="block text-sm font-medium text-gray-700">
+                                        Keywords
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.keywords" id="keywords" name="keywords" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    </div>
+                                    <p class="mt-2 text-sm text-gray-500">
+                                        Please enter keywords separated by semicolons. Each individual keyword may be up to 256 characters in length.
+                                    </p>
+                                    </div>
+
+                                    <div>
+                                    <!-- <label for="authors" class="block text-sm font-medium text-gray-700">
+                                        Authors
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea  v-model="manuscriptForm.authors" id="authors" name="authors" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    </div> -->
+                                    <p class="mt-2 text-sm text-gray-500">
+                                    </p>
+                                    </div>
+
+                                    <div>
+                                    <label for="funding_information" class="block text-sm font-medium text-gray-700">
+                                        Funding Information
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.funding_information" id="funding_information" name="funding_information" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    </div>
+                                    <p class="mt-2 text-sm text-gray-500">
+
+                                    </p>
+                                    </div>
+
+                                    
+                                </div>
+                                <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                                    <button :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Save
+                                    </button>
+                                </div>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hidden sm:block" aria-hidden="true">
+                        <div class="py-5">
+                            <div class="border-t border-gray-200" />
+                        </div>
+                    </div>
+                    <div id="manuscript-attach-files">
+                        <div class="md:grid md:grid-cols-3 md:gap-6">
+                            <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Attach Files</h3>
+                                <span v-show="isReviewer()">
+                                    You have been assigned to review this manuscript, please download the manuscript in the "Manuscript Attach Files" section.
+                                </span>
+                                <p v-show="isReviewer()" class="mt-1 text-sm text-gray-600">
+                                    Please upload your reviewer comments in a new file name using Words Document file.  Please make sure that your comments can be clearly understood by the authors. You are given 30 working days for this cycle of reviewing process. Thank You
+                                </p>
+                                <p v-show="isAuthor()" class="mt-1 text-sm text-gray-600">
+                                    When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
+                                </p>
+                            </div>
+                            </div>
+                            <div class="mt-5 md:mt-0 md:col-span-2">
+                                <div class="bg-white shadow sm:rounded-lg">
+                                    <div class="flex justify-between px-4 py-5 sm:px-6">
+                                        <div class="">
+                                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                                Attach Files
+                                            </h3>
+                                            <JetInputError :message="manuscriptForm.errors.status" class="mt-2" />
+                                            <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                                                Personal details and application.
+                                            </p> -->
+                                        </div>
+                                        <div>
+                                            <span class="sm:ml-3">
+                                                <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"  @click="data.showUploadAttachModal = !data.showUploadAttachModal; ">
+                                                    Upload File 
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border-t border-gray-200 text-sm">
+                                        <Table>
+                                            <template v-slot:header>
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        #
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Name
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Size
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        Modified
+                                                    </th>
+                                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                        
+                                                    </th>
+                                                </tr>
+                                            </template>
+                                            <template v-slot:body>
+                                                <tr v-for="(attachment, index) in filterAttachments(attachments)" :key="attachment.id + '-attach'">
+                                                    <td class="px-6 py-4 word-break">
+                                                        {{ attachments.meta.from + index }}
+                                                    </td>
+                                                    <td class="px-6 py-4 word-break">
+                                                        <p>{{ attachment.type.name }}</p>
+                                                        <small class="text-gray-500">
+                                                            {{ attachment.description }}
+                                                        </small>
+                                                    </td>
+                                                    <td class="px-6 py-4 word-break">
+                                                        {{ attachment.size}}
+                                                    </td>
+                                                    <td class="px-6 py-4 word-break">
+                                                        {{ attachment.updated_at }}
+                                                    </td>
+                                                    <td class="px-6 py-4 word-break">
+                                                        <span class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1" @click="data.showUpdateAttachModel = !data.showUpdateAttachModel; fillUpdateAttachForm(attachment);">View</span>
+                                                        <!--<a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>-->
+                                                        <span :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" @click="cannotEditOnSubmit() ? `` : deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1">Delete</span>
+                                                    </td>
+                                                </tr>
+                                                <tr v-if="attachments.length == 0">
+                                                    <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center">
+                                                        No Data
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </Table>
+                                    </div>
+                                </div>
+                                <!-- <div class="my-2 flex justify-end">
+                                    <Pagination :links="attachments.meta.links" :meta="attachments.meta" />
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div v-show="canViewAdditionalInformation()" class="hidden sm:block" aria-hidden="true">
+                        <div class="py-5">
+                            <div class="border-t border-gray-200" />
+                        </div>
+                    </div>
+                    <div v-show="canViewAdditionalInformation()" class="mt-10 sm:mt-0">
+                        <div class="md:grid md:grid-cols-3 md:gap-6">
+                            <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">Additional Information</h3>
+                                <p class="mt-1 text-sm text-gray-600">
+                                    Please respond to the presented questions/statements.
+                                </p>
+                            </div>
+                            </div>
+                            <div class="mt-5 md:mt-0 md:col-span-2">
+                            <form @submit.prevent="saveManuscript()">
+                                <div class="shadow overflow-hidden sm:rounded-md">
+                                <div class="px-4 py-5 bg-white sm:p-6">
+                                    <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                                        <fieldset>
+                                        <legend class="text-base font-medium text-gray-900">Please confirm that you have mentioned all organizations that funded your research in the Acknowledgements section of your submission, including grant numbers where appropriate.</legend>
+                                        <div class="mt-4 space-y-4">
+                                            <div class="flex items-start">
+                                            <div class="flex items-center h-5">
+                                                <input :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.is_confirm_grant_numbers" id="is_confirm_grant_numbers" name="is_confirm_grant_numbers" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
                                             </div>
+                                            <div class="ml-3 text-sm">
+                                                <label for="is_confirm_grant_numbers" class="font-medium text-gray-700">I Confirm</label>
+                                                <p class="text-gray-500">I confirm that I have mentioned all organizations that funded my research in the Acknowledgements section of my submission, including grant numbers where appropriate.</p>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </fieldset>
+                                        <div class="hidden sm:block" aria-hidden="true">
+                                            <div class="py-5">
+                                                <div class="border-t border-gray-200" />
+                                            </div>
+                                        </div>
+                                        <fieldset>
+                                        <legend class="text-base font-medium text-gray-900">Sensors Malaysia is an open access journal which charges an Article Publishing Charge (APC) to cover the cost associated with the publication process. All articles published Open Access will be immediately and permanently free on ScienceDirect for users to read, download, and use in accordance with the author’s selected Creative Commons user license. </legend>
+                                        <div class="mt-4 space-y-4">
+                                            <div class="flex items-start">
+                                            <div class="flex items-center h-5">
+                                                <input :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.is_acknowledge" id="is_acknowledge" name="is_acknowledge" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                            </div>
+                                            <div class="ml-3 text-sm">
+                                                <label for="is_acknowledge" class="font-medium text-gray-700">I Acknowledge</label>
+                                                <p class="text-gray-500">As an Author, I acknowledge I need to pay the Article Publishing Charge if my manuscript is accepted for publication</p>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </fieldset>
+                                        <!-- <div class="hidden sm:block" aria-hidden="true">
+                                            <div class="py-5">
+                                                <div class="border-t border-gray-200" />
+                                            </div>
+                                        </div>
+                                        <fieldset>
+                                        <div>
+                                            <legend class="text-base font-medium text-gray-900">
+                                            In support of Open Science, Sensors and Actuators Reports offers its authors a free preprint posting service. Preprints provide early registration and dissemination of research, which facilitates early citations and collaboration. Please indicate below whether you would like to release your manuscript publicly as a preprint on the preprint server www.SSRN.com once it enters peer-review with the journal. Your choice will have no effect on the editorial process or outcome with the journal. Your preprint will remain globally available free to read whether the journal accepts or rejects your manuscript.data. For more information about posting to www.SSRN.com, please consult the SSRN Terms of Use and FAQs.</legend>
+                                        </div>
+                                        <div class="mt-4 space-y-4">
+                                            <div class="flex items-center">
+                                            <input id="push-everything" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                            <label for="push-everything" class="ml-3 block text-sm font-medium text-gray-700">
+                                                Please select a response
+                                            </label>
+                                            </div>
+                                            <div class="flex items-center">
+                                            <input id="push-email" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                            <label for="push-email" class="ml-3 block text-sm font-medium text-gray-700">
+                                                YES, I want to share my research early and openly as a preprint.
+                                            </label>
+                                            </div>
+                                            <div class="flex items-center">
+                                            <input id="push-nothing" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                            <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700">
+                                                NO, I don't want to share my research early and openly as a preprint.
+                                            </label>
+                                            </div>
+                                        </div>
+                                        </fieldset> -->
+                                    </div>
+                                </div>
+                                <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                                    <button :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Save
+                                    </button>
+                                </div>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hidden sm:block" aria-hidden="true">
+                        <div class="py-5">
+                            <div class="border-t border-gray-200" />
+                        </div>
+                    </div>  
+                    <div class="mt-10 sm:mt-0">
+                        <div class="md:grid md:grid-cols-3 md:gap-6">
+                            <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">Comments</h3>
+                                <p class="mt-1 text-sm text-gray-600">
+                                Please identify your submission's areas of interest and specialization by selecting one or more classifications.
+                                </p>
+                            </div>
+                            </div>
+                            <div class="mt-5 md:mt-0 md:col-span-2">
+                            <form @submit.prevent="saveManuscript()">
+                                <div class="shadow overflow-hidden sm:rounded-md">
+                                    <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                                        <div class="grid gap-6">
+                                            <CommentSectionCard
+                                                :manuscript-id="manuscript.data.id"
+                                                :auth="auth"
+                                                :from="data.viewAs"></CommentSectionCard>
                                         </div>
                                     </div>
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                </div>
-                <div v-show="data.viewAs == `editor` || data.viewAs == `publisher`" class="hidden sm:block" aria-hidden="true">
-                    <div class="py-5">
-                        <div class="border-t border-gray-200" />
-                    </div>
-                </div>  
-                <div v-show="data.viewAs == `editor` || data.viewAs == `publisher`">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                            <div class="px-4 sm:px-0">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900">Reviewers Review Status</h3>
-                                <p class="mt-1 text-sm text-gray-600">
-                                    Here's the list of reviewer(s) review status.
-                                </p>
                             </div>
                         </div>
-                        <div class="mt-5 md:mt-0 md:col-span-2">
-                            <Table>
-                                <template v-slot:header>
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Name
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Status
-                                        </th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Review
-                                        </th>
-                                    </tr>
-                                </template>
-                                <template v-slot:body>
-                                    <tr v-for="reviewer in manuscript.data.reviewers" :key="reviewer.id">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            {{ manuscript.data.reviewers_in_users.filter((v) => v.id == reviewer.user_id)[0]['first_name'] }} {{ manuscript.data.reviewers_in_users.filter((v) => v.id == reviewer.user_id)[0]['last_name'] }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            {{ reviewer.reviewed == null ? 'N/a' : `Reviewed at ${moment(reviewer.reviewed).format("DD/MM/YYYY")}` }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap" :class="(reviewer.reviewedVote == null ? false : reviewer.reviewedVote.includes('Accepted')) ? 'text-green-600' : 'text-red-600'">
-                                            {{ reviewer.reviewedVote == null ? 'N/a' : reviewer.reviewedVote }}
-                                        </td>
-                                    </tr>
-                                </template>
-                            </Table>
-                        </div>
                     </div>
-                </div>
-                <div v-show="data.viewAs == `author` || data.viewAs == `corresponding author` || data.viewAs == `editor` || data.viewAs == `publisher`" class="hidden sm:block" aria-hidden="true">
-                    <div class="py-5">
-                        <div class="border-t border-gray-200" />
-                    </div>
-                </div>
-                <div v-show="data.viewAs == `author` || data.viewAs == `corresponding author` || data.viewAs == `editor` || data.viewAs == `publisher`">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                        <div class="px-4 sm:px-0">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Data</h3>
-                            <!--<p v-show="authIsReviewer()" class="mt-1 text-sm text-gray-600">
-                                Please make sure the manuscript attached here is the same manuscript as registered here.
-                            </p>-->
-                            <p class="mt-1 text-sm text-gray-600">
-                                When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
-                            </p>
-                        </div>
-                        </div>
-                        <div class="mt-5 md:mt-0 md:col-span-2">
-                        <form @submit.prevent="saveManuscript()">
-                            <div class="shadow sm:rounded-md sm:overflow-hidden">
-                            <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                    <Modal :show="data.showAddUserModal" @close="data.showAddUserModal = false;">
+                        <template v-slot:default>
+                            <div class="mt-2">
                                 <div>
-                                <label for="title" class="block text-sm font-medium text-gray-700">
-                                    Full Title
-                                </label>
-                                <div class="mt-1">
-                                    <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.title" id="title" name="title" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                                    <div class="md:col-span-1">
+                                        <div class="px-4 sm:px-0">
+                                        <h3 class="text-lg font-medium leading-6 text-gray-900">Add New User</h3>
+                                        </div>
+                                    </div>
+                                    <div class="mt-5 md:mt-0 md:col-span-2">
+                                        <div class="shadow sm:rounded-md sm:overflow-hidden">
+                                            <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                                                <div class="col-span-12 sm:col-span-12">
+                                                    <label for="first-name" class="block text-sm font-medium text-gray-700">First Name</label>
+                                                    <input v-model="userForm.first_name" type="text" name="first-name" id="first-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                                </div>
+                                                <div class="col-span-12 sm:col-span-12">
+                                                    <label for="last-name" class="block text-sm font-medium text-gray-700">Last Name</label>
+                                                    <input v-model="userForm.last_name" type="text" name="last-name" id="last-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                                </div>
+                                                <div class="col-span-12 sm:col-span-12">
+                                                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                                    <input v-model="userForm.email" type="text" name="email" id="email" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
                                 </div>
-                                <p class="mt-2 text-sm text-gray-500">
-                                    
-                                </p>
-                                </div>
-
-                                <div>
-                                <!--<label for="short_title" class="block text-sm font-medium text-gray-700">
-                                    Short Title
-                                </label>
-                                <div class="mt-1">
-                                    <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.short_title" id="short_title" name="short_title" rows="1" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                </div>
-                                </div>
-
-                                <div>-->
-                                <label for="abstract" class="block text-sm font-medium text-gray-700">
-                                    Abstract
-                                </label>
-                                <div class="mt-1">
-                                    <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.abstract" id="abstract" name="abstract" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                </div>
-                                <p class="mt-2 text-sm text-gray-500">
-                                    Limit 300 words
-                                </p>
-                                </div>
-
-                                <div>
-                                <label for="keywords" class="block text-sm font-medium text-gray-700">
-                                    Keywords
-                                </label>
-                                <div class="mt-1">
-                                    <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.keywords" id="keywords" name="keywords" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                </div>
-                                <p class="mt-2 text-sm text-gray-500">
-                                    Please enter keywords separated by semicolons. Each individual keyword may be up to 256 characters in length.
-                                </p>
-                                </div>
-
-                                <div>
-                                <!-- <label for="authors" class="block text-sm font-medium text-gray-700">
-                                    Authors
-                                </label>
-                                <div class="mt-1">
-                                    <textarea  v-model="manuscriptForm.authors" id="authors" name="authors" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                </div> -->
-                                <p class="mt-2 text-sm text-gray-500">
-                                </p>
-                                </div>
-
-                                <div>
-                                <label for="funding_information" class="block text-sm font-medium text-gray-700">
-                                    Funding Information
-                                </label>
-                                <div class="mt-1">
-                                    <textarea :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.funding_information" id="funding_information" name="funding_information" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-                                </div>
-                                <p class="mt-2 text-sm text-gray-500">
-
-                                </p>
-                                </div>
-
-                                
                             </div>
+                        </template>
+                        <template v-slot:footer>
                             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                <button :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Save
-                                </button>
+                                <span @click="submitUserForm()" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer">Add</span>
                             </div>
-                            </div>
-                        </form>
-                        </div>
-                    </div>
+                        </template>
+                    </Modal>
                 </div>
-                <div class="hidden sm:block" aria-hidden="true">
-                    <div class="py-5">
-                        <div class="border-t border-gray-200" />
-                    </div>
-                </div>
-                <div id="manuscript-attach-files">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                        <div class="px-4 sm:px-0">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">Manuscript Attach Files</h3>
-                            <span v-show="data.viewAs == `reviewer`">
-                                You have been assigned to review this manuscript, please download the manuscript in the "Manuscript Attach Files" section.
-                            </span>
-                            <p v-show="data.viewAs == `reviewer`" class="mt-1 text-sm text-gray-600">
-                                Please upload your reviewer comments in a new file name using Words Document file.  Please make sure that your comments can be clearly understood by the authors. You are given 30 working days for this cycle of reviewing process. Thank You
-                            </p>
-                            <p v-show="data.viewAs == `author` || data.viewAs == `corresponding author`" class="mt-1 text-sm text-gray-600">
-                                When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
-                            </p>
-                        </div>
-                        </div>
-                        <div class="mt-5 md:mt-0 md:col-span-2">
-                            <div class="bg-white shadow sm:rounded-lg">
-                                <div class="flex justify-between px-4 py-5 sm:px-6">
-                                    <div class="">
-                                        <h3 class="text-lg leading-6 font-medium text-gray-900">
-                                            Attach Files
-                                        </h3>
-                                        <JetInputError :message="manuscriptForm.errors.status" class="mt-2" />
-                                        <!-- <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                                            Personal details and application.
-                                        </p> -->
-                                    </div>
-                                    <div>
-                                        <span class="sm:ml-3">
-                                            <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"  @click="data.showUploadAttachModal = !data.showUploadAttachModal; ">
-                                                Upload File 
-                                            </button>
-                                        </span>
-                                    </div>
-                                </div>
-                                
-                                <div class="border-t border-gray-200 text-sm">
-                                    <Table>
-                                        <template v-slot:header>
-                                            <tr>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    #
-                                                </th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Name
-                                                </th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Size
-                                                </th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Modified
-                                                </th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    
-                                                </th>
-                                            </tr>
-                                        </template>
-                                        <template v-slot:body>
-                                            <tr v-for="(attachment, index) in attachments.data.filter(function(attach) {if(data.viewAs == `reviewer` && (attach.type.name != `Manuscript`)) {return false;}return true;})" :key="attachment.id + '-attach'">
-                                                <td class="px-6 py-4 word-break">
-                                                    {{ attachments.meta.from + index }}
-                                                </td>
-                                                <td class="px-6 py-4 word-break">
-                                                    <p>{{ attachment.type.name }}</p>
-                                                    <small class="text-gray-500">
-                                                        {{ attachment.description }}
-                                                    </small>
-                                                </td>
-                                                <td class="px-6 py-4 word-break">
-                                                    {{ attachment.size}}
-                                                </td>
-                                                <td class="px-6 py-4 word-break">
-                                                    {{ attachment.updated_at }}
-                                                </td>
-                                                <td class="px-6 py-4 word-break">
-                                                    <span class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1" @click="data.showUpdateAttachModel = !data.showUpdateAttachModel; fillUpdateAttachForm(attachment);">View</span>
-                                                    <!--<a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>-->
-                                                    <span :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" @click="cannotEditOnSubmit() ? `` : deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1">Delete</span>
-                                                </td>
-                                            </tr>
-                                            <tr v-if="attachments.length == 0">
-                                                <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center">
-                                                    No Data
-                                                </td>
-                                            </tr>
-                                        </template>
-                                    </Table>
-                                </div>
+                <div v-else>
+                    
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                            </svg>
                             </div>
-                            <!-- <div class="my-2 flex justify-end">
-                                <Pagination :links="attachments.meta.links" :meta="attachments.meta" />
-                            </div> -->
-                        </div>
-                    </div>
-                </div>
-                <div v-show="data.viewAs == `author` || data.viewAs == `corresponding author`" class="hidden sm:block" aria-hidden="true">
-                    <div class="py-5">
-                        <div class="border-t border-gray-200" />
-                    </div>
-                </div>
-                <div v-show="data.viewAs == `author` || data.viewAs == `corresponding author`" class="mt-10 sm:mt-0">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                        <div class="px-4 sm:px-0">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">Additional Information</h3>
-                            <p class="mt-1 text-sm text-gray-600">
-                                Please respond to the presented questions/statements.
-                            </p>
-                        </div>
-                        </div>
-                        <div class="mt-5 md:mt-0 md:col-span-2">
-                        <form @submit.prevent="saveManuscript()">
-                            <div class="shadow overflow-hidden sm:rounded-md">
-                            <div class="px-4 py-5 bg-white sm:p-6">
-                                <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                    <fieldset>
-                                    <legend class="text-base font-medium text-gray-900">Please confirm that you have mentioned all organizations that funded your research in the Acknowledgements section of your submission, including grant numbers where appropriate.</legend>
-                                    <div class="mt-4 space-y-4">
-                                        <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.is_confirm_grant_numbers" id="is_confirm_grant_numbers" name="is_confirm_grant_numbers" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
-                                        </div>
-                                        <div class="ml-3 text-sm">
-                                            <label for="is_confirm_grant_numbers" class="font-medium text-gray-700">I Confirm</label>
-                                            <p class="text-gray-500">I confirm that I have mentioned all organizations that funded my research in the Acknowledgements section of my submission, including grant numbers where appropriate.</p>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </fieldset>
-                                    <div class="hidden sm:block" aria-hidden="true">
-                                        <div class="py-5">
-                                            <div class="border-t border-gray-200" />
-                                        </div>
-                                    </div>
-                                    <fieldset>
-                                    <legend class="text-base font-medium text-gray-900">Sensors Malaysia is an open access journal which charges an Article Publishing Charge (APC) to cover the cost associated with the publication process. All articles published Open Access will be immediately and permanently free on ScienceDirect for users to read, download, and use in accordance with the author’s selected Creative Commons user license. </legend>
-                                    <div class="mt-4 space-y-4">
-                                        <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" v-model="manuscriptForm.is_acknowledge" id="is_acknowledge" name="is_acknowledge" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
-                                        </div>
-                                        <div class="ml-3 text-sm">
-                                            <label for="is_acknowledge" class="font-medium text-gray-700">I Acknowledge</label>
-                                            <p class="text-gray-500">As an Author, I acknowledge I need to pay the Article Publishing Charge if my manuscript is accepted for publication</p>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </fieldset>
-                                    <!-- <div class="hidden sm:block" aria-hidden="true">
-                                        <div class="py-5">
-                                            <div class="border-t border-gray-200" />
-                                        </div>
-                                    </div>
-                                    <fieldset>
-                                    <div>
-                                        <legend class="text-base font-medium text-gray-900">
-                                        In support of Open Science, Sensors and Actuators Reports offers its authors a free preprint posting service. Preprints provide early registration and dissemination of research, which facilitates early citations and collaboration. Please indicate below whether you would like to release your manuscript publicly as a preprint on the preprint server www.SSRN.com once it enters peer-review with the journal. Your choice will have no effect on the editorial process or outcome with the journal. Your preprint will remain globally available free to read whether the journal accepts or rejects your manuscript.data. For more information about posting to www.SSRN.com, please consult the SSRN Terms of Use and FAQs.</legend>
-                                    </div>
-                                    <div class="mt-4 space-y-4">
-                                        <div class="flex items-center">
-                                        <input id="push-everything" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                                        <label for="push-everything" class="ml-3 block text-sm font-medium text-gray-700">
-                                            Please select a response
-                                        </label>
-                                        </div>
-                                        <div class="flex items-center">
-                                        <input id="push-email" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                                        <label for="push-email" class="ml-3 block text-sm font-medium text-gray-700">
-                                            YES, I want to share my research early and openly as a preprint.
-                                        </label>
-                                        </div>
-                                        <div class="flex items-center">
-                                        <input id="push-nothing" name="push-notifications" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
-                                        <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700">
-                                            NO, I don't want to share my research early and openly as a preprint.
-                                        </label>
-                                        </div>
-                                    </div>
-                                    </fieldset> -->
-                                </div>
-                            </div>
-                            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                <button :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Save
-                                </button>
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Unable to access manuscript.</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">To access the content, you must be a member of this manuscript and have received an invitation. Without membership, you will not be able to view the content.</p>
                             </div>
                             </div>
-                        </form>
                         </div>
                     </div>
-                </div>
-                <div class="hidden sm:block" aria-hidden="true">
-                    <div class="py-5">
-                        <div class="border-t border-gray-200" />
-                    </div>
-                </div>  
-                <div class="mt-10 sm:mt-0">
-                    <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                        <div class="px-4 sm:px-0">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">Comments</h3>
-                            <p class="mt-1 text-sm text-gray-600">
-                            Please identify your submission's areas of interest and specialization by selecting one or more classifications.
-                            </p>
-                        </div>
-                        </div>
-                        <div class="mt-5 md:mt-0 md:col-span-2">
-                        <form @submit.prevent="saveManuscript()">
-                            <div class="shadow overflow-hidden sm:rounded-md">
-                                <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                    <div class="grid gap-6">
-                                        <CommentSectionCard
-                                            :manuscript-id="manuscript.data.id"
-                                            :auth="auth"
-                                            :from="data.viewAs"></CommentSectionCard>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        </div>
-                    </div>
-                </div>
-                <Modal :show="data.showAddUserModal" @close="data.showAddUserModal = false;">
-                    <template v-slot:default>
-                        <div class="mt-2">
-                            <div>
-                                <div class="md:grid md:grid-cols-3 md:gap-6">
-                                <div class="md:col-span-1">
-                                    <div class="px-4 sm:px-0">
-                                    <h3 class="text-lg font-medium leading-6 text-gray-900">Add New User</h3>
-                                    </div>
-                                </div>
-                                <div class="mt-5 md:mt-0 md:col-span-2">
-                                    <div class="shadow sm:rounded-md sm:overflow-hidden">
-                                        <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-                                            <div class="col-span-12 sm:col-span-12">
-                                                <label for="first-name" class="block text-sm font-medium text-gray-700">First Name</label>
-                                                <input v-model="userForm.first_name" type="text" name="first-name" id="first-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
-                                            </div>
-                                            <div class="col-span-12 sm:col-span-12">
-                                                <label for="last-name" class="block text-sm font-medium text-gray-700">Last Name</label>
-                                                <input v-model="userForm.last_name" type="text" name="last-name" id="last-name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
-                                            </div>
-                                            <div class="col-span-12 sm:col-span-12">
-                                                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                                                <input v-model="userForm.email" type="text" name="email" id="email" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-                    <template v-slot:footer>
-                        <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                            <span @click="submitUserForm()" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer">Add</span>
-                        </div>
-                    </template>
-                </Modal>
+                </div> 
             </template>
         </Layout>
     </div>
@@ -1156,7 +1173,8 @@
         message: String,
         auth: Object,
         manuscriptStatusList: Array,
-        manuscriptStatus: Array
+        manuscriptStatus: Array,
+        roleAndPermissions: Array
     });
 
     const vm = getCurrentInstance();
@@ -1647,7 +1665,8 @@
         if (data.viewAsList.length > 0) {
             data.viewAs = data.viewAsList[0];
         } else {
-            data.viewAs = 'unassigned';
+            data.viewAsList.push('unassigned role');
+            data.viewAs = 'unassigned role';
         }
     };
 
@@ -1728,6 +1747,74 @@
                 manuscriptForm.reviewers = props.manuscript.data.reviewers;
             }
         });
+    }
+
+    const getRoleBgColor = () => {
+        return (data.viewAs == 'author' || data.viewAs == 'corresponding author') ? 'bg-indigo-500' : (data.viewAs == 'editor' ? 'bg-yellow-700' : (data.viewAs == 'reviewer' ? 'bg-orange-500' : (data.viewAs == 'publisher' ? 'bg-red-500' : 'bg-gray-500')));
+    }
+
+    const canSubmitToEditor = () => {
+        return (props.manuscript.data.status == `Draft`) && (data.viewAs == `author` || data.viewAs == `corresponding author` || data.viewAs == `publisher`);
+    }
+
+    const canViewAdditionalInformation = () => {
+        return data.viewAs == `author` || data.viewAs == `corresponding author`;
+    }
+
+    const filterAttachments = (attachments) => {
+        // Filter attachments according to current view as permission.
+        return attachments.data.filter(
+            function(attach) {
+                if(data.viewAs == `reviewer` && (attach.type.name != `Manuscript`)) {
+                    return false;
+                }
+                return true;
+            }
+        );
+    }
+
+    const isReviewer = () => {
+        return data.viewAs == `reviewer`;
+    }
+
+    const isAuthor = () => {
+        return data.viewAs == `author` || data.viewAs == `corresponding author`;
+    }
+
+    const isEditor = () => {
+        return data.viewAs == `editor`;
+    }
+
+    const isPublisher = () => {
+        return data.viewAs == `publisher`;
+    }
+
+    const isAssigned = () => {
+        return isAuthor() || isEditor() || isPublisher();
+    }
+
+    const canViewManuscriptData = () => {
+        return isAuthor() || isEditor() || isPublisher();
+    }
+
+    const canViewReviewerStatus = () => {
+        return isEditor() || isPublisher();
+    }
+
+    const canRemoveReviewer = () => {
+        return !(isReviewer());
+    }
+
+    const canEditReviewerReviewStatus = (reviewer) => {
+        return reviewer.status == 'Pending' && (isEditor() || isPublisher());
+    }
+
+    const canSuggestReviewer = () => {
+        return !(isReviewer());
+    }
+
+    const canPublish = () => {
+        return props.manuscript.data.status.includes('Accept') && (data.viewAs == `publisher`);
     }
 
     onMounted(() => {

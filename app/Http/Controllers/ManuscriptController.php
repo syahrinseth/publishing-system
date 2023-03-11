@@ -204,40 +204,48 @@ class ManuscriptController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $manuscript = Manuscript::with([
-            'authors' => function($q) {
-                $q->with('user');
-            },
-            'correspondingAuthors' => function($q) {
-                $q->with('user');
-            },
-            'editors' => function($q) {
-                $q->with('user');
-            },
-            'reviewers' => function($q) {
-                $q->with('user');
-            }
-        ])
-            ->where('id', $id);
+        $manuscript = Manuscript::permissionMiddleware()
+            ->with([
+                'authors.user',
+                'correspondingAuthors.user',
+                'editors.user',
+                'reviewers.user'
+            ])
+            ->findOrFail($id);
 
-        if (!auth()->user()->can('manuscripts.show_all')) {
-            $manuscript->whereHas('members', function($q) {
-                $q->where('user_id', auth()->id())
-                    ->where(function($q) {
-                        $q->where('role', 'author')
-                            ->orWhere(function($q) {
-                                $q->where('role', '!=', 'author')
-                                    ->whereHas('manuscript', function($q) {
-                                        $q->where('status', '!=', 'Draft');
-                                    });
-                            });
-                    });
-            });
-        }
-            
-        $manuscript = $manuscript->firstOrFail();
-        
-        $users = User::all();
+        // $manuscriptRoleAndPermissions = [
+        //     'author' => [
+        //         'disabled' => $manuscript->authors?->where('user_id', auth()->id())?->count() > 0 ? false : true,
+        //         'permissions' => [
+                    
+        //         ],
+        //     ],
+        //     'corresponding_author' => [
+        //         'disabled' => $manuscript->correspondingAuthors?->where('user_id', auth()->id())?->count() > 0 ? false : true,
+        //         'permissions' => [
+                    
+        //         ]
+        //     ],
+        //     'editor' => [
+        //         'disabled' => $manuscript->editors?->where('user_id', auth()->id())?->count() > 0 ? false : true,
+        //         'permissions' => [
+                    
+        //         ]
+        //     ],
+        //     'reviewer' => [
+        //         'disabled' => $manuscript->reviewers?->where('user_id', auth()->id())?->count() > 0 ? false : true,
+        //         'permissions' => [
+                    
+        //         ]
+        //     ],
+        //     'publisher' => [
+        //         'disabled' => auth()->user()->roles?->whereIn('name', ['Publisher', 'Admin', 'Super Admin'])?->count() > 0 ? false : true,
+        //         'permissions' => [
+
+        //         ]
+        //     ]
+        // ];
+        // dd($manuscriptRoleAndPermissions);
 
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));
@@ -247,7 +255,6 @@ class ManuscriptController extends Controller
             'manuscript' => new ManuscriptResource($manuscript),
             'attachments' => ManuscriptAttachResource::collection($manuscript->attachments()->orderBy('updated_at', 'desc')->paginate()),
             'filters' => $request->all(['search', 'field', 'direction', 'viewAs']),
-            'users' => $users,
             'attachTypes' => ManuscriptAttachFile::$types,
             'articleTypes' => Manuscript::getTypes(),
             'manuscriptStatusList' => Manuscript::getStatusList($manuscript->id),
