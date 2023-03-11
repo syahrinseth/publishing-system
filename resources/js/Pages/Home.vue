@@ -142,6 +142,13 @@
           color: 'text-green-700',
           icon: 'fa-thumbs-up'
         },
+        {
+          name: 'Published Manuscripts',
+          value: props.manuscript_overview.total_published,
+          link: props.manuscript_overview.total_published_link,
+          color: 'text-amber-700',
+          icon: 'fa-newspaper'
+        },
       ];
 
       return {

@@ -56,24 +56,12 @@ class ManuscriptController extends Controller
             'direction' => ['in:asc,desc'],
             'field' => ['in:title,status,updated_at,created_at']
         ]);
-        $manuscripts = Manuscript::filter($manuscriptFilters);
-        if (!auth()->user()->can('manuscripts.show_all')) {
-            // can see all manuscript accept draft created from other author.
-            // validate if manuscript is draft from other author
-            $manuscripts->whereHas('members', function($q) {
-                $q->where('user_id', auth()->id())
-                    ->where(function($q) {
-                        $q->where('role', 'author')
-                            ->orWhere(function($q) {
-                                $q->where('role', '!=', 'author')
-                                    ->whereHas('manuscript', function($q) {
-                                        $q->where('status', '!=', 'Draft');
-                                    });
-                            });
-                    });
-            });
-        }
-        $manuscripts = new ManuscriptCollection($manuscripts->orderBy('updated_at', 'desc')->paginate(5)->appends(request()->query()));
+        $manuscripts = Manuscript::permissionMiddleware()
+            ->filter($manuscriptFilters)
+            ->orderBy('updated_at', 'desc')
+            ->paginate($request->input('per_page') ?? 5)
+            ->appends(request()->query());
+        $manuscripts = new ManuscriptCollection($manuscripts);
 
         if ($request->is('api/*')) {
             return response()->json($manuscripts);

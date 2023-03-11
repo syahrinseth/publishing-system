@@ -87,6 +87,12 @@ __webpack_require__.r(__webpack_exports__);
       link: props.manuscript_overview.total_approved_link,
       color: 'text-green-700',
       icon: 'fa-thumbs-up'
+    }, {
+      name: 'Published Manuscripts',
+      value: props.manuscript_overview.total_published,
+      link: props.manuscript_overview.total_published_link,
+      color: 'text-amber-700',
+      icon: 'fa-newspaper'
     }];
     return {
       overviewCards: overviewCards

@@ -796,4 +796,38 @@ class Manuscript extends Model
             ->where('role', $role)
             ->exists();
     }
+
+    /**
+     * 
+     */
+    public static function permissionMiddleware()
+    {
+        $obj = static::query();
+        if (auth()?->user()?->can('manuscripts.show_all')) {
+            // Can view all accept draft that not belongs to the user
+            $obj->where(function($q) {
+                $q->where('status', '=', 'Draft')
+                    ->whereHas('members', function($q) {
+                        $q->where('user_id', auth()->id())
+                            ->where('role', '=', 'Author');
+                    });
+            })
+                ->orWhere('status', '!=', 'Draft');
+        } else {
+            // cannot view all
+            $obj->whereHas('members', function($q) {
+                $q->where('user_id', auth()->id() ?? 0)
+                    ->where(function($q) {
+                        $q->where('role', 'author')
+                            ->orWhere(function($q) {
+                                $q->where('role', '!=', 'author')
+                                    ->whereHas('manuscript', function($q) {
+                                        $q->where('status', '!=', 'Draft');
+                                    });
+                            });
+                    });
+            });
+        }
+        return $obj;
+    }
 }
