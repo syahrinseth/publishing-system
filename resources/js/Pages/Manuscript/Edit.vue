@@ -255,10 +255,7 @@
                                                         </label>
                                                         <p class="pl-1">or drag and drop</p>
                                                     </div>
-                                                    <p v-if="updateAttachForm.type == 1" class="text-xs text-gray-500">
-                                                        DOC, DOCX up to 50MB
-                                                    </p>
-                                                    <p v-else class="text-xs text-gray-500">
+                                                    <p class="text-xs text-gray-500">
                                                         DOC, DOCX, PDF up to 50MB
                                                     </p>
                                                 </div>
