@@ -32,6 +32,30 @@
                     </div>
                 </div>
             </div> -->
+            <div class="col-span-3 sm:col-span-2 mb-2 mt-1">
+                <label for="company-website" class="block text-sm font-medium text-gray-700 mt-1">
+                Send to
+                </label>
+                <select v-model="commentForm.to" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    <option value="" selected>Select</option>
+                    <option value="authors">Authors</option>
+                    <option value="editors">Editors</option>
+                    <option value="reviewers">Reviewers</option>
+                    <option value="publishers">Publishers</option>
+                </select>
+                <label for="company-website" class="block text-sm mt-3 font-medium text-gray-700">
+                Add your comment
+                </label>
+                <div class="mt-1 flex rounded-md shadow-sm">
+                    <textarea v-model="commentForm.text" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
+                </div>
+            </div>
+            <div class="col-span-3 sm:col-span-2 mb-2 mt-1 flex">
+                <div class="grow"></div>
+                <div href="#" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm cursor-pointer" @click="postComment()">
+                    Post
+                </div>
+            </div>
             <div v-for="comment in comments" :key="comment.id" >
                 <div class="flex">
                     <div class="flex-none pr-2 py-2">
@@ -44,7 +68,7 @@
                     </div>
                     <div class="grow">
                         <p class="text-gray-700">
-                            <span v-if="comment.user.id == auth.user.data.id">You</span>
+                        <span v-if="comment.user.id == auth.user.data.id">You</span>
                             <span v-else>{{ comment.from }}</span>
                         </p>
                         <small class="text-gray-500">
@@ -71,30 +95,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-span-3 sm:col-span-2 mb-2 mt-1">
-            <label for="company-website" class="block text-sm font-medium text-gray-700 mt-1">
-            Send to
-            </label>
-            <select v-model="commentForm.to" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                <option value="" selected>Select</option>
-                <option value="authors">Authors</option>
-                <option value="editors">Editors</option>
-                <option value="reviewers">Reviewers</option>
-                <option value="publishers">Publishers</option>
-            </select>
-            <label for="company-website" class="block text-sm mt-3 font-medium text-gray-700">
-            Add your comment
-            </label>
-            <div class="mt-1 flex rounded-md shadow-sm">
-                <textarea v-model="commentForm.text" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="" />
-            </div>
-        </div>
-        <div class="col-span-3 sm:col-span-2 mb-2 mt-1 flex">
-            <div class="grow"></div>
-            <div href="#" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm cursor-pointer" @click="postComment()">
-                Post
-            </div>
-        </div>
     </div>
 </template>
 <script>
@@ -118,7 +118,8 @@ export default {
                     params: {
                         from: this.$props.from,
                         user_id: this.$props.auth.user.data.id,
-                        to: this.$props.from
+                        to: this.$props.from,
+                        createdAt: 'desc'
                     }
                 });
                 if (resp.status == 200) {
@@ -130,6 +131,7 @@ export default {
                         from: this.$props.from,
                         user_id: this.$props.auth.user.data.id,
                         to: this.$props.from,
+                        createdAt: 'desc'
                     }
                 });
                 if (resp.status == 200) {

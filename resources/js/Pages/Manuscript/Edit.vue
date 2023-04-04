@@ -30,7 +30,6 @@
                             </div>
                         </div>
                         <div class="mt-5 flex lg:mt-0 lg:ml-4">
-                            
                         </div>
                     </div>
                     <hr class="my-4">
@@ -587,7 +586,7 @@
                             <div class="border-t border-gray-200" />
                         </div>
                     </div>  
-                    <div>
+                    <div v-if="isAssigned() && !isReviewer()">
                         <div class="md:grid md:grid-cols-3 md:gap-6">
                             <div class="md:col-span-1">
                                 <div class="px-4 sm:px-0">
@@ -904,7 +903,15 @@
                                                         {{ attachments.meta.from + index }}
                                                     </td>
                                                     <td class="px-6 py-4 word-break">
-                                                        <p>{{ attachment.type.name }}</p>
+                                                        <p>
+                                                            {{ attachment.type.name }} 
+                                                            <Badge
+                                                                v-show="attachment.unread_comment_notifications?.length > 0"
+                                                                :text="attachment.unread_comment_notifications?.length"
+                                                                :tooltip="`You have ${attachment.unread_comment_notifications?.length} unread comment(s).`">
+                                                            </badge>
+                                                            
+                                                        </p>
                                                         <small class="text-gray-500">
                                                             {{ attachment.description }}
                                                         </small>
@@ -916,7 +923,8 @@
                                                         {{ attachment.updated_at }}
                                                     </td>
                                                     <td class="px-6 py-4 word-break">
-                                                        <span class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1" @click="data.showUpdateAttachModel = !data.showUpdateAttachModel; fillUpdateAttachForm(attachment);">View</span>
+                                                        
+                                                        <span class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1" @click="data.showUpdateAttachModel = !data.showUpdateAttachModel; fillUpdateAttachForm(attachment); markAsRead(attachment.unread_comment_notifications)">View</span>
                                                         <!--<a :href="`/admin/manuscripts/${manuscript.data.id}/attach-files/${attachment.id}/download`" class="text-indigo-600 hover:text-indigo-900 px-1">Download</a>-->
                                                         <span :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" @click="cannotEditOnSubmit() ? `` : deleteAttachFile(attachment)" class="text-indigo-600 hover:text-indigo-900 cursor-pointer px-1">Delete</span>
                                                     </td>
@@ -1159,6 +1167,7 @@
     import Pagination from '../../Components/Pagination.vue'
     import JetInputError from '../../Components/InputError.vue';
     import { onMounted, reactive, defineProps, getCurrentInstance } from 'vue'
+    import Badge from '../../Components/Badge.vue'
 
     const props = defineProps({
         manuscript: Object,
@@ -1874,6 +1883,22 @@
 
     const canPublish = () => {
         return props.manuscript.data.status.includes('Accept') && (data.viewAs == `publisher`);
+    }
+
+    const markAsRead = async (notifications) => {
+        if (notifications.length == 0) {
+            return 0;
+        }
+        await window.axios.put('/api/notifications/mark-as-read', {
+            ids: notifications?.map(v => v.id),
+        })
+            .then((res) => {
+                if (res.status >= 200 && res.status < 300) {
+                    
+                }
+            })
+            .catch((err) => {
+            });
     }
 
     onMounted(() => {

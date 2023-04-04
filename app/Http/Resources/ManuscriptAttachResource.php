@@ -24,6 +24,7 @@ class ManuscriptAttachResource extends JsonResource
             "file_name" => $this->file_name,
             "file_location" => $this->file_location,
             "size" => $this->size,
+            "unread_comment_notifications" => $this->unreadCommentNotifications(),
             "created_at" => $this->created_at->diffForHumans(),
             "updated_at" => $this->updated_at->diffForHumans()
         ];

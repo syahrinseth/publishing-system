@@ -14,7 +14,7 @@ class ManuscriptCommentFilters extends QueryFilter
 
     public function createdAt($order = 'desc')
     {
-        return $this->builder->orderBy('updated_at', $order);
+        return $this->builder->orderBy('created_at', $order);
     }
 
     public function search($input = null)

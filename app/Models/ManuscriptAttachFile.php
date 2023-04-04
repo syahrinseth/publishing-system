@@ -170,4 +170,17 @@ class ManuscriptAttachFile extends Model
         }
         return $this;
     }
+
+    public function comments()
+    {
+        return $this->hasMany(ManuscriptAttachFileComment::class, 'manuscript_attach_id', 'id');
+    }
+
+    public function unreadCommentNotifications()
+    {
+        return auth()->user()?->unreadNotifications()?->where(function($q) { 
+            $q->where('data->model_type', 'like', "%ManuscriptAttachFileComment%")
+                ->whereIn('data->model_id', $this->comments()->get(['id'])->toArray()); 
+        })?->get(['id', 'read_at']);
+    }
 }

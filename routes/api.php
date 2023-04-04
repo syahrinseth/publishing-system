@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\ManuscriptController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PublicJournalController;
 
 /*
@@ -75,6 +76,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Journals
     Route::controller(JournalController::class)->group(function () {
         Route::get('/journals/{id}/manuscripts', 'indexManuscript')->name('api.journal.manuscript');
+    });
+
+    Route::controller(NotificationController::class)->group(function() {
+        Route::put('/notifications/mark-as-read', 'markAsRead')->name('notification.markAsRead');
     });
 
 });
