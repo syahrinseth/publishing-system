@@ -3772,7 +3772,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     var filterAttachments = function filterAttachments(attachments) {
       // Filter attachments according to current view as permission.
       return attachments.data.filter(function (attach) {
-        if (data.viewAs == "reviewer" && attach.type.name != "Manuscript") {
+        if (data.viewAs == "reviewer" && (attach.type.id == 1 || attach.type.id == 2)) {
+          return true;
+        }
+
+        if (data.viewAs != 'reviewer') {
+          return true;
+        }
+
+        return false;
+      });
+    };
+
+    var filterAttachTypes = function filterAttachTypes(attachTypes) {
+      return attachTypes.filter(function (type) {
+        if (data.viewAs == 'reviewer') {
+          if (type.id == 1 || type.id == 2) {
+            return true;
+          }
+
           return false;
         }
 
@@ -3911,6 +3929,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       canSubmitToEditor: canSubmitToEditor,
       canViewAdditionalInformation: canViewAdditionalInformation,
       filterAttachments: filterAttachments,
+      filterAttachTypes: filterAttachTypes,
       isReviewer: isReviewer,
       isAuthor: isAuthor,
       isEditor: isEditor,
@@ -5918,7 +5937,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
               return $setup.attachForm.type = $event;
             })
-          }, [_hoisted_43, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.attachTypes, function (type, index) {
+          }, [_hoisted_43, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.filterAttachTypes($props.attachTypes), function (type, index) {
             return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
               key: type.id,
               value: type.id

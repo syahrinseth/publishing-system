@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAttachFileManuscriptRequest;
 use PDF;
 use FPDF;
 use App\Models\User;
@@ -445,15 +446,9 @@ class ManuscriptController extends Controller
      * 
      * @return Response
      */
-    public function storeAttachFile(Request $request, $id)
+    public function storeAttachFile(StoreAttachFileManuscriptRequest $request, $id)
     {
-        $request->validate([
-            'type' => ['required', $request->type == 1 ? Rule::unique('manuscript_attach_files')->where(function ($query) use($id, $request) {
-                return $query->where('manuscript_id', $id)
-                ->where('type', $request->type);
-            }) : 'integer'],
-            'file' => ['required','mimes:doc,docx,pdf']
-        ]);
+        $validated = $request->validated();
 
         $manuscript = Manuscript::findOrFail($id);
         $attach = new ManuscriptAttachFile;   
@@ -462,14 +457,7 @@ class ManuscriptController extends Controller
         $attach->description = $request->description;
         $attach->size = 0;
         $attach->save();
-
-        if ($request->hasFile('file')) {
-            $path = $request->file->storeAs("manuscripts/{$id}/attach-files/$attach->id", $request->file->getClientOriginalName());
-            $attach->file_location = $path;
-            $attach->file_name = $attach->getFileName();
-            $attach->size = Storage::size($path);
-            $attach->update();
-        }
+        $attach->storeFile($validated);
 
         // Send mail
         $manuscript->notifyCreateAttachToMembers($attach);

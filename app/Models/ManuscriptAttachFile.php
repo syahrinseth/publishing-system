@@ -150,4 +150,24 @@ class ManuscriptAttachFile extends Model
         $types = collect(ManuscriptAttachFile::$types);
         return $types->where('id', $this->type)->first();
     }
+
+    public function storeFile($data)
+    {
+        if ($data['file'] instanceof \Illuminate\Http\UploadedFile) {
+            $path = $data['file']->storeAs("manuscripts/{$this->manuscript_id}/attach-files/$this->id", $data['file']->getClientOriginalName());
+            $this->file_location = $path;
+            $this->file_name = $data['file']->getFileName();
+            $this->size = Storage::size($path);
+            $this->update();
+        }
+        return $this;
+    }
+
+    public function filteredByPermissions($manuscript)
+    {
+        if ($manuscript->authIsReviewer()) {
+            $this->whereIn('type', [1,2]);
+        }
+        return $this;
+    }
 }

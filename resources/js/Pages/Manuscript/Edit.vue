@@ -133,7 +133,7 @@
                                                 </label>
                                                 <select :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? 'cursor-not-allowed' : null" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" v-model="attachForm.type">
                                                     <option value="" selected>Select</option>
-                                                    <option v-for="type, index in attachTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
+                                                    <option v-for="type, index in filterAttachTypes(attachTypes)" :key="type.id" :value="type.id">{{ type.name }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -1798,7 +1798,24 @@
         // Filter attachments according to current view as permission.
         return attachments.data.filter(
             function(attach) {
-                if(data.viewAs == `reviewer` && (attach.type.name != `Manuscript`)) {
+                if(data.viewAs == `reviewer` && (attach.type.id == 1 || attach.type.id == 2)) {
+                    return true;
+                }
+                if (data.viewAs != 'reviewer') {
+                    return true;
+                }
+                return false;
+            }
+        );
+    }
+
+    const filterAttachTypes = (attachTypes) => {
+        return attachTypes.filter(
+            function(type) {
+                if (data.viewAs == 'reviewer') {
+                    if (type.id == 1 || type.id == 2) {
+                        return true;
+                    }
                     return false;
                 }
                 return true;
