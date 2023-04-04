@@ -47,12 +47,9 @@ class ManuscriptMemberController extends Controller
             'members' => ['nullable', 'array']
         ]);
 
-        $user_ids = collect($validated['members'] ?? [ $validated['user_id'] ])
-                ?->map(function($member){ 
-                    return gettype($member) == 'integer' || gettype($member) == 'string' ? $member : $member['id']; 
-                });
+        $user_ids = ManuscriptMember::mapInputIntoUserID($validated);
 
-        $members = ManuscriptMember::createMembers(
+        ManuscriptMember::createMembers(
             Manuscript::findOrFail($id),
             [
                 'reviewers' => $user_ids

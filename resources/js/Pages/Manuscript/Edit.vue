@@ -16,11 +16,11 @@
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
                                     <DocumentReportIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
                                     <span class="px-3 py-2 rounded-full text-white" :class="{
-                                        'bg-gray-400': (manuscript.data.status == 'Draft'),
-                                        'bg-blue-400': (manuscript.data.status == 'Submit For Review') || (manuscript.data.status == 'Submit To Editor'),
-                                        'bg-red-400': (manuscript.data.status == 'Rejected Invite To Resubmit') || (manuscript.data.status == 'Rejected'),
-                                        'bg-green-400': (manuscript.data.status == 'Accepted Without Changes') || (manuscript.data.status == 'Accepted With Minor Changes') || (manuscript.data.status == 'Accepted With Major Changes'),
-                                        'bg-indigo-400': (manuscript.data.status == 'Published'),
+                                        'bg-gray-400': isDraft(),
+                                        'bg-blue-400': isSubmitForReview() || isSubmitToEditor(),
+                                        'bg-red-400': isRejected(),
+                                        'bg-green-400': isAccepted(),
+                                        'bg-indigo-400': isPublished(),
                                     }">{{ manuscript.data.status }}</span>
                                 </div>
                                 <div class="mt-2 flex items-center text-sm text-gray-500">
@@ -82,19 +82,19 @@
                                     Submit To Editor
                                 </button>
                             </span>
-                            <span class="sm:ml-3" v-if="(manuscript.data.status == `Rejected Invite To Resubmit` || manuscript.data.status == `Submit To Editor`) && (data.viewAs == `editor`)">
+                            <span class="sm:ml-3" v-if="(isRejectedToResubmit() || isSubmitToEditor()) && (isEditor())">
                                 <a href="#" @click="data.showSubmitReviewModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                                     <DocumentSearchIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                     Submit For Review
                                 </a>
                             </span>
-                            <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (data.viewAs == `reviewer`) && canReview()">
+                            <span class="sm:ml-3" v-if="isSubmitForReview() && isReviewer() && canReview() && !isReviewerPending()">
                                 <a href="#" @click="data.showRejectModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                     <XCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                     Reject
                                 </a>
                             </span>
-                            <span class="sm:ml-3" v-if="manuscript.data.status == `Submit For Review` && (data.viewAs == `reviewer`) && canReview()">
+                            <span class="sm:ml-3" v-if="isSubmitForReview() && isReviewer() && canReview() && !isReviewerPending()">
                                 <a href="#" @click="data.showAcceptModal = true" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                     <CheckCircleIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                     Accept
@@ -106,7 +106,7 @@
                                     Publish
                                 </a>
                             </span>
-                            <span class="sm:ml-3" v-if="manuscript.data.status == `Published`">
+                            <span class="sm:ml-3" v-if="isPublished()">
                                 <a :href="`/admin/manuscripts/${manuscript.data.id}/download`" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
                                     <DownloadIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                     Download PDF
@@ -131,9 +131,9 @@
                                                 <label for="company-website" class="block text-sm font-medium text-gray-700">
                                                 Type
                                                 </label>
-                                                <select :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="attachForm.type">
+                                                <select :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? 'cursor-not-allowed' : null" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" v-model="attachForm.type">
                                                     <option value="" selected>Select</option>
-                                                    <option v-for="type in attachTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
+                                                    <option v-for="type, index in attachTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -203,7 +203,7 @@
                                                 </label>
                                                 <select :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="updateAttachForm.type">
                                                     <option value="" selected>Select</option>
-                                                    <option v-for="type in attachTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
+                                                    <option v-for="type, index in attachTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -466,7 +466,7 @@
                                     Suggest Reviewer
                                 </DialogTitle>
                                 <div class="mt-2 h-80">
-                                    <form @submit.prevent="submitAttach">
+                                    <form>
                                         <div class="grid grid-cols-3 gap-6 mb-2">
                                             <div class="col-span-3 sm:col-span-3">
                                                 <VueMultiselect 
@@ -540,7 +540,7 @@
                                             </label>
                                             <select :disabled="cannotEditOnSubmit()" :class="cannotEditOnSubmit() ? `cursor-not-allowed` : null" name="company-website" id="company-website" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="www.example.com" v-model="manuscriptForm.type">
                                                 <option value="" selected>Select</option>
-                                                <option v-for="type in articleTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
+                                                <option v-for="type, index in articleTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
                                             </select>
                                         </div>
                                         <div class="col-span-3 sm:col-span-2">
@@ -1180,7 +1180,7 @@
         showAddUserModal: false,
         showAddUserModalDataIncludeIntoInput: 'corresponding_authors',
         viewAsList: [],
-        viewAs: 0,
+        viewAs: null,
         attach_files: [],
         showUploadAttachModal: false,
         showUpdateAttachModel: false,
@@ -1255,6 +1255,41 @@
         password: helper.generateString(8),
         password_confirmation: null
     });
+
+    const isDraft = () => {
+        return props.manuscript?.data?.status == "Draft";
+    }
+
+    const isSubmitForReview = () => {
+        return props.manuscript?.data?.status == "Submit For Review";
+    }
+
+    const isSubmitToEditor = () => {
+        return props.manuscript?.data?.status == "Submit To Editor";
+    }
+
+    const isRejected = () => {
+        return [
+            'Rejected',
+            'Rejected Invite To Resubmit'
+        ].includes(props.manuscript?.data.status);
+    }
+
+    const isAccepted = () => {
+        return [
+            'Accepted Without Changes',
+            'Accepted With Minor Changes',
+            'Accepted With Major Changes'
+        ].includes(props.manuscript?.data.status);
+    }
+
+    const isRejectedToResubmit = () => {
+        return props.manuscript?.data.status == "Rejected Invite To Resubmit";
+    }
+
+    const isPublished = () => {
+        return props.manuscript?.data.status == "Published";
+    }
 
     const fillUpdateAttachForm = (attach) => {
         updateAttachForm.id = attach.id;
@@ -1572,12 +1607,16 @@
         return 0;
     }, 300);
 
+    const getAuthID = () => {
+        return props.auth.user.data.id;
+    }
+
     const authIsAuthor = () => {
-        let auth_id = props.auth.user.data.id;
+        
         let manuscriptAuthors = props.manuscript.data.authors;
         // Filter auth roles
         let result = manuscriptAuthors.filter(function(member) {
-            if (member.user_id == auth_id) {
+            if (member.user_id == getAuthID()) {
                 return true;
             }
             return false;
@@ -1586,11 +1625,10 @@
     };
 
     const authIsCorrespondingAuthor = () => {
-        let auth_id = props.auth.user.data.id;
         let manuscriptAuthors = props.manuscript.data.corresponding_authors;
         // Filter auth roles
         let result = manuscriptAuthors.filter(function(member) {
-            if (member.user_id == auth_id) {
+            if (member.user_id == getAuthID()) {
                 return true;
             }
             return false;
@@ -1599,11 +1637,10 @@
     };
 
     const authIsEditor = () => {
-        let auth_id = props.auth.user.data.id;
         let manuscriptEditors = props.manuscript.data.editors;
         // Filter auth roles
         let result = manuscriptEditors.filter(function(member) {
-            if (member.user_id == auth_id) {
+            if (member.user_id == getAuthID()) {
                 return true;
             }
             return false;
@@ -1612,11 +1649,10 @@
     };
 
     const authIsReviewer = () => {
-        let auth_id = props.auth.user.data.id;
         let manuscriptReviewers = props.manuscript.data.reviewers;
         // Filter auth roles
         let result = manuscriptReviewers.filter(function(member) {
-            if (member.user_id == auth_id) {
+            if (member.user_id == getAuthID()) {
                 return true;
             }
             return false;
@@ -1663,12 +1699,12 @@
             data.viewAs = data.viewAsList[0];
         } else {
             data.viewAsList.push('unassigned role');
-            data.viewAs = 'unassigned role';
+            data.viewAs = data.viewAsList[0];
         }
     };
 
     const cannotEditOnSubmit = () => {
-        return props.auth.user.data.permissions_attribute.manuscripts.edit_after_submit == false && (props.manuscript.data.status == `Submit To Editor` || props.manuscript.data.status == `Submit For Review` || props.manuscript.data.status == `Rejected` || props.manuscript.data.status == `Accepted Without Changes` || props.manuscript.data.status == `Published`);
+        return props.auth.user.data.permissions_attribute.manuscripts.edit_after_submit == false && (isSubmitToEditor() || isSubmitForReview() || props.manuscript.data.status == `Rejected` || props.manuscript.data.status == `Accepted Without Changes` || isPublished());
     }
 
     const onRemoveReviewer = (reviewer) => {
@@ -1751,7 +1787,7 @@
     }
 
     const canSubmitToEditor = () => {
-        return (props.manuscript.data.status == `Draft`) && (data.viewAs == `author` || data.viewAs == `corresponding author` || data.viewAs == `publisher`);
+        return (isDraft()) && (data.viewAs == `author` || data.viewAs == `corresponding author` || data.viewAs == `publisher`);
     }
 
     const canViewAdditionalInformation = () => {
@@ -1788,6 +1824,15 @@
 
     const isAssigned = () => {
         return isAuthor() || isEditor() || isPublisher();
+    }
+
+    const getAuthReviewer = () => {
+        return props.manuscript.data.reviewers.filter(v => v.user_id == getAuthID())?.[0];
+    }
+
+    const isReviewerPending = () => {
+        let reviewer = getAuthReviewer();
+        return isReviewer() && (reviewer.status == 'Pending' || reviewer.status == 'Accepted');
     }
 
     const canViewManuscriptData = () => {

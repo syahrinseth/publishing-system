@@ -213,40 +213,6 @@ class ManuscriptController extends Controller
             ])
             ->findOrFail($id);
 
-        // $manuscriptRoleAndPermissions = [
-        //     'author' => [
-        //         'disabled' => $manuscript->authors?->where('user_id', auth()->id())?->count() > 0 ? false : true,
-        //         'permissions' => [
-                    
-        //         ],
-        //     ],
-        //     'corresponding_author' => [
-        //         'disabled' => $manuscript->correspondingAuthors?->where('user_id', auth()->id())?->count() > 0 ? false : true,
-        //         'permissions' => [
-                    
-        //         ]
-        //     ],
-        //     'editor' => [
-        //         'disabled' => $manuscript->editors?->where('user_id', auth()->id())?->count() > 0 ? false : true,
-        //         'permissions' => [
-                    
-        //         ]
-        //     ],
-        //     'reviewer' => [
-        //         'disabled' => $manuscript->reviewers?->where('user_id', auth()->id())?->count() > 0 ? false : true,
-        //         'permissions' => [
-                    
-        //         ]
-        //     ],
-        //     'publisher' => [
-        //         'disabled' => auth()->user()->roles?->whereIn('name', ['Publisher', 'Admin', 'Super Admin'])?->count() > 0 ? false : true,
-        //         'permissions' => [
-
-        //         ]
-        //     ]
-        // ];
-        // dd($manuscriptRoleAndPermissions);
-
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));
         }
