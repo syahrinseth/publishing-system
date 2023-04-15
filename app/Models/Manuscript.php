@@ -43,7 +43,8 @@ class Manuscript extends Model
         'keywords',
         'funding_information',
         'is_confirm_grant_numbers',
-        'is_acknowledge'
+        'is_acknowledge',
+        'date_published'
     ];
 
     /**
@@ -52,7 +53,7 @@ class Manuscript extends Model
      * @var array
      */
     protected $casts = [
-        'date_published' => 'dateTime'
+        'date_published' => 'datetime'
     ];
 
     public static $types = [
@@ -249,9 +250,9 @@ class Manuscript extends Model
             ($this->authIsEditor() || $this->authIsAuthor()) && 
             in_array($input, [$statusList[0]['name'], $statusList[1]['name'], $statusList[8]['name']])
         ) {
-
             $this->status = $input;
             $this->update();
+            $this->refreshReviewersReviewLog();
 
             // Send notification to reviewers.
             if ($statusList[1]['name'] == $input) {
@@ -306,6 +307,7 @@ class Manuscript extends Model
         ) {
         
             $this->status = $input;
+            $this->date_published = Carbon::now();
             $this->update();
             $this->notifyMembersForPublished();
             return true;
@@ -314,6 +316,15 @@ class Manuscript extends Model
         
         return false;
     
+    }
+
+    public function refreshReviewersReviewLog()
+    {
+        $this->reviewers()->update([
+            'reviewed' => null,
+            'reviewedVote' => null
+        ]);
+        return $this;
     }
 
     /**
@@ -625,7 +636,7 @@ class Manuscript extends Model
         })->values()->all());
 
         $users = collect($users)->unique()->all();
-        
+
         if (!empty($users)) {
             Mail::to($users)->queue(new ManuscriptPublishedNotification($this));
         }
