@@ -334,24 +334,31 @@ class ManuscriptController extends Controller
             'manuscript' => $manuscript,
             'attachFile'  => $attachments->first()
         ])->render();
-            
+        
         // Fetch latest manuscript
         $attachment = $attachments->filter(function($value) {
+            
             if ($value->canMerge()) {
                 return true;
             }
+
             return false;
+
         })?->sortByDesc('id')?->first();
+
         // Fetch break template
         $breakTemplate = file_get_contents( public_path() . "/break.html" );
         
         if (empty($attachment)) {
+
             if ($request->is('api/*')) {
                 return response('', 403)->json();
             }
-            return back()->withErrors([
-                'status' => 'There\'s nothing to download.'
+
+            return redirect()->back()->withErrors([
+                'status' => 'There\'s nothing to download. Make sure you upload the correct file as correct attachment file type. Eg: Manuscript or Manuscript (for publish).'
             ]);
+
         }
 
         // Convert attach file into html
@@ -385,6 +392,7 @@ class ManuscriptController extends Controller
             return $pdf->stream('merged.pdf');
 
         } elseif(str_contains(Storage::mimeType($attachment->file_location), 'pdf')) {
+
             // Create a header for the manuscript
             $pdf = PDF::loadHTML($mainTemplate);
             $pdf->setPaper('A4', 'portrait');

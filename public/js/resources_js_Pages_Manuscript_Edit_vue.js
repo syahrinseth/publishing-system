@@ -3934,12 +3934,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       };
     }();
 
+    var displayErrors = function displayErrors() {
+      var _props$errors;
+
+      if (((_props$errors = props.errors) === null || _props$errors === void 0 ? void 0 : _props$errors.status) != null) {
+        notification(props.errors.status, 'error');
+      }
+    };
+
     (0,vue__WEBPACK_IMPORTED_MODULE_10__.onMounted)(function () {
       setRoleView();
       asyncFindEditors();
       asyncFindReviewers();
       asyncFindAuthors();
       asyncFindCorrespondingAuthors();
+      displayErrors();
     });
     var __returned__ = {
       props: props,
@@ -4023,6 +4032,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       canSuggestReviewer: canSuggestReviewer,
       canPublish: canPublish,
       markAsRead: markAsRead,
+      displayErrors: displayErrors,
       Layout: _Layout__WEBPACK_IMPORTED_MODULE_1__["default"],
       Table: _Components_Table__WEBPACK_IMPORTED_MODULE_2__["default"],
       Modal: _Components_Modal__WEBPACK_IMPORTED_MODULE_3__["default"],

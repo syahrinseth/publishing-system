@@ -1901,12 +1901,20 @@
             });
     }
 
+    const displayErrors = () => {
+        if (props.errors?.status != null) {
+            notification(props.errors.status, 'error');
+        }
+        
+    }
+
     onMounted(() => {
         setRoleView();
         asyncFindEditors()
         asyncFindReviewers()
         asyncFindAuthors()
         asyncFindCorrespondingAuthors()
+        displayErrors()
     });
 
 </script>

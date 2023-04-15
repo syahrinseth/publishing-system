@@ -23,6 +23,10 @@ class ManuscriptAttachFile extends Model
             "name" => "Manuscript"
         ],
         [
+            "id" => 14,
+            "name" => "Manuscript (for publish)"
+        ],
+        [
             "id" => 2,
             "name" => "Highlights (for review)"
         ],
@@ -129,15 +133,31 @@ class ManuscriptAttachFile extends Model
      */
     public function canMerge()
     {
+        if (empty($this->file_location)) {
+            return false;
+        }
+
         $mimeType = Storage::mimeType($this->file_location);
 
-        if((str_contains(strtolower($mimeType), 'word') || str_contains(strtolower($mimeType), 'pdf')) && $this->type == 1) {
+        if((str_contains(strtolower($mimeType), 'word') || str_contains(strtolower($mimeType), 'pdf')) && ($this->type == 14 || $this->type == 1)) {
 
             return true;
 
         }
 
         return false;
+    }
+
+    public function sizeFormated($precision = 2)
+    {
+        if (empty($this->size)) {
+            return 0;
+        }
+
+        $base = log($this->size, 1024);
+        $suffixes = array('', 'KB', 'MB', 'GB', 'TB');   
+
+        return round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[floor($base)];
     }
 
     /**
