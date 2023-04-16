@@ -4,9 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\Manuscript;
 use Illuminate\Console\Command;
-use App\Models\ManuscriptMember;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ManuscriptReviewerNotification;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ManuscriptReviewerNotification;
 
 class ManuscriptReviewerReminder extends Command
 {
@@ -51,7 +50,8 @@ class ManuscriptReviewerReminder extends Command
             $reviewers = $manuscript->members->where('role', 'reviewer')->where('reviewed', null)->values()->all();
             // Send mail.
             foreach ($reviewers as $reviewer) {
-                Mail::to($reviewer->user->email)->queue(new ManuscriptReviewerNotification($manuscript, $reviewer->user));
+                // Mail::to($reviewer->user->email)->queue(new ManuscriptReviewerNotification($manuscript, $reviewer->user));
+                Notification::send($reviewer->user, new ManuscriptReviewerNotification($manuscript, $reviewer->user));
             }
         }
         // Done.

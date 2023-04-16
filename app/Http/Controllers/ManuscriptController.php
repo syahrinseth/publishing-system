@@ -148,12 +148,15 @@ class ManuscriptController extends Controller
      */
     public function storeFinal(Request $request, $id)
     {
-        $request->validate([
-            'is_confirm_grant_numbers' => 'required|accepted',
-            'is_acknowledge' => 'required|accepted'
+        $validated = $request->validate([
+            'is_confirm_grant_numbers' => 'required|boolean',
+            'is_acknowledge' => 'required|boolean'
         ]);
         $manuscript = Manuscript::findOrFail($id);
-        $manuscript->status = 'Submit To Editor';
+        $manuscript->update([
+            ...$validated,
+            'status' => 'Submit To Editor'
+        ]);
 
         // Validate submit to editor
         $attachments = $manuscript->attachments->unique('type')->whereIn('type', [1, 5, 13]);
@@ -167,12 +170,7 @@ class ManuscriptController extends Controller
                 'status' => '"Manuscript", "Cover Letter" and "Plagiarism Report" attached files are required. Please upload the following documents.'
             ]);
         }
-        
-        $manuscript->additional_informations = [
-            'is_confirm_grant_numbers' => $request->is_confirm_grant_numbers == null ? (empty($manuscript->additional_informations['is_confirm_grant_numbers']) ? false : true) : $request->is_confirm_grant_numbers,
-            'is_acknowledge' => $request->is_acknowledge == null ? (empty($manuscript->additional_informations['is_acknowledge']) ? false : true) : $request->is_acknowledge
-        ];
-        $manuscript->update();
+
         $manuscript->notifyCreateManuscript();
 
         if ($request->is('api/*')) {
@@ -205,14 +203,14 @@ class ManuscriptController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $manuscript = Manuscript::permissionMiddleware()
-            ->with([
+        $manuscript = Manuscript::with([
                 'authors.user',
                 'correspondingAuthors.user',
                 'editors.user',
                 'reviewers.user'
             ])
-            ->findOrFail($id);
+            ->where('id', $id)
+            ->firstOrFail();
 
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));
