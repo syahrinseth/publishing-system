@@ -23,6 +23,10 @@ class ManuscriptAttachFile extends Model
             "name" => "Manuscript"
         ],
         [
+            "id" => 14,
+            "name" => "Manuscript (for publish)"
+        ],
+        [
             "id" => 2,
             "name" => "Highlights (for review)"
         ],
@@ -129,15 +133,31 @@ class ManuscriptAttachFile extends Model
      */
     public function canMerge()
     {
+        if (empty($this->file_location)) {
+            return false;
+        }
+
         $mimeType = Storage::mimeType($this->file_location);
 
-        if((str_contains(strtolower($mimeType), 'word') || str_contains(strtolower($mimeType), 'pdf')) && $this->type == 1) {
+        if((str_contains(strtolower($mimeType), 'word') || str_contains(strtolower($mimeType), 'pdf')) && ($this->type == 14 || $this->type == 1)) {
 
             return true;
 
         }
 
         return false;
+    }
+
+    public function sizeFormated($precision = 2)
+    {
+        if (empty($this->size)) {
+            return 0;
+        }
+
+        $base = log($this->size, 1024);
+        $suffixes = array('', 'KB', 'MB', 'GB', 'TB');   
+
+        return round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[floor($base)];
     }
 
     /**
@@ -149,5 +169,38 @@ class ManuscriptAttachFile extends Model
     {
         $types = collect(ManuscriptAttachFile::$types);
         return $types->where('id', $this->type)->first();
+    }
+
+    public function storeFile($data)
+    {
+        if ($data['file'] instanceof \Illuminate\Http\UploadedFile) {
+            $path = $data['file']->storeAs("manuscripts/{$this->manuscript_id}/attach-files/$this->id", $data['file']->getClientOriginalName());
+            $this->file_location = $path;
+            $this->file_name = $data['file']->getFileName();
+            $this->size = Storage::size($path);
+            $this->update();
+        }
+        return $this;
+    }
+
+    public function filteredByPermissions($manuscript)
+    {
+        if ($manuscript->authIsReviewer()) {
+            $this->whereIn('type', [1,2]);
+        }
+        return $this;
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(ManuscriptAttachFileComment::class, 'manuscript_attach_id', 'id');
+    }
+
+    public function unreadCommentNotifications()
+    {
+        return auth()->user()?->unreadNotifications()?->where(function($q) { 
+            $q->where('data->model_type', 'like', "%ManuscriptAttachFileComment%")
+                ->whereIn('data->model_id', $this->comments()->get(['id'])->toArray()); 
+        })?->get(['id', 'read_at']);
     }
 }

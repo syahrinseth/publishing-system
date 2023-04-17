@@ -28,13 +28,8 @@ class HomeController extends Controller
     public function index()
     {
         // Query Manuscripts
-        $manuscripts = Manuscript::query();
-        if (!auth()->user()->can('manuscripts.show_all')) {
-            $manuscripts->whereHas('members', function($q) {
-                $q->where('user_id', auth()->id());
-            });
-        }
-        $manuscripts = $manuscripts->get();
+        $manuscripts = Manuscript::permissionMiddleware()
+            ->get();
 
         // Next Steps
         // Author Steps
@@ -79,22 +74,22 @@ class HomeController extends Controller
         
         // Filter Manuscript Status card
         $total_draft = $manuscripts->where('status', 'Draft')->count();
-        $total_draft_link = http_build_query([ 'ids' => $manuscripts->where('status', 'Draft')->map(function($manuscript) {return $manuscript->id;})->all()]);
+        $total_draft_link = http_build_query([ 'status' => 'Draft']);
 
         $total_submit_to_editor = $manuscripts->where('status', 'Submit To Editor')->count();
-        $total_submit_to_editor_link = http_build_query([ 'ids' => $manuscripts->where('status', 'Submit To Editor')->map(function($manuscript) {return $manuscript->id;})->all()]);
+        $total_submit_to_editor_link = http_build_query([ 'status' => 'Submit To Editor']);
 
         $total_review = $manuscripts->where('status', 'Submit For Review')->count();
-        $total_review_link = http_build_query([ 'ids' => $manuscripts->where('status', 'Submit For Review')->map(function($manuscript) {return $manuscript->id;})->all()]);
+        $total_review_link = http_build_query([ 'status' => 'Submit For Review']);
 
         $total_rejected = $manuscripts->whereIn('status', ['Rejected', 'Rejected Invite To Resubmit', ])->count();
-        $total_rejected_link = http_build_query([ 'ids' => $manuscripts->whereIn('status', ['Rejected', 'Rejected Invite To Resubmit', ])->map(function($manuscript) {return $manuscript->id;})->all()]);
+        $total_rejected_link = http_build_query([ 'status' => ['Rejected', 'Rejected Invite To Resubmit']]);
 
         $total_approved = $manuscripts->whereIn('status', ['Accepted Without Changes', 'Accepted With Minor Changes', 'Accepted With Major Changes'])->count();
-        $total_approved_link = http_build_query([ 'ids' => $manuscripts->whereIn('status', ['Accepted Without Changes', 'Accepted With Minor Changes', 'Accepted With Major Changes'])->map(function($manuscript) {return $manuscript->id;})->all()]);
+        $total_approved_link = http_build_query([ 'status' => ['Accepted Without Changes', 'Accepted With Minor Changes', 'Accepted With Major Changes']]);
 
         $total_published = $manuscripts->where('status', 'Published')->count();
-        $total_published_link = http_build_query([ 'ids' => $manuscripts->where('status', 'Published')->map(function($manuscript) {return $manuscript->id;})->all()]);
+        $total_published_link = http_build_query([ 'status' => 'Published']);
 
         $total_reviewers_reviewed_manuscripts = User::getTotalReviewersReviewedManuscripts();
 

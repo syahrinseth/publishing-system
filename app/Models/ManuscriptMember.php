@@ -6,8 +6,10 @@ use App\Models\Manuscript;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Notifications\InviteReviewerForReview;
 use App\Mail\ManuscriptInviteMemberNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Notifications\ManuscriptMemberInvitationReview;
 
 class ManuscriptMember extends Model
 {
@@ -95,12 +97,13 @@ class ManuscriptMember extends Model
         foreach ($input['reviewers'] ?? [] as $key => $value) {
             $user_id = gettype($value) == 'integer' || gettype($value) == 'string' ? $value : $value['id'];
             if (!Manuscript::memberIsExists(manuscript_id: $manuscript->id, user_id: $user_id, role: 'reviewer')) {
-                ManuscriptMember::firstOrCreate([
+                $member = ManuscriptMember::firstOrCreate([
                     'manuscript_id' => $manuscript->id,
                     'user_id' => $user_id,
                     'role' => 'reviewer',
                     'status' => 'Pending'
                 ]);
+                $member->notifyReviewerInvitation();
             }
         }
 
@@ -153,5 +156,22 @@ class ManuscriptMember extends Model
             ->where('manuscript_id', $manuscript->id)
             ->where('role', $member)
             ->get();
+    }
+
+    public static function mapInputIntoUserID($input)
+    {
+        return collect($input['members'] ?? [ $input['user_id'] ])
+                ?->map(function($member){ 
+                    return gettype($member) == 'integer' || gettype($member) == 'string' ? $member : $member['id']; 
+                });
+    }
+
+    public function notifyReviewerInvitation()
+    {
+        $editors = $this->manuscript->editors;
+        foreach ($editors as $editor) {
+            $editor->user?->notify(new ManuscriptMemberInvitationReview($this->manuscript, $this->user));
+        }
+        return count($editors) > 0 ? true : false;
     }
 }

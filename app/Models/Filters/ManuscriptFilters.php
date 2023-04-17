@@ -3,6 +3,7 @@
 namespace App\Models\Filters;
 
 use App\QueryFilter;
+use Illuminate\Database\Eloquent\Builder;
 
 class ManuscriptFilters extends QueryFilter
 {
@@ -29,6 +30,9 @@ class ManuscriptFilters extends QueryFilter
 
     public function status($level)
     {
+        if (is_array($level)) {
+            return $this->builder->whereIn('status', $level);
+        }
         return $this->builder->where('status', $level);
     }
 

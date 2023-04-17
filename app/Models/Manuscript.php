@@ -5,23 +5,21 @@ namespace App\Models;
 use Carbon\Carbon;
 use App\Models\User;
 use App\QueryFilter;
-use App\Mail\ManuscriptCreated;
-use App\Mail\ManuscriptUpdated;
 use App\Models\ManuscriptMember;
 use App\Models\JournalManuscript;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\ManuscriptAttachCreated;
-use App\Mail\ManuscriptAttachUpdated;
 use Illuminate\Database\Eloquent\Model;
-use App\Mail\ManuscriptEditorNotification;
-use App\Mail\ManuscriptReviewNotification;
+use App\Notifications\ManuscriptCreated;
+use App\Notifications\ManuscriptPublished;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Mail\ManuscriptPublishedNotification;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ManuscriptInviteMember;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Mail\ManuscriptInviteMemberNotification;
+use App\Notifications\ManuscriptAttachCreated;
+use App\Notifications\ManuscriptAttachUpdated;
+use App\Notifications\ManuscriptReviewedThanks;
 use App\Mail\ManuscriptPostReviewedNotification;
-use App\Mail\ManuscriptReviewThanksNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Mail\ManuscriptRejectedInviteToResubmitNotification;
 
@@ -43,7 +41,9 @@ class Manuscript extends Model
         'keywords',
         'funding_information',
         'is_confirm_grant_numbers',
-        'is_acknowledge'
+        'is_acknowledge',
+        'date_published',
+        'status'
     ];
 
     /**
@@ -52,7 +52,7 @@ class Manuscript extends Model
      * @var array
      */
     protected $casts = [
-        'date_published' => 'dateTime'
+        'date_published' => 'datetime'
     ];
 
     public static $types = [
@@ -249,9 +249,9 @@ class Manuscript extends Model
             ($this->authIsEditor() || $this->authIsAuthor()) && 
             in_array($input, [$statusList[0]['name'], $statusList[1]['name'], $statusList[8]['name']])
         ) {
-
             $this->status = $input;
             $this->update();
+            $this->refreshReviewersReviewLog();
 
             // Send notification to reviewers.
             if ($statusList[1]['name'] == $input) {
@@ -294,7 +294,8 @@ class Manuscript extends Model
                 };
 
                 // Send thanks notification
-                Mail::to($reviewer->user->email)->queue(new ManuscriptReviewThanksNotification($this));
+                // Mail::to($reviewer->user->email)->queue(new ManuscriptReviewThanksNotification($this));
+                Notification::send($reviewer->user, new ManuscriptReviewedThanks($this));
 
             }
             return true;
@@ -306,6 +307,7 @@ class Manuscript extends Model
         ) {
         
             $this->status = $input;
+            $this->date_published = Carbon::now();
             $this->update();
             $this->notifyMembersForPublished();
             return true;
@@ -314,6 +316,15 @@ class Manuscript extends Model
         
         return false;
     
+    }
+
+    public function refreshReviewersReviewLog()
+    {
+        $this->reviewers()->update([
+            'reviewed' => null,
+            'reviewedVote' => null
+        ]);
+        return $this;
     }
 
     /**
@@ -360,10 +371,12 @@ class Manuscript extends Model
      */
     public function authIsReviewer()
     {
-        return static::whereHas('members', function($q) {
-            $q->where('role', 'reviewer')
-                ->where('user_id', auth()->id());
-        })->exists();
+        // return static::whereHas('members', function($q) {
+        //     $q->where('role', 'reviewer')
+        //         ->where('user_id', auth()->id());
+        // })->exists();
+
+        return $this->reviewers()->where('user_id', auth()->id())->exists();
     }
 
     /**
@@ -493,7 +506,8 @@ class Manuscript extends Model
                 $member->role = $roleName;
                 $member->save();
                 // Send Invitation Notification
-                Mail::to($user)->queue(new ManuscriptInviteMemberNotification($this, $user, $roleName));
+                // Mail::to($user)->queue(new ManuscriptInviteMemberNotification($this, $user, $roleName));
+                Notification::send($user, new ManuscriptInviteMember($this, $user, $roleName));
             }
         }
         foreach ($members as $member) {
@@ -538,24 +552,18 @@ class Manuscript extends Model
      */
     public function notifyCreateManuscript()
     {
-        $users = [];
-        $users = array_merge($users, $this->correspondingAuthors->map(function($member) {
-            return $member->user->email;
-        })->values()->all());
-
-        $users = array_merge($users, $this->authors->map(function($member) {
-            return $member->user->email;
-        })->values()->all());
-
-        $users = array_merge($users, $this->editors->map(function($member) {
-            return $member->user->email;
-        })->values()->all());
-
-        $users = collect($users)->unique()->all();
-        
-        if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptCreated($this));
+        foreach ($this->correspondingAuthors as $value) {
+            Notification::send($value->user, new ManuscriptCreated($this));
         }
+
+        foreach ($this->authors as $value) {
+            Notification::send($value->user, new ManuscriptCreated($this));
+        }
+
+        foreach ($this->editors as $value) {
+            Notification::send($value->user, new ManuscriptCreated($this));
+        }
+
         return $this;
 
     }
@@ -612,22 +620,17 @@ class Manuscript extends Model
     public function notifyMembersForPublished()
     {
         $users = [];
-        $users = array_merge($users, $this->correspondingAuthors->map(function($member) {
-            return $member->user->email;
-        })->values()->all());
 
-        $users = array_merge($users, $this->authors->map(function($member) {
-            return $member->user->email;
-        })->values()->all());
+        foreach ($this->correspondingAuthors as $value) {
+            Notification::send($value->user, new ManuscriptPublished($this));
+        }
 
-        $users = array_merge($users, $this->editors->map(function($member) {
-            return $member->user->email;
-        })->values()->all());
+        foreach ($this->authors as $value) {
+            Notification::send($value->user, new ManuscriptPublished($this));
+        }
 
-        $users = collect($users)->unique()->all();
-        
-        if (!empty($users)) {
-            Mail::to($users)->queue(new ManuscriptPublishedNotification($this));
+        foreach ($this->editors as $value) {
+            Notification::send($value->user, new ManuscriptPublished($this));
         }
 
         return $this;
@@ -719,29 +722,22 @@ class Manuscript extends Model
     {
         $emails = [];
 
-        $coAuthors = $this->correspondingAuthors->map(function($member) {
-            return $member->user->email;
-        })->toArray();
-
-        $authors = $this->authors->map(function($member) {
-            return $member->user->email;
-        })->toArray();
-
-        $editors = $this->editors->map(function($member) {
-            return $member->user->email;
-        })->toArray();
-
-        $reviewers = [];
-        if ($attach->type == 1 && $this->status != "Draft") {
-            $reviewers = $this->reviewers->map(function($member) {
-                return $member->user->email;
-            })->toArray();
+        foreach ($this->correspondingAuthors as $coAuthor) {
+            Notification::send($coAuthor->user, new ManuscriptAttachUpdated($this, $attach));
         }
 
-        $emails = collect(array_merge($coAuthors, $authors, $editors, $reviewers))->unique()->values()->all();
+        foreach ($this->authors as $author) {
+            Notification::send($author->user, new ManuscriptAttachUpdated($this, $attach));
+        }
 
-        if (!empty($emails)) {
-            Mail::to($emails)->queue(new ManuscriptAttachUpdated($this, $attach));
+        foreach ($this->editors as $editor) {
+            Notification::send($editor->user, new ManuscriptAttachUpdated($this, $attach));
+        }
+
+        if ($attach->type == 1 && $this->status != "Draft") {
+            foreach ($this->reviewers as $reviewer) {
+                Notification::send($reviewer->user, new ManuscriptAttachUpdated($this, $attach));
+            }
         }
     }
 
@@ -755,29 +751,22 @@ class Manuscript extends Model
     {
         $emails = [];
 
-        $coAuthors = $this->correspondingAuthors->map(function($member) {
-            return $member->user->email;
-        })->toArray();
-
-        $authors = $this->authors->map(function($member) {
-            return $member->user->email;
-        })->toArray();
-
-        $editors = $this->editors->map(function($member) {
-            return $member->user->email;
-        })->toArray();
-
-        $reviewers = [];
-        if ($attach->type == 1 && $this->status != "Draft") {
-            $reviewers = $this->reviewers->map(function($member) {
-                return $member->user->email;
-            })->toArray();
+        foreach ($this->correspondingAuthors as $coAuthor) {
+            Notification::send($coAuthor->user, new ManuscriptAttachCreated($this, $attach));
         }
 
-        $emails = collect(array_merge($coAuthors, $authors, $editors, $reviewers))->unique()->values()->all();
+        foreach ($this->authors as $author) {
+            Notification::send($author->user, new ManuscriptAttachCreated($this, $attach));
+        }
 
-        if (!empty($emails)) {
-            Mail::to($emails)->queue(new ManuscriptAttachCreated($this, $attach));
+        foreach ($this->editors as $editor) {
+            Notification::send($editor->user, new ManuscriptAttachCreated($this, $attach));
+        }
+
+        if ($attach->type == 1 && $this->status != "Draft") {
+            foreach ($this->reviewers as $reviewer) {
+                Notification::send($reviewer->user, new ManuscriptAttachCreated($this, $attach));
+            }
         }
     }
 
@@ -795,5 +784,39 @@ class Manuscript extends Model
             ->where('user_id', $user_id)
             ->where('role', $role)
             ->exists();
+    }
+
+    /**
+     * 
+     */
+    public static function permissionMiddleware()
+    {
+        $obj = static::query();
+        if (auth()?->user()?->can('manuscripts.show_all')) {
+            // Can view all accept draft that not belongs to the user
+            $obj->where(function($q) {
+                $q->where('status', '=', 'Draft')
+                    ->whereHas('members', function($q) {
+                        $q->where('user_id', auth()->id())
+                            ->where('role', '=', 'Author');
+                    });
+            })
+                ->orWhere('status', '!=', 'Draft');
+        } else {
+            // cannot view all
+            $obj->whereHas('members', function($q) {
+                $q->where('user_id', auth()->id() ?? 0)
+                    ->where(function($q) {
+                        $q->where('role', 'author')
+                            ->orWhere(function($q) {
+                                $q->where('role', '!=', 'author')
+                                    ->whereHas('manuscript', function($q) {
+                                        $q->where('status', '!=', 'Draft');
+                                    });
+                            });
+                    });
+            });
+        }
+        return $obj;
     }
 }

@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Mail\NewUserNotification;
 use Spatie\Permission\Models\Role;
 use App\Models\Filters\UserFilters;
@@ -13,9 +14,11 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Resources\UserCollection;
+use App\Notifications\NewRegisteredUser;
 use Illuminate\Support\Facades\Redirect;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Notification;
 
 class UserController extends Controller
 {
@@ -110,8 +113,7 @@ class UserController extends Controller
             $user->password = bcrypt($request->password);
             $user->save();
             
-            Mail::to($user->email)->queue(new NewUserNotification($user, $user));
-
+            Notification::send($user, new NewRegisteredUser($user, $user));
 
         } catch(Exception $e) {
 
@@ -188,7 +190,7 @@ class UserController extends Controller
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => ['required', 'email', Rule::unique('users')->ignore($id)],
             // 'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 

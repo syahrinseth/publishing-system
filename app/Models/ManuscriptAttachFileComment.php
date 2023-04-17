@@ -7,7 +7,8 @@ use App\Models\User;
 use App\QueryFilter;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
-use App\Mail\ManuscriptAttachCommentCreated;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ManuscriptAttachCommentCreated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ManuscriptAttachFileComment extends Model
@@ -18,7 +19,7 @@ class ManuscriptAttachFileComment extends Model
 
     public function attachFile()
     {
-        return $this->hasOne(ManuscriptAttachFile::class, 'id');    
+        return $this->hasOne(ManuscriptAttachFile::class, 'id', 'manuscript_attach_id');    
     }
 
     /**
@@ -68,57 +69,57 @@ class ManuscriptAttachFileComment extends Model
             if ($this->to == "all") {
 
                 $members = $manuscript->members->map(function($member){
-                    return $member->user->email;
+                    return $member->user;
                 });
                 $emails = $emails->merge($members);
 
                 $publishers = User::whereHas('roles', function($q){$q->whereIn('name', ['Super Admin', 'Admin', 'Publisher']);})->get()->map(function($member){
-                    return $member->user->email;
+                    return $member->user;
                 });
                 $emails = $emails->merge($publishers);
 
             } elseif($this->to == "authors") {
 
                 $authors = $manuscript->authors->map(function($member){
-                    return $member->user->email;
+                    return $member->user;
                 });
                 $emails = $emails->merge($authors);
 
                 $co_authors = $manuscript->correspondingAuthors->map(function($member){
-                    return $member->user->email;
+                    return $member->user;
                 });
                 $emails = $emails->merge($co_authors);
 
             } elseif($this->to == "reviewers") {
 
                 $reviewers = $manuscript->reviewers->map(function($member){
-                    return $member->user->email;
+                    return $member->user;
                 });
                 $emails = $emails->merge($reviewers);
 
             } elseif($this->to == "editors") {
 
                 $editors = $manuscript->editors->map(function($member){
-                    return $member->user->email;
+                    return $member->user;
                 });
                 $emails = $emails->merge($editors);
 
             } elseif($this->to == "publishers") {
 
                 $publishers = User::whereHas('roles', function($q){$q->whereIn('name', ['Super Admin', 'Admin', 'Publisher']);})->get()->map(function($user){
-                    return $user['email'];
+                    return $user;
                 });
                 $emails = $emails->merge($publishers);
 
             }
             if ($emails->count() > 0) {
                 
-                Mail::to($emails)->queue(new ManuscriptAttachCommentCreated($this));
+                Notification::send($emails, new ManuscriptAttachCommentCreated($this));
                 return true;
                 
             }
             return false;
-        } catch(Exception $e) {dd($manuscript);
+        } catch(Exception $e) {
             return false;
         }
     }

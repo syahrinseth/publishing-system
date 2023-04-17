@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAttachFileManuscriptRequest;
 use PDF;
 use FPDF;
 use App\Models\User;
@@ -56,21 +57,12 @@ class ManuscriptController extends Controller
             'direction' => ['in:asc,desc'],
             'field' => ['in:title,status,updated_at,created_at']
         ]);
-        $manuscripts = Manuscript::filter($manuscriptFilters);
-        if (!auth()->user()->can('manuscripts.show_all')) {
-            $manuscripts->whereHas('members', function($q) {
-                $q->where('user_id', auth()->id())
-                    ->where('role', 'author');;
-            })
-                ->orWhereHas('members', function($q) {
-                    $q->where('user_id', auth()->id())
-                        ->where('role', '!=', 'author')
-                        ->whereHas('manuscript', function($q) {
-                            $q->where('status', '!=', 'Draft');
-                        });
-                });
-        }
-        $manuscripts = new ManuscriptCollection($manuscripts->orderBy('updated_at', 'desc')->paginate(5)->appends(request()->query()));
+        $manuscripts = Manuscript::permissionMiddleware()
+            ->filter($manuscriptFilters)
+            ->orderBy('updated_at', 'desc')
+            ->paginate($request->input('per_page') ?? 5)
+            ->appends(request()->query());
+        $manuscripts = new ManuscriptCollection($manuscripts);
 
         if ($request->is('api/*')) {
             return response()->json($manuscripts);
@@ -156,12 +148,15 @@ class ManuscriptController extends Controller
      */
     public function storeFinal(Request $request, $id)
     {
-        $request->validate([
-            'is_confirm_grant_numbers' => 'required|accepted',
-            'is_acknowledge' => 'required|accepted'
+        $validated = $request->validate([
+            'is_confirm_grant_numbers' => 'required|boolean',
+            'is_acknowledge' => 'required|boolean'
         ]);
         $manuscript = Manuscript::findOrFail($id);
-        $manuscript->status = 'Submit To Editor';
+        $manuscript->update([
+            ...$validated,
+            'status' => 'Submit To Editor'
+        ]);
 
         // Validate submit to editor
         $attachments = $manuscript->attachments->unique('type')->whereIn('type', [1, 5, 13]);
@@ -175,12 +170,7 @@ class ManuscriptController extends Controller
                 'status' => '"Manuscript", "Cover Letter" and "Plagiarism Report" attached files are required. Please upload the following documents.'
             ]);
         }
-        
-        $manuscript->additional_informations = [
-            'is_confirm_grant_numbers' => $request->is_confirm_grant_numbers == null ? (empty($manuscript->additional_informations['is_confirm_grant_numbers']) ? false : true) : $request->is_confirm_grant_numbers,
-            'is_acknowledge' => $request->is_acknowledge == null ? (empty($manuscript->additional_informations['is_acknowledge']) ? false : true) : $request->is_acknowledge
-        ];
-        $manuscript->update();
+
         $manuscript->notifyCreateManuscript();
 
         if ($request->is('api/*')) {
@@ -201,31 +191,7 @@ class ManuscriptController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $manuscript = Manuscript::where('id', $id);
-
-        if (!auth()->user()->can('manuscripts.show_all')) {
-            $manuscript->whereHas('members', function($q) {
-                $q->where('user_id', auth()->id());
-            });
-        }
-            
-        $manuscript = $manuscript->firstOrFail();
-        
-        $users = User::all();
-
-        if ($request->is('api/*')) {
-            return response()->json(new ManuscriptResource($manuscript));
-        }
-
-        return Inertia::render('Manuscript/Show', [
-            'manuscript' => new ManuscriptResource($manuscript),
-            'attachments' => new ManuscriptAttachCollection($manuscript->attachments()->orderBy('updated_at', 'desc')->paginate(100)),
-            'users' => $users,
-            'attachTypes' => ManuscriptAttachFile::$types,
-            'articleTypes' => Manuscript::getTypes(),
-            'manuscriptStatusList' => Manuscript::getStatusList($manuscript->id),
-            'manuscriptStatus' => collect(Manuscript::$statusList),
-        ]);
+        return abort(404);
     }
 
     /**
@@ -238,30 +204,13 @@ class ManuscriptController extends Controller
     public function edit(Request $request, $id)
     {
         $manuscript = Manuscript::with([
-            'authors' => function($q) {
-                $q->with('user');
-            },
-            'correspondingAuthors' => function($q) {
-                $q->with('user');
-            },
-            'editors' => function($q) {
-                $q->with('user');
-            },
-            'reviewers' => function($q) {
-                $q->with('user');
-            }
-        ])
-            ->where('id', $id);
-
-        if (!auth()->user()->can('manuscripts.show_all')) {
-            $manuscript->whereHas('members', function($q) {
-                $q->where('user_id', auth()->id());
-            });
-        }
-            
-        $manuscript = $manuscript->firstOrFail();
-        
-        $users = User::all();
+                'authors.user',
+                'correspondingAuthors.user',
+                'editors.user',
+                'reviewers.user'
+            ])
+            ->where('id', $id)
+            ->firstOrFail();
 
         if ($request->is('api/*')) {
             return response()->json(new ManuscriptResource($manuscript));
@@ -271,7 +220,6 @@ class ManuscriptController extends Controller
             'manuscript' => new ManuscriptResource($manuscript),
             'attachments' => ManuscriptAttachResource::collection($manuscript->attachments()->orderBy('updated_at', 'desc')->paginate()),
             'filters' => $request->all(['search', 'field', 'direction', 'viewAs']),
-            'users' => $users,
             'attachTypes' => ManuscriptAttachFile::$types,
             'articleTypes' => Manuscript::getTypes(),
             'manuscriptStatusList' => Manuscript::getStatusList($manuscript->id),
@@ -384,24 +332,31 @@ class ManuscriptController extends Controller
             'manuscript' => $manuscript,
             'attachFile'  => $attachments->first()
         ])->render();
-            
+        
         // Fetch latest manuscript
         $attachment = $attachments->filter(function($value) {
+            
             if ($value->canMerge()) {
                 return true;
             }
+
             return false;
+
         })?->sortByDesc('id')?->first();
+
         // Fetch break template
         $breakTemplate = file_get_contents( public_path() . "/break.html" );
         
         if (empty($attachment)) {
+
             if ($request->is('api/*')) {
                 return response('', 403)->json();
             }
-            return back()->withErrors([
-                'status' => 'There\'s nothing to download.'
+
+            return redirect()->back()->withErrors([
+                'status' => 'There\'s nothing to download. Make sure you upload the correct file as correct attachment file type. Eg: Manuscript or Manuscript (for publish).'
             ]);
+
         }
 
         // Convert attach file into html
@@ -435,6 +390,7 @@ class ManuscriptController extends Controller
             return $pdf->stream('merged.pdf');
 
         } elseif(str_contains(Storage::mimeType($attachment->file_location), 'pdf')) {
+
             // Create a header for the manuscript
             $pdf = PDF::loadHTML($mainTemplate);
             $pdf->setPaper('A4', 'portrait');
@@ -496,15 +452,9 @@ class ManuscriptController extends Controller
      * 
      * @return Response
      */
-    public function storeAttachFile(Request $request, $id)
+    public function storeAttachFile(StoreAttachFileManuscriptRequest $request, $id)
     {
-        $request->validate([
-            'type' => ['required', $request->type == 1 ? Rule::unique('manuscript_attach_files')->where(function ($query) use($id, $request) {
-                return $query->where('manuscript_id', $id)
-                ->where('type', $request->type);
-            }) : 'integer'],
-            'file' => ['required','mimes:doc,docx,pdf']
-        ]);
+        $validated = $request->validated();
 
         $manuscript = Manuscript::findOrFail($id);
         $attach = new ManuscriptAttachFile;   
@@ -513,14 +463,7 @@ class ManuscriptController extends Controller
         $attach->description = $request->description;
         $attach->size = 0;
         $attach->save();
-
-        if ($request->hasFile('file')) {
-            $path = $request->file->storeAs("manuscripts/{$id}/attach-files/$attach->id", $request->file->getClientOriginalName());
-            $attach->file_location = $path;
-            $attach->file_name = $attach->getFileName();
-            $attach->size = Storage::size($path);
-            $attach->update();
-        }
+        $attach->storeFile($validated);
 
         // Send mail
         $manuscript->notifyCreateAttachToMembers($attach);

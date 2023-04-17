@@ -8,7 +8,9 @@ use App\Mail\NewUserNotification;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Notifications\NewRegisteredUser;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Notification;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
 class CreateNewUser implements CreatesNewUsers
@@ -50,7 +52,7 @@ class CreateNewUser implements CreatesNewUsers
         // Notify Users with permission of Receive New User Notification.
         $users = User::permission(['users.receive_notification_for_new_register_user'])->get();
         foreach ($users as $userForNotification) {
-            Mail::to($userForNotification)->queue(new NewUserNotification($userForNotification, $user));
+            Notification::send($userForNotification->email, new NewRegisteredUser($userForNotification, $user));
         }
 
         return $user;
