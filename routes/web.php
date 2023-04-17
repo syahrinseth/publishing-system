@@ -40,6 +40,8 @@ Route::get('/', [PublicController::class, 'index'])->name('public.index');
 // Journals
 Route::get('/journals', [PublicJournalController::class, 'index'])->name('public.journal.index');
 Route::get('/journals/{id}', [PublicJournalController::class, 'show'])->name('public.journal.show');
+Route::get('/journals/{id}/manuscripts/{manuscript_id}', [PublicJournalController::class, 'showManuscript'])->name('public.journal.showManuscript');
+Route::get('/journals/{id}/manuscripts/{manuscript_id}/download', [PublicJournalController::class, 'showManuscriptDownload'])->name('public.journal.showManuscriptDownload');
 
 # Private Route
 Route::prefix('admin')->middleware(['auth:sanctum'])->group(function() {

@@ -20,6 +20,12 @@ class JournalResource extends JsonResource
             'date' => $this->date,
             'status' => $this->status,
             'manuscripts' => $this->manuscripts(),
+            'get_manuscripts' => $this->getManuscripts()->with([
+                'getAuthors:id,first_name,last_name,email',
+                'getCoAuthors:id,first_name,last_name,email',
+                'getEditors:id,first_name,last_name,email',
+                'getReviewers:id,first_name,last_name,email',
+            ])->get(),
             'description' => $this->description,
             'created_at' => $this->created_at->diffForHumans(),
             'updated_at' => $this->updated_at->diffForHumans()

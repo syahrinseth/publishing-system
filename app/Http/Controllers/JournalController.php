@@ -124,7 +124,7 @@ class JournalController extends Controller
     {
         $journal = Journal::findOrFail($id);
         $journal = new JournalResource($journal);
-
+        
         if (request()->is('api/*')) {
             return response()->json($journal);
         }

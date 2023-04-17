@@ -18,6 +18,10 @@ class Journal extends Model
     protected static $logAttributes = ["*"];
     protected static $logOnlyDirty = true;
 
+    protected $casts = [
+        'date' => 'datetime'
+    ];
+
 
     public static $statusList = [
         [
@@ -38,6 +42,11 @@ class Journal extends Model
     public function manuscripts()
     {
         return new JournalManuscriptCollection($this->hasMany(JournalManuscript::class, 'journal_id', 'id')->get());
+    }
+
+    public function getManuscripts()
+    {
+        return $this->belongsToMany(Manuscript::class, 'journal_manuscripts', 'journal_id', 'manuscript_id')->where('journal_manuscripts.deleted_at', '=', null);
     }
 
     /**

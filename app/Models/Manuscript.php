@@ -130,6 +130,26 @@ class Manuscript extends Model
         return $this->hasMany(ManuscriptMember::class, 'manuscript_id', 'id')->where('role', 'author');
     }
 
+    public function getAuthors()
+    {
+        return $this->belongsToMany(User::class, 'manuscript_members', 'manuscript_id', 'user_id')->where('manuscript_members.role', '=', 'author');
+    }
+
+    public function getCoAuthors()
+    {
+        return $this->belongsToMany(User::class, 'manuscript_members', 'manuscript_id', 'user_id')->where('manuscript_members.role', '=', 'corresponding author');
+    }
+
+    public function getEditors()
+    {
+        return $this->belongsToMany(User::class, 'manuscript_members', 'manuscript_id', 'user_id')->where('manuscript_members.role', '=', 'editor');
+    }
+
+    public function getReviewers()
+    {
+        return $this->belongsToMany(User::class, 'manuscript_members', 'manuscript_id', 'user_id')->where('manuscript_members.role', '=', 'reviewer');
+    }
+
     /**
      * Get corresponding authors collection
      * @return Collection

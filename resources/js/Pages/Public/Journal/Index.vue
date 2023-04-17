@@ -3,58 +3,54 @@
         <PublicLayout :auth="auth">
             <template v-slot:default>
                 <div class="bg-white">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div class="lg:text-center">
-                            <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">Journal Published</h2>
-                            <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"></p>
+                    <div class="">
+                        <!-- Product info -->
+                        <div class="max-w-2xl mx-auto pb-16 px-4 sm:px-6 lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8">
+                        <div class="lg:col-span-3 lg:border-r-cancel lg:border-gray-200 lg:pr-8">
+                            <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+                                Collection of Journals
+                            </h1>
+                            
                         </div>
-                    <div class="mt-10">
-                        <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
-                        <div v-for="journal in journals.data" :key="journal.name" class="relative">
-                            <dt>
-                            <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
-                                
+
+                        <div class="py-10 lg:pt-6 lg:pb-16 lg:col-start-1 lg:col-span-3 lg:border-gray-200 lg:pr-8">
+
+                            <div class="mt-5" v-for="journal in journals.data" :key="journal.id">
+                                <h2 class="text-xl font-medium text-gray-900"><a :href="`/journals/${journal.id}`" class="text-indigo-500 hover:text-indigo-800">{{ journal.name }}</a></h2>
+                                <p class="mb-5">
+                                    Published date: {{ moment(journal.date).format("DD/MM/YYYY") }}
+                                </p>
+                                <hr/>
                             </div>
-                            <Link :href="`/journals/${journal.id}`" class="ml-16 text-lg leading-6 font-medium text-gray-900">{{ journal.name }}</Link>
-                            <small class="px-2">
-                                {{ moment(journal.date).format('DD/MM/YYYY') }}
-                            </small>
-                            </dt>
-                            <dd class="mt-2 ml-16 text-base text-gray-500">
-                               
-                            </dd>
                         </div>
-                        </dl>
+                        </div>
                     </div>
                     </div>
-                </div>
             </template>
         </PublicLayout>
     </div>
 </template>
 <script>
 import PublicLayout from '../../../PublicLayout.vue'
-import { AnnotationIcon, GlobeAltIcon, LightningBoltIcon, ScaleIcon } from '@heroicons/vue/outline'
-import { Link } from '@inertiajs/inertia-vue3'
+import { DownloadIcon } from '@heroicons/vue/outline'
 import moment from 'moment'
-
 export default {
     components: {
         PublicLayout,
-        AnnotationIcon,
-        GlobeAltIcon,
-        LightningBoltIcon,
-        ScaleIcon,
-        Link
+        DownloadIcon,
     },
-    props: {
-        auth: Object,
-        journals: Object
-    },
-    setup() {
+    data() {
         return {
             moment
         }
     },
-}
+    setup() {
+        
+    },
+    props: {
+        journals: Array,
+        auth: Object
+    }
+};
 </script>
+
