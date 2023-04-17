@@ -124,7 +124,7 @@ class JournalController extends Controller
     {
         $journal = Journal::findOrFail($id);
         $journal = new JournalResource($journal);
-        
+
         if (request()->is('api/*')) {
             return response()->json($journal);
         }
@@ -189,6 +189,11 @@ class JournalController extends Controller
         if ($request->is('api/*')) {
             return response()->json(new JournalManuscriptCollection($manuscripts));
         }
+        return abort(404);
+    }
+
+    public function download(Request $request, Journal $id)
+    {
         return abort(404);
     }
 }

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
 use App\Notifications\ManuscriptCreated;
+use App\Mail\ManuscriptEditorNotification;
 use App\Notifications\ManuscriptPublished;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Support\Facades\Notification;
