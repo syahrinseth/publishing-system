@@ -2490,23 +2490,26 @@ var _hoisted_32 = {
   "class": "px-6 py-4 word-break text-sm"
 };
 var _hoisted_33 = {
-  "class": "px-6 py-4 word-break text-sm"
+  "class": "text-bold text-lg"
 };
 var _hoisted_34 = {
-  "class": "px-6 py-4 word-break text-sm text-gray-500"
+  "class": "px-6 py-4 word-break text-sm"
 };
 var _hoisted_35 = {
   "class": "px-6 py-4 word-break text-sm text-gray-500"
 };
 var _hoisted_36 = {
+  "class": "px-6 py-4 word-break text-sm text-gray-500"
+};
+var _hoisted_37 = {
   "class": "px-6 py-4 word-break text-right text-sm font-medium"
 };
-var _hoisted_37 = ["onClick"];
+var _hoisted_38 = ["onClick"];
 
-var _hoisted_38 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "shadow sm:rounded-md sm:overflow-hidden"
+var _hoisted_39 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "mt-5"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "px-4 py-3 bg-gray-50 text-right sm:px-6"
+  "class": "text-right"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   "class": "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
   type: "submit"
@@ -2514,26 +2517,26 @@ var _hoisted_38 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_39 = {
+var _hoisted_40 = {
   "class": "sm:flex sm:items-start"
 };
-var _hoisted_40 = {
+var _hoisted_41 = {
   "class": "mt-3 text-center sm:mt-0 sm:text-left w-full"
 };
 
-var _hoisted_41 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Add Manuscripts ");
+var _hoisted_42 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Add Manuscripts ");
 
-var _hoisted_42 = {
-  "class": "mt-2"
-};
 var _hoisted_43 = {
-  "class": "grid grid-cols-3 gap-6 mb-2"
+  "class": "mt-2 h-52"
 };
 var _hoisted_44 = {
+  "class": "grid grid-cols-3 gap-6 mb-2"
+};
+var _hoisted_45 = {
   "class": "col-span-3 sm:col-span-3"
 };
 
-var _hoisted_45 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+var _hoisted_46 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "for": "company-website",
   "class": "block text-sm font-medium text-gray-700"
 }, " Manuscripts ", -1
@@ -2656,15 +2659,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               key: manuscript.id
             }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(index + 1), 1
             /* TEXT */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_manuscript$title = manuscript.title) !== null && _manuscript$title !== void 0 ? _manuscript$title : 'Untitled'), 1
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.manuscript_no), 1
             /* TEXT */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_manuscript$type = manuscript.type) === null || _manuscript$type === void 0 ? void 0 : _manuscript$type.name), 1
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_manuscript$title = manuscript.title) !== null && _manuscript$title !== void 0 ? _manuscript$title : 'Untitled'), 1
             /* TEXT */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.status), 1
+            )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_manuscript$type = manuscript.type) === null || _manuscript$type === void 0 ? void 0 : _manuscript$type.name), 1
             /* TEXT */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_35, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.updated_at), 1
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_35, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.status), 1
             /* TEXT */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_36, [$props.auth.user.data.permissions_attribute.journals.edit == true ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_36, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.updated_at), 1
+            /* TEXT */
+            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_37, [$props.auth.user.data.permissions_attribute.journals.edit == true ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
               key: 0,
               onClick: function onClick($event) {
                 return $options.onRemoveManuscript(manuscript);
@@ -2672,7 +2677,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               "class": "text-red-600 hover:text-red-900 px-2"
             }, " Remove ", 8
             /* PROPS */
-            , _hoisted_37)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
+            , _hoisted_38)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
           }), 128
           /* KEYED_FRAGMENT */
           ))];
@@ -2680,28 +2685,28 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         _: 1
         /* STABLE */
 
-      })]), _hoisted_38]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Modal, {
+      })])]), _hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Modal, {
         show: $data.showManuscriptAddModel,
         onClose: _cache[10] || (_cache[10] = function ($event) {
           $data.showManuscriptAddModel = false;
         })
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_39, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DialogTitle, {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_41, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DialogTitle, {
             as: "h3",
             "class": "text-lg leading-6 font-medium text-gray-900"
           }, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-              return [_hoisted_41];
+              return [_hoisted_42];
             }),
             _: 1
             /* STABLE */
 
-          }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_42, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+          }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_43, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
             onSubmit: _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
               return _ctx.updateAttach && _ctx.updateAttach.apply(_ctx, arguments);
             }, ["prevent"]))
-          }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_43, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [_hoisted_45, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_VueMultiselect, {
+          }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_45, [_hoisted_46, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_VueMultiselect, {
             modelValue: $data.manuscripSelect.selected,
             "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
               return $data.manuscripSelect.selected = $event;

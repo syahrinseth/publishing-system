@@ -128,7 +128,8 @@
                                             {{ index + 1 }}
                                         </td>
                                         <td class="px-6 py-4 word-break text-sm">
-                                            {{ manuscript.title ?? 'Untitled' }}
+                                            <p>{{ manuscript.manuscript_no }}</p>
+                                            <p class="text-bold text-lg">{{ manuscript.title ?? 'Untitled' }}</p>
                                         </td>
                                         <td class="px-6 py-4 word-break text-sm">
                                             {{ manuscript.type?.name }}
@@ -149,12 +150,14 @@
                             </Table>
                         </div>
 
-                        <div class="shadow sm:rounded-md sm:overflow-hidden">
-                            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                <button class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="submit">
-                                    Save
-                                </button>
-                            </div>
+                        
+                    </div>
+
+                    <div class="mt-5">
+                        <div class="text-right">
+                            <button class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="submit">
+                                Save
+                            </button>
                         </div>
                     </div>
 
@@ -165,7 +168,7 @@
                                     <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
                                         Add Manuscripts
                                     </DialogTitle>
-                                    <div class="mt-2">
+                                    <div class="mt-2 h-52">
                                         <form @submit.prevent="updateAttach">
                                             <div class="grid grid-cols-3 gap-6 mb-2">
                                                 <div class="col-span-3 sm:col-span-3">
@@ -238,7 +241,7 @@ export default {
     },
     props: {
         auth: Object,
-        journal: Object
+        journal: Object,
     },
     computed: {
         dragOptions() {

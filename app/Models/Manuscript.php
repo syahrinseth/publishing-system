@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
 use App\Notifications\ManuscriptCreated;
+use App\Mail\ManuscriptEditorNotification;
 use App\Notifications\ManuscriptPublished;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Support\Facades\Notification;
@@ -128,6 +129,26 @@ class Manuscript extends Model
     public function authors()
     {
         return $this->hasMany(ManuscriptMember::class, 'manuscript_id', 'id')->where('role', 'author');
+    }
+
+    public function getAuthors()
+    {
+        return $this->belongsToMany(User::class, 'manuscript_members', 'manuscript_id', 'user_id')->where('manuscript_members.role', '=', 'author');
+    }
+
+    public function getCoAuthors()
+    {
+        return $this->belongsToMany(User::class, 'manuscript_members', 'manuscript_id', 'user_id')->where('manuscript_members.role', '=', 'corresponding author');
+    }
+
+    public function getEditors()
+    {
+        return $this->belongsToMany(User::class, 'manuscript_members', 'manuscript_id', 'user_id')->where('manuscript_members.role', '=', 'editor');
+    }
+
+    public function getReviewers()
+    {
+        return $this->belongsToMany(User::class, 'manuscript_members', 'manuscript_id', 'user_id')->where('manuscript_members.role', '=', 'reviewer');
     }
 
     /**

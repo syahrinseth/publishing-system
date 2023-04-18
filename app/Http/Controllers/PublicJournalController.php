@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Journal;
+use App\Models\Manuscript;
 use Illuminate\Http\Request;
 use App\Http\Resources\JournalResource;
 use App\Http\Resources\JournalCollection;
@@ -18,10 +19,14 @@ class PublicJournalController extends Controller
      */
     public function index()
     {
-        $journals = Journal::where('status', 'Published')
+        $journals = Journal::with([
+                'getManuscripts' => function ($q) {
+                    $q->with(['getAuthors:id,first_name,last_name', 'getCoAuthors:id,first_name,last_name']);
+                },
+            ])
+            ->where('status', 'Published')
             ->orderBy('date', 'desc')
             ->paginate(request()->input('per_page') ?? 50);
-        $journals = new JournalCollection($journals);
 
         if (request()->is('api/*')) {
             return response()->json($journals);
@@ -61,9 +66,12 @@ class PublicJournalController extends Controller
      */
     public function show($id)
     {
-        $journal = Journal::findOrFail($id);
-        $journal = new JournalResource($journal);
-        $manuscripts = $journal->manuscripts();
+        $journal = Journal::with([
+            'getManuscripts' => function ($q) {
+                $q->with(['getAuthors:id,first_name,last_name', 'getCoAuthors:id,first_name,last_name']);
+            },
+        ])->findOrFail($id);
+        
         $editorial_board = [
             'publisher' => User::role(['Publisher'])->with('roles')->get(),
             'editor' => User::role(['Editor'])->with('roles')->get(),
@@ -76,7 +84,6 @@ class PublicJournalController extends Controller
 
         return Inertia::render('Public/Journal/Show', [
             'journal' => $journal,
-            'manuscripts' => $manuscripts,
             'editorial_board' => $editorial_board
         ]);
     }
@@ -113,5 +120,22 @@ class PublicJournalController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function showManuscript(Journal $id, $manuscript_id)
+    {
+        $manuscript = Manuscript::with(['getAuthors:id,first_name,last_name,affiliation', 'getCoAuthors:id,first_name,last_name,affiliation'])
+            ->findOrFail($manuscript_id);
+
+        return Inertia::render('Public/Journal/Manuscripts/Show', [
+            'journal' => $id,
+            'manuscript' => $manuscript
+        ]);
+    }
+
+    public function showManuscriptDownload(Request $request, $id, $manuscript_id)
+    {
+        $controller = new ManuscriptController();
+        return $controller->download($request, $manuscript_id);
     }
 }

@@ -271,7 +271,7 @@ import { Link } from '@inertiajs/inertia-vue3'
 
 const navigation = [
   // { name: 'Product', href: '#' },
-  { name: 'Journal Published', href: '/journals' },
+  { name: 'Published Journals', href: '/journals' },
 ]
 
 const features = [

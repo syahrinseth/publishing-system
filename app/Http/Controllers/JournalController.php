@@ -191,4 +191,9 @@ class JournalController extends Controller
         }
         return abort(404);
     }
+
+    public function download(Request $request, Journal $id)
+    {
+        return abort(404);
+    }
 }

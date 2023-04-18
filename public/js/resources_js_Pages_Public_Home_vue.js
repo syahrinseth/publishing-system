@@ -21,7 +21,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var navigation = [// { name: 'Product', href: '#' },
 {
-  name: 'Journal Published',
+  name: 'Published Journals',
   href: '/journals'
 }];
 var features = [{
