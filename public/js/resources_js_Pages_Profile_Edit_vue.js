@@ -65,6 +65,11 @@ __webpack_require__.r(__webpack_exports__);
     onChangeProfileImage: function onChangeProfileImage(e) {
       this.userPhoto = URL.createObjectURL(e.target.files[0]);
       this.userForm.photo = e.target.files[0];
+    },
+    canEditRoleAndPermission: function canEditRoleAndPermission() {
+      var _this$auth$user$data, _this$auth$user$data$, _this$auth$user$data$2;
+
+      return (_this$auth$user$data = this.auth.user.data) === null || _this$auth$user$data === void 0 ? void 0 : (_this$auth$user$data$ = _this$auth$user$data.permissions_attribute) === null || _this$auth$user$data$ === void 0 ? void 0 : (_this$auth$user$data$2 = _this$auth$user$data$.roles_and_permissions) === null || _this$auth$user$data$2 === void 0 ? void 0 : _this$auth$user$data$2.edit;
     }
   },
   setup: function setup(props) {
@@ -458,21 +463,15 @@ var _hoisted_66 = {
 var _hoisted_67 = {
   "class": "flex items-center h-5"
 };
-var _hoisted_68 = ["id", "value"];
+var _hoisted_68 = ["id", "value", "disabled"];
 var _hoisted_69 = {
   "class": "ml-3 text-sm"
 };
 var _hoisted_70 = ["for"];
-
-var _hoisted_71 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_71 = {
   "class": "px-4 py-3 bg-gray-50 text-right sm:px-6"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  type: "submit",
-  "class": "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-}, "Save")], -1
-/* HOISTED */
-);
-
+};
+var _hoisted_72 = ["disabled"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Layout = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Layout");
 
@@ -690,9 +689,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           }),
           value: role.id,
           type: "checkbox",
-          "class": "focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-        }, null, 8
-        /* PROPS */
+          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded", {
+            'cursor-not-allowed bg-slate-500': !$options.canEditRoleAndPermission()
+          }]),
+          disabled: !$options.canEditRoleAndPermission()
+        }, null, 10
+        /* CLASS, PROPS */
         , _hoisted_68), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $setup.userForm.roles]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_69, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
           "for": "role-input-".concat(role.id),
           "class": "font-medium text-gray-700"
@@ -701,7 +703,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         , _hoisted_70), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <p class=\"text-gray-500\">Get notified when someones posts a comment on a posting.</p> ")])]);
       }), 128
       /* KEYED_FRAGMENT */
-      ))])])]), _hoisted_71])], 32
+      ))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_71, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+        type: "submit",
+        "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500", {
+          'cursor-not-allowed bg-slate-500': !$options.canEditRoleAndPermission()
+        }]),
+        disabled: !$options.canEditRoleAndPermission()
+      }, "Save", 10
+      /* CLASS, PROPS */
+      , _hoisted_72)])])], 32
       /* HYDRATE_EVENTS */
       )])])])];
     }),

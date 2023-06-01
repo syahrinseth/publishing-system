@@ -68,7 +68,7 @@ class ProfileController extends Controller
         }
 
         $roles = Role::all();
-
+        
         return Inertia::render('Profile/Edit', [
             'user' => $user,
             'roles' => $roles
