@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use Exception;
 use Carbon\Carbon;
 use App\Models\User;
 use App\QueryFilter;
+use setasign\Fpdi\Fpdi;
 use App\Models\ManuscriptMember;
 use App\Models\JournalManuscript;
+use App\Models\ManuscriptAttachFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use App\Notifications\ManuscriptCreated;
 use App\Mail\ManuscriptEditorNotification;
 use App\Notifications\ManuscriptPublished;
@@ -839,5 +843,77 @@ class Manuscript extends Model
             });
         }
         return $obj;
+    }
+
+    /**
+     * Get manuscript file format for publish.
+     * 
+     * @return bool
+     */
+    public function isDoc()
+    {
+        $file_location = $this->attachments()->whereIn('type', [1, 14])->orderBy('updated_at', 'desc')->first()?->file_location;
+        if (empty($file_location)) {
+            return false;
+        }
+        return str_contains(Storage::mimeType($file_location), 'word') ? true : false;
+    }
+
+    /**
+     * Get manuscript file format for publish.
+     * 
+     * @return bool
+     */
+    public function isPDF()
+    {
+        $file_location = $this->attachments()->whereIn('type', [1, 14])->orderBy('updated_at', 'desc')->first()?->file_location;
+        if (empty($file_location)) {
+            return false;
+        }
+        return str_contains(Storage::mimeType($file_location), 'pdf') ? true : false;
+    }
+
+    public function generatePDF(ManuscriptAttachFile $attachment, Fpdi $pdf = new Fpdi(), $pageNum = 1, $documentNum = null, Journal $journal = null)
+    {
+        try {
+        
+            $currentPdf = new Fpdi();
+            $pageCount = $pdf->setSourceFile(storage_path("app/{$attachment->file_location}"));
+
+            $headerTitle = empty($journal) ? $this->manuscript_no : $journal->name . ", No " . ($documentNum) . ' (' . Carbon::parse($journal->date)->format('Y') . ')';
+            $outputPath = empty($journal) ? public_path("storage/{$this->manuscript_no}.pdf") : public_path("storage/{$journal->name}.pdf");
+            
+            // Iterate over each page
+            for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {
+                
+                $pdf->AddPage();
+                $template = $pdf->importPage($pageNumber);
+                $pdf->useTemplate($template);
+
+                // Add page number text
+                $pdf->SetFont('Times', "", 12);
+                $pdf->SetMargins(left: 30, top: 25, right: 30);
+                // $pdf->SetXY(30, 25); // Adjust the coordinates as needed
+                $pdf->SetY(25);
+
+                $pdf->Cell(0, 0, $headerTitle, 0, 0, 'L');
+
+                $pdf->Cell(0, 0, $pageNum++, 0, 0, 'R');
+
+                // $pdf->SetY(-25);
+                // $pdf->Cell(0, 0, $journal->name . ", No " . ($documentNum) . ' (' . Carbon::parse($journal->date)->format('Y') . ')' , 0, 0, 'L');
+                // $pdf->Cell(0, 0, $pageNum++, 0, 0, 'R');
+
+                $currentPdf->Output('F', $outputPath);
+            }
+
+            return $pdf;
+        
+        } catch (Exception $e) {
+
+            return null;
+
+        }
+
     }
 }

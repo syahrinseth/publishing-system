@@ -174,37 +174,13 @@ var _hoisted_5 = {
   "class": "text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl"
 };
 var _hoisted_6 = {
-  "class": "py-10 lg:pt-6 lg:pb-16 lg:col-start-1 lg:col-span-3 lg:border-gray-200 lg:pr-8"
-};
-var _hoisted_7 = {
-  "class": "mb-5"
-};
-
-var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
-  "class": "text-2xl bold mb-5"
-}, "Table of Content", -1
-/* HOISTED */
-);
-
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", null, null, -1
-/* HOISTED */
-);
-
-var _hoisted_10 = {
-  "class": "text-xl font-medium text-gray-900"
-};
-var _hoisted_11 = ["href"];
-var _hoisted_12 = {
   "class": "mt-2 mb-5"
 };
-var _hoisted_13 = {
-  "class": "text-sm text-gray-600"
-};
-var _hoisted_14 = ["href"];
+var _hoisted_7 = ["href"];
 
-var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" PDF ");
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" PDF ");
 
-var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
   xmlns: "http://www.w3.org/2000/svg",
   fill: "none",
   viewBox: "0 0 24 24",
@@ -219,9 +195,56 @@ var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_17 = [_hoisted_15, _hoisted_16];
+var _hoisted_10 = [_hoisted_8, _hoisted_9];
+var _hoisted_11 = {
+  "class": "py-10 lg:pt-6 lg:pb-16 lg:col-start-1 lg:col-span-3 lg:border-gray-200 lg:pr-8"
+};
+var _hoisted_12 = {
+  "class": "mb-5"
+};
 
-var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", null, null, -1
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
+  "class": "text-2xl bold mb-5"
+}, "Table of Content", -1
+/* HOISTED */
+);
+
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", null, null, -1
+/* HOISTED */
+);
+
+var _hoisted_15 = {
+  "class": "text-xl font-medium text-gray-900"
+};
+var _hoisted_16 = ["href"];
+var _hoisted_17 = {
+  "class": "mt-2 mb-5"
+};
+var _hoisted_18 = {
+  "class": "text-sm text-gray-600"
+};
+var _hoisted_19 = ["href"];
+
+var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" PDF ");
+
+var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  fill: "none",
+  viewBox: "0 0 24 24",
+  "stroke-width": "1.5",
+  stroke: "currentColor",
+  "class": "w-5 h-5"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
+  "stroke-linecap": "round",
+  "stroke-linejoin": "round",
+  d: "M12 9.75v6.75m0 0l-3-3m3 3l3-3m-8.25 6a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+})], -1
+/* HOISTED */
+);
+
+var _hoisted_22 = [_hoisted_20, _hoisted_21];
+
+var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", null, null, -1
 /* HOISTED */
 );
 
@@ -236,30 +259,34 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       /* TEXT */
       ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, " Published date: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.moment($props.journal.date).format("DD/MM/YYYY")), 1
       /* TEXT */
-      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Options "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"mt-4 lg:mt-0 lg:row-span-3\">\n                            <h2 class=\"\">Description:</h2>\n                            <div class=\"text-sm text-gray-600 mb-2 h-96 overflow-auto\">\n                                \n                            </div>\n\n                            <h2 class=\"\">Editorial board:</h2>\n                            <div v-show=\"editorial_board.publisher.length > 0\" class=\"text-2xl text-gray-900\">\n                                Publisher\n                            </div>\n                            <div v-for=\"editor in editorial_board.publisher\" :key=\"editor.id\">\n                                <div class=\"text-sm text-gray-600 mb-2\">\n                                    {{ editor.first_name }} {{ editor.last_name }} <span v-show=\"editor.affiliation\">-</span> {{ editor.affiliation }}\n                                </div>\n                            </div>\n                            <div v-show=\"editorial_board.chief_editor.length > 0\" class=\"text-2xl text-gray-900\">\n                                Editor in Chief\n                            </div>\n                            <div v-for=\"editor in editorial_board.chief_editor\" :key=\"editor.id\">\n                                <div class=\"text-sm text-gray-600 mb-2\">\n                                    {{ editor.first_name }} {{ editor.last_name }} <span v-show=\"editor.affiliation\">-</span> {{ editor.affiliation }}\n                                </div>\n                            </div>\n                            <div v-show=\"editorial_board.editor.length > 0\" class=\"text-2xl text-gray-900\">\n                                Editor\n                            </div>\n                            <div v-for=\"editor in editorial_board.editor\" :key=\"editor.id\">\n                                <div class=\"text-sm text-gray-600 mb-2\">\n                                    {{ editor.first_name }} {{ editor.last_name }} <span v-show=\"editor.affiliation\">-</span> {{ editor.affiliation }}\n                                </div>\n                            </div>\n                            \n\n                            <form class=\"mt-10\">\n\n                             <div class=\"mt-10\">\n                                <div class=\"flex items-center justify-between\">\n                                <h3 class=\"text-sm text-gray-900 font-medium\">Document</h3>\n                                <a href=\"#\" class=\"text-sm font-medium text-indigo-600 hover:text-indigo-500\">Document guide</a>\n                                </div>\n\n                            </div>\n\n                            <button type=\"submit\" class=\"mt-10 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500\">\n                                <DownloadIcon class=\"h-6 w-6 px-1\" aria-hidden=\"true\" />\n                                Download Full-Text PDF\n                            </button>\n                            </form>\n                        </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Description and details "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.journal.description), 1
+      ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+        href: "/journals/".concat($props.journal.id, "/download"),
+        "class": "mt-2 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
+      }, _hoisted_10, 8
+      /* PROPS */
+      , _hoisted_7)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Options "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"mt-4 lg:mt-0 lg:row-span-3\">\n                            <h2 class=\"\">Description:</h2>\n                            <div class=\"text-sm text-gray-600 mb-2 h-96 overflow-auto\">\n                                \n                            </div>\n\n                            <h2 class=\"\">Editorial board:</h2>\n                            <div v-show=\"editorial_board.publisher.length > 0\" class=\"text-2xl text-gray-900\">\n                                Publisher\n                            </div>\n                            <div v-for=\"editor in editorial_board.publisher\" :key=\"editor.id\">\n                                <div class=\"text-sm text-gray-600 mb-2\">\n                                    {{ editor.first_name }} {{ editor.last_name }} <span v-show=\"editor.affiliation\">-</span> {{ editor.affiliation }}\n                                </div>\n                            </div>\n                            <div v-show=\"editorial_board.chief_editor.length > 0\" class=\"text-2xl text-gray-900\">\n                                Editor in Chief\n                            </div>\n                            <div v-for=\"editor in editorial_board.chief_editor\" :key=\"editor.id\">\n                                <div class=\"text-sm text-gray-600 mb-2\">\n                                    {{ editor.first_name }} {{ editor.last_name }} <span v-show=\"editor.affiliation\">-</span> {{ editor.affiliation }}\n                                </div>\n                            </div>\n                            <div v-show=\"editorial_board.editor.length > 0\" class=\"text-2xl text-gray-900\">\n                                Editor\n                            </div>\n                            <div v-for=\"editor in editorial_board.editor\" :key=\"editor.id\">\n                                <div class=\"text-sm text-gray-600 mb-2\">\n                                    {{ editor.first_name }} {{ editor.last_name }} <span v-show=\"editor.affiliation\">-</span> {{ editor.affiliation }}\n                                </div>\n                            </div>\n                            \n\n                            <form class=\"mt-10\">\n\n                             <div class=\"mt-10\">\n                                <div class=\"flex items-center justify-between\">\n                                <h3 class=\"text-sm text-gray-900 font-medium\">Document</h3>\n                                <a href=\"#\" class=\"text-sm font-medium text-indigo-600 hover:text-indigo-500\">Document guide</a>\n                                </div>\n\n                            </div>\n\n                            <button type=\"submit\" class=\"mt-10 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500\">\n                                <DownloadIcon class=\"h-6 w-6 px-1\" aria-hidden=\"true\" />\n                                Download Full-Text PDF\n                            </button>\n                            </form>\n                        </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Description and details "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.journal.description), 1
       /* TEXT */
-      ), _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <small>Articles most recently published online for this journal.</small> "), _hoisted_9, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.journal.get_manuscripts, function (manuscript) {
+      ), _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <small>Articles most recently published online for this journal.</small> "), _hoisted_14, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.journal.get_manuscripts, function (manuscript) {
         var _manuscript$get_autho, _manuscript$get_autho2;
 
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
           "class": "mt-10",
           key: manuscript.id
-        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
           href: "/journals/".concat($props.journal.id, "/manuscripts/").concat(manuscript.id),
           "class": "text-indigo-500 hover:text-indigo-800"
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(manuscript.title), 9
         /* TEXT, PROPS */
-        , _hoisted_11)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_manuscript$get_autho = manuscript.get_authors) === null || _manuscript$get_autho === void 0 ? void 0 : (_manuscript$get_autho2 = _manuscript$get_autho.map(function (v) {
+        , _hoisted_16)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_manuscript$get_autho = manuscript.get_authors) === null || _manuscript$get_autho === void 0 ? void 0 : (_manuscript$get_autho2 = _manuscript$get_autho.map(function (v) {
           return (v === null || v === void 0 ? void 0 : v.first_name) + ' ' + (v === null || v === void 0 ? void 0 : v.last_name);
         })) === null || _manuscript$get_autho2 === void 0 ? void 0 : _manuscript$get_autho2.join(', ')), 1
         /* TEXT */
         ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
           href: "/journals/".concat($props.journal.id, "/manuscripts/").concat(manuscript.id, "/download"),
-          target: "_blank",
           "class": "mt-2 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:w-auto sm:text-sm"
-        }, _hoisted_17, 8
+        }, _hoisted_22, 8
         /* PROPS */
-        , _hoisted_14)]), _hoisted_18]);
+        , _hoisted_19)]), _hoisted_23]);
       }), 128
       /* KEYED_FRAGMENT */
       ))])])])])];
