@@ -5,7 +5,7 @@
                 <div class="lg:flex lg:items-center lg:justify-between">
                         <div class="flex-1 min-w-0">
                             <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-                                User Profile
+                                User Profile 
                             </h2>
                         </div>
                 </div>
@@ -175,7 +175,7 @@
                                 <div class="mt-4 space-y-4">
                                     <div v-for="role in roles" v-bind:key="`role-${role.id}`" class="flex items-start">
                                         <div class="flex items-center h-5">
-                                        <input :id="`role-input-${role.id}`" v-model="userForm.roles" :value="role.id" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
+                                        <input :id="`role-input-${role.id}`" v-model="userForm.roles" :value="role.id" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" :disabled="!canEditRoleAndPermission()" :class="{'cursor-not-allowed bg-slate-500': !canEditRoleAndPermission()}" />
                                         </div>
                                         <div class="ml-3 text-sm">
                                         <label :for="`role-input-${role.id}`" class="font-medium text-gray-700">
@@ -188,7 +188,7 @@
                             </fieldset>
                             </div>
                             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                            <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save</button>
+                            <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" :disabled="!canEditRoleAndPermission()" :class="{'cursor-not-allowed bg-slate-500': !canEditRoleAndPermission()}">Save</button>
                             </div>
                         </div>
                         </form>
@@ -248,6 +248,9 @@ export default {
         onChangeProfileImage(e) {
             this.userPhoto = URL.createObjectURL(e.target.files[0]);
             this.userForm.photo = e.target.files[0];
+        },
+        canEditRoleAndPermission() {
+            return this.auth.user.data?.permissions_attribute?.roles_and_permissions?.edit;
         }
     },
     setup(props) {
