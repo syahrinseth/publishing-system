@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use setasign\Fpdi\Fpdi;
+use Illuminate\Support\Facades\File;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Http\Resources\ManuscriptCollection;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Http\Resources\JournalManuscriptCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Journal extends Model
 {
@@ -77,5 +81,74 @@ class Journal extends Model
             }
         }
         return $this;
+    }
+
+    /**
+     * Generate PDF for journal.
+     * @param int $manuscript_id
+     * 
+     * @return String // Generated PDF File Path
+     */
+    public function generatePDF($manuscript_id = null)
+    {
+        // Fetch all manuscripts inside journal.
+        $manuscripts = $this->getManuscripts()->with([
+            'attachments' => function($q) {
+                $q->whereIn('type', [1, 14])
+                    ->orderBy('updated_at', 'desc');
+            }
+        ])->get();
+
+        $pdf = new Fpdi();
+        $globalPageNumber = 1;
+        $docNum = 1;
+
+        foreach ($manuscripts as $key => $manuscript) {
+
+            if ($manuscript->id == $manuscript_id || empty($manuscript_id)) {
+
+                if ($manuscript->id == $manuscript_id) {
+
+                    $docNum = $key + 1;
+
+                }
+
+                $attachment = $manuscript->attachments?->first();
+                if (!empty($attachment)) {
+
+                    if ($attachment->canMerge()) {
+
+                        if ($manuscript->isDoc()) {
+                            // doc -> html -> pdf
+                            return null;
+                            // $manuscript->generateHTML();
+
+                        } elseif(!$manuscript->isPDF()) {
+
+                            return null;
+
+                        }
+                        
+                        $pdf = $manuscript->generatePDF(attachment: $attachment, pdf: $pdf, pageNum: $globalPageNumber++, documentNum: $key + 1, journal: $this);
+
+                    }
+                }
+
+            } else {
+
+                $globalPageNumber++;
+
+            }
+
+        }
+
+        $outputPath = empty($manuscript_id) ? public_path("storage/{$this->name}.pdf") : public_path("storage/{$this->name} No {$docNum}.pdf");
+        if (empty($pdf)) {
+
+            return null;
+
+        }
+        $pdf->Output('F', $outputPath);
+        return $outputPath;
     }
 }

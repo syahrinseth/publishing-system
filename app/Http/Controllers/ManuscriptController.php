@@ -34,6 +34,7 @@ use App\Http\Resources\ManuscriptAttachFileCommentResource;
 use App\Http\Resources\ManuscriptAttachFileCommentCollection;
 use \Jurosh\PDFMerge\PDFMerger;
 use Illuminate\Validation\Rule;
+use setasign\Fpdi\Fpdi;
 
 class ManuscriptController extends Controller
 {
@@ -324,100 +325,58 @@ class ManuscriptController extends Controller
     public function download(Request $request, $id)
     {
         $manuscript = Manuscript::findOrFail($id);
-        $attachments = ManuscriptAttachFile::where('manuscript_id', $manuscript->id)
-            ->get();
-        
-        // fetch manuscript cover page
-        $mainTemplate = view('template.main', [
-            'manuscript' => $manuscript,
-            'attachFile'  => $attachments->first()
-        ])->render();
-        
-        // Fetch latest manuscript
-        $attachment = $attachments->filter(function($value) {
-            
-            if ($value->canMerge()) {
-                return true;
-            }
+        $attachment = $manuscript->attachments()
+            ->whereIn('type', [1, 14])
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ?->filter(function ($attach) use ($manuscript) {
+                if ($attach->canMerge()) {
 
-            return false;
+                    if ($manuscript->isDoc()) {
+                        // doc -> html -> pdf
+                        return false;
+                        // $manuscript->generateHTML();
 
-        })?->sortByDesc('id')?->first();
+                    } elseif(!$manuscript->isPDF()) {
 
-        // Fetch break template
-        $breakTemplate = file_get_contents( public_path() . "/break.html" );
+                        return false;
+
+                    }
+
+                    return true;
+
+                }
+            })
+            ?->first();
         
         if (empty($attachment)) {
 
-            if ($request->is('api/*')) {
-                return response('', 403)->json();
-            }
-
-            return redirect()->back()->withErrors([
-                'status' => 'There\'s nothing to download. Make sure you upload the correct file as correct attachment file type. Eg: Manuscript or Manuscript (for publish).'
-            ]);
+            return abort(403, 'One or more manuscript has an incorrect file format.');
 
         }
 
-        // Convert attach file into html
-        $attachTemplate = null;
-        if (str_contains(Storage::mimeType($attachment->file_location), 'word')) {
+        $pdf = new Fpdi();
+        $globalPageNumber = 1;
+        $pdf = $manuscript->generatePDF(
+            attachment: $attachment,
+            pdf: $pdf,
+            pageNum: $globalPageNumber++
+        );
 
-            // Convert docs to html.
-            $phpWord = \PhpOffice\PhpWord\IOFactory::load(storage_path('app') . '/' . $attachment->file_location);
-            $phpWord->setDefaultFontName('times new romen');
-            $section = $phpWord->addSection(array('borderColor' => '00FF00', 'borderSize' => 12, 'pageNumberingStart' => 1));
+        if (empty($pdf)) {
 
-            // Add top label
-            $section->addText($attachment->getType()['name']);
-            foreach($phpWord->getSections() as $i => $section) {
-                $section->setElementIndex($i);
-            }
+            return abort(403, 'One or more manuscript has an unsupported file format.');
 
-            // sort sections
-            $phpWord->sortSections(function($a,$b) { 
-                return $a->getElementIndex() < $b->getElementIndex();
-            });
-
-            $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
-            $PDFWriter->save(storage_path('app') . '/' . "{$attachment->file_location}.html");
-            
-            $attachTemplate = file_get_contents(storage_path('app') . "/{$attachment->file_location}.html" );
-
-            $pdf = PDF::loadHTML($mainTemplate . $breakTemplate . $attachTemplate);
-            $pdf->setPaper('A4', 'portrait');
-            // $pdf->setOptions(['footer-html', '/resources/views/template/footer.html']);
-            return $pdf->stream('merged.pdf');
-
-        } elseif(str_contains(Storage::mimeType($attachment->file_location), 'pdf')) {
-
-            // Create a header for the manuscript
-            $pdf = PDF::loadHTML($mainTemplate);
-            $pdf->setPaper('A4', 'portrait');
-            $pdfContent = $pdf->output();
-            
-            // Save the PDF header template to storage
-            $fileName = 'main_template.pdf';
-            $filePath = storage_path('app/' . "manuscripts/{$id}/$fileName");
-            file_put_contents($filePath, $pdfContent);
-
-            // Create new instance of pdf
-            $pdf = new PDFMerger;
-            
-            // merge the file
-            $pdf->addPDF($filePath, 'all', 'vertical')
-                ->addPDF(storage_path("app/{$attachment->file_location}"), 'all');
-                // ->addPDF('path/to/source/file2.pdf', 'all', 'horizontal');
-            // call merge, output format `file`
-            return $pdf->merge('browser', str_replace(' ', '-', $manuscript->title . ".pdf"));
         }
-        
-        if ($request->is('api/*')) {
-            return response('', 403)->json();
+
+        $outputPath = public_path("storage/{$manuscript->manuscript_no}-{$manuscript->id}.pdf");
+        $pdf->Output('F', $outputPath);
+
+        if (empty($outputPath)) {
+            return abort(403, 'One or more manuscript has an incorrect file format.');
         }
-        return back()->withErrors([
-            'status' => 'There\'s nothing to download.'
-        ]);
+
+        return response()->download($outputPath)->deleteFileAfterSend(false);
         
     }
 

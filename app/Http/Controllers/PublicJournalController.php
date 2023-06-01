@@ -9,6 +9,7 @@ use App\Models\Manuscript;
 use Illuminate\Http\Request;
 use App\Http\Resources\JournalResource;
 use App\Http\Resources\JournalCollection;
+use PDF;
 
 class PublicJournalController extends Controller
 {
@@ -135,7 +136,31 @@ class PublicJournalController extends Controller
 
     public function showManuscriptDownload(Request $request, $id, $manuscript_id)
     {
-        $controller = new ManuscriptController();
-        return $controller->download($request, $manuscript_id);
+
+        $journal = Journal::findOrFail($id);
+
+        $outputPath = $journal->generatePDF($manuscript_id);
+
+        if (empty($outputPath)) {
+            return abort(403, 'One or more manuscript has an incorrect file format.');
+        }
+
+        return response()->download($outputPath)->deleteFileAfterSend(false);
+
+    }
+
+    public function download(Journal $journal)
+    {
+        
+        $journal = Journal::findOrFail($journal?->id);
+
+        $outputPath = $journal->generatePDF();
+
+        if (empty($outputPath)) {
+            return abort(403, 'One or more manuscript has an incorrect file format.');
+        }
+
+        return response()->download($outputPath)->deleteFileAfterSend(false);
+        
     }
 }

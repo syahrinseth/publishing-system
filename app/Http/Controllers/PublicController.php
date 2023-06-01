@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Models\Journal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use setasign\Fpdi\Fpdi;
 
 class PublicController extends Controller
 {
@@ -87,5 +90,22 @@ class PublicController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * 
+     */
+    public function test(Request $request)
+    {
+        return abort(404);
+        $journal = Journal::find(6);
+
+        $outputPath = $journal->generatePDF();
+
+        if (empty($outputPath)) {
+            return abort(403, 'One or more manuscript has an incorrect file format.');
+        }
+
+        return response()->download($outputPath)->deleteFileAfterSend(false);
     }
 }

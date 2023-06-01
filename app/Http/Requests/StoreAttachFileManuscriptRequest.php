@@ -30,9 +30,10 @@ class StoreAttachFileManuscriptRequest extends FormRequest
         return [
             'type' => ['required', ($type == 1 ? Rule::unique('manuscript_attach_files')->where(function ($query) use($id, $type) {
                 return $query->where('manuscript_id', $id)
-                    ->where('type', $type);
+                    ->where('type', $type)
+                    ->where('deleted_at', null);
             }) : 'integer')],
-            'file' => ['required','mimes:doc,docx,pdf']
+            'file' => ['required', $type == 14 ? 'mimes:pdf' : 'mimes:doc,docx,pdf']
         ];
     }
 
@@ -62,7 +63,7 @@ class StoreAttachFileManuscriptRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            if ($this->isReviewer()) {
+            if ($this->isReviewer()) {dd($this->isManuscript(), $this->isHighlightsForReview());
                 if (!($this->isManuscript() || $this->isHighlightsForReview())) {
                     $validator->errors()->add('type', 'Reviewer can only upload file attach type "Manuscript" or "Highlight for review" only.');
                 }

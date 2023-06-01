@@ -106,7 +106,7 @@
                                 </a>
                             </span>
                             <span class="sm:ml-3" v-if="isPublished()">
-                                <a :href="`/admin/manuscripts/${manuscript.data.id}/download`" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" target="_blank">
+                                <a :href="`/admin/manuscripts/${manuscript.data.id}/download`" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <DownloadIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                                     Download PDF
                                 </a>
@@ -166,7 +166,10 @@
                                                         </label>
                                                         <p class="pl-1">or drag and drop</p>
                                                     </div>
-                                                    <p class="text-xs text-gray-500">
+                                                    <p v-show="attachForm.type == 14" class="text-xs text-gray-500">
+                                                        PDF up to 50MB
+                                                    </p>
+                                                    <p v-show="attachForm.type != 14" class="text-xs text-gray-500">
                                                         DOC, DOCX, PDF up to 50MB
                                                     </p>
                                                 </div>

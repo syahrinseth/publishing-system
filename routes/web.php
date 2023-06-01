@@ -28,11 +28,7 @@ use App\Http\Controllers\JournalManuscriptController;
 */
 
 # Test Route
-Route::get('/test', function() {
-    return abort(404);
-    $manuscript = Manuscript::find(15);
-    Mail::to(auth()->user())->queue(new ManuscriptCreated($manuscript));
-});
+Route::get('/test', [PublicController::class, 'test']);
 
 # Public Route
 Route::get('/', [PublicController::class, 'index'])->name('public.index');
@@ -40,6 +36,7 @@ Route::get('/', [PublicController::class, 'index'])->name('public.index');
 // Journals
 Route::get('/journals', [PublicJournalController::class, 'index'])->name('public.journal.index');
 Route::get('/journals/{id}', [PublicJournalController::class, 'show'])->name('public.journal.show');
+Route::get('/journals/{journal}/download', [PublicJournalController::class, 'download'])->name('public.journal.download');
 Route::get('/journals/{id}/manuscripts/{manuscript_id}', [PublicJournalController::class, 'showManuscript'])->name('public.journal.showManuscript');
 Route::get('/journals/{id}/manuscripts/{manuscript_id}/download', [PublicJournalController::class, 'showManuscriptDownload'])->name('public.journal.showManuscriptDownload');
 

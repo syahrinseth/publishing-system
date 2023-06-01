@@ -41,6 +41,11 @@ class UpdateManuscriptStatusRequest extends FormRequest
             if (!$this->canSubmitToEditor()) {
                 $validator->errors()->add('status', '"Manuscript", "Cover Letter" and "Plagiarism Report" attached files are required. Please upload the following documents.');
             }
+            if ($this->onPublish()) {
+                if (!$this->hasManuscriptForPublish()) {
+                    $validator->errors()->add('status', 'Unable to preceed. You need to upload "Manuscript (for publish)" attachment file before publish the manuscript.');
+                }
+            }
         });
     }
 
@@ -58,5 +63,15 @@ class UpdateManuscriptStatusRequest extends FormRequest
             }
         }
         return true;
+    }
+
+    public function onPublish()
+    {
+        return strtolower($this->status) == 'published' ? true : false;
+    }
+
+    public function hasManuscriptForPublish()
+    {
+        return empty(Manuscript::find($this->id)?->attachments()->where('type', 14)->first()) ? false : true;
     }
 }
