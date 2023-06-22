@@ -40,20 +40,24 @@ class ManuscriptReviewerReminder extends Command
      */
     public function handle()
     {
-        // Get members where reviewer is not reviewed teh manuscript yet.
-        $manuscripts = Manuscript::where('status', 'Submit For Review')->whereHas('members', function($q) {
-            $q->where('role', 'reviewer')
-                ->where('reviewed', null);
+        // Get members where reviewer is not reviewed the manuscript yet.
+        $manuscripts = Manuscript::where('status', 'Submit For Review')->whereHas('reviewers', function($q) {
+            $q->where('reviewed', null);
         })->get();
+
         // Send email notifications to these reviewers.
         foreach ($manuscripts as $manuscript) {
-            $reviewers = $manuscript->members->where('role', 'reviewer')->where('reviewed', null)->values()->all();
+
+            $reviewers = $manuscript->reviewers()->where('reviewed', null)->get()->values()->all();
             // Send mail.
             foreach ($reviewers as $reviewer) {
-                // Mail::to($reviewer->user->email)->queue(new ManuscriptReviewerNotification($manuscript, $reviewer->user));
+
                 Notification::send($reviewer->user, new ManuscriptReviewerNotification($manuscript, $reviewer->user));
+
             }
+
         }
+
         // Done.
         return 0;
     }

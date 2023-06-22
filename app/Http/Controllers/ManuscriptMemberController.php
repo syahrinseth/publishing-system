@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\ManuscriptMember;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\InviteReviewerForReview;
 
 class ManuscriptMemberController extends Controller
 {
@@ -100,8 +102,15 @@ class ManuscriptMemberController extends Controller
             'status' => 'required'
         ]);
 
-        ManuscriptMember::findOrFail($member_id)
-            ->update($validated);
+        $member =  ManuscriptMember::findOrFail($member_id);
+        $member->update($validated);
+        
+        if ($validated['role'] == 'reviewer' && $validated['status'] == 'Accepted') {
+
+            // Invite reviewer through email.
+            Notification::send($member->user, new InviteReviewerForReview($member->manuscript, $member));
+
+        }
 
         if (request()->is('api/*')) {
             return response()->json();
@@ -131,6 +140,9 @@ class ManuscriptMemberController extends Controller
 
     /**
      * Accept Invitation
+     * @param Request $request
+     * @param int $id
+     * @param int $member_id
      */
     public function acceptInvitation(Request $request, $id, $member_id)
     {
