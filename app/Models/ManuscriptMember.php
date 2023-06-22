@@ -6,7 +6,6 @@ use App\Models\Manuscript;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Notifications\InviteReviewerForReview;
 use App\Mail\ManuscriptInviteMemberNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Notifications\ManuscriptMemberInvitationReview;
@@ -31,14 +30,7 @@ class ManuscriptMember extends Model
 
     protected static function booted()
     {
-        static::updating(function($member) {
-            if ($member->isDirty('status') && $member->status == 'Accepted') {
-                // Invite reviewer through email.
-                if (!empty($member->user)) {
-                    Mail::to($member->user)->queue(new ManuscriptInviteMemberNotification($member->manuscript, $member->user, $member->role));
-                }
-            }
-        });
+
     }
 
     public function user() 
@@ -66,7 +58,8 @@ class ManuscriptMember extends Model
                 ManuscriptMember::firstOrCreate([
                     'manuscript_id' => $manuscript->id,
                     'user_id' => $user_id,
-                    'role' => 'author'
+                    'role' => 'author',
+                    'status' => 'Active'
                 ]);
             }
         }
@@ -77,7 +70,8 @@ class ManuscriptMember extends Model
                 ManuscriptMember::firstOrCreate([
                     'manuscript_id' => $manuscript->id,
                     'user_id' => $user_id,
-                    'role' => 'corresponding author'
+                    'role' => 'corresponding author',
+                    'status' => 'Active'
                 ]);
             }
             
@@ -89,7 +83,8 @@ class ManuscriptMember extends Model
                 ManuscriptMember::firstOrCreate([
                     'manuscript_id' => $manuscript->id,
                     'user_id' => $user_id,
-                    'role' => 'editor'
+                    'role' => 'editor',
+                    'status' => 'Active'
                 ]);
             }
         }
@@ -103,7 +98,8 @@ class ManuscriptMember extends Model
                     'role' => 'reviewer',
                     'status' => 'Pending'
                 ]);
-                $member->notifyReviewerInvitation();
+                // notify editor or admin to review suggested reviewer.
+                $member->notifyEditorsForSuggestReviewer();
             }
         }
 
@@ -166,7 +162,7 @@ class ManuscriptMember extends Model
                 });
     }
 
-    public function notifyReviewerInvitation()
+    public function notifyEditorsForSuggestReviewer()
     {
         $editors = $this->manuscript->editors;
         foreach ($editors as $editor) {
