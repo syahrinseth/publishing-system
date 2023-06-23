@@ -63,7 +63,7 @@ class StoreAttachFileManuscriptRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            if ($this->isReviewer()) {dd($this->isManuscript(), $this->isHighlightsForReview());
+            if ($this->isReviewer()) {
                 if (!($this->isManuscript() || $this->isHighlightsForReview())) {
                     $validator->errors()->add('type', 'Reviewer can only upload file attach type "Manuscript" or "Highlight for review" only.');
                 }

@@ -890,14 +890,23 @@ class Manuscript extends Model
                 $template = $pdf->importPage($pageNumber);
                 $pdf->useTemplate($template);
 
-                // Add page number text
-                $pdf->SetFont('Times', "", 12);
+                // Add header title
+                $pdf->SetFont('Times', "I", 10);
+                $pdf->SetMargins(left: 30, top: 21, right: 30);
+                // $pdf->SetXY(30, 25); // Adjust the coordinates as needed
+                $pdf->SetY(21);
+                $pdf->Cell(0, 0, config('app.name'), 0, 0, 'L');
+
+                // Add Header text
+                $pdf->SetFont('Times', "I", 10);
                 $pdf->SetMargins(left: 30, top: 25, right: 30);
                 // $pdf->SetXY(30, 25); // Adjust the coordinates as needed
                 $pdf->SetY(25);
-
                 $pdf->Cell(0, 0, $headerTitle, 0, 0, 'L');
 
+                // Add footer text
+                $pdf->SetFont('Times', "I", 12);
+                $pdf->SetY(-25);
                 $pdf->Cell(0, 0, $pageNum++, 0, 0, 'R');
 
                 // $pdf->SetY(-25);

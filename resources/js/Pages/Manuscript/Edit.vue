@@ -648,9 +648,9 @@
                                                                     {{ index + 1 }}
                                                                 </td>
                                                                 <td class="px-6 py-4 word-break">
-                                                                    <p>{{ reviewer.user.first_name }} {{ reviewer.user.last_name }}</p>
+                                                                    <p>{{ reviewer?.user?.first_name }} {{ reviewer?.user?.last_name }}</p>
                                                                     <small class="text-gray-500">
-                                                                        {{ reviewer.user.email }}
+                                                                        {{ reviewer?.user?.email }}
                                                                     </small>
                                                                 </td>
                                                                 <td class="px-6 py-4 word-break">
