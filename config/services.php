@@ -30,4 +30,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'gtag' => [
+        'src' => env('GTAG_SRC'),
+        'key' => env('GTAG_KEY')
+    ]
+
 ];
