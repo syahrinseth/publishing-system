@@ -875,7 +875,36 @@ class Manuscript extends Model
         return str_contains(Storage::mimeType($file_location), 'pdf') ? true : false;
     }
 
-    public function generatePDF(ManuscriptAttachFile $attachment, Fpdi $pdf = new Fpdi(), $pageNum = 1, $documentNum = null, Journal $journal = null)
+    public function getAttachPageCount()
+    {
+
+        $attachment = $this->attachments?->first();
+        if (!empty($attachment)) {
+
+            if ($attachment->canMerge()) {
+
+                if ($this->isDoc()) {
+                    // doc -> html -> pdf
+                    return null;
+                    // $manuscript->generateHTML();
+
+                } elseif(!$this->isPDF()) {
+
+                    return null;
+
+                }
+
+                $currentPdf = new Fpdi();
+                return $currentPdf->setSourceFile(storage_path("app/{$attachment->file_location}"));
+
+            }
+        }
+
+        return 0;
+        
+    }
+
+    public function generatePDF(ManuscriptAttachFile $attachment, Fpdi $pdf = new Fpdi(), &$pageNum, $documentNum = null, Journal $journal = null)
     {
         try {
         

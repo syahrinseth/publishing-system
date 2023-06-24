@@ -129,15 +129,16 @@ class Journal extends Model
 
                         }
                         
-                        $pdf = $manuscript->generatePDF(attachment: $attachment, pdf: $pdf, pageNum: $globalPageNumber++, documentNum: $key + 1, journal: $this);
+                        $pdf = $manuscript->generatePDF(attachment: $attachment, pdf: $pdf, pageNum: $globalPageNumber, documentNum: $key + 1, journal: $this);
 
                     }
                 }
 
             } else {
 
-                $globalPageNumber++;
-
+                // $globalPageNumber++;
+                $globalPageNumber += $manuscript->getAttachPageCount();
+            
             }
 
         }

@@ -360,7 +360,7 @@ class ManuscriptController extends Controller
         $pdf = $manuscript->generatePDF(
             attachment: $attachment,
             pdf: $pdf,
-            pageNum: $globalPageNumber++
+            pageNum: $globalPageNumber
         );
 
         if (empty($pdf)) {
