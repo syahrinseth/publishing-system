@@ -41,6 +41,9 @@ class HandleInertiaRequests extends Middleware
             'auth.user' => fn () => auth()->user()
                 ? new UserResource(auth()->user())
                 : null,
+            'app' => [
+                'name' => config('app.name')
+            ]
         ]);
     }
 }
