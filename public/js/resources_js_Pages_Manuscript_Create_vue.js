@@ -2082,7 +2082,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     });
   }), _defineProperty(_methods, "asyncFindEditors", _.debounce( /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(query) {
-      var resp;
+      var resp, _resp$data;
+
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
@@ -2105,7 +2106,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 break;
               }
 
-              this.editorSelect.options = resp.data;
+              this.editorSelect.options = (_resp$data = resp.data) === null || _resp$data === void 0 ? void 0 : _resp$data.map(function (v) {
+                return {
+                  id: v.id,
+                  first_name: v.first_name,
+                  last_name: v.last_name,
+                  field: v.field,
+                  affiliation: v.affiliation
+                };
+              });
               return _context3.abrupt("return", 0);
 
             case 8:
@@ -2125,7 +2134,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   }(), 300)), _defineProperty(_methods, "asyncFindReviewers", _.debounce( /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(query) {
-      var resp;
+      var resp, _resp$data2;
+
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
@@ -2148,7 +2158,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 break;
               }
 
-              this.reviewerSelect.options = resp.data;
+              this.reviewerSelect.options = (_resp$data2 = resp.data) === null || _resp$data2 === void 0 ? void 0 : _resp$data2.map(function (v) {
+                return {
+                  id: v.id,
+                  first_name: v.first_name,
+                  last_name: v.last_name,
+                  field: v.field,
+                  affiliation: v.affiliation
+                };
+              });
               return _context4.abrupt("return", 0);
 
             case 8:
@@ -2168,7 +2186,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   }(), 300)), _defineProperty(_methods, "asyncFindAuthors", _.debounce( /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(query) {
-      var resp;
+      var resp, _resp$data3;
+
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
@@ -2191,7 +2210,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 break;
               }
 
-              this.authorSelect.options = resp.data;
+              this.authorSelect.options = (_resp$data3 = resp.data) === null || _resp$data3 === void 0 ? void 0 : _resp$data3.map(function (v) {
+                return {
+                  id: v.id,
+                  first_name: v.first_name,
+                  last_name: v.last_name,
+                  field: v.field,
+                  affiliation: v.affiliation
+                };
+              });
               return _context5.abrupt("return", 0);
 
             case 8:
@@ -2211,10 +2238,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   }(), 300)), _methods),
   setup: function setup(props) {
+    var _props$auth$user$data, _props$auth$user$data2, _props$auth$user$data3, _props$auth$user$data4, _props$auth$user$data5;
+
     var manuscriptForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__.useForm)({
       type: "",
       title: null,
-      authors: [props.auth.user.data],
+      authors: [{
+        id: (_props$auth$user$data = props.auth.user.data) === null || _props$auth$user$data === void 0 ? void 0 : _props$auth$user$data.id,
+        first_name: (_props$auth$user$data2 = props.auth.user.data) === null || _props$auth$user$data2 === void 0 ? void 0 : _props$auth$user$data2.first_name,
+        last_name: (_props$auth$user$data3 = props.auth.user.data) === null || _props$auth$user$data3 === void 0 ? void 0 : _props$auth$user$data3.last_name,
+        field: (_props$auth$user$data4 = props.auth.user.data) === null || _props$auth$user$data4 === void 0 ? void 0 : _props$auth$user$data4.field,
+        affiliation: (_props$auth$user$data5 = props.auth.user.data) === null || _props$auth$user$data5 === void 0 ? void 0 : _props$auth$user$data5.affiliation
+      }],
       corresponding_authors: [],
       editors: [],
       editor: null,
@@ -2618,7 +2653,7 @@ var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_36 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <label for=\"authors\" class=\"block text-sm font-medium text-gray-700\">\n                                                Authors\n                                            </label>\n                                            <div class=\"mt-1\">\n                                                <textarea v-model=\"manuscriptForm.authors\" id=\"authors\" name=\"authors\" rows=\"3\" class=\"shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md\" placeholder=\"\" />\n                                            </div> "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+var _hoisted_36 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
   "class": "mt-2 text-sm text-gray-500"
 })], -1
 /* HOISTED */
@@ -2770,7 +2805,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
           return $setup.manuscriptForm.authors = $event;
         }),
-        id: "ajax",
+        "track-by": "id",
         label: "first_name",
         "custom-label": function customLabel(value) {
           return "".concat(value.first_name, " ").concat(value.last_name || "", " ").concat(value.field == null ? "" : "- ".concat(value.field), " ").concat(value.affiliation == null ? "" : "- ".concat(value.affiliation));
@@ -2804,7 +2839,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
           return $setup.manuscriptForm.corresponding_authors = $event;
         }),
-        id: "ajax",
+        "track-by": "id",
         label: "first_name",
         "custom-label": function customLabel(value) {
           return "".concat(value.first_name, " ").concat(value.last_name || "", " ").concat(value.field == null ? "" : "- ".concat(value.field), " ").concat(value.affiliation == null ? "" : "- ".concat(value.affiliation));
@@ -2838,7 +2873,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
           return $setup.manuscriptForm.editor = $event;
         }),
-        id: "ajax",
+        "track-by": "id",
         label: "first_name",
         "custom-label": function customLabel(value) {
           return "".concat(value.first_name, " ").concat(value.last_name || "", " ").concat(value.field == null ? "" : "- ".concat(value.field), " ").concat(value.affiliation == null ? "" : "- ".concat(value.affiliation));
