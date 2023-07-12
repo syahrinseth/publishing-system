@@ -474,7 +474,7 @@ class ManuscriptController extends Controller
                 return $query->where('manuscript_id', $id)
                 ->where('type', $request->type);
             })->ignore($attachFileId, 'id') : 'integer'],
-            'file' => 'nullable|mimes:doc,docx,pdf'
+            'file' => ['nullable', ($request->type == 14 ? 'mimes:pdf' : 'mimes:doc,docx,pdf'), 'max:10240']
         ]);
 
         $manuscript = Manuscript::findOrFail($id);

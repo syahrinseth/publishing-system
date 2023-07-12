@@ -33,7 +33,7 @@ class StoreAttachFileManuscriptRequest extends FormRequest
                     ->where('type', $type)
                     ->where('deleted_at', null);
             }) : 'integer')],
-            'file' => ['required', $type == 14 ? 'mimes:pdf' : 'mimes:doc,docx,pdf']
+            'file' => ['required', ($type == 14 ? 'mimes:pdf' : 'mimes:doc,docx,pdf'), 'max:10240']
         ];
     }
 

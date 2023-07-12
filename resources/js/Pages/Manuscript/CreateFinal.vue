@@ -80,39 +80,24 @@
                                             <label class="block text-sm font-medium text-gray-700">
                                                 Files
                                             </label>
-                                            <div class="mt-1 flex justify-center pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                                                <div class="w-full mx-5">
-                                                    <div class="space-y-1 text-center w-64 mx-auto">
-                                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                        </svg>
-                                                        <p v-if="attachForm.file != null">
-                                                            {{ attachForm.file.name }}
-                                                        </p>
-                                                        <div class="flex text-sm text-gray-600 justify-center">
-                                                            <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                            <span>Upload a file</span>
-                                                            <input id="file-upload" ref="file"  @change="onChangeSubmitAttachFile" type="file" class="sr-only" />
-                                                            <progress v-if="attachForm.progress" :value="attachForm.progress.percentage" max="100">
-                                                            {{ attachForm.progress.percentage }}%
-                                                            </progress>
-                                                            </label>
-                                                            <p class="pl-1">or drag and drop</p>
-                                                        </div>
-                                                        <p v-if="attachForm.type == 1" class="text-xs text-gray-500">
-                                                            DOC, DOCX up to 50MB
-                                                        </p>
-                                                        <p v-else class="text-xs text-gray-500">
-                                                            DOC, DOCX, PDF up to 50MB
-                                                        </p>
+                                            <FileInput
+                                                :key-value="`attach-file-upload-update`"
+                                                @on-select="onChangeSubmitAttachFile"
+                                                :url="attachForm.selected_file">
+                                                <requirements>
+                                                    <p v-show="attachForm.type == 14" class="text-center mb-2 text-xs leading-5 text-gray-600">
+                                                        PDF up to 10MB
+                                                    </p>
+                                                    <p v-show="attachForm.type != 14" class="text-center mb-2 text-xs leading-5 text-gray-600">
+                                                        DOC, DOCX, PDF up to 10MB
+                                                    </p>
+                                                </requirements>
+                                                <template v-if="attachForm.type == 1 || attachForm.type == 14">
+                                                    <div class="bg-blue-100 border-blue-100 px-4 py-5 text-blue-500 w-full rounded-md mt-2">
+                                                        Please upload manuscript based on "{{ app.name }}"" guidelines found in <a class="font-extrabold hover:underline" href="/guidelines/TemplateforJournalofSmartSensorandMaterials.pdf" target="_blank">here</a>.
                                                     </div>
-                                                    <template v-if="attachForm.type == 1 || attachForm.type == 14">
-                                                        <div class="bg-blue-100 border-blue-100 px-4 py-5 text-blue-500 w-full rounded-md mt-2">
-                                                            Please upload manuscript based on "{{ app.name }}"" guidelines found in <a class="font-extrabold hover:underline" href="/guidelines/TemplateforJournalofSmartSensorandMaterials.pdf" target="_blank">here</a>.
-                                                        </div>
-                                                    </template>
-                                                </div>
-                                            </div>
+                                                </template>
+                                            </FileInput>
                                         </div>
                                     </form>
                                 </div>
@@ -178,6 +163,8 @@
                                             <label class="mt-1 block text-sm font-medium text-gray-700">
                                                 Files
                                             </label>
+
+                                            
                                             <div class="mt-1 flex justify-center pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                                                 <div class="space-y-1 text-center">
                                                     <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
@@ -197,10 +184,10 @@
                                                         <p class="pl-1">or drag and drop</p>
                                                     </div>
                                                     <p v-if="updateAttachForm.type == 1" class="text-xs text-gray-500">
-                                                        DOC, DOCX, PDF up to 50MB
+                                                        DOC, DOCX, PDF up to 10MB
                                                     </p>
                                                     <p v-else class="text-xs text-gray-500">
-                                                        DOC, DOCX, PDF up to 50MB
+                                                        DOC, DOCX, PDF up to 10MB
                                                     </p>
                                                 </div>
                                             </div>
@@ -480,26 +467,29 @@
                 <Modal :show="showSubmitToEditorModal" @close="showSubmitToEditorModal = false;">
                     <template v-slot:default>
                         <div class="sm:flex sm:items-start">
-                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <div class="mx-auto flex-none flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
                             <ExclamationIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
                             </div>
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left" flex-1>
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900"> Submit To Editor </DialogTitle>
                                 <div class="mt-2">
-                                    <!-- <p class="text-sm text-gray-500">Lorem ipsum dolor sit amet, consectetur adipisicing elit. In quidem asperiores, beatae deserunt ipsam est. In vero, expedita neque ex, debitis, odio animi quisquam deserunt beatae fuga rerum blanditiis id?</p> -->
+                                    <p class="text-sm text-gray-500">Are you sure to submit to editor?</p>
                                 </div>
                                 <div class="w-full mt-3 grid grid-col-1 gap-4">
-                                    <a href="#" @click="submitToEditor()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:w-auto sm:text-sm">
-                                        Submit To Editor
-                                    </a>
                                 </div>
                             </div>
                         </div>
                     </template>
                     <template v-slot:footer>
-                        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showSubmitToEditorModal = false">
-                            Cancel
-                        </button>
+                        <div class="flex gap-2">
+                            <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showSubmitToEditorModal = false">
+                                Cancel
+                            </button>
+                            <a href="#" @click="submitToEditor()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:w-auto sm:text-sm">
+                                Submit to Editor
+                            </a>
+                        </div>
+                        
                     </template>
                 </Modal>
             </template>
@@ -539,6 +529,7 @@
   import Toast from '../../Components/Toast'
   import CommentSectionCard from '../../Components/CommentSectionCard.vue'
   import JetInputError from '../../Components/InputError.vue';
+  import FileInput from '../../Components/FileInput.vue'
 
   export default {
     components: {
@@ -576,7 +567,8 @@
         DialogTitle,
         Toast,
         PaperClipIcon,
-        CommentSectionCard
+        CommentSectionCard,
+        FileInput
     },
     props: {
         manuscript: Object,
@@ -651,8 +643,8 @@
                 }
             });
         },
-        onChangeSubmitAttachFile(e) {
-            this.attachForm.file = e.target.files[0];
+        onChangeSubmitAttachFile(file) {
+            this.attachForm.file = file;
         },
         onChangeUpdateAttachFile(e) {
             this.updateAttachForm.file = e.target.files[0];

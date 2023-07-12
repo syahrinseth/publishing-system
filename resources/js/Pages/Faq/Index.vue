@@ -36,6 +36,25 @@ import Layout from '../../Layout.vue';
 import { ChevronLeftIcon, ChevronDownIcon } from '@heroicons/vue/solid'
 const faqs = [
     {
+        name: "How to submit the manuscript?",
+        desc: `<h2 class="text-gray-700 text-lg font-bold">
+                Step 1:
+            </h2>
+            <a href="/img/faq/submit-manuscript-1.png" target="_blank"><img src="/img/faq/submit-manuscript-1.png" class="rounded shadow-full w-auto mx-auto border-gray-400 my-3" alt="faq1"></a>
+            <p class="text-gray-600">
+                On the <b>Dashboard</b> page, navigate to "Submit Manuscript" menu. Fill in manuscript information, and click "Proceed" button to proceed to next page.
+            </p>
+            <h2 class="text-gray-700 text-lg font-bold mt-3">
+                Step 2:
+            </h2>
+            <a href="/img/faq/submit-manuscript-2.png" target="_blank"><img src="/img/faq/submit-manuscript-2.png" class="rounded shadow-full w-auto mx-auto border-gray-400 my-3" alt="faq1"/></a>
+            <p class="text-gray-600">
+                Upload 3 required file, of "Manuscript", "Cover Letter", "Plagiarism Report" and click on both checkbox to accept terms and conditions. Proceed by click the "Submit to Editor" button. The editor will be notified and review the manuscript.
+            </p>`,
+        role: 'Editor',
+        hide: true
+    },
+    {
         name: "How to assign reviewers in manuscript as an editor?",
         desc: `<h2 class="text-gray-700 text-lg font-bold">
                 Step 1:
