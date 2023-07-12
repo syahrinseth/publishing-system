@@ -31,57 +31,58 @@
             </div>
             <div class="hidden md:block">
               <div class="ml-10 flex items-baseline space-x-4">
-                <div v-for="item in navigation.filter((v) => {return v.disabled == true ? false : true;})">
-                  <Link v-if="item.isParent == false" :key="item.name" :href="item.href" :class="[item.href == $page.url ? 'bg-gray-900 text-white' : 'text-gray-900 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined" preserve-state preserve-scroll>{{ item.name }}</Link>
-                  
-                  <Popover v-else class="relative" v-slot="{ open }">
-                    <PopoverButton :class="[item.href == $page.url ? 'bg-gray-900 text-white' : 'text-gray-900 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']">
-                      More
-                      <!-- <svg class="text-gray-400 ml-2 h-5 w-5 group-hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                      </svg> -->
-                    </PopoverButton>
+                <template v-for="item in navigation">
+                  <div v-if="item.disabled == false">
+                    <Link v-if="item.isParent == false" :key="item.name" :href="item.href" :class="[item.href == $page.url ? 'bg-gray-900 text-white' : 'text-gray-900 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined" preserve-state preserve-scroll>{{ item.name }}</Link>
+                    
+                    <Popover v-else class="relative" v-slot="{ open }">
+                      <PopoverButton :class="[item.href == $page.url ? 'bg-gray-900 text-white' : 'text-gray-900 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']">
+                        More
+                        <!-- <svg class="text-gray-400 ml-2 h-5 w-5 group-hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg> -->
+                      </PopoverButton>
 
-                    <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
-                      <PopoverPanel class="absolute z-10 left-1/2 transform -translate-x-1/2 mt-3 px-2 w-screen max-w-md sm:px-0">
-                        <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                          <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
-                            <a v-for="child in item.children" :key="child.name"  :href="child.href" :class="[child.href == $page.url ? 'bg-gray-900 text-white' : 'text-gray-900 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']">
-                              <component :is="item.icon" class="flex-shrink-0 h-6 w-6 text-indigo-600" aria-hidden="true" />
-                              <div class="ml-4">
-                                <p class="text-base font-medium">
-                                  {{ child.name }}
-                                </p>
-                                <p class="mt-1 text-sm text-gray-500">
-                                </p>
+                      <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
+                        <PopoverPanel class="absolute z-10 left-1/2 transform -translate-x-1/2 mt-3 px-2 w-screen max-w-md sm:px-0">
+                          <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+                            <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                              <template  v-for="child in item.children" :key="child.name">
+                                <a v-if="child.disabled == false" :href="child.href" :class="[child.href == $page.url ? 'bg-gray-900 text-white' : 'text-gray-900 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']">
+                                  <component :is="item.icon" class="flex-shrink-0 h-6 w-6 text-indigo-600" aria-hidden="true" />
+                                  <div class="ml-4">
+                                    <p class="text-base font-medium">
+                                      {{ child.name }}
+                                    </p>
+                                    <p class="mt-1 text-sm text-gray-500">
+                                    </p>
+                                  </div>
+                                </a>
+                              </template>
+                            </div>
+                            <!-- <div class="px-5 py-5 bg-gray-50 sm:px-8 sm:py-8">
+                              <div>
+                                <h3 class="text-sm tracking-wide font-medium text-gray-500 uppercase">Recent Posts</h3>
+                                <ul role="list" class="mt-4 space-y-4">
+                                  <li v-for="post in recentPosts" :key="post.id" class="text-base truncate">
+                                    <a :href="post.href" class="font-medium text-gray-900 hover:text-gray-700">
+                                      {{ post.name }}
+                                    </a>
+                                  </li>
+                                </ul>
                               </div>
-                            </a>
+                              <div class="mt-5 text-sm">
+                                <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"> View all posts <span aria-hidden="true">&rarr;</span></a>
+                              </div>
+                            </div> -->
                           </div>
-                          <!-- <div class="px-5 py-5 bg-gray-50 sm:px-8 sm:py-8">
-                            <div>
-                              <h3 class="text-sm tracking-wide font-medium text-gray-500 uppercase">Recent Posts</h3>
-                              <ul role="list" class="mt-4 space-y-4">
-                                <li v-for="post in recentPosts" :key="post.id" class="text-base truncate">
-                                  <a :href="post.href" class="font-medium text-gray-900 hover:text-gray-700">
-                                    {{ post.name }}
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="mt-5 text-sm">
-                              <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"> View all posts <span aria-hidden="true">&rarr;</span></a>
-                            </div>
-                          </div> -->
-                        </div>
-                      </PopoverPanel>
-                    </transition>
-                  </Popover>
-                </div>
+                        </PopoverPanel>
+                      </transition>
+                    </Popover>
+                  </div>
+                </template>
                 
-
-
                 <!-- <a :href="'/manuscripts/1/attach-files/1'" :class="['text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" target="_blank">Download</a> -->
-
               </div>
             </div>
           </div>
@@ -283,6 +284,7 @@ let navigation = [
   { name: 'Submit Manuscript', href: '/admin/manuscript-create', disabled: false, isParent: false },
   { name: 'Manuscripts', href: '/admin/manuscripts', disabled: false, isParent: false },
   { name: 'Journals', href: '/admin/journals', disabled: false, isParent: false },
+  { name: 'FAQs', href: '/admin/faqs', disabled: false, isParent: false },
   { 
     name: 'More', 
     href: '#', 
@@ -291,7 +293,6 @@ let navigation = [
     children: [
       { name: 'Users', href: '/admin/users', disabled: false },
       { name: 'Settings', href: '/admin/settings', disabled: false },
-      { name: 'FAQs', href: '/admin/faqs', disabled: false }
     ] 
   },
 ]
@@ -369,16 +370,30 @@ export default {
           val.disabled = true;
         }
 
-        if(user.permissions_attribute.journals.show == false && val.name == 'Journal Overview') {
+        if(user.permissions_attribute.journals.show == false && val.name == 'Journals') {
           val.disabled = true;
         }
 
-        if(user.permissions_attribute.manuscripts.show == false && (val.name == 'Manuscript Overview' || val.name == 'Submit manuscript')) {
+        if(user.permissions_attribute.manuscripts.show == false && (val.name == 'Manuscripts' || val.name == 'Submit manuscript')) {
           val.disabled = true;
         }
 
         if(user.permissions_attribute.settings.edit == false && (val.name == 'Settings')) {
           val.disabled = true;
+        }
+
+        if(val.name == 'More') {
+          for(let i = 0; i < val.children?.length; i++) {
+              
+            if (user.permissions_attribute.users.show == false && val.children?.[i].name == 'Users') {
+              val.children[i].disabled = true;
+            }
+
+            if (user.permissions_attribute.settings.show == false && val.children?.[i].name == 'Settings') {
+              val.children[i].disabled = true;
+            }
+
+          }
         }
 
         return val;
