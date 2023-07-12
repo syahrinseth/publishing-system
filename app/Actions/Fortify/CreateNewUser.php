@@ -52,7 +52,7 @@ class CreateNewUser implements CreatesNewUsers
         // Notify Users with permission of Receive New User Notification.
         $users = User::permission(['users.receive_notification_for_new_register_user'])->get();
         foreach ($users as $userForNotification) {
-            Notification::send($userForNotification->email, new NewRegisteredUser($userForNotification, $user));
+            Notification::send($userForNotification, new NewRegisteredUser($userForNotification, $user));
         }
 
         return $user;
