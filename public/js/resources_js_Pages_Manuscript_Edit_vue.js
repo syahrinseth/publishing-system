@@ -3987,7 +3987,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
 
     var canPublish = function canPublish() {
-      return props.manuscript.data.status.includes('Accept') && data.viewAs == "publisher";
+      return props.manuscript.data.status != 'Published' && data.viewAs == "publisher";
     };
 
     var markAsRead = /*#__PURE__*/function () {

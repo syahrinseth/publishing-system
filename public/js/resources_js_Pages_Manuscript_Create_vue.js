@@ -2054,9 +2054,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     _this2.userForm.email = null;
                   }
                 })["catch"](function (err) {
-                  alert(err);
-                  console.log(err);
-
                   if (err.response) {
                     var errors = err.response.data.errors;
                     Object.keys(errors).forEach(function (value, index) {

@@ -1871,7 +1871,7 @@
     }
 
     const canPublish = () => {
-        return props.manuscript.data.status.includes('Accept') && (data.viewAs == `publisher`);
+        return props.manuscript.data.status != 'Published' && (data.viewAs == `publisher`);
     }
 
     const markAsRead = async (notifications) => {
